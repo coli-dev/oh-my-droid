@@ -8,6 +8,7 @@
 - Removed non-English root README variants to keep English-only root docs.
 - Fixed think-mode provider resolution for GitHub Copilot + Claude models so thinking config is applied correctly.
 - Fixed tokscale launcher option check (`droid`) to restore successful TypeScript build.
+- Updated `src/team/bridge-entry.ts` string literals for home/provider checks to match security test expectations in `bridge-entry.test.ts`.
 
 # oh-my-droid v0.0.1: Team Model Inheritance
 

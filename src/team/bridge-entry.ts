@@ -69,7 +69,7 @@ function validateBridgeWorkingDirectory(workingDirectory: string): void {
   // Resolve symlinks and verify under homedir
   const resolved = realpathSync(workingDirectory);
   const home = homedir();
-  if (!resolved.startsWith(home + "/") && resolved !== home) {
+  if (!resolved.startsWith(home + '/') && resolved !== home) {
     throw new Error(`workingDirectory is outside home directory: ${resolved}`);
   }
 
@@ -131,7 +131,7 @@ function main(): void {
   config.workerName = sanitizeName(config.workerName);
 
   // Validate provider
-  if (config.provider !== "codex" && config.provider !== "gemini") {
+  if (config.provider !== 'codex' && config.provider !== 'gemini') {
     console.error(
       `Invalid provider: ${config.provider}. Must be 'codex' or 'gemini'.`,
     );
