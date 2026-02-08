@@ -1,0 +1,30 @@
+/**
+ * OMD Tools Server - In-process MCP server for custom tools
+ *
+ * Exposes 18 custom tools (12 LSP, 2 AST, 1 python_repl, 3 skills) via the Droid Agent SDK's
+ * createSdkMcpServer helper for use by subagents.
+ */
+/**
+ * In-process MCP server exposing all OMD custom tools
+ *
+ * Tools will be available as mcp__t__<tool_name>
+ */
+export declare const omdToolsServer: import("@anthropic-ai/claude-agent-sdk").McpSdkServerConfigWithInstance;
+/**
+ * Tool names in MCP format for allowedTools configuration
+ */
+export declare const omdToolNames: string[];
+/**
+ * Get tool names filtered by category
+ */
+export declare function getOmcToolNames(options?: {
+    includeLsp?: boolean;
+    includeAst?: boolean;
+    includePython?: boolean;
+    includeSkills?: boolean;
+    includeState?: boolean;
+    includeNotepad?: boolean;
+    includeMemory?: boolean;
+    includeTrace?: boolean;
+}): string[];
+//# sourceMappingURL=omd-tools-server.d.ts.map

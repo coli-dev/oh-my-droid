@@ -1,0 +1,19 @@
+{
+  "aliases": {
+    "omd": {
+      "repo": "coli-dev/oh-my-droid",
+      "local": "~/Workspace/oh-my-droid",
+      "default_base": "main"
+    },
+    "cc": {
+      "repo": "anthropics/droid-code",
+      "local": "~/Workspace/droid-code",
+      "default_base": "main"
+    }
+  },
+  "defaults": {
+    "worktree_root": "~/.psm/worktrees",
+    "cleanup_after_days": 14,
+    "auto_cleanup_merged": true
+  }
+}

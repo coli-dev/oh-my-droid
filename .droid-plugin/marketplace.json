@@ -1,0 +1,30 @@
+{
+  "$schema": "https://anthropic.com/droid-code/marketplace.schema.json",
+  "name": "omd",
+  "description": "Droid native multi-agent orchestration - intelligent model routing, 28 agents, 32 skills",
+  "owner": {
+    "name": "coli.dev",
+    "email": "hi@coli.dev"
+  },
+  "plugins": [
+    {
+      "name": "oh-my-droid",
+      "description": "Droid native multi-agent orchestration with intelligent model routing, 28 agent variants, and 32 powerful skills. Zero learning curve. Maximum power.",
+      "version": "0.0.1",
+      "author": {
+        "name": "coli.dev",
+        "email": "hi@coli.dev"
+      },
+      "source": "./",
+      "category": "productivity",
+      "homepage": "https://github.com/coli-dev/oh-my-droid",
+      "tags": [
+        "multi-agent",
+        "orchestration",
+        "delegation",
+        "todo-management",
+        "ultrawork"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+node_modules/
+*.log
+.DS_Store
+.omd/
+.sisyphus/
+.idea/
+
+# Windows reserved names (prevent accidental creation)
+nul
+NUL
