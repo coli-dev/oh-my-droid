@@ -20,7 +20,7 @@ export interface AutoInvokeState {
     lastInvokeTime: number;
 }
 /**
- * Load auto-invocation config from ~/.droid/.omd-config.json
+ * Load auto-invocation config from ~/.factory/.omd-config.json
  */
 export declare function loadInvocationConfig(): InvocationConfig;
 /**

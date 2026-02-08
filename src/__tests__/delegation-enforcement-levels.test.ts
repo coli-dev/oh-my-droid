@@ -143,7 +143,7 @@ describe('delegation-enforcement-levels', () => {
       mockExistsSync.mockImplementation((p: unknown) => {
         const s = String(p);
         if (/[\\/]tmp[\\/]test-project[\\/]\.omd[\\/]config\.json$/.test(s)) return true;
-        if (/[\\/]mock[\\/]home[\\/]\.droid[\\/]\.omd-config\.json$/.test(s)) return true;
+        if (/[\\/]mock[\\/]home[\\/]\.factory[\\/]\.omd-config\.json$/.test(s)) return true;
         return false;
       });
       mockReadFileSync.mockImplementation((p: unknown) => {
@@ -151,7 +151,7 @@ describe('delegation-enforcement-levels', () => {
         if (/[\\/]tmp[\\/]test-project[\\/]\.omd[\\/]config\.json$/.test(s)) {
           return JSON.stringify({ delegationEnforcementLevel: 'off' });
         }
-        if (/[\\/]mock[\\/]home[\\/]\.droid[\\/]\.omd-config\.json$/.test(s)) {
+        if (/[\\/]mock[\\/]home[\\/]\.factory[\\/]\.omd-config\.json$/.test(s)) {
           return JSON.stringify({ delegationEnforcementLevel: 'strict' });
         }
         return '';
@@ -166,12 +166,12 @@ describe('delegation-enforcement-levels', () => {
     it('falls back to global config when no local config', () => {
       mockExistsSync.mockImplementation((p: unknown) => {
         const s = String(p);
-        if (/[\\/]mock[\\/]home[\\/]\.droid[\\/]\.omd-config\.json$/.test(s)) return true;
+        if (/[\\/]mock[\\/]home[\\/]\.factory[\\/]\.omd-config\.json$/.test(s)) return true;
         return false;
       });
       mockReadFileSync.mockImplementation((p: unknown) => {
         const s = String(p);
-        if (/[\\/]mock[\\/]home[\\/]\.droid[\\/]\.omd-config\.json$/.test(s)) {
+        if (/[\\/]mock[\\/]home[\\/]\.factory[\\/]\.omd-config\.json$/.test(s)) {
           return JSON.stringify({ delegationEnforcementLevel: 'strict' });
         }
         return '';
@@ -294,7 +294,7 @@ describe('delegation-enforcement-levels', () => {
     describe('allowed paths always continue', () => {
       const allowedPaths = [
         '.omd/plans/test.md',
-        '.droid/settings.json',
+        '.factory/settings.json',
         'docs/AGENTS.md',
         'AGENTS.md',
       ];
@@ -577,8 +577,8 @@ describe('delegation-enforcement-levels', () => {
       expect(isAllowedPath('.omd/plans/test.md')).toBe(true);
     });
 
-    it('returns true for .droid/ paths', () => {
-      expect(isAllowedPath('.droid/settings.json')).toBe(true);
+    it('returns true for .factory/ paths', () => {
+      expect(isAllowedPath('.factory/settings.json')).toBe(true);
     });
 
     it('returns true for AGENTS.md', () => {
@@ -603,8 +603,8 @@ describe('delegation-enforcement-levels', () => {
       expect(isAllowedPath('.omd/../src/file.ts')).toBe(false);
     });
 
-    it('rejects .droid/../src/file.ts traversal', () => {
-      expect(isAllowedPath('.droid/../src/file.ts')).toBe(false);
+    it('rejects .factory/../src/file.ts traversal', () => {
+      expect(isAllowedPath('.factory/../src/file.ts')).toBe(false);
     });
 
     it('rejects bare .. traversal', () => {

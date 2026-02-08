@@ -15,13 +15,13 @@ Meta-skill for managing oh-my-droid skills via CLI-like commands.
 Show all local skills organized by scope.
 
 **Behavior:**
-1. Scan user skills at `~/.droid/skills/omd-learned/`
+1. Scan user skills at `~/.factory/skills/omd-learned/`
 2. Scan project skills at `.omd/skills/`
 3. Parse YAML frontmatter for metadata
 4. Display in organized table format:
 
 ```
-USER SKILLS (~/.droid/skills/omd-learned/):
+USER SKILLS (~/.factory/skills/omd-learned/):
 | Name              | Triggers           | Quality | Usage | Scope |
 |-------------------|--------------------|---------|-------|-------|
 | error-handler     | fix, error         | 95%     | 42    | user  |
@@ -51,7 +51,7 @@ Interactive wizard for creating a new skill.
 4. **Ask for argument hint** (optional)
    - Example: "<file> [options]"
 5. **Ask for scope:**
-   - `user` → `~/.droid/skills/omd-learned/<name>/SKILL.md`
+   - `user` → `~/.factory/skills/omd-learned/<name>/SKILL.md`
    - `project` → `.omd/skills/<name>/SKILL.md`
 6. **Create skill file** with template:
 
@@ -105,7 +105,7 @@ Triggers (comma-separated): log, logger, logging
 Argument hint (optional): <level> [message]
 Scope (user/project): user
 
-✓ Created skill at ~/.droid/skills/omd-learned/custom-logger/SKILL.md
+✓ Created skill at ~/.factory/skills/omd-learned/custom-logger/SKILL.md
 → Edit with: /skill edit custom-logger
 ```
 
@@ -117,13 +117,13 @@ Remove a skill by name.
 
 **Behavior:**
 1. **Search for skill** in both scopes:
-   - `~/.droid/skills/omd-learned/<name>/SKILL.md`
+   - `~/.factory/skills/omd-learned/<name>/SKILL.md`
    - `.omd/skills/<name>/SKILL.md`
 2. **If found:**
    - Display skill info (name, description, scope)
    - **Ask for confirmation:** "Delete '<name>' skill from <scope>? (yes/no)"
 3. **If confirmed:**
-   - Delete entire skill directory (e.g., `~/.droid/skills/omd-learned/<name>/`)
+   - Delete entire skill directory (e.g., `~/.factory/skills/omd-learned/<name>/`)
    - Report: "✓ Removed skill '<name>' from <scope>"
 4. **If not found:**
    - Report: "✗ Skill '<name>' not found in user or project scope"
@@ -135,7 +135,7 @@ Remove a skill by name.
 User: /skill remove old-logger
 Assistant: Found skill 'old-logger' in user scope:
   Description: Legacy logging utility
-  Scope: user (~/.droid/skills/omd-learned/)
+  Scope: user (~/.factory/skills/omd-learned/)
 
 Delete 'old-logger' skill? (yes/no)
 
@@ -251,13 +251,13 @@ Show detailed information about a skill.
 
 ```
 Skill: custom-logger
-Scope: user (~/.droid/skills/omd-learned/custom-logger/)
+Scope: user (~/.factory/skills/omd-learned/custom-logger/)
 Description: Enhanced logging with structured output
 Triggers: log, logger, logging
 Argument Hint: <level> [message]
 Quality: 95% (if available)
 Usage Count: 42 times (if available)
-File Path: /home/user/.droid/skills/omd-learned/custom-logger/SKILL.md
+File Path: /home/user/.factory/skills/omd-learned/custom-logger/SKILL.md
 
 --- FULL CONTENT ---
 [entire markdown content]
@@ -272,7 +272,7 @@ Assistant: Skill: custom-logger
 Scope: user
 Description: Enhanced logging with structured output
 Triggers: log, logger, logging
-File: ~/.droid/skills/omd-learned/custom-logger/SKILL.md
+File: ~/.factory/skills/omd-learned/custom-logger/SKILL.md
 
 --- CONTENT ---
 # Custom Logger Skill
@@ -290,7 +290,7 @@ Sync skills between user and project scopes.
 
 **Behavior:**
 1. **Scan both scopes:**
-   - User skills: `~/.droid/skills/omd-learned/`
+   - User skills: `~/.factory/skills/omd-learned/`
    - Project skills: `.omd/skills/`
 2. **Compare and categorize:**
    - User-only skills (not in project)
@@ -360,7 +360,7 @@ First, check if skill directories exist and create them if needed:
 
 ```bash
 # Check and create user-level skills directory
-USER_SKILLS_DIR="$HOME/.droid/skills/omd-learned"
+USER_SKILLS_DIR="$HOME/.factory/skills/omd-learned"
 if [ -d "$USER_SKILLS_DIR" ]; then
   echo "User skills directory exists: $USER_SKILLS_DIR"
 else
@@ -384,15 +384,15 @@ Scan both directories and show a comprehensive inventory:
 
 ```bash
 # Scan user-level skills
-echo "=== USER-LEVEL SKILLS (~/.droid/skills/omd-learned/) ==="
-if [ -d "$HOME/.droid/skills/omd-learned" ]; then
-  USER_COUNT=$(find "$HOME/.droid/skills/omd-learned" -name "*.md" 2>/dev/null | wc -l)
+echo "=== USER-LEVEL SKILLS (~/.factory/skills/omd-learned/) ==="
+if [ -d "$HOME/.factory/skills/omd-learned" ]; then
+  USER_COUNT=$(find "$HOME/.factory/skills/omd-learned" -name "*.md" 2>/dev/null | wc -l)
   echo "Total skills: $USER_COUNT"
 
   if [ $USER_COUNT -gt 0 ]; then
     echo ""
     echo "Skills found:"
-    find "$HOME/.droid/skills/omd-learned" -name "*.md" -type f -exec sh -c '
+    find "$HOME/.factory/skills/omd-learned" -name "*.md" -type f -exec sh -c '
       FILE="$1"
       NAME=$(grep -m1 "^name:" "$FILE" 2>/dev/null | sed "s/name: //")
       DESC=$(grep -m1 "^description:" "$FILE" 2>/dev/null | sed "s/description: //")
@@ -467,7 +467,7 @@ Ask user to provide either:
 - **Paste content**: Paste skill markdown content directly
 
 Then ask for scope:
-- **User-level** (~/.droid/skills/omd-learned/) - Available across all projects
+- **User-level** (~/.factory/skills/omd-learned/) - Available across all projects
 - **Project-level** (.omd/skills/) - Only for this project
 
 Validate the skill format and save to the chosen location.
@@ -761,7 +761,7 @@ Good skills are:
 > /oh-my-droid:skill list
 
 Checking skill directories...
-✓ User skills directory exists: ~/.droid/skills/omd-learned/
+✓ User skills directory exists: ~/.factory/skills/omd-learned/
 ✓ Project skills directory exists: .omd/skills/
 
 Scanning for skills...

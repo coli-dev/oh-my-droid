@@ -6,7 +6,7 @@ import { appendOutbox, rotateOutboxIfNeeded, readNewInboxMessages, readAllInboxM
 import { sanitizeName } from '../tmux-session.js';
 import { validateResolvedPath } from '../fs-utils.js';
 const TEST_TEAM = 'test-team-io';
-const TEAMS_DIR = join(homedir(), '.droid', 'teams', TEST_TEAM);
+const TEAMS_DIR = join(homedir(), '.factory', 'teams', TEST_TEAM);
 beforeEach(() => {
     mkdirSync(join(TEAMS_DIR, 'inbox'), { recursive: true });
     mkdirSync(join(TEAMS_DIR, 'outbox'), { recursive: true });

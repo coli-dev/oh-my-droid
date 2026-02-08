@@ -30,7 +30,7 @@ This skill enhances Droid's capabilities by:
 | **UI work** | ✗ NEVER | designer/designer-high |
 | **Docs** | ✗ NEVER | writer |
 
-**Path Exception**: Only write to `.omd/`, `.droid/`, `AGENTS.md`, `AGENTS.md`
+**Path Exception**: Only write to `.omd/`, `.factory/`, `AGENTS.md`, `AGENTS.md`
 
 The PreToolUse hook will warn you if you attempt direct code changes.
 

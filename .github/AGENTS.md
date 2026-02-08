@@ -21,7 +21,7 @@ oh-my-droid is a Droid plugin that provides multi-agent orchestration capabiliti
 ## Code Structure
 
 ```
-.droid-plugin/          # Plugin metadata
+.factory-plugin/          # Plugin metadata
   plugin.json            # Main plugin config
   marketplace.json       # Marketplace registration
 agents/                  # Agent definitions (YAML)

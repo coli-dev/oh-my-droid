@@ -92,7 +92,7 @@ program
     try {
         await launchTokscaleTUI({
             view,
-            droid: options.droid
+            droid: options.factory
         });
     }
     catch (error) {

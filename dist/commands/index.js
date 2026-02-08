@@ -11,7 +11,7 @@ import { homedir } from 'os';
  * Get the commands directory path
  */
 export function getCommandsDir() {
-    return join(homedir(), '.droid', 'commands');
+    return join(homedir(), '.factory', 'commands');
 }
 /**
  * Parse command frontmatter and content

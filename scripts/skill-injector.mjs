@@ -26,7 +26,7 @@ try {
 }
 
 // Constants (used by fallback)
-const USER_SKILLS_DIR = join(homedir(), '.droid', 'skills', 'omd-learned');
+const USER_SKILLS_DIR = join(homedir(), '.factory', 'skills', 'omd-learned');
 const GLOBAL_SKILLS_DIR = join(homedir(), '.omd', 'skills');
 const PROJECT_SKILLS_SUBDIR = join('.omd', 'skills');
 const SKILL_EXTENSION = '.md';

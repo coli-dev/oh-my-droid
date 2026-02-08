@@ -12,7 +12,7 @@ import { validateResolvedPath, writeFileWithMode, atomicWriteJson, ensureDirWith
 import { sanitizeName } from './tmux-session.js';
 const MAX_OUTBOX_READ_SIZE = 10 * 1024 * 1024; // 10MB cap per read
 function teamsDir() {
-    return join(homedir(), '.droid', 'teams');
+    return join(homedir(), '.factory', 'teams');
 }
 /**
  * Read new outbox messages for a worker using byte-offset cursor.

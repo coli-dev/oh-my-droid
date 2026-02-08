@@ -6,7 +6,7 @@
  *
  * Authentication:
  * - macOS: Reads from Keychain "Droid-credentials"
- * - Linux/fallback: Reads from ~/.droid/.credentials.json
+ * - Linux/fallback: Reads from ~/.factory/.credentials.json
  *
  * API: api.anthropic.com/api/oauth/usage
  * Response: { five_hour: { utilization }, seven_day: { utilization } }

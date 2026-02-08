@@ -37,7 +37,7 @@ export function getTeamMembers(
 
   // 1. Read Droid native members from config.json
   try {
-    const configPath = join(homedir(), '.droid', 'teams', teamName, 'config.json');
+    const configPath = join(homedir(), '.factory', 'teams', teamName, 'config.json');
     if (existsSync(configPath)) {
       const config = JSON.parse(readFileSync(configPath, 'utf-8'));
       if (Array.isArray(config.members)) {

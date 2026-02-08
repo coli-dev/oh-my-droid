@@ -24,13 +24,13 @@ function getLocalStateFilePath(directory) {
  * Get Droid settings.json path
  */
 function getSettingsFilePath() {
-    return join(homedir(), '.droid', 'settings.json');
+    return join(homedir(), '.factory', 'settings.json');
 }
 /**
  * Get the HUD config file path (legacy)
  */
 function getConfigFilePath() {
-    return join(homedir(), '.droid', '.omd', 'hud-config.json');
+    return join(homedir(), '.factory', '.omd', 'hud-config.json');
 }
 /**
  * Ensure the .omd/state directory exists
@@ -124,7 +124,7 @@ export function getBackgroundTaskCount(state) {
  * Priority: settings.json > hud-config.json (legacy) > defaults
  */
 export function readHudConfig() {
-    // 1. Try reading from ~/.droid/settings.json (omdHud key)
+    // 1. Try reading from ~/.factory/settings.json (omdHud key)
     const settingsFile = getSettingsFilePath();
     if (existsSync(settingsFile)) {
         try {
@@ -139,7 +139,7 @@ export function readHudConfig() {
             // Fall through to legacy config
         }
     }
-    // 2. Try reading from ~/.droid/.omd/hud-config.json (legacy)
+    // 2. Try reading from ~/.factory/.omd/hud-config.json (legacy)
     const configFile = getConfigFilePath();
     if (existsSync(configFile)) {
         try {
@@ -175,7 +175,7 @@ function mergeWithDefaults(config) {
     };
 }
 /**
- * Write HUD configuration to ~/.droid/settings.json (omdHud key)
+ * Write HUD configuration to ~/.factory/settings.json (omdHud key)
  */
 export function writeHudConfig(config) {
     try {

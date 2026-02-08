@@ -80,28 +80,28 @@ Use the AskUserQuestion tool to prompt the user:
 **Question:** "Where should I configure oh-my-droid?"
 
 **Options:**
-1. **Local (this project)** - Creates `.droid/AGENTS.md` in current project directory. Best for project-specific configurations.
-2. **Global (all projects)** - Creates `~/.droid/AGENTS.md` for all Droid sessions. Best for consistent behavior everywhere.
+1. **Local (this project)** - Creates `.factory/AGENTS.md` in current project directory. Best for project-specific configurations.
+2. **Global (all projects)** - Creates `~/.factory/AGENTS.md` for all Droid sessions. Best for consistent behavior everywhere.
 
 ## Step 2: Execute Based on Choice
 
 ### If User Chooses LOCAL:
 
 ```bash
-# Create .droid directory in current project
-mkdir -p .droid
+# Create .factory directory in current project
+mkdir -p .factory
 
 # Download fresh AGENTS.md from GitHub
-curl -fsSL "https://raw.githubusercontent.com/coli-dev/oh-my-droid/main/docs/AGENTS.md" -o .droid/AGENTS.md && \
-echo "Downloaded AGENTS.md to .droid/AGENTS.md"
+curl -fsSL "https://raw.githubusercontent.com/coli-dev/oh-my-droid/main/docs/AGENTS.md" -o .factory/AGENTS.md && \
+echo "Downloaded AGENTS.md to .factory/AGENTS.md"
 ```
 
 ### If User Chooses GLOBAL:
 
 ```bash
 # Download fresh AGENTS.md to global config
-curl -fsSL "https://raw.githubusercontent.com/coli-dev/oh-my-droid/main/docs/AGENTS.md" -o ~/.droid/AGENTS.md && \
-echo "Downloaded AGENTS.md to ~/.droid/AGENTS.md"
+curl -fsSL "https://raw.githubusercontent.com/coli-dev/oh-my-droid/main/docs/AGENTS.md" -o ~/.factory/AGENTS.md && \
+echo "Downloaded AGENTS.md to ~/.factory/AGENTS.md"
 ```
 
 ## Step 3: Setup HUD Statusline
@@ -111,8 +111,8 @@ The HUD shows real-time status in Droid's status bar. **Invoke the hud skill** t
 Use the Skill tool to invoke: `hud` with args: `setup`
 
 This will:
-1. Install the HUD wrapper script to `~/.droid/hud/omd-hud.mjs`
-2. Configure `statusLine` in `~/.droid/settings.json`
+1. Install the HUD wrapper script to `~/.factory/hud/omd-hud.mjs`
+2. Configure `statusLine` in `~/.factory/settings.json`
 3. Report status and prompt to restart if needed
 
 ## Step 3.5: Install CLI Analytics Tools (Optional)
@@ -162,7 +162,7 @@ Skip this step. User can install later with `bun install -g oh-my-droid` or `npm
 ## Step 4: Verify Plugin Installation
 
 ```bash
-grep -q "oh-my-droid" ~/.droid/settings.json && echo "Plugin verified" || echo "Plugin NOT found - run: droid /install-plugin oh-my-droid"
+grep -q "oh-my-droid" ~/.factory/settings.json && echo "Plugin verified" || echo "Plugin NOT found - run: droid /install-plugin oh-my-droid"
 ```
 
 ## Step 4.5: Install AST Tools (Optional)
@@ -238,7 +238,7 @@ If no, skip to next step.
 
 Agent teams are an experimental Droid feature that spawns N coordinated agents on a shared task list with inter-agent messaging. **Disabled by default** — requires enabling in `settings.json`.
 
-Reference: https://code.droid.com/docs/en/agent-teams
+Reference: https://code.factory.com/docs/en/agent-teams
 
 Ask user: "Would you like to enable agent teams? (experimental Droid feature)"
 
@@ -250,10 +250,10 @@ Ask user: "Would you like to enable agent teams? (experimental Droid feature)"
 
 #### 5.5.1: Enable in settings.json
 
-**CRITICAL**: Must preserve existing user settings. Read `~/.droid/settings.json` first, then merge the teams env var.
+**CRITICAL**: Must preserve existing user settings. Read `~/.factory/settings.json` first, then merge the teams env var.
 
 ```bash
-SETTINGS_FILE="$HOME/.droid/settings.json"
+SETTINGS_FILE="$HOME/.factory/settings.json"
 
 if [ -f "$SETTINGS_FILE" ]; then
   # Merge env var into existing settings, preserving everything else
@@ -298,10 +298,10 @@ Ask three questions:
 2. **Default agent type?** → executor (Recommended) / build-fixer / designer
 3. **Default model?** → sonnet (Recommended) / opus / haiku
 
-Store in `~/.droid/.omd-config.json`:
+Store in `~/.factory/.omd-config.json`:
 
 ```bash
-CONFIG_FILE="$HOME/.droid/.omd-config.json"
+CONFIG_FILE="$HOME/.factory/.omd-config.json"
 mkdir -p "$(dirname "$CONFIG_FILE")"
 
 if [ -f "$CONFIG_FILE" ]; then
@@ -326,7 +326,7 @@ jq -e '.env.DROID_CODE_EXPERIMENTAL_AGENT_TEAMS' "$SETTINGS_FILE" > /dev/null 2>
 
 ### If User Chooses NO:
 
-Skip. Teams remain disabled. Enable later by adding to `~/.droid/settings.json`:
+Skip. Teams remain disabled. Enable later by adding to `~/.factory/settings.json`:
 ```json
 { "env": { "DROID_CODE_EXPERIMENTAL_AGENT_TEAMS": "1" } }
 ```
@@ -336,7 +336,7 @@ Skip. Teams remain disabled. Enable later by adding to `~/.droid/settings.json`:
 Check if user has existing configuration:
 ```bash
 # Check for existing 2.x artifacts
-ls ~/.droid/commands/ralph-loop.md 2>/dev/null || ls ~/.droid/commands/ultrawork.md 2>/dev/null
+ls ~/.factory/commands/ralph-loop.md 2>/dev/null || ls ~/.factory/commands/ultrawork.md 2>/dev/null
 ```
 
 If found, this is an upgrade from 2.x.

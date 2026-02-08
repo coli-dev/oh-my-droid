@@ -5,7 +5,7 @@ import { tmpdir, homedir } from 'os';
 import { readProbeResult, writeProbeResult, getRegistrationStrategy, registerMcpWorker, unregisterMcpWorker, isMcpWorker, listMcpWorkers } from '../team-registration.js';
 const TEST_DIR = join(tmpdir(), '__test_team_reg__');
 const TEST_TEAM = 'test-team-reg-team';
-const CONFIG_DIR = join(homedir(), '.droid', 'teams', TEST_TEAM);
+const CONFIG_DIR = join(homedir(), '.factory', 'teams', TEST_TEAM);
 beforeEach(() => {
     mkdirSync(TEST_DIR, { recursive: true });
     mkdirSync(join(TEST_DIR, '.omd', 'state'), { recursive: true });

@@ -117,7 +117,7 @@ Why bad: This is an exploration/brainstorming request. Respond conversationally 
 <Advanced>
 ## Configuration
 
-Optional settings in `.droid/settings.json`:
+Optional settings in `.factory/settings.json`:
 
 ```json
 {

@@ -26,7 +26,7 @@ import type {
 const DEFAULT_TASK_TTL_MS = 30 * 60 * 1000;
 
 /** Storage directory for task state */
-const BACKGROUND_TASKS_DIR = join(homedir(), '.droid', '.omd', 'background-tasks');
+const BACKGROUND_TASKS_DIR = join(homedir(), '.factory', '.omd', 'background-tasks');
 
 /**
  * Manages background tasks for the Sisyphus system.

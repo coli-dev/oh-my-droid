@@ -312,7 +312,7 @@ describe('Installer Constants', () => {
 
   describe('File Paths', () => {
     it('should define valid directory paths', () => {
-      const expectedBase = join(homedir(), '.droid');
+      const expectedBase = join(homedir(), '.factory');
 
       expect(DROID_CONFIG_DIR).toBe(expectedBase);
       expect(AGENTS_DIR).toBe(join(expectedBase, 'agents'));
@@ -449,7 +449,7 @@ describe('Installer Constants', () => {
     });
 
     it('should return true when DROID_PLUGIN_ROOT is set', () => {
-      process.env.DROID_PLUGIN_ROOT = '/home/user/.droid/plugins/marketplaces/oh-my-droid';
+      process.env.DROID_PLUGIN_ROOT = '/home/user/.factory/plugins/marketplaces/oh-my-droid';
       expect(isRunningAsPlugin()).toBe(true);
     });
 
@@ -480,31 +480,31 @@ describe('Installer Constants', () => {
     });
 
     it('should return false for global plugin installation', () => {
-      // Global plugins are under ~/.droid/plugins/
-      process.env.DROID_PLUGIN_ROOT = join(homedir(), '.droid', 'plugins', 'cache', 'omd', 'oh-my-droid', '3.9.0');
+      // Global plugins are under ~/.factory/plugins/
+      process.env.DROID_PLUGIN_ROOT = join(homedir(), '.factory', 'plugins', 'cache', 'omd', 'oh-my-droid', '3.9.0');
       expect(isProjectScopedPlugin()).toBe(false);
     });
 
     it('should return true for project-scoped plugin installation', () => {
-      // Project-scoped plugins are in the project's .droid/plugins/ directory
-      process.env.DROID_PLUGIN_ROOT = '/home/user/myproject/.droid/plugins/oh-my-droid';
+      // Project-scoped plugins are in the project's .factory/plugins/ directory
+      process.env.DROID_PLUGIN_ROOT = '/home/user/myproject/.factory/plugins/oh-my-droid';
       expect(isProjectScopedPlugin()).toBe(true);
     });
 
     it('should return true when plugin is outside global plugin directory', () => {
-      // Any path that's not under ~/.droid/plugins/ is considered project-scoped
-      process.env.DROID_PLUGIN_ROOT = '/var/projects/app/.droid/plugins/omd';
+      // Any path that's not under ~/.factory/plugins/ is considered project-scoped
+      process.env.DROID_PLUGIN_ROOT = '/var/projects/app/.factory/plugins/omd';
       expect(isProjectScopedPlugin()).toBe(true);
     });
 
     it('should handle Windows-style paths', () => {
       // Windows paths with backslashes should be normalized
-      process.env.DROID_PLUGIN_ROOT = 'C:\\Users\\user\\project\\.droid\\plugins\\omd';
+      process.env.DROID_PLUGIN_ROOT = 'C:\\Users\\user\\project\\.factory\\plugins\\omd';
       expect(isProjectScopedPlugin()).toBe(true);
     });
 
     it('should handle trailing slashes in paths', () => {
-      process.env.DROID_PLUGIN_ROOT = join(homedir(), '.droid', 'plugins', 'cache', 'omd') + '/';
+      process.env.DROID_PLUGIN_ROOT = join(homedir(), '.factory', 'plugins', 'cache', 'omd') + '/';
       expect(isProjectScopedPlugin()).toBe(false);
     });
   });

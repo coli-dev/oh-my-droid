@@ -55,7 +55,7 @@ When set as default, saying "fast" or "parallel" will activate ecomode instead o
 
 ## Disabling Ecomode
 
-To completely disable ecomode (prevents all ecomode keyword detection and activation), add to `~/.droid/.omd-config.json`:
+To completely disable ecomode (prevents all ecomode keyword detection and activation), add to `~/.factory/.omd-config.json`:
 
 ```json
 {

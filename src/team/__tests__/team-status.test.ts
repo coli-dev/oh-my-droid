@@ -9,8 +9,8 @@ import { appendOutbox } from '../inbox-outbox.js';
 import type { HeartbeatData, TaskFile, OutboxMessage, McpWorkerMember } from '../types.js';
 
 const TEST_TEAM = 'test-team-status';
-const TEAMS_DIR = join(homedir(), '.droid', 'teams', TEST_TEAM);
-const TASKS_DIR = join(homedir(), '.droid', 'tasks', TEST_TEAM);
+const TEAMS_DIR = join(homedir(), '.factory', 'teams', TEST_TEAM);
+const TASKS_DIR = join(homedir(), '.factory', 'tasks', TEST_TEAM);
 let WORK_DIR: string;
 
 beforeEach(() => {

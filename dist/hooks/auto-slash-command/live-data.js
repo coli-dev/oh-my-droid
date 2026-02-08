@@ -80,7 +80,7 @@ let policyLoadedFrom = null;
 function loadSecurityPolicy() {
     const policyPaths = [
         join(process.cwd(), ".omd", "config", "live-data-policy.json"),
-        join(process.cwd(), ".droid", "live-data-policy.json"),
+        join(process.cwd(), ".factory", "live-data-policy.json"),
     ];
     for (const p of policyPaths) {
         if (p === policyLoadedFrom && cachedPolicy)

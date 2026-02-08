@@ -736,18 +736,18 @@ For maximum security, you can review the code - it's fully open-source on GitHub
 **Answer:**
 "Absolutely. Agent customization is a first-class feature.
 
-Place custom agent definitions in `~/.droid/agents/{agent-name}.md` and they'll override the defaults.
+Place custom agent definitions in `~/.factory/agents/{agent-name}.md` and they'll override the defaults.
 
 For example, if you want a specialized Python testing agent:
 ```markdown
-# ~/.droid/agents/pytest-specialist.md
+# ~/.factory/agents/pytest-specialist.md
 You are an expert in pytest and Python testing best practices.
 Focus on: fixtures, parametrization, mocking with pytest-mock.
 ```
 
 Then invoke: `Task(subagent_type="oh-my-droid:pytest-specialist")`
 
-You can also customize execution modes, delegation categories, and model routing rules via the config file at `~/.droid/.omd-config.json`.
+You can also customize execution modes, delegation categories, and model routing rules via the config file at `~/.factory/.omd-config.json`.
 
 Power users go deep on customization. Casual users never need to touch it."
 

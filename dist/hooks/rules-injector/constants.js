@@ -23,7 +23,7 @@ export const PROJECT_MARKERS = [
 export const PROJECT_RULE_SUBDIRS = [
     ['.github', 'instructions'],
     ['.cursor', 'rules'],
-    ['.droid', 'rules'],
+    ['.factory', 'rules'],
 ];
 /** Single-file rules that always apply */
 export const PROJECT_RULE_FILES = [
@@ -32,7 +32,7 @@ export const PROJECT_RULE_FILES = [
 /** Pattern for GitHub instructions files */
 export const GITHUB_INSTRUCTIONS_PATTERN = /\.instructions\.md$/;
 /** User-level rule directory */
-export const USER_RULE_DIR = '.droid/rules';
+export const USER_RULE_DIR = '.factory/rules';
 /** Valid rule file extensions */
 export const RULE_EXTENSIONS = ['.md', '.mdc'];
 /** Tools that trigger rule injection */

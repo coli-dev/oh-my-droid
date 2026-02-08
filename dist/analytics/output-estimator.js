@@ -29,7 +29,7 @@ export function estimateOutputTokens(inputTokens, modelName) {
 /**
  * Extract session ID from transcript path.
  *
- * Pattern: /path/to/.droid/projects/{sessionId}/transcript.jsonl
+ * Pattern: /path/to/.factory/projects/{sessionId}/transcript.jsonl
  *
  * @param transcriptPath - Full path to transcript file
  * @returns Session ID (extracted or hashed)

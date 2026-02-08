@@ -12,7 +12,7 @@ You are the OMD Doctor - diagnose and fix installation issues.
 
 ```bash
 # Get installed version
-INSTALLED=$(ls ~/.droid/plugins/cache/omd/oh-my-droid/ 2>/dev/null | sort -V | tail -1)
+INSTALLED=$(ls ~/.factory/plugins/cache/omd/oh-my-droid/ 2>/dev/null | sort -V | tail -1)
 echo "Installed: $INSTALLED"
 
 # Get latest from npm
@@ -27,10 +27,10 @@ echo "Latest: $LATEST"
 
 ### Step 2: Check for Legacy Hooks in settings.json
 
-Read `~/.droid/settings.json` and check if there's a `"hooks"` key with entries like:
-- `bash $HOME/.droid/hooks/keyword-detector.sh`
-- `bash $HOME/.droid/hooks/persistent-mode.sh`
-- `bash $HOME/.droid/hooks/session-start.sh`
+Read `~/.factory/settings.json` and check if there's a `"hooks"` key with entries like:
+- `bash $HOME/.factory/hooks/keyword-detector.sh`
+- `bash $HOME/.factory/hooks/persistent-mode.sh`
+- `bash $HOME/.factory/hooks/session-start.sh`
 
 **Diagnosis**:
 - If found: CRITICAL - legacy hooks causing duplicates
@@ -38,7 +38,7 @@ Read `~/.droid/settings.json` and check if there's a `"hooks"` key with entries 
 ### Step 3: Check for Legacy Bash Hook Scripts
 
 ```bash
-ls -la ~/.droid/hooks/*.sh 2>/dev/null
+ls -la ~/.factory/hooks/*.sh 2>/dev/null
 ```
 
 **Diagnosis**:
@@ -48,10 +48,10 @@ ls -la ~/.droid/hooks/*.sh 2>/dev/null
 
 ```bash
 # Check if AGENTS.md exists
-ls -la ~/.droid/AGENTS.md 2>/dev/null
+ls -la ~/.factory/AGENTS.md 2>/dev/null
 
 # Check for OMD marker
-grep -q "oh-my-droid Multi-Agent System" ~/.droid/AGENTS.md 2>/dev/null && echo "Has OMD config" || echo "Missing OMD config"
+grep -q "oh-my-droid Multi-Agent System" ~/.factory/AGENTS.md 2>/dev/null && echo "Has OMD config" || echo "Missing OMD config"
 ```
 
 **Diagnosis**:
@@ -62,7 +62,7 @@ grep -q "oh-my-droid Multi-Agent System" ~/.droid/AGENTS.md 2>/dev/null && echo 
 
 ```bash
 # Count versions in cache
-ls ~/.droid/plugins/cache/omd/oh-my-droid/ 2>/dev/null | wc -l
+ls ~/.factory/plugins/cache/omd/oh-my-droid/ 2>/dev/null | wc -l
 ```
 
 **Diagnosis**:
@@ -74,19 +74,19 @@ Check for legacy agents, commands, and skills installed via curl (before plugin 
 
 ```bash
 # Check for legacy agents directory
-ls -la ~/.droid/agents/ 2>/dev/null
+ls -la ~/.factory/agents/ 2>/dev/null
 
 # Check for legacy commands directory
-ls -la ~/.droid/commands/ 2>/dev/null
+ls -la ~/.factory/commands/ 2>/dev/null
 
 # Check for legacy skills directory
-ls -la ~/.droid/skills/ 2>/dev/null
+ls -la ~/.factory/skills/ 2>/dev/null
 ```
 
 **Diagnosis**:
-- If `~/.droid/agents/` exists with oh-my-droid-related files: WARN - legacy agents (now provided by plugin)
-- If `~/.droid/commands/` exists with oh-my-droid-related files: WARN - legacy commands (now provided by plugin)
-- If `~/.droid/skills/` exists with oh-my-droid-related files: WARN - legacy skills (now provided by plugin)
+- If `~/.factory/agents/` exists with oh-my-droid-related files: WARN - legacy agents (now provided by plugin)
+- If `~/.factory/commands/` exists with oh-my-droid-related files: WARN - legacy commands (now provided by plugin)
+- If `~/.factory/skills/` exists with oh-my-droid-related files: WARN - legacy skills (now provided by plugin)
 
 Look for files like:
 - `architect.md`, `researcher.md`, `explore.md`, `executor.md`, etc. in agents/
@@ -111,12 +111,12 @@ After running all checks, output a report:
 |-------|--------|---------|
 | Plugin Version | OK/WARN/CRITICAL | ... |
 | Legacy Hooks (settings.json) | OK/CRITICAL | ... |
-| Legacy Scripts (~/.droid/hooks/) | OK/WARN | ... |
+| Legacy Scripts (~/.factory/hooks/) | OK/WARN | ... |
 | AGENTS.md | OK/WARN/CRITICAL | ... |
 | Plugin Cache | OK/WARN | ... |
-| Legacy Agents (~/.droid/agents/) | OK/WARN | ... |
-| Legacy Commands (~/.droid/commands/) | OK/WARN | ... |
-| Legacy Skills (~/.droid/skills/) | OK/WARN | ... |
+| Legacy Agents (~/.factory/agents/) | OK/WARN | ... |
+| Legacy Commands (~/.factory/commands/) | OK/WARN | ... |
+| Legacy Skills (~/.factory/skills/) | OK/WARN | ... |
 
 ### Issues Found
 1. [Issue description]
@@ -135,31 +135,31 @@ If issues found, ask user: "Would you like me to fix these issues automatically?
 If yes, apply fixes:
 
 ### Fix: Legacy Hooks in settings.json
-Remove the `"hooks"` section from `~/.droid/settings.json` (keep other settings intact)
+Remove the `"hooks"` section from `~/.factory/settings.json` (keep other settings intact)
 
 ### Fix: Legacy Bash Scripts
 ```bash
-rm -f ~/.droid/hooks/keyword-detector.sh
-rm -f ~/.droid/hooks/persistent-mode.sh
-rm -f ~/.droid/hooks/session-start.sh
-rm -f ~/.droid/hooks/stop-continuation.sh
+rm -f ~/.factory/hooks/keyword-detector.sh
+rm -f ~/.factory/hooks/persistent-mode.sh
+rm -f ~/.factory/hooks/session-start.sh
+rm -f ~/.factory/hooks/stop-continuation.sh
 ```
 
 ### Fix: Outdated Plugin
 ```bash
-rm -rf ~/.droid/plugins/cache/oh-my-droid
+rm -rf ~/.factory/plugins/cache/oh-my-droid
 echo "Plugin cache cleared. Restart Droid to fetch latest version."
 ```
 
 ### Fix: Stale Cache (multiple versions)
 ```bash
 # Keep only latest version
-cd ~/.droid/plugins/cache/omd/oh-my-droid/
+cd ~/.factory/plugins/cache/omd/oh-my-droid/
 ls | sort -V | head -n -1 | xargs rm -rf
 ```
 
 ### Fix: Missing/Outdated AGENTS.md
-Fetch latest from GitHub and write to `~/.droid/AGENTS.md`:
+Fetch latest from GitHub and write to `~/.factory/AGENTS.md`:
 ```
 WebFetch(url: "https://raw.githubusercontent.com/coli-dev/oh-my-droid/main/docs/AGENTS.md", prompt: "Return the complete raw markdown content exactly as-is")
 ```
@@ -170,14 +170,14 @@ Remove legacy agents, commands, and skills directories (now provided by plugin):
 
 ```bash
 # Backup first (optional - ask user)
-# mv ~/.droid/agents ~/.droid/agents.bak
-# mv ~/.droid/commands ~/.droid/commands.bak
-# mv ~/.droid/skills ~/.droid/skills.bak
+# mv ~/.factory/agents ~/.factory/agents.bak
+# mv ~/.factory/commands ~/.factory/commands.bak
+# mv ~/.factory/skills ~/.factory/skills.bak
 
 # Or remove directly
-rm -rf ~/.droid/agents
-rm -rf ~/.droid/commands
-rm -rf ~/.droid/skills
+rm -rf ~/.factory/agents
+rm -rf ~/.factory/commands
+rm -rf ~/.factory/skills
 ```
 
 **Note**: Only remove if these contain oh-my-droid-related files. If user has custom agents/commands/skills, warn them and ask before removing.

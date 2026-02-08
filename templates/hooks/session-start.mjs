@@ -239,13 +239,13 @@ Continue working in ultrawork mode until all tasks are complete.
 `);
     }
 
-    // Check for incomplete todos (project-local only, not global ~/.droid/todos/)
-    // NOTE: We intentionally do NOT scan the global ~/.droid/todos/ directory.
+    // Check for incomplete todos (project-local only, not global ~/.factory/todos/)
+    // NOTE: We intentionally do NOT scan the global ~/.factory/todos/ directory.
     // That directory accumulates todo files from ALL past sessions across all
     // projects, causing phantom task counts in fresh sessions (see issue #354).
     const localTodoPaths = [
       join(directory, '.omd', 'todos.json'),
-      join(directory, '.droid', 'todos.json')
+      join(directory, '.factory', 'todos.json')
     ];
     let incompleteCount = 0;
     for (const todoFile of localTodoPaths) {

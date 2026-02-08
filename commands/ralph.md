@@ -25,7 +25,7 @@ Ralph automatically activates Ultrawork for maximum parallel execution. You MUST
 | **UI work** | ✗ NEVER | designer/designer-high |
 | **Docs** | ✗ NEVER | writer |
 
-**Path Exception**: Only write to `.omd/`, `.droid/`, `AGENTS.md`, `AGENTS.md`
+**Path Exception**: Only write to `.omd/`, `.factory/`, `AGENTS.md`, `AGENTS.md`
 
 ### Parallel Execution Rules
 - **PARALLEL**: Fire independent calls simultaneously - NEVER wait sequentially

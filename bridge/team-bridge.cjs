@@ -195,8 +195,8 @@ function sanitizeTaskId(taskId) {
   return taskId;
 }
 function tasksDir(teamName) {
-  const result = (0, import_path2.join)((0, import_os.homedir)(), ".droid", "tasks", sanitizeName(teamName));
-  validateResolvedPath(result, (0, import_path2.join)((0, import_os.homedir)(), ".droid", "tasks"));
+  const result = (0, import_path2.join)((0, import_os.homedir)(), ".factory", "tasks", sanitizeName(teamName));
+  validateResolvedPath(result, (0, import_path2.join)((0, import_os.homedir)(), ".factory", "tasks"));
   return result;
 }
 function taskPath(teamName, taskId) {
@@ -345,8 +345,8 @@ var import_path3 = require("path");
 var import_os2 = require("os");
 var MAX_INBOX_READ_SIZE = 10 * 1024 * 1024;
 function teamsDir(teamName) {
-  const result = (0, import_path3.join)((0, import_os2.homedir)(), ".droid", "teams", sanitizeName(teamName));
-  validateResolvedPath(result, (0, import_path3.join)((0, import_os2.homedir)(), ".droid", "teams"));
+  const result = (0, import_path3.join)((0, import_os2.homedir)(), ".factory", "teams", sanitizeName(teamName));
+  validateResolvedPath(result, (0, import_path3.join)((0, import_os2.homedir)(), ".factory", "teams"));
   return result;
 }
 function inboxPath(teamName, workerName) {
@@ -511,8 +511,8 @@ var import_fs4 = require("fs");
 var import_path4 = require("path");
 var import_os3 = require("os");
 function configPath(teamName) {
-  const result = (0, import_path4.join)((0, import_os3.homedir)(), ".droid", "teams", sanitizeName(teamName), "config.json");
-  validateResolvedPath(result, (0, import_path4.join)((0, import_os3.homedir)(), ".droid", "teams"));
+  const result = (0, import_path4.join)((0, import_os3.homedir)(), ".factory", "teams", sanitizeName(teamName), "config.json");
+  validateResolvedPath(result, (0, import_path4.join)((0, import_os3.homedir)(), ".factory", "teams"));
   return result;
 }
 function shadowRegistryPath(workingDirectory) {
@@ -1261,7 +1261,7 @@ function getWorktreeRoot(cwd) {
 function validateConfigPath(configPath2, homeDir) {
   const resolved = (0, import_path8.resolve)(configPath2);
   const isUnderHome = resolved.startsWith(homeDir + "/") || resolved === homeDir;
-  const isTrustedSubpath = resolved.includes("/.droid/") || resolved.includes("/.omd/");
+  const isTrustedSubpath = resolved.includes("/.factory/") || resolved.includes("/.omd/");
   if (!isUnderHome || !isTrustedSubpath) return false;
   try {
     const parentDir = (0, import_path8.resolve)(resolved, "..");
@@ -1302,7 +1302,7 @@ function main() {
   const configPath2 = (0, import_path8.resolve)(process.argv[configIdx + 1]);
   const home = (0, import_os4.homedir)();
   if (!validateConfigPath(configPath2, home)) {
-    console.error(`Config path must be under ~/ with .droid/ or .omd/ subpath: ${configPath2}`);
+    console.error(`Config path must be under ~/ with .factory/ or .omd/ subpath: ${configPath2}`);
     process.exit(1);
   }
   let config;

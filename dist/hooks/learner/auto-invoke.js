@@ -9,10 +9,10 @@ const DEFAULT_CONFIG = {
     cooldownMs: 30000,
 };
 /**
- * Load auto-invocation config from ~/.droid/.omd-config.json
+ * Load auto-invocation config from ~/.factory/.omd-config.json
  */
 export function loadInvocationConfig() {
-    const configPath = path.join(os.homedir(), '.droid', '.omd-config.json');
+    const configPath = path.join(os.homedir(), '.factory', '.omd-config.json');
     try {
         if (!fs.existsSync(configPath)) {
             return { ...DEFAULT_CONFIG };

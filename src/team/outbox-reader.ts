@@ -25,7 +25,7 @@ export interface OutboxCursor {
 const MAX_OUTBOX_READ_SIZE = 10 * 1024 * 1024; // 10MB cap per read
 
 function teamsDir(): string {
-  return join(homedir(), '.droid', 'teams');
+  return join(homedir(), '.factory', 'teams');
 }
 
 /**

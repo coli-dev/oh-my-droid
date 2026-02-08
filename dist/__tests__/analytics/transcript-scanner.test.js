@@ -39,7 +39,7 @@ vi.mock('fs/promises');
 vi.mock('os');
 describe('transcript-scanner', () => {
     const mockHomedir = '/home/testuser';
-    const projectsDir = join(mockHomedir, '.droid', 'projects');
+    const projectsDir = join(mockHomedir, '.factory', 'projects');
     beforeEach(() => {
         vi.mocked(homedir).mockReturnValue(mockHomedir);
     });

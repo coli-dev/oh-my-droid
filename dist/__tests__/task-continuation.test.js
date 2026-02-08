@@ -19,7 +19,7 @@ describe('Task System Support', () => {
         it('should return correct path for session ID', () => {
             const sessionId = 'abc123';
             const result = getTaskDirectory(sessionId);
-            expect(result).toBe(path.join(mockHomedir, '.droid', 'tasks', sessionId));
+            expect(result).toBe(path.join(mockHomedir, '.factory', 'tasks', sessionId));
         });
         it('should handle session ID with special characters', () => {
             const sessionId = 'session-123_test';
@@ -712,7 +712,7 @@ describe('Task System Support', () => {
         it('should return valid path for valid session ID', () => {
             const result = getTaskDirectory('valid-session-123');
             expect(result).toContain('valid-session-123');
-            expect(result).toContain(path.join('.droid', 'tasks'));
+            expect(result).toContain(path.join('.factory', 'tasks'));
         });
     });
     describe('Security: readTaskFiles with validation', () => {

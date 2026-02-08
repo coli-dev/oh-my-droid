@@ -115,6 +115,6 @@ All mode state files use standardized locations:
 | pipeline | `pipeline-state.json` |
 | swarm | `swarm-summary.json` + `swarm-active.marker` |
 
-**Important:** Never store OMD state in `~/.droid/` - that directory is reserved for Droid itself.
+**Important:** Never store OMD state in `~/.factory/` - that directory is reserved for Droid itself.
 
 Legacy locations are auto-migrated on read.

@@ -18,7 +18,7 @@ describe('message-router', () => {
     rmSync(testDir, { recursive: true, force: true });
     // Clean up inbox files that may have been created
     try {
-      const inboxDir = join(homedir(), '.droid', 'teams', teamName, 'inbox');
+      const inboxDir = join(homedir(), '.factory', 'teams', teamName, 'inbox');
       rmSync(inboxDir, { recursive: true, force: true });
     } catch { /* ignore */ }
   });
@@ -47,7 +47,7 @@ describe('message-router', () => {
       expect(result.details).toContain('inbox');
 
       // Verify inbox file was written
-      const inboxPath = join(homedir(), '.droid', 'teams', teamName, 'inbox', 'codex-1.jsonl');
+      const inboxPath = join(homedir(), '.factory', 'teams', teamName, 'inbox', 'codex-1.jsonl');
       expect(existsSync(inboxPath)).toBe(true);
       const content = readFileSync(inboxPath, 'utf-8').trim();
       const msg = JSON.parse(content);
@@ -73,8 +73,8 @@ describe('message-router', () => {
       expect(result.nativeRecipients).toEqual([]);
 
       // Verify both inbox files were written
-      const inbox1 = join(homedir(), '.droid', 'teams', teamName, 'inbox', 'worker1.jsonl');
-      const inbox2 = join(homedir(), '.droid', 'teams', teamName, 'inbox', 'worker2.jsonl');
+      const inbox1 = join(homedir(), '.factory', 'teams', teamName, 'inbox', 'worker1.jsonl');
+      const inbox2 = join(homedir(), '.factory', 'teams', teamName, 'inbox', 'worker2.jsonl');
       expect(existsSync(inbox1)).toBe(true);
       expect(existsSync(inbox2)).toBe(true);
     });

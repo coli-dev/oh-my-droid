@@ -3,7 +3,7 @@
  *
  * Handles loading and merging configuration from multiple sources:
  * - User config: ~/.config/droid-sisyphus/config.jsonc
- * - Project config: .droid/sisyphus.jsonc
+ * - Project config: .factory/sisyphus.jsonc
  * - Environment variables
  */
 
@@ -93,7 +93,7 @@ export function getConfigPaths(): { user: string; project: string } {
 
   return {
     user: join(userConfigDir, 'droid-sisyphus', 'config.jsonc'),
-    project: join(process.cwd(), '.droid', 'sisyphus.jsonc')
+    project: join(process.cwd(), '.factory', 'sisyphus.jsonc')
   };
 }
 
@@ -261,8 +261,8 @@ export function findContextFiles(startDir?: string): string[] {
   const contextFileNames = [
     'AGENTS.md',
     'AGENTS.md',
-    '.droid/AGENTS.md',
-    '.droid/AGENTS.md'
+    '.factory/AGENTS.md',
+    '.factory/AGENTS.md'
   ];
 
   // Search in current directory and parent directories

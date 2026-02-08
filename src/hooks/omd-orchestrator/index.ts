@@ -55,7 +55,7 @@ export function clearEnforcementCache(): void {
 
 /**
  * Read enforcement level from config
- * Checks: .omd/config.json → ~/.droid/.omd-config.json → default (warn)
+ * Checks: .omd/config.json → ~/.factory/.omd-config.json → default (warn)
  */
 function getEnforcementLevel(directory: string): EnforcementLevel {
   const now = Date.now();
@@ -68,7 +68,7 @@ function getEnforcementLevel(directory: string): EnforcementLevel {
   }
 
   const localConfig = path.join(directory, '.omd', 'config.json');
-  const globalConfig = path.join(os.homedir(), '.droid', '.omd-config.json');
+  const globalConfig = path.join(os.homedir(), '.factory', '.omd-config.json');
 
   let level: EnforcementLevel = 'warn'; // Default
 

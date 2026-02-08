@@ -32,7 +32,7 @@ services:
       # Docker socket for SWE-bench container operations
       - /var/run/docker.sock:/var/run/docker.sock
       # Droid config persistence
-      - droid-config:/root/.droid
+      - droid-config:/root/.factory
 
     # Resource limits
     deploy:

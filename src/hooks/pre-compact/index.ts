@@ -285,7 +285,7 @@ function readTodoSummary(directory: string): {
   completed: number;
 } {
   const todoPaths = [
-    join(directory, ".droid", "todos.json"),
+    join(directory, ".factory", "todos.json"),
     join(directory, ".omd", "state", "todos.json"),
   ];
 

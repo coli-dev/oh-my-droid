@@ -8,7 +8,7 @@ Configure Model Context Protocol (MCP) servers to extend Droid's capabilities wi
 
 ## Overview
 
-MCP servers provide additional tools that Droid agents can use. This skill helps you configure popular MCP servers in your `~/.droid/settings.json`.
+MCP servers provide additional tools that Droid agents can use. This skill helps you configure popular MCP servers in your `~/.factory/settings.json`.
 
 ## Step 1: Show Available MCP Servers
 
@@ -56,7 +56,7 @@ Do you have a GitHub Personal Access Token?
 
 ## Step 3: Update settings.json
 
-Read the current `~/.droid/settings.json` and add/update the `mcpServers` section.
+Read the current `~/.factory/settings.json` and add/update the `mcpServers` section.
 
 ### Context7 Configuration:
 ```json
@@ -117,14 +117,14 @@ Read the current `~/.droid/settings.json` and add/update the `mcpServers` sectio
 
 When updating settings.json:
 
-1. Read existing file: `~/.droid/settings.json`
+1. Read existing file: `~/.factory/settings.json`
 2. Parse as JSON (handle comments with jsonc-parser if needed)
 3. Merge new `mcpServers` entries with existing ones (don't overwrite user's other MCP servers)
 4. Write back to file with proper formatting
 
 ```bash
 # Backup existing settings first
-cp ~/.droid/settings.json ~/.droid/settings.json.bak 2>/dev/null || true
+cp ~/.factory/settings.json ~/.factory/settings.json.bak 2>/dev/null || true
 ```
 
 Use the Edit tool or Write tool to update the settings file, preserving existing configuration.
@@ -135,10 +135,10 @@ After configuration, verify the MCP servers are properly set up:
 
 ```bash
 # Check if settings.json has mcpServers
-grep -q "mcpServers" ~/.droid/settings.json && echo "MCP servers configured" || echo "Configuration may have failed"
+grep -q "mcpServers" ~/.factory/settings.json && echo "MCP servers configured" || echo "Configuration may have failed"
 
 # List configured servers
-node -e "const s = require('$HOME/.droid/settings.json'); console.log('Configured MCP servers:', Object.keys(s.mcpServers || {}).join(', ') || 'none')"
+node -e "const s = require('$HOME/.factory/settings.json'); console.log('Configured MCP servers:', Object.keys(s.mcpServers || {}).join(', ') || 'none')"
 ```
 
 ## Step 6: Show Completion Message
@@ -160,7 +160,7 @@ USAGE TIPS:
 - GitHub: Interact with GitHub repos, issues, and PRs
 
 TROUBLESHOOTING:
-- If MCP servers don't appear, check ~/.droid/settings.json for syntax errors
+- If MCP servers don't appear, check ~/.factory/settings.json for syntax errors
 - Ensure you have Node.js 18+ installed for npx commands
 - Run /oh-my-droid:doctor to diagnose issues
 

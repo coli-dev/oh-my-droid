@@ -124,7 +124,7 @@ export function calculateDistance(rulePath, currentFile, projectRoot) {
 /**
  * Find all rule files for a given context.
  * Searches from currentFile upward to projectRoot for rule directories,
- * then user-level directory (~/.droid/rules).
+ * then user-level directory (~/.factory/rules).
  */
 export function findRuleFiles(projectRoot, homeDir, currentFile) {
     const candidates = [];
@@ -187,7 +187,7 @@ export function findRuleFiles(projectRoot, homeDir, currentFile) {
             }
         }
     }
-    // Search user-level rule directory (~/.droid/rules)
+    // Search user-level rule directory (~/.factory/rules)
     const userRuleDir = join(homeDir, USER_RULE_DIR);
     const userFiles = [];
     findRuleFilesRecursive(userRuleDir, userFiles);

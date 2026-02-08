@@ -198,12 +198,12 @@ Directory structures have been renamed for consistency with the new package name
 - **New**: `~/.omd/`
 
 #### Skills Directory
-- **Old**: `~/.droid/skills/sisyphus-learned/`
-- **New**: `~/.droid/skills/omd-learned/`
+- **Old**: `~/.factory/skills/sisyphus-learned/`
+- **New**: `~/.factory/skills/omd-learned/`
 
 #### Config Files
-- **Old**: `~/.droid/sisyphus/mnemosyne.json`
-- **New**: `~/.droid/omd/learner.json`
+- **Old**: `~/.factory/sisyphus/mnemosyne.json`
+- **New**: `~/.factory/omd/learner.json`
 
 ### Environment Variables
 
@@ -325,10 +325,10 @@ mv .sisyphus .omd
 mv ~/.sisyphus ~/.omd
 
 # Skills directory
-mv ~/.droid/skills/sisyphus-learned ~/.droid/skills/omd-learned
+mv ~/.factory/skills/sisyphus-learned ~/.factory/skills/omd-learned
 
 # Config directory
-mv ~/.droid/sisyphus ~/.droid/omd
+mv ~/.factory/sisyphus ~/.factory/omd
 ```
 
 #### 5. Update Environment Variables
@@ -423,7 +423,7 @@ Next time keywords match → Solution auto-injects
 
 Storage:
 - **Project-level**: `.omd/skills/` (version-controlled)
-- **User-level**: `~/.droid/skills/omd-learned/` (portable)
+- **User-level**: `~/.factory/skills/omd-learned/` (portable)
 
 #### 4. HUD Statusline (Real-Time Orchestration)
 
@@ -707,7 +707,7 @@ All existing configurations, plans, and workflows continue working unchanged.
 
 #### Default Execution Mode
 
-Set your preferred execution mode in `~/.droid/.omd-config.json`:
+Set your preferred execution mode in `~/.factory/.omd-config.json`:
 
 ```json
 {
@@ -910,7 +910,7 @@ Apply oh-my-droid to current project only:
 /oh-my-droid:omd-default
 ```
 
-Creates: `./.droid/AGENTS.md`
+Creates: `./.factory/AGENTS.md`
 
 ### Global Configuration
 
@@ -920,7 +920,7 @@ Apply to all Droid sessions:
 /oh-my-droid:omd-default-global
 ```
 
-Creates: `~/.droid/AGENTS.md`
+Creates: `~/.factory/AGENTS.md`
 
 **Precedence:** Project config overrides global if both exist.
 

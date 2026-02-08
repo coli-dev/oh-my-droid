@@ -54,7 +54,7 @@ export function routeMessage(
   }
 
   // MCP worker: write to inbox
-  const teamsBase = join(homedir(), '.droid', 'teams');
+  const teamsBase = join(homedir(), '.factory', 'teams');
   const inboxDir = join(teamsBase, sanitizeName(teamName), 'inbox');
   ensureDirWithMode(inboxDir);
   const inboxPath = join(inboxDir, `${sanitizeName(recipientName)}.jsonl`);
@@ -93,7 +93,7 @@ export function broadcastToTeam(
       nativeRecipients.push(member.name);
     } else {
       // Write to each MCP worker's inbox
-      const teamsBase = join(homedir(), '.droid', 'teams');
+      const teamsBase = join(homedir(), '.factory', 'teams');
       const inboxDir = join(teamsBase, sanitizeName(teamName), 'inbox');
       ensureDirWithMode(inboxDir);
       const inboxPath = join(inboxDir, `${sanitizeName(member.name)}.jsonl`);

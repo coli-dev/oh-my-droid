@@ -106,7 +106,7 @@ During execution, you MUST follow these rules:
 
 **Path-Based Exception**: You may ONLY use Edit/Write for:
 - `.omd/**` (state files)
-- `.droid/**` (config)
+- `.factory/**` (config)
 - `AGENTS.md`, `AGENTS.md` (docs)
 
 **All source code changes MUST go through executor agents.**
@@ -158,7 +158,7 @@ Signal: **AUTOPILOT_COMPLETE**
 ### Delegation Rules (MANDATORY)
 - **NEVER** use Edit/Write/Bash for source code changes
 - **ALWAYS** delegate implementation to executor agents
-- **ONLY** write directly to `.omd/`, `.droid/`, `AGENTS.md`, `AGENTS.md`
+- **ONLY** write directly to `.omd/`, `.factory/`, `AGENTS.md`, `AGENTS.md`
 - If you attempt direct code changes, the PreToolUse hook will warn you
 
 ### Execution Rules

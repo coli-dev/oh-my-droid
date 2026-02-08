@@ -113,7 +113,7 @@ export function getMarkerFilePath(cwd, mode) {
     return join(getStateDir(cwd), config.markerFile);
 }
 /**
- * Get the global state file path (in ~/.droid/) for modes that support it
+ * Get the global state file path (in ~/.factory/) for modes that support it
  * @deprecated Global state is no longer supported. All modes use local-only state in .omd/state/
  * @returns Always returns null
  */
@@ -307,7 +307,7 @@ export function getAllModeStatuses(cwd, sessionId) {
  * - Local state file (.omd/state/{mode}-state.json)
  * - Session-scoped state file if sessionId provided
  * - Local marker file if applicable
- * - Global state file if applicable (~/.droid/{mode}-state.json)
+ * - Global state file if applicable (~/.factory/{mode}-state.json)
  *
  * @returns true if all files were deleted successfully (or didn't exist)
  */

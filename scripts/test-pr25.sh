@@ -188,23 +188,23 @@ if node dist/cli/index.js postinstall &> /tmp/pr25-postinstall.log; then
     log_pass "Installer postinstall succeeded"
 
     # Verify file exists
-    if [ -f "$HOME/.droid/agents/qa-tester.md" ]; then
-        log_pass "qa-tester.md installed to ~/.droid/agents/"
+    if [ -f "$HOME/.factory/agents/qa-tester.md" ]; then
+        log_pass "qa-tester.md installed to ~/.factory/agents/"
 
         # Verify content
-        if grep -q "tmux" "$HOME/.droid/agents/qa-tester.md"; then
+        if grep -q "tmux" "$HOME/.factory/agents/qa-tester.md"; then
             log_pass "qa-tester.md contains tmux content"
         else
             log_fail "qa-tester.md missing tmux content"
         fi
 
-        if grep -q "Oracle" "$HOME/.droid/agents/qa-tester.md"; then
+        if grep -q "Oracle" "$HOME/.factory/agents/qa-tester.md"; then
             log_pass "qa-tester.md contains Oracle collaboration section"
         else
             log_fail "qa-tester.md missing Oracle collaboration section"
         fi
     else
-        log_fail "qa-tester.md NOT installed to ~/.droid/agents/"
+        log_fail "qa-tester.md NOT installed to ~/.factory/agents/"
     fi
 else
     log_fail "Installer postinstall failed"

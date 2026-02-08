@@ -25,7 +25,7 @@ export interface BridgeWorkerPermissions {
     allowedCommands: string[];
     maxFileSize: number;
 }
-/** Mirrors the JSON structure of ~/.droid/tasks/{team}/{id}.json */
+/** Mirrors the JSON structure of ~/.factory/tasks/{team}/{id}.json */
 export interface TaskFile {
     id: string;
     subject: string;

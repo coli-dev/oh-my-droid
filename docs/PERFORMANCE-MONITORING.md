@@ -206,7 +206,7 @@ The replay system automatically identifies bottlenecks:
 
 ### Configuration
 
-Edit `~/.droid/settings.json`:
+Edit `~/.factory/settings.json`:
 
 ```json
 {

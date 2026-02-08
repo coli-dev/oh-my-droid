@@ -33,7 +33,7 @@ export async function launchTokscaleTUI(options = {}) {
             : 'tui'; // 'overview' and 'stats' use default tui
     const args = ['tokscale@latest', subcommand];
     // Always use --droid flag for OMD (Droid-focused) unless explicitly disabled
-    if (options.droid !== false) {
+    if (options.factory !== false) {
         args.push('--droid');
     }
     const proc = spawn('bunx', args, {

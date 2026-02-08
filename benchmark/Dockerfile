@@ -44,7 +44,7 @@ RUN mkdir -p /workspace/results \
     /workspace/predictions \
     /workspace/repos \
     /workspace/logs \
-    /root/.droid
+    /root/.factory
 
 # Environment variables
 ENV PYTHONUNBUFFERED=1

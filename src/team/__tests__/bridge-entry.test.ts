@@ -14,8 +14,8 @@ describe('bridge-entry security', () => {
     expect(source).toContain('validateBridgeWorkingDirectory');
   });
 
-  it('validates config path is under ~/.droid/ or .omd/', () => {
-    expect(source).toContain('.droid/');
+  it('validates config path is under ~/.factory/ or .omd/', () => {
+    expect(source).toContain('.factory/');
     expect(source).toContain('.omd/');
   });
 
@@ -81,8 +81,8 @@ describe('validateConfigPath', () => {
     expect(validateConfigPath('/home/user/project/config.json', home)).toBe(false);
   });
 
-  it('should accept paths under ~/.droid/', () => {
-    expect(validateConfigPath('/home/user/.droid/teams/foo/config.json', home)).toBe(true);
+  it('should accept paths under ~/.factory/', () => {
+    expect(validateConfigPath('/home/user/.factory/teams/foo/config.json', home)).toBe(true);
   });
 
   it('should accept paths under project/.omd/', () => {
@@ -90,11 +90,11 @@ describe('validateConfigPath', () => {
   });
 
   it('should reject path that matches subpath but not home', () => {
-    expect(validateConfigPath('/other/.droid/config.json', home)).toBe(false);
+    expect(validateConfigPath('/other/.factory/config.json', home)).toBe(false);
   });
 
   it('should reject path traversal via ../ that escapes trusted subpath', () => {
-    // ~/foo/.droid/../../evil.json resolves to ~/evil.json (no trusted subpath)
-    expect(validateConfigPath('/home/user/foo/.droid/../../evil.json', home)).toBe(false);
+    // ~/foo/.factory/../../evil.json resolves to ~/evil.json (no trusted subpath)
+    expect(validateConfigPath('/home/user/foo/.factory/../../evil.json', home)).toBe(false);
   });
 });

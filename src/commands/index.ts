@@ -26,7 +26,7 @@ export interface ExpandedCommand {
  * Get the commands directory path
  */
 export function getCommandsDir(): string {
-  return join(homedir(), '.droid', 'commands');
+  return join(homedir(), '.factory', 'commands');
 }
 
 /**

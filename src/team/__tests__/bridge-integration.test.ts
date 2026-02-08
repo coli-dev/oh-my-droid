@@ -9,8 +9,8 @@ import { writeHeartbeat, readHeartbeat } from '../heartbeat.js';
 import { sanitizeName } from '../tmux-session.js';
 
 const TEST_TEAM = 'test-bridge-int';
-const TASKS_DIR = join(homedir(), '.droid', 'tasks', TEST_TEAM);
-const TEAMS_DIR = join(homedir(), '.droid', 'teams', TEST_TEAM);
+const TASKS_DIR = join(homedir(), '.factory', 'tasks', TEST_TEAM);
+const TEAMS_DIR = join(homedir(), '.factory', 'teams', TEST_TEAM);
 const WORK_DIR = join(tmpdir(), '__test_bridge_work__');
 
 function writeTask(task: TaskFile): void {
@@ -185,7 +185,7 @@ describe('validateBridgeWorkingDirectory logic', () => {
   });
 
   it('accepts a valid directory under home', () => {
-    const testDir = join(homedir(), '.droid', '__bridge_validate_test__');
+    const testDir = join(homedir(), '.factory', '__bridge_validate_test__');
     mkdirSync(testDir, { recursive: true });
     try {
       expect(() => validateBridgeWorkingDirectory(testDir)).not.toThrow();

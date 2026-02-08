@@ -23,7 +23,7 @@ export function toForwardSlash(path: string): string {
  * Get Droid config directory path
  */
 export function getDroidConfigDir(): string {
-  return join(homedir(), '.droid');
+  return join(homedir(), '.factory');
 }
 
 /**

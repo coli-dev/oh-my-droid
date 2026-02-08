@@ -2,7 +2,7 @@
  * Installer Module
  *
  * Handles installation of OMD agents, commands, and configuration
- * into the Droid config directory (~/.droid/).
+ * into the Droid config directory (~/.factory/).
  *
  * Cross-platform support via Node.js-based hook scripts (.mjs).
  * Bash hook scripts were removed in v3.9.0.
@@ -19,7 +19,7 @@ export declare const VERSION_FILE: string;
 /**
  * Core commands - DISABLED for v3.0+
  * All commands are now plugin-scoped skills managed by Droid.
- * The installer no longer copies commands to ~/.droid/commands/
+ * The installer no longer copies commands to ~/.factory/commands/
  */
 export declare const CORE_COMMANDS: string[];
 /** Current version */
@@ -75,7 +75,7 @@ export declare function isDroidInstalled(): boolean;
 /**
  * Check if we're running in Droid plugin context
  *
- * When installed as a plugin, we should NOT copy files to ~/.droid/
+ * When installed as a plugin, we should NOT copy files to ~/.factory/
  * because the plugin system already handles file access via ${DROID_PLUGIN_ROOT}.
  *
  * Detection method:
@@ -88,10 +88,10 @@ export declare function isRunningAsPlugin(): boolean;
 /**
  * Check if we're running as a project-scoped plugin (not global)
  *
- * Project-scoped plugins are installed in the project's .droid/plugins/ directory,
- * while global plugins are installed in ~/.droid/plugins/.
+ * Project-scoped plugins are installed in the project's .factory/plugins/ directory,
+ * while global plugins are installed in ~/.factory/plugins/.
  *
- * When project-scoped, we should NOT modify global settings (like ~/.droid/settings.json)
+ * When project-scoped, we should NOT modify global settings (like ~/.factory/settings.json)
  * because the user explicitly chose project-level installation.
  *
  * @returns true if running as a project-scoped plugin, false otherwise

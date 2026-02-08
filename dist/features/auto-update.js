@@ -19,7 +19,7 @@ export const REPO_NAME = 'oh-my-droid';
 export const GITHUB_API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`;
 export const GITHUB_RAW_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}`;
 /** Installation paths */
-export const DROID_CONFIG_DIR = join(homedir(), '.droid');
+export const DROID_CONFIG_DIR = join(homedir(), '.factory');
 export const VERSION_FILE = join(DROID_CONFIG_DIR, '.omd-version.json');
 export const CONFIG_FILE = join(DROID_CONFIG_DIR, '.omd-config.json');
 /**

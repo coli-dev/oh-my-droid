@@ -3,13 +3,13 @@ import { toForwardSlash, toShellPath, getDataDir, getConfigDir } from '../paths.
 describe('cross-platform path utilities', () => {
     describe('toForwardSlash', () => {
         it('should convert backslashes to forward slashes', () => {
-            expect(toForwardSlash('C:\\Users\\test\\.droid')).toBe('C:/Users/test/.droid');
+            expect(toForwardSlash('C:\\Users\\test\\.factory')).toBe('C:/Users/test/.factory');
         });
         it('should leave forward slashes unchanged', () => {
-            expect(toForwardSlash('/home/user/.droid')).toBe('/home/user/.droid');
+            expect(toForwardSlash('/home/user/.factory')).toBe('/home/user/.factory');
         });
         it('should handle mixed slashes', () => {
-            expect(toForwardSlash('C:\\Users/test\\.droid')).toBe('C:/Users/test/.droid');
+            expect(toForwardSlash('C:\\Users/test\\.factory')).toBe('C:/Users/test/.factory');
         });
         it('should handle empty string', () => {
             expect(toForwardSlash('')).toBe('');

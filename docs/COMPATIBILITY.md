@@ -43,10 +43,10 @@ Plugins              MCP Configs          OMD Tools
 
 Scans for external plugins and MCP servers from:
 
-- `~/.droid/plugins/` - OMD/Droid plugins directory
-- `~/.droid/installed-plugins/` - Alternative plugins location
-- `~/.droid/settings.json` - Droid MCP server configs
-- `~/.droid/droid_desktop_config.json` - Droid Desktop MCP server configs
+- `~/.factory/plugins/` - OMD/Droid plugins directory
+- `~/.factory/installed-plugins/` - Alternative plugins location
+- `~/.factory/settings.json` - Droid MCP server configs
+- `~/.factory/droid_desktop_config.json` - Droid Desktop MCP server configs
 - Plugin manifests (`plugin.json`) for embedded MCP servers
 
 **Discovers:**
@@ -101,10 +101,10 @@ Manages MCP server connections:
 
 ### Directory Structure
 
-Plugins are discovered from `~/.droid/plugins/` and `~/.droid/installed-plugins/`:
+Plugins are discovered from `~/.factory/plugins/` and `~/.factory/installed-plugins/`:
 
 ```
-~/.droid/plugins/
+~/.factory/plugins/
 ├── my-plugin/
 │   ├── plugin.json          (required)
 │   ├── skills/              (optional)
@@ -186,7 +186,7 @@ Skill documentation here...
 
 ### Droid Desktop Config
 
-Located at `~/.droid/droid_desktop_config.json`:
+Located at `~/.factory/droid_desktop_config.json`:
 
 ```json
 {
@@ -207,7 +207,7 @@ Located at `~/.droid/droid_desktop_config.json`:
 
 ### Droid Settings
 
-Located at `~/.droid/settings.json`:
+Located at `~/.factory/settings.json`:
 
 ```json
 {
@@ -513,8 +513,8 @@ import {
 
 // Initialize everything
 const result = await initializeCompatibility({
-  pluginPaths: ['~/.droid/plugins'],
-  mcpConfigPath: '~/.droid/droid_desktop_config.json',
+  pluginPaths: ['~/.factory/plugins'],
+  mcpConfigPath: '~/.factory/droid_desktop_config.json',
   autoConnect: true  // Auto-connect to MCP servers
 });
 
@@ -544,8 +544,8 @@ const plugins = discoverPlugins({
 
 // Discover MCP servers
 const servers = discoverMcpServers({
-  mcpConfigPath: '~/.droid/droid_desktop_config.json',
-  settingsPath: '~/.droid/settings.json'
+  mcpConfigPath: '~/.factory/droid_desktop_config.json',
+  settingsPath: '~/.factory/settings.json'
 });
 
 // Discover everything at once
@@ -879,8 +879,8 @@ registerCustomPatterns();
 **Problem:** `discoverPlugins()` returns empty array.
 
 **Checklist:**
-- Plugins are in `~/.droid/plugins/` or `~/.droid/installed-plugins/`
-- Each plugin has a `plugin.json` in the root or `.droid-plugin/` subdirectory
+- Plugins are in `~/.factory/plugins/` or `~/.factory/installed-plugins/`
+- Each plugin has a `plugin.json` in the root or `.factory-plugin/` subdirectory
 - Plugin name doesn't conflict with reserved names (e.g., 'oh-my-droid')
 - File permissions allow reading the directory
 

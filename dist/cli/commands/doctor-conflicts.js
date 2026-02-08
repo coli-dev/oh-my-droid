@@ -7,11 +7,11 @@ import { homedir } from 'os';
 import { join } from 'path';
 import { colors } from '../utils/formatting.js';
 /**
- * Check for hook conflicts in ~/.droid/settings.json
+ * Check for hook conflicts in ~/.factory/settings.json
  */
 export function checkHookConflicts() {
     const conflicts = [];
-    const settingsPath = join(homedir(), '.droid', 'settings.json');
+    const settingsPath = join(homedir(), '.factory', 'settings.json');
     if (!existsSync(settingsPath)) {
         return conflicts;
     }
@@ -53,7 +53,7 @@ export function checkHookConflicts() {
  * Check AGENTS.md for OMD markers and user content
  */
 export function checkAgentsMdStatus() {
-    const droidMdPath = join(homedir(), '.droid', 'AGENTS.md');
+    const droidMdPath = join(homedir(), '.factory', 'AGENTS.md');
     if (!existsSync(droidMdPath)) {
         return null;
     }
@@ -101,7 +101,7 @@ export function checkEnvFlags() {
  */
 export function checkConfigIssues() {
     const unknownFields = [];
-    const configPath = join(homedir(), '.droid', '.omd-config.json');
+    const configPath = join(homedir(), '.factory', '.omd-config.json');
     if (!existsSync(configPath)) {
         return { unknownFields };
     }

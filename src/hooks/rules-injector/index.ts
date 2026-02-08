@@ -2,8 +2,8 @@
  * Rules Injector Hook
  *
  * Automatically injects relevant rule files when Droid accesses files.
- * Supports project-level (.droid/rules, .github/instructions) and
- * user-level (~/.droid/rules) rule files.
+ * Supports project-level (.factory/rules, .github/instructions) and
+ * user-level (~/.factory/rules) rule files.
  *
  * Ported from oh-my-opencode's rules-injector hook.
  */

@@ -11,7 +11,7 @@ import type { TaskFile } from '../types.js';
 import type { LockHandle } from '../task-file-ops.js';
 
 const TEST_TEAM = 'test-team-ops';
-const TASKS_DIR = join(homedir(), '.droid', 'tasks', TEST_TEAM);
+const TASKS_DIR = join(homedir(), '.factory', 'tasks', TEST_TEAM);
 
 function writeTask(task: TaskFile): void {
   mkdirSync(TASKS_DIR, { recursive: true });

@@ -45,7 +45,7 @@ export interface ScanOptions {
  */
 export declare function decodeProjectPath(dirName: string): string;
 /**
- * Scan for all transcript files in ~/.droid/projects/
+ * Scan for all transcript files in ~/.factory/projects/
  */
 export declare function scanTranscripts(options?: ScanOptions): Promise<ScanResult>;
 //# sourceMappingURL=transcript-scanner.d.ts.map

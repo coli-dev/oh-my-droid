@@ -29,7 +29,7 @@ oh-my-droid enhances Droid with:
 | `docs/AGENTS.md` | End-user orchestration instructions (installed to user projects) |
 | `src/index.ts` | Main entry point - exports `createSisyphusSession()` |
 | `.mcp.json` | MCP server configuration for plugin discovery |
-| `.droid-plugin/plugin.json` | Droid plugin manifest |
+| `.factory-plugin/plugin.json` | Droid plugin manifest |
 
 ## Subdirectories
 
@@ -285,7 +285,7 @@ JavaScript, TypeScript, TSX, Python, Ruby, Go, Rust, Java, Kotlin, Swift, C, C++
 | `.omd/state/*.json` | Execution mode state (autopilot, swarm, etc.) |
 | `.omd/notepads/` | Plan-scoped wisdom (learnings, decisions, issues) |
 | `~/.omd/state/` | Global state |
-| `~/.droid/.omd/` | Legacy state (auto-migrated) |
+| `~/.factory/.omd/` | Legacy state (auto-migrated) |
 
 ## Dependencies
 
@@ -337,7 +337,7 @@ Key hooks in `src/hooks/`:
 
 ## Configuration
 
-Settings in `~/.droid/.omd-config.json`:
+Settings in `~/.factory/.omd-config.json`:
 
 ```json
 {

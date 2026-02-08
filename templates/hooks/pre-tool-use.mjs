@@ -18,8 +18,8 @@ const { readStdin } = await import(path.join(__dirname, 'lib', 'stdin.mjs'));
 // Paths are normalized to forward slashes before matching
 const ALLOWED_PATH_PATTERNS = [
   /^\.omd\//,          // .omd/** (anchored)
-  /^\.droid\//,       // .droid/** (anchored)
-  /\/\.droid\//,      // any /.droid/ path (intentionally unanchored for absolute paths)
+  /^\.factory\//,       // .factory/** (anchored)
+  /\/\.factory\//,      // any /.factory/ path (intentionally unanchored for absolute paths)
   /DROID\.md$/,
   /AGENTS\.md$/,
 ];

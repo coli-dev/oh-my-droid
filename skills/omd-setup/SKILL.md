@@ -13,7 +13,7 @@ This is the **only command you need to learn**. After running this, everything e
 
 ```bash
 # Check if setup was already completed
-CONFIG_FILE="$HOME/.droid/.omd-config.json"
+CONFIG_FILE="$HOME/.factory/.omd-config.json"
 
 if [ -f "$CONFIG_FILE" ]; then
   SETUP_COMPLETED=$(jq -r '.setupCompleted // empty' "$CONFIG_FILE" 2>/dev/null)
@@ -41,7 +41,7 @@ Use AskUserQuestion to prompt:
 3. **Cancel** - Exit without changes
 
 **If user chooses "Update AGENTS.md only":**
-- Detect if local (.droid/AGENTS.md) or global (~/.droid/AGENTS.md) config exists
+- Detect if local (.factory/AGENTS.md) or global (~/.factory/AGENTS.md) config exists
 - If local exists, run the download/merge script from Step 2A
 - If only global exists, run the download/merge script from Step 2B
 - Skip all other steps
@@ -160,8 +160,8 @@ echo "Setup completed successfully. State cleared."
 This skill handles three scenarios:
 
 1. **Initial Setup (no flags)**: First-time installation wizard
-2. **Local Configuration (`--local`)**: Configure project-specific settings (.droid/AGENTS.md)
-3. **Global Configuration (`--global`)**: Configure global settings (~/.droid/AGENTS.md)
+2. **Local Configuration (`--local`)**: Configure project-specific settings (.factory/AGENTS.md)
+3. **Global Configuration (`--global`)**: Configure global settings (~/.factory/AGENTS.md)
 
 ## Mode Detection
 
@@ -180,25 +180,25 @@ Use the AskUserQuestion tool to prompt the user:
 **Question:** "Where should I configure oh-my-droid?"
 
 **Options:**
-1. **Local (this project)** - Creates `.droid/AGENTS.md` in current project directory. Best for project-specific configurations.
-2. **Global (all projects)** - Creates `~/.droid/AGENTS.md` for all Droid sessions. Best for consistent behavior everywhere.
+1. **Local (this project)** - Creates `.factory/AGENTS.md` in current project directory. Best for project-specific configurations.
+2. **Global (all projects)** - Creates `~/.factory/AGENTS.md` for all Droid sessions. Best for consistent behavior everywhere.
 
 ## Step 2A: Local Configuration (--local flag or user chose LOCAL)
 
 **CRITICAL**: This ALWAYS downloads fresh AGENTS.md from GitHub to the local project. DO NOT use the Write tool - use bash curl exclusively.
 
-### Create Local .droid Directory
+### Create Local .factory Directory
 
 ```bash
-# Create .droid directory in current project
-mkdir -p .droid && echo ".droid directory ready"
+# Create .factory directory in current project
+mkdir -p .factory && echo ".factory directory ready"
 ```
 
 ### Download Fresh AGENTS.md
 
 ```bash
 # Define target path
-TARGET_PATH=".droid/AGENTS.md"
+TARGET_PATH=".factory/AGENTS.md"
 
 # Extract old version before download
 OLD_VERSION=$(grep -m1 "^# oh-my-droid" "$TARGET_PATH" 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' || echo "none")
@@ -283,7 +283,7 @@ fi
 
 **Note**: The downloaded AGENTS.md includes Context Persistence instructions with `<remember>` tags for surviving conversation compaction.
 
-**Note**: If an existing AGENTS.md is found, it will be backed up to `.droid/AGENTS.md.backup.YYYY-MM-DD` before downloading the new version.
+**Note**: If an existing AGENTS.md is found, it will be backed up to `.factory/AGENTS.md.backup.YYYY-MM-DD` before downloading the new version.
 
 **MANDATORY**: Always run this command. Do NOT skip. Do NOT use Write tool.
 
@@ -294,7 +294,7 @@ https://raw.githubusercontent.com/coli-dev/oh-my-droid/main/docs/AGENTS.md
 ### Verify Plugin Installation
 
 ```bash
-grep -q "oh-my-droid" ~/.droid/settings.json && echo "Plugin verified" || echo "Plugin NOT found - run: droid /install-plugin oh-my-droid"
+grep -q "oh-my-droid" ~/.factory/settings.json && echo "Plugin verified" || echo "Plugin NOT found - run: droid /install-plugin oh-my-droid"
 ```
 
 ### Confirm Local Configuration Success
@@ -314,8 +314,8 @@ EOF
 ```
 
 **OMD Project Configuration Complete**
-- AGENTS.md: Updated with latest configuration from GitHub at ./.droid/AGENTS.md
-- Backup: Previous AGENTS.md backed up to `.droid/AGENTS.md.backup.YYYY-MM-DD` (if existed)
+- AGENTS.md: Updated with latest configuration from GitHub at ./.factory/AGENTS.md
+- Backup: Previous AGENTS.md backed up to `.factory/AGENTS.md.backup.YYYY-MM-DD` (if existed)
 - Scope: **PROJECT** - applies only to this project
 - Hooks: Provided by plugin (no manual installation needed)
 - Agents: 28+ available (base + tiered variants)
@@ -337,7 +337,7 @@ Do not continue to HUD setup or other steps.
 
 ```bash
 # Define target path
-TARGET_PATH="$HOME/.droid/AGENTS.md"
+TARGET_PATH="$HOME/.factory/AGENTS.md"
 
 # Extract old version before download
 OLD_VERSION=$(grep -m1 "^# oh-my-droid" "$TARGET_PATH" 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' || echo "none")
@@ -420,7 +420,7 @@ else
 fi
 ```
 
-**Note**: If an existing AGENTS.md is found, it will be backed up to `~/.droid/AGENTS.md.backup.YYYY-MM-DD` before downloading the new version.
+**Note**: If an existing AGENTS.md is found, it will be backed up to `~/.factory/AGENTS.md.backup.YYYY-MM-DD` before downloading the new version.
 
 ### Clean Up Legacy Hooks (if present)
 
@@ -428,21 +428,21 @@ Check if old manual hooks exist and remove them to prevent duplicates:
 
 ```bash
 # Remove legacy bash hook scripts (now handled by plugin system)
-rm -f ~/.droid/hooks/keyword-detector.sh
-rm -f ~/.droid/hooks/stop-continuation.sh
-rm -f ~/.droid/hooks/persistent-mode.sh
-rm -f ~/.droid/hooks/session-start.sh
+rm -f ~/.factory/hooks/keyword-detector.sh
+rm -f ~/.factory/hooks/stop-continuation.sh
+rm -f ~/.factory/hooks/persistent-mode.sh
+rm -f ~/.factory/hooks/session-start.sh
 echo "Legacy hooks cleaned"
 ```
 
-Check `~/.droid/settings.json` for manual hook entries. If the "hooks" key exists with UserPromptSubmit, Stop, or SessionStart entries pointing to bash scripts, inform the user:
+Check `~/.factory/settings.json` for manual hook entries. If the "hooks" key exists with UserPromptSubmit, Stop, or SessionStart entries pointing to bash scripts, inform the user:
 
-> **Note**: Found legacy hooks in settings.json. These should be removed since the plugin now provides hooks automatically. Remove the "hooks" section from ~/.droid/settings.json to prevent duplicate hook execution.
+> **Note**: Found legacy hooks in settings.json. These should be removed since the plugin now provides hooks automatically. Remove the "hooks" section from ~/.factory/settings.json to prevent duplicate hook execution.
 
 ### Verify Plugin Installation
 
 ```bash
-grep -q "oh-my-droid" ~/.droid/settings.json && echo "Plugin verified" || echo "Plugin NOT found - run: droid /install-plugin oh-my-droid"
+grep -q "oh-my-droid" ~/.factory/settings.json && echo "Plugin verified" || echo "Plugin NOT found - run: droid /install-plugin oh-my-droid"
 ```
 
 ### Confirm Global Configuration Success
@@ -462,8 +462,8 @@ EOF
 ```
 
 **OMD Global Configuration Complete**
-- AGENTS.md: Updated with latest configuration from GitHub at ~/.droid/AGENTS.md
-- Backup: Previous AGENTS.md backed up to `~/.droid/AGENTS.md.backup.YYYY-MM-DD` (if existed)
+- AGENTS.md: Updated with latest configuration from GitHub at ~/.factory/AGENTS.md
+- Backup: Previous AGENTS.md backed up to `~/.factory/AGENTS.md.backup.YYYY-MM-DD` (if existed)
 - Scope: **GLOBAL** - applies to all Droid sessions
 - Hooks: Provided by plugin (no manual installation needed)
 - Agents: 28+ available (base + tiered variants)
@@ -486,8 +486,8 @@ The HUD shows real-time status in Droid's status bar. **Invoke the hud skill** t
 Use the Skill tool to invoke: `hud` with args: `setup`
 
 This will:
-1. Install the HUD wrapper script to `~/.droid/hud/omd-hud.mjs`
-2. Configure `statusLine` in `~/.droid/settings.json`
+1. Install the HUD wrapper script to `~/.factory/hud/omd-hud.mjs`
+2. Configure `statusLine` in `~/.factory/settings.json`
 3. Report status and prompt to restart if needed
 
 After HUD setup completes, save progress:
@@ -510,7 +510,7 @@ Clear old cached plugin versions to avoid conflicts:
 
 ```bash
 # Clear stale plugin cache versions
-CACHE_DIR="$HOME/.droid/plugins/cache/omd/oh-my-droid"
+CACHE_DIR="$HOME/.factory/plugins/cache/omd/oh-my-droid"
 if [ -d "$CACHE_DIR" ]; then
   LATEST=$(ls -1 "$CACHE_DIR" | sort -V | tail -1)
   CLEARED=0
@@ -535,8 +535,8 @@ Notify user if a newer version is available:
 INSTALLED_VERSION=""
 
 # Try cache directory first
-if [ -d "$HOME/.droid/plugins/cache/omd/oh-my-droid" ]; then
-  INSTALLED_VERSION=$(ls -1 "$HOME/.droid/plugins/cache/omd/oh-my-droid" | sort -V | tail -1)
+if [ -d "$HOME/.factory/plugins/cache/omd/oh-my-droid" ]; then
+  INSTALLED_VERSION=$(ls -1 "$HOME/.factory/plugins/cache/omd/oh-my-droid" | sort -V | tail -1)
 fi
 
 # Try .omd-version.json second
@@ -546,10 +546,10 @@ fi
 
 # Try AGENTS.md header third (local first, then global)
 if [ -z "$INSTALLED_VERSION" ]; then
-  if [ -f ".droid/AGENTS.md" ]; then
-    INSTALLED_VERSION=$(grep -m1 "^# oh-my-droid" .droid/AGENTS.md 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | sed 's/^v//')
-  elif [ -f "$HOME/.droid/AGENTS.md" ]; then
-    INSTALLED_VERSION=$(grep -m1 "^# oh-my-droid" "$HOME/.droid/AGENTS.md" 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | sed 's/^v//')
+  if [ -f ".factory/AGENTS.md" ]; then
+    INSTALLED_VERSION=$(grep -m1 "^# oh-my-droid" .factory/AGENTS.md 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | sed 's/^v//')
+  elif [ -f "$HOME/.factory/AGENTS.md" ]; then
+    INSTALLED_VERSION=$(grep -m1 "^# oh-my-droid" "$HOME/.factory/AGENTS.md" 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | sed 's/^v//')
   fi
 fi
 
@@ -583,11 +583,11 @@ Use the AskUserQuestion tool to prompt the user:
 1. **ultrawork (maximum capability)** - Uses all agent tiers including Opus for complex tasks. Best for challenging work where quality matters most. (Recommended)
 2. **ecomode (token efficient)** - Prefers Haiku/Sonnet agents, avoids Opus. Best for pro-plan users who want cost efficiency.
 
-Store the preference in `~/.droid/.omd-config.json`:
+Store the preference in `~/.factory/.omd-config.json`:
 
 ```bash
 # Read existing config or create empty object
-CONFIG_FILE="$HOME/.droid/.omd-config.json"
+CONFIG_FILE="$HOME/.factory/.omd-config.json"
 mkdir -p "$(dirname "$CONFIG_FILE")"
 
 if [ -f "$CONFIG_FILE" ]; then
@@ -677,7 +677,7 @@ If beads or beads-rust is detected, use AskUserQuestion:
 Store the preference:
 
 ```bash
-CONFIG_FILE="$HOME/.droid/.omd-config.json"
+CONFIG_FILE="$HOME/.factory/.omd-config.json"
 mkdir -p "$(dirname "$CONFIG_FILE")"
 
 if [ -f "$CONFIG_FILE" ]; then
@@ -696,7 +696,7 @@ echo "Task tool set to: USER_CHOICE"
 ## Step 4: Verify Plugin Installation
 
 ```bash
-grep -q "oh-my-droid" ~/.droid/settings.json && echo "Plugin verified" || echo "Plugin NOT found - run: droid /install-plugin oh-my-droid"
+grep -q "oh-my-droid" ~/.factory/settings.json && echo "Plugin verified" || echo "Plugin NOT found - run: droid /install-plugin oh-my-droid"
 ```
 
 ## Step 5: Offer MCP Server Configuration
@@ -718,7 +718,7 @@ If no, skip to next step.
 
 Agent teams are an experimental Droid feature that lets you spawn N coordinated agents working on a shared task list with inter-agent messaging. **Teams are disabled by default** and require enabling via `settings.json`.
 
-Reference: https://code.droid.com/docs/en/agent-teams
+Reference: https://code.factory.com/docs/en/agent-teams
 
 Use the AskUserQuestion tool to prompt:
 
@@ -732,12 +732,12 @@ Use the AskUserQuestion tool to prompt:
 
 #### Step 5.5.1: Enable Agent Teams in settings.json
 
-**CRITICAL**: Agent teams require `DROID_CODE_EXPERIMENTAL_AGENT_TEAMS` to be set in `~/.droid/settings.json`. This must be done carefully to preserve existing user settings.
+**CRITICAL**: Agent teams require `DROID_CODE_EXPERIMENTAL_AGENT_TEAMS` to be set in `~/.factory/settings.json`. This must be done carefully to preserve existing user settings.
 
 First, read the current settings.json:
 
 ```bash
-SETTINGS_FILE="$HOME/.droid/settings.json"
+SETTINGS_FILE="$HOME/.factory/settings.json"
 
 if [ -f "$SETTINGS_FILE" ]; then
   echo "Current settings.json found"
@@ -747,7 +747,7 @@ else
 fi
 ```
 
-Then use the Read tool to read `~/.droid/settings.json` (if it exists). Use the Edit tool to merge the teams configuration while preserving ALL existing settings.
+Then use the Read tool to read `~/.factory/settings.json` (if it exists). Use the Edit tool to merge the teams configuration while preserving ALL existing settings.
 
 **If settings.json exists and has an `env` key**, merge the new env var into it:
 
@@ -762,7 +762,7 @@ Then use the Read tool to read `~/.droid/settings.json` (if it exists). Use the 
 Use jq to safely merge without overwriting existing settings:
 
 ```bash
-SETTINGS_FILE="$HOME/.droid/settings.json"
+SETTINGS_FILE="$HOME/.factory/settings.json"
 
 if [ -f "$SETTINGS_FILE" ]; then
   # Merge env var into existing settings, preserving everything else
@@ -799,7 +799,7 @@ Use the AskUserQuestion tool:
 If user chooses anything other than "Auto", add `teammateMode` to settings.json:
 
 ```bash
-SETTINGS_FILE="$HOME/.droid/settings.json"
+SETTINGS_FILE="$HOME/.factory/settings.json"
 
 # TEAMMATE_MODE is "in-process" or "tmux" based on user choice
 # Skip this if user chose "Auto" (that's the default)
@@ -832,10 +832,10 @@ Use the AskUserQuestion tool with multiple questions:
 2. **opus** - Maximum capability for complex tasks (higher cost)
 3. **haiku** - Fastest and cheapest, good for simple/repetitive tasks
 
-Store the team configuration in `~/.droid/.omd-config.json`:
+Store the team configuration in `~/.factory/.omd-config.json`:
 
 ```bash
-CONFIG_FILE="$HOME/.droid/.omd-config.json"
+CONFIG_FILE="$HOME/.factory/.omd-config.json"
 mkdir -p "$(dirname "$CONFIG_FILE")"
 
 if [ -f "$CONFIG_FILE" ]; then
@@ -862,7 +862,7 @@ echo "  Default model: MODEL"
 After all modifications, verify settings.json is valid JSON and contains the expected keys:
 
 ```bash
-SETTINGS_FILE="$HOME/.droid/settings.json"
+SETTINGS_FILE="$HOME/.factory/settings.json"
 
 # Verify JSON is valid
 if jq empty "$SETTINGS_FILE" 2>/dev/null; then
@@ -888,7 +888,7 @@ jq '.' "$SETTINGS_FILE"
 
 ### If User Chooses NO:
 
-Skip this step. Agent teams will remain disabled. User can enable later by adding to `~/.droid/settings.json`:
+Skip this step. Agent teams will remain disabled. User can enable later by adding to `~/.factory/settings.json`:
 ```json
 {
   "env": {
@@ -919,7 +919,7 @@ EOF
 Check if user has existing configuration:
 ```bash
 # Check for existing 2.x artifacts
-ls ~/.droid/commands/ralph-loop.md 2>/dev/null || ls ~/.droid/commands/ultrawork.md 2>/dev/null
+ls ~/.factory/commands/ralph-loop.md 2>/dev/null || ls ~/.factory/commands/ultrawork.md 2>/dev/null
 ```
 
 If found, this is an upgrade from 2.x.
@@ -1061,15 +1061,15 @@ After Step 8 completes (regardless of star choice), clear the temporary state an
 rm -f ".omd/state/setup-state.json"
 
 # Mark setup as completed in persistent config (prevents re-running full setup on updates)
-CONFIG_FILE="$HOME/.droid/.omd-config.json"
+CONFIG_FILE="$HOME/.factory/.omd-config.json"
 mkdir -p "$(dirname "$CONFIG_FILE")"
 
 # Get current OMD version from AGENTS.md
 OMD_VERSION=""
-if [ -f ".droid/AGENTS.md" ]; then
-  OMD_VERSION=$(grep -m1 "^# oh-my-droid" .droid/AGENTS.md 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
-elif [ -f "$HOME/.droid/AGENTS.md" ]; then
-  OMD_VERSION=$(grep -m1 "^# oh-my-droid" "$HOME/.droid/AGENTS.md" 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
+if [ -f ".factory/AGENTS.md" ]; then
+  OMD_VERSION=$(grep -m1 "^# oh-my-droid" .factory/AGENTS.md 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
+elif [ -f "$HOME/.factory/AGENTS.md" ]; then
+  OMD_VERSION=$(grep -m1 "^# oh-my-droid" "$HOME/.factory/AGENTS.md" 2>/dev/null | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' || echo "unknown")
 fi
 
 if [ -f "$CONFIG_FILE" ]; then
@@ -1108,8 +1108,8 @@ OMD Setup - Configure oh-my-droid
 
 USAGE:
   /oh-my-droid:omd-setup           Run initial setup wizard (or update if already configured)
-  /oh-my-droid:omd-setup --local   Configure local project (.droid/AGENTS.md)
-  /oh-my-droid:omd-setup --global  Configure global settings (~/.droid/AGENTS.md)
+  /oh-my-droid:omd-setup --local   Configure local project (.factory/AGENTS.md)
+  /oh-my-droid:omd-setup --global  Configure global settings (~/.factory/AGENTS.md)
   /oh-my-droid:omd-setup --force   Force full setup wizard even if already configured
   /oh-my-droid:omd-setup --help    Show this help
 
@@ -1124,14 +1124,14 @@ MODES:
     - If already configured, offers quick update option
 
   Local Configuration (--local)
-    - Downloads fresh AGENTS.md to ./.droid/
-    - Backs up existing AGENTS.md to .droid/AGENTS.md.backup.YYYY-MM-DD
+    - Downloads fresh AGENTS.md to ./.factory/
+    - Backs up existing AGENTS.md to .factory/AGENTS.md.backup.YYYY-MM-DD
     - Project-specific settings
     - Use this to update project config after OMD upgrades
 
   Global Configuration (--global)
-    - Downloads fresh AGENTS.md to ~/.droid/
-    - Backs up existing AGENTS.md to ~/.droid/AGENTS.md.backup.YYYY-MM-DD
+    - Downloads fresh AGENTS.md to ~/.factory/
+    - Backs up existing AGENTS.md to ~/.factory/AGENTS.md.backup.YYYY-MM-DD
     - Applies to all Droid sessions
     - Cleans up legacy hooks
     - Use this to update global config after OMD upgrades

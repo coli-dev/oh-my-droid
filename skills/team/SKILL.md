@@ -65,7 +65,7 @@ User: "/team 3:executor fix all TypeScript errors"
 
 **Storage layout (managed by Droid):**
 ```
-~/.droid/
+~/.factory/
   teams/fix-ts-errors/
     config.json          # Team metadata + members array
   tasks/fix-ts-errors/
@@ -108,7 +108,7 @@ Call `TeamCreate` with a slug derived from the task:
 ```json
 {
   "team_name": "fix-ts-errors",
-  "team_file_path": "~/.droid/teams/fix-ts-errors/config.json",
+  "team_file_path": "~/.factory/teams/fix-ts-errors/config.json",
   "lead_agent_id": "team-lead@fix-ts-errors"
 }
 ```
@@ -536,7 +536,7 @@ This approach complements the existing `SendMessage`-based communication by prov
 
 If the lead crashes mid-run, the team skill should detect existing state and resume:
 
-1. Check `~/.droid/teams/` for teams matching the task slug
+1. Check `~/.factory/teams/` for teams matching the task slug
 2. If found, read `config.json` to discover active members
 3. Resume monitor mode instead of creating a duplicate team
 4. Call `TaskList` to determine current progress
@@ -548,7 +548,7 @@ This prevents duplicate teams and allows graceful recovery from lead failures.
 
 | Aspect | Team (Native) | Swarm (Legacy SQLite) |
 |--------|--------------|----------------------|
-| **Storage** | JSON files in `~/.droid/teams/` and `~/.droid/tasks/` | SQLite in `.omd/state/swarm.db` |
+| **Storage** | JSON files in `~/.factory/teams/` and `~/.factory/tasks/` | SQLite in `.omd/state/swarm.db` |
 | **Dependencies** | `better-sqlite3` not needed | Requires `better-sqlite3` npm package |
 | **Task claiming** | `TaskUpdate(owner + in_progress)` -- lead pre-assigns | SQLite IMMEDIATE transaction -- atomic |
 | **Race conditions** | Possible if two agents claim same task (mitigate by pre-assigning) | None (SQLite transactions) |
@@ -574,7 +574,7 @@ The `/oh-my-droid:cancel` skill handles team cleanup:
 4. Call `TeamDelete` to remove team and task directories
 5. Delete `.omd/state/team-state.json`
 
-If teammates are unresponsive, `TeamDelete` may fail. In that case, the cancel skill should wait briefly and retry, or inform the user to manually clean up `~/.droid/teams/{team_name}/` and `~/.droid/tasks/{team_name}/`.
+If teammates are unresponsive, `TeamDelete` may fail. In that case, the cancel skill should wait briefly and retry, or inform the user to manually clean up `~/.factory/teams/{team_name}/` and `~/.factory/tasks/{team_name}/`.
 
 ## Configuration
 
@@ -603,8 +603,8 @@ Optional settings via `.omd-config.json`:
 On successful completion:
 
 1. `TeamDelete` handles all Droid state:
-   - Removes `~/.droid/teams/{team_name}/` (config)
-   - Removes `~/.droid/tasks/{team_name}/` (all task files + lock)
+   - Removes `~/.factory/teams/{team_name}/` (config)
+   - Removes `~/.factory/tasks/{team_name}/` (all task files + lock)
 2. OMD state cleanup:
    ```bash
    rm -f .omd/state/team-state.json

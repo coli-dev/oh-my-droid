@@ -6,7 +6,7 @@
  *
  * Authentication:
  * - macOS: Reads from Keychain "Droid-credentials"
- * - Linux/fallback: Reads from ~/.droid/.credentials.json
+ * - Linux/fallback: Reads from ~/.factory/.credentials.json
  *
  * API: api.anthropic.com/api/oauth/usage
  * Response: { five_hour: { utilization }, seven_day: { utilization } }
@@ -23,7 +23,7 @@ import type { RateLimits } from './types.js';
 const CACHE_TTL_SUCCESS_MS = 30 * 1000; // 30 seconds for successful responses
 const CACHE_TTL_FAILURE_MS = 15 * 1000; // 15 seconds for failures
 const API_TIMEOUT_MS = 10000;
-const TOKEN_REFRESH_URL_HOSTNAME = 'platform.droid.com';
+const TOKEN_REFRESH_URL_HOSTNAME = 'platform.factory.com';
 const TOKEN_REFRESH_URL_PATH = '/v1/oauth/token';
 
 /**
@@ -58,7 +58,7 @@ interface UsageApiResponse {
  * Get the cache file path
  */
 function getCachePath(): string {
-  return join(homedir(), '.droid/plugins/oh-my-droid/.usage-cache.json');
+  return join(homedir(), '.factory/plugins/oh-my-droid/.usage-cache.json');
 }
 
 /**
@@ -159,7 +159,7 @@ function readKeychainCredentials(): OAuthCredentials | null {
  */
 function readFileCredentials(): OAuthCredentials | null {
   try {
-    const credPath = join(homedir(), '.droid/.credentials.json');
+    const credPath = join(homedir(), '.factory/.credentials.json');
     if (!existsSync(credPath)) return null;
 
     const content = readFileSync(credPath, 'utf-8');
@@ -323,7 +323,7 @@ function fetchUsageFromApi(accessToken: string): Promise<UsageApiResponse | null
  */
 function writeBackCredentials(creds: OAuthCredentials): void {
   try {
-    const credPath = join(homedir(), '.droid/.credentials.json');
+    const credPath = join(homedir(), '.factory/.credentials.json');
     if (!existsSync(credPath)) return;
 
     const content = readFileSync(credPath, 'utf-8');

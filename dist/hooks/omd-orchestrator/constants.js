@@ -12,9 +12,9 @@ export const ALLOWED_PATH_PREFIX = '.omd/';
  *  Paths are normalized to forward slashes before matching (via toForwardSlash). */
 export const ALLOWED_PATH_PATTERNS = [
     /^\.omd\//, // .omd/**
-    /^\.droid\//, // .droid/** (local)
-    /^~?\/\.droid\//, // ~/.droid/** (global)
-    /\/\.droid\//, // any /.droid/ path
+    /^\.factory\//, // .factory/** (local)
+    /^~?\/\.factory\//, // ~/.factory/** (global)
+    /\/\.factory\//, // any /.factory/ path
     /DROID\.md$/, // **/AGENTS.md
     /AGENTS\.md$/, // **/AGENTS.md
 ];
@@ -97,7 +97,7 @@ As an ORCHESTRATOR, you MUST:
 
 **ALLOWED direct file operations:**
 - Files inside \`.omd/\` (plans, notepads, drafts)
-- Files inside \`~/.droid/\` (global config)
+- Files inside \`~/.factory/\` (global config)
 - \`AGENTS.md\` and \`AGENTS.md\` files
 - Reading files for verification
 - Running diagnostics/tests

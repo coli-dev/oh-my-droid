@@ -14,8 +14,8 @@ import { appendFileWithMode, writeFileWithMode, atomicWriteJson, ensureDirWithMo
 const MAX_INBOX_READ_SIZE = 10 * 1024 * 1024;
 // --- Path helpers ---
 function teamsDir(teamName) {
-    const result = join(homedir(), '.droid', 'teams', sanitizeName(teamName));
-    validateResolvedPath(result, join(homedir(), '.droid', 'teams'));
+    const result = join(homedir(), '.factory', 'teams', sanitizeName(teamName));
+    validateResolvedPath(result, join(homedir(), '.factory', 'teams'));
     return result;
 }
 function inboxPath(teamName, workerName) {

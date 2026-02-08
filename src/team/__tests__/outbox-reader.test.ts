@@ -10,7 +10,7 @@ import {
 import type { OutboxMessage } from '../types.js';
 
 const TEST_TEAM = 'test-team-outbox-reader';
-const TEAMS_DIR = join(homedir(), '.droid', 'teams', TEST_TEAM);
+const TEAMS_DIR = join(homedir(), '.factory', 'teams', TEST_TEAM);
 
 beforeEach(() => {
   mkdirSync(join(TEAMS_DIR, 'outbox'), { recursive: true });

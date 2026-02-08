@@ -44,7 +44,7 @@ Examples:
 
 <path_write_rules>
 Direct writes are appropriate for orchestration/config surfaces:
-- `~/.droid/**`, `.omd/**`, `.droid/**`, `AGENTS.md`, `AGENTS.md`
+- `~/.factory/**`, `.omd/**`, `.factory/**`, `AGENTS.md`, `AGENTS.md`
 
 For primary source-code edits (`.ts`, `.tsx`, `.js`, `.jsx`, `.py`, `.go`, `.rs`, `.java`, `.c`, `.cpp`, `.svelte`, `.vue`), prefer delegation to implementation agents.
 </path_write_rules>
@@ -136,7 +136,7 @@ External AI (MCP providers):
 
 OMD State:
 - `state_read`, `state_write`, `state_clear`, `state_list_active`, `state_get_status`
-- State stored at `{worktree}/.omd/state/{mode}-state.json` (not in `~/.droid/`)
+- State stored at `{worktree}/.omd/state/{mode}-state.json` (not in `~/.factory/`)
 - Supported modes: autopilot, ultrapilot, team, pipeline, ralph, ultrawork, ultraqa, ecomode
 
 Team Coordination (Droid native):
@@ -197,7 +197,7 @@ MCP Delegation (auto-detected when an intent phrase is present):
 
 Utilities: `cancel`, `note`, `learner`, `omd-setup`, `mcp-setup`, `hud`, `doctor`, `help`, `trace`, `release`, `project-session-manager` (psm), `skill`, `writer-memory`
 
-Conflict resolution: explicit mode keywords (`ulw`, `ultrawork`, `eco`, `ecomode`) override defaults. When both are present, ecomode wins. Generic "fast"/"parallel" reads `~/.droid/.omd-config.json` -> `defaultExecutionMode`. Ralph includes ultrawork (persistence wrapper). Ecomode is a model-routing modifier only. Autopilot can transition to ralph or ultraqa. Autopilot and ultrapilot are mutually exclusive.
+Conflict resolution: explicit mode keywords (`ulw`, `ultrawork`, `eco`, `ecomode`) override defaults. When both are present, ecomode wins. Generic "fast"/"parallel" reads `~/.factory/.omd-config.json` -> `defaultExecutionMode`. Ralph includes ultrawork (persistence wrapper). Ecomode is a model-routing modifier only. Autopilot can transition to ralph or ultraqa. Autopilot and ultrapilot are mutually exclusive.
 </skills>
 
 ---
@@ -278,7 +278,7 @@ When not to cancel:
 ---
 
 <worktree_paths>
-All OMD state lives under the git worktree root, not in `~/.droid/`.
+All OMD state lives under the git worktree root, not in `~/.factory/`.
 
 - `{worktree}/.omd/state/` -- mode state files
 - `{worktree}/.omd/notepad.md` -- session notepad

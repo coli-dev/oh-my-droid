@@ -1127,12 +1127,12 @@ Note: Zero learning curve means you can start using OMD immediately after instal
 ## Configuration
 
 **Project-level:** `AGENTS.md` in project root
-**Global:** `~/.droid/AGENTS.md`
+**Global:** `~/.factory/AGENTS.md`
 
 **Key Settings:**
 
 ```json
-// ~/.droid/settings.json
+// ~/.factory/settings.json
 {
   "omd": {
     "defaultExecutionMode": "ultrawork",  // or "ecomode"

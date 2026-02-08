@@ -97,7 +97,7 @@ omd export cost csv ./costs.csv
 
 ### Overview
 
-The analytics system can analyze historical Droid session transcripts from `~/.droid/projects/` to backfill token usage data.
+The analytics system can analyze historical Droid session transcripts from `~/.factory/projects/` to backfill token usage data.
 
 ### The `omd backfill` Command
 
@@ -141,7 +141,7 @@ The `omd` CLI automatically runs a silent backfill on startup if more than 24 ho
 
 ### Data Sources
 
-- **Transcript Location**: `~/.droid/projects/<encoded-path>/<uuid>.jsonl`
+- **Transcript Location**: `~/.factory/projects/<encoded-path>/<uuid>.jsonl`
 - **Token Data**: Actual `output_tokens` from API responses (not estimates)
 - **Agent Detection**: Extracted from `tool_use` blocks with Task tool
 

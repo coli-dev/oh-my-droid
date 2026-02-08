@@ -23,7 +23,7 @@ export interface ConflictReport {
     hasConflicts: boolean;
 }
 /**
- * Check for hook conflicts in ~/.droid/settings.json
+ * Check for hook conflicts in ~/.factory/settings.json
  */
 export declare function checkHookConflicts(): ConflictReport['hookConflicts'];
 /**

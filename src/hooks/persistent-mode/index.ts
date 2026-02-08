@@ -190,7 +190,7 @@ export function resetTodoContinuationAttempts(sessionId: string): void {
  * Check for architect approval in session transcript
  */
 function checkArchitectApprovalInTranscript(sessionId: string): boolean {
-  const droidDir = join(homedir(), '.droid');
+  const droidDir = join(homedir(), '.factory');
   const possiblePaths = [
     join(droidDir, 'sessions', sessionId, 'transcript.md'),
     join(droidDir, 'sessions', sessionId, 'messages.json'),
@@ -216,7 +216,7 @@ function checkArchitectApprovalInTranscript(sessionId: string): boolean {
  * Check for architect rejection in session transcript
  */
 function checkArchitectRejectionInTranscript(sessionId: string): { rejected: boolean; feedback: string } {
-  const droidDir = join(homedir(), '.droid');
+  const droidDir = join(homedir(), '.factory');
   const possiblePaths = [
     join(droidDir, 'sessions', sessionId, 'transcript.md'),
     join(droidDir, 'sessions', sessionId, 'messages.json'),

@@ -75,7 +75,7 @@ function getPluginVersion() {
 // Get npm global package version
 function getNpmVersion() {
   try {
-    const versionFile = join(homedir(), '.droid', '.omd-version.json');
+    const versionFile = join(homedir(), '.factory', '.omd-version.json');
     const data = readJsonFile(versionFile);
     return data?.version || null;
   } catch { return null; }
@@ -84,7 +84,7 @@ function getNpmVersion() {
 // Get AGENTS.md version
 function getDroidMdVersion() {
   try {
-    const droidMdPath = join(homedir(), '.droid', 'AGENTS.md');
+    const droidMdPath = join(homedir(), '.factory', 'AGENTS.md');
     if (!existsSync(droidMdPath)) return null;  // File doesn't exist
     const content = readFileSync(droidMdPath, 'utf-8');
     const version = extractOmcVersion(content);
@@ -128,7 +128,7 @@ function detectVersionDrift() {
 
 // Check if we should notify (once per unique drift combination)
 function shouldNotifyDrift(driftInfo) {
-  const stateFile = join(homedir(), '.droid', '.omd', 'update-state.json');
+  const stateFile = join(homedir(), '.factory', '.omd', 'update-state.json');
   const driftKey = `plugin:${driftInfo.pluginVersion}-npm:${driftInfo.npmVersion}-droid:${driftInfo.droidMdVersion}`;
 
   try {
@@ -140,7 +140,7 @@ function shouldNotifyDrift(driftInfo) {
 
   // Save new drift state
   try {
-    const dir = join(homedir(), '.droid', '.omd');
+    const dir = join(homedir(), '.factory', '.omd');
     if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
     writeFileSync(stateFile, JSON.stringify({
       lastNotifiedDrift: driftKey,
@@ -153,7 +153,7 @@ function shouldNotifyDrift(driftInfo) {
 
 // Check npm registry for available update (with 24h cache)
 async function checkNpmUpdate(currentVersion) {
-  const cacheFile = join(homedir(), '.droid', '.omd', 'update-check.json');
+  const cacheFile = join(homedir(), '.factory', '.omd', 'update-check.json');
   const CACHE_DURATION = 24 * 60 * 60 * 1000;
   const now = Date.now();
 
@@ -185,7 +185,7 @@ async function checkNpmUpdate(currentVersion) {
 
     // Update cache
     try {
-      const dir = join(homedir(), '.droid', '.omd');
+      const dir = join(homedir(), '.factory', '.omd');
       if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
       writeFileSync(cacheFile, JSON.stringify({ timestamp: now, latestVersion, currentVersion, updateAvailable }));
     } catch {}
@@ -196,11 +196,11 @@ async function checkNpmUpdate(currentVersion) {
 
 // Check if HUD is properly installed (with retry for race conditions)
 async function checkHudInstallation(retryCount = 0) {
-  const hudDir = join(homedir(), '.droid', 'hud');
+  const hudDir = join(homedir(), '.factory', 'hud');
   // Support both legacy (sisyphus-hud.mjs) and current (omd-hud.mjs) naming
   const hudScriptOmc = join(hudDir, 'omd-hud.mjs');
   const hudScriptSisyphus = join(hudDir, 'sisyphus-hud.mjs');
-  const settingsFile = join(homedir(), '.droid', 'settings.json');
+  const settingsFile = join(homedir(), '.factory', 'settings.json');
 
   const MAX_RETRIES = 2;
   const RETRY_DELAY_MS = 100;
@@ -356,13 +356,13 @@ Continue working until the task is verified complete.
 `);
     }
 
-    // Check for incomplete todos (project-local only, not global ~/.droid/todos/)
-    // NOTE: We intentionally do NOT scan the global ~/.droid/todos/ directory.
+    // Check for incomplete todos (project-local only, not global ~/.factory/todos/)
+    // NOTE: We intentionally do NOT scan the global ~/.factory/todos/ directory.
     // That directory accumulates todo files from ALL past sessions across all
     // projects, causing phantom task counts in fresh sessions (see issue #354).
     const localTodoPaths = [
       join(directory, '.omd', 'todos.json'),
-      join(directory, '.droid', 'todos.json')
+      join(directory, '.factory', 'todos.json')
     ];
     let incompleteCount = 0;
     for (const todoFile of localTodoPaths) {
@@ -413,7 +413,7 @@ ${cleanContent}
 
     // Cleanup old plugin cache versions (keep latest 2)
     try {
-      const cacheBase = join(homedir(), '.droid', 'plugins', 'cache', 'omd', 'oh-my-droid');
+      const cacheBase = join(homedir(), '.factory', 'plugins', 'cache', 'omd', 'oh-my-droid');
       if (existsSync(cacheBase)) {
         const versions = readdirSync(cacheBase)
           .filter(v => /^\d+\.\d+\.\d+/.test(v))

@@ -17,8 +17,8 @@ import { atomicWriteJson, validateResolvedPath } from './fs-utils.js';
 // --- Config paths ---
 
 function configPath(teamName: string): string {
-  const result = join(homedir(), '.droid', 'teams', sanitizeName(teamName), 'config.json');
-  validateResolvedPath(result, join(homedir(), '.droid', 'teams'));
+  const result = join(homedir(), '.factory', 'teams', sanitizeName(teamName), 'config.json');
+  validateResolvedPath(result, join(homedir(), '.factory', 'teams'));
   return result;
 }
 

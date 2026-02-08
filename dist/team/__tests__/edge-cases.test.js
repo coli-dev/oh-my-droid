@@ -31,12 +31,12 @@ import { readProbeResult, writeProbeResult, registerMcpWorker, unregisterMcpWork
 // ============================================================
 const EDGE_TEAM_TASKS = 'test-edge-tasks';
 const EDGE_TEAM_IO = 'test-edge-io';
-const TASKS_DIR = join(homedir(), '.droid', 'tasks', EDGE_TEAM_TASKS);
-const TEAMS_IO_DIR = join(homedir(), '.droid', 'teams', EDGE_TEAM_IO);
+const TASKS_DIR = join(homedir(), '.factory', 'tasks', EDGE_TEAM_TASKS);
+const TEAMS_IO_DIR = join(homedir(), '.factory', 'teams', EDGE_TEAM_IO);
 const HB_DIR = join(tmpdir(), 'test-edge-hb');
 const REG_DIR = join(tmpdir(), 'test-edge-reg');
 const REG_TEAM = 'test-edge-reg-team';
-const CONFIG_DIR = join(homedir(), '.droid', 'teams', REG_TEAM);
+const CONFIG_DIR = join(homedir(), '.factory', 'teams', REG_TEAM);
 function writeTaskHelper(task) {
     mkdirSync(TASKS_DIR, { recursive: true });
     writeFileSync(join(TASKS_DIR, `${task.id}.json`), JSON.stringify(task, null, 2));

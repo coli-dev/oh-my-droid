@@ -19,7 +19,7 @@ import type {
 import { resolveLiveData } from './live-data.js';
 
 /** Droid config directory */
-const DROID_CONFIG_DIR = join(homedir(), '.droid');
+const DROID_CONFIG_DIR = join(homedir(), '.factory');
 
 /**
  * Parse YAML-like frontmatter from markdown file
@@ -116,7 +116,7 @@ function discoverCommandsFromDir(
  */
 export function discoverAllCommands(): CommandInfo[] {
   const userCommandsDir = join(DROID_CONFIG_DIR, 'commands');
-  const projectCommandsDir = join(process.cwd(), '.droid', 'commands');
+  const projectCommandsDir = join(process.cwd(), '.factory', 'commands');
   const skillsDir = join(DROID_CONFIG_DIR, 'skills');
 
   const userCommands = discoverCommandsFromDir(userCommandsDir, 'user');
@@ -234,7 +234,7 @@ export function executeSlashCommand(parsed: ParsedSlashCommand): ExecuteResult {
   if (!command) {
     return {
       success: false,
-      error: `Command "/${parsed.command}" not found. Available commands are in ~/.droid/commands/ or .droid/commands/`,
+      error: `Command "/${parsed.command}" not found. Available commands are in ~/.factory/commands/ or .factory/commands/`,
     };
   }
 

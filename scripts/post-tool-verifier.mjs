@@ -29,11 +29,11 @@ try {
 }
 
 // State file for session tracking
-const STATE_FILE = join(homedir(), '.droid', '.session-stats.json');
+const STATE_FILE = join(homedir(), '.factory', '.session-stats.json');
 
 // Ensure state directory exists
 try {
-  const stateDir = join(homedir(), '.droid');
+  const stateDir = join(homedir(), '.factory');
   if (!existsSync(stateDir)) {
     mkdirSync(stateDir, { recursive: true });
   }
@@ -82,7 +82,7 @@ function updateStats(toolName, sessionId) {
 // Read bash history config (default: enabled)
 function getBashHistoryConfig() {
   try {
-    const configPath = join(homedir(), '.droid', '.omd-config.json');
+    const configPath = join(homedir(), '.factory', '.omd-config.json');
     if (existsSync(configPath)) {
       const config = JSON.parse(readFileSync(configPath, 'utf-8'));
       if (config.bashHistory === false) return false;

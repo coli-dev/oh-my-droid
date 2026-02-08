@@ -33,7 +33,7 @@ if [ "$RUN_MODE" = "omd" ]; then
     fi
 
     # Initialize OMD configuration
-    mkdir -p ~/.droid
+    mkdir -p ~/.factory
 
     echo "OMD installation complete"
 fi

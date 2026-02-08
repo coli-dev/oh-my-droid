@@ -280,7 +280,7 @@ Examples:
     try {
         await launchTokscaleTUI({
             view,
-            droid: options.droid
+            droid: options.factory
         });
     }
     catch (error) {
@@ -508,7 +508,7 @@ Types:
   discord    Discord webhook notification
 
 Examples:
-  $ omd config-stop-callback file --enable --path ~/.droid/logs/{date}.md
+  $ omd config-stop-callback file --enable --path ~/.factory/logs/{date}.md
   $ omd config-stop-callback telegram --enable --token <token> --chat <id>
   $ omd config-stop-callback discord --enable --webhook <url>
   $ omd config-stop-callback file --disable
@@ -548,7 +548,7 @@ Examples:
             const current = config.stopHookCallbacks.file;
             config.stopHookCallbacks.file = {
                 enabled: enabled ?? current?.enabled ?? false,
-                path: options.path ?? current?.path ?? '~/.droid/session-logs/{session_id}.md',
+                path: options.path ?? current?.path ?? '~/.factory/session-logs/{session_id}.md',
                 format: options.format ?? current?.format ?? 'markdown',
             };
             break;
@@ -762,17 +762,17 @@ Examples:
     console.log(chalk.gray('\nTo check for updates, run: oh-my-droid update --check'));
 });
 /**
- * Install command - Install agents and commands to ~/.droid/
+ * Install command - Install agents and commands to ~/.factory/
  */
 program
     .command('install')
-    .description('Install Sisyphus agents and commands to Droid config (~/.droid/)')
+    .description('Install Sisyphus agents and commands to Droid config (~/.factory/)')
     .option('-f, --force', 'Overwrite existing files')
     .option('-q, --quiet', 'Suppress output except for errors')
     .option('--skip-droid-check', 'Skip checking if Droid is installed')
     .addHelpText('after', `
 Examples:
-  $ omd install                  Install to ~/.droid/
+  $ omd install                  Install to ~/.factory/
   $ omd install --force          Reinstall, overwriting existing files
   $ omd install --quiet          Silent install for scripts`)
     .action(async (options) => {
@@ -809,7 +809,7 @@ Examples:
             console.log(chalk.green('║         Installation Complete!                            ║'));
             console.log(chalk.green('╚═══════════════════════════════════════════════════════════╝'));
             console.log('');
-            console.log(chalk.gray(`Installed to: ~/.droid/`));
+            console.log(chalk.gray(`Installed to: ~/.factory/`));
             console.log('');
             console.log(chalk.yellow('Usage:'));
             console.log('  droid                        # Start Droid normally');

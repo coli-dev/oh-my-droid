@@ -77,7 +77,7 @@ Analyze your oh-my-droid usage and get tailored recommendations to improve your 
 # Check for token tracking data
 TOKEN_FILE="$HOME/.omd/state/token-tracking.jsonl"
 SESSION_FILE=".omd/state/session-history.json"
-CONFIG_FILE="$HOME/.droid/.omd-config.json"
+CONFIG_FILE="$HOME/.factory/.omd-config.json"
 
 echo "Analyzing OMD Usage..."
 echo ""

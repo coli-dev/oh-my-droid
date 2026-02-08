@@ -1,13 +1,13 @@
 # Rules Templates
 
-This directory contains rule templates that you can copy to your project's `.droid/rules/` directory.
+This directory contains rule templates that you can copy to your project's `.factory/rules/` directory.
 
 ## How to Use
 
-1. Create a `.droid/rules/` directory in your project root
+1. Create a `.factory/rules/` directory in your project root
 2. Copy the templates you want to use
 3. Customize them for your project
-4. Rules in `.droid/rules/*.md` will be auto-discovered and injected into context
+4. Rules in `.factory/rules/*.md` will be auto-discovered and injected into context
 
 ## Available Templates
 
@@ -21,18 +21,18 @@ This directory contains rule templates that you can copy to your project's `.dro
 
 ## Auto-Discovery
 
-When you place rules in `.droid/rules/`, they are automatically discovered by oh-my-droid and injected into the context for all agents working in your project.
+When you place rules in `.factory/rules/`, they are automatically discovered by oh-my-droid and injected into the context for all agents working in your project.
 
 ## Example
 
 ```bash
 # Copy templates to your project
-mkdir -p .droid/rules
-cp templates/rules/security.md .droid/rules/
-cp templates/rules/testing.md .droid/rules/
+mkdir -p .factory/rules
+cp templates/rules/security.md .factory/rules/
+cp templates/rules/testing.md .factory/rules/
 
 # Customize for your project
-# Edit .droid/rules/security.md to add project-specific checks
+# Edit .factory/rules/security.md to add project-specific checks
 ```
 
 ## Customization

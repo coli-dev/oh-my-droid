@@ -57,7 +57,7 @@ Configure omd for the current project only:
 /oh-my-droid:omd-setup
 ```
 
-- Creates `./.droid/AGENTS.md` in your current project
+- Creates `./.factory/AGENTS.md` in your current project
 - Configuration applies only to this project
 - Won't affect other projects or global settings
 - **Safe**: Preserves your global AGENTS.md
@@ -70,9 +70,9 @@ Configure omd for all Droid sessions:
 /oh-my-droid:omd-setup
 ```
 
-- Creates `~/.droid/AGENTS.md` globally
+- Creates `~/.factory/AGENTS.md` globally
 - Configuration applies to all projects
-- **Warning**: Completely overwrites existing `~/.droid/AGENTS.md`
+- **Warning**: Completely overwrites existing `~/.factory/AGENTS.md`
 
 ### What Configuration Enables
 
@@ -89,7 +89,7 @@ Configure omd for all Droid sessions:
 If both configurations exist, **project-scoped takes precedence** over global:
 
 ```
-./.droid/AGENTS.md  (project)   →  Overrides  →  ~/.droid/AGENTS.md  (global)
+./.factory/AGENTS.md  (project)   →  Overrides  →  ~/.factory/AGENTS.md  (global)
 ```
 
 ### When to Re-run Setup
@@ -103,7 +103,7 @@ If both configurations exist, **project-scoped takes precedence** over global:
 
 ### Agent Customization
 
-Edit agent files in `~/.droid/agents/` to customize behavior:
+Edit agent files in `~/.factory/agents/` to customize behavior:
 
 ```yaml
 ---
@@ -118,7 +118,7 @@ Your custom system prompt here...
 
 ### Project-Level Config
 
-Create `.droid/AGENTS.md` in your project for project-specific instructions:
+Create `.factory/AGENTS.md` in your project for project-specific instructions:
 
 ```markdown
 # Project Context
@@ -537,7 +537,7 @@ Installs or repairs the HUD statusline for real-time status updates.
 
 ### HUD Configuration (settings.json)
 
-Configure HUD elements in `~/.droid/settings.json`:
+Configure HUD elements in `~/.factory/settings.json`:
 
 ```json
 {
@@ -571,8 +571,8 @@ Available presets: `minimal`, `focused`, `full`, `dense`, `analytics`, `opencode
 | Issue | Solution |
 |-------|----------|
 | Commands not found | Re-run `/oh-my-droid:omd-setup` |
-| Hooks not executing | Check hook permissions: `chmod +x ~/.droid/hooks/**/*.sh` |
-| Agents not delegating | Verify AGENTS.md is loaded: check `./.droid/AGENTS.md` or `~/.droid/AGENTS.md` |
+| Hooks not executing | Check hook permissions: `chmod +x ~/.factory/hooks/**/*.sh` |
+| Agents not delegating | Verify AGENTS.md is loaded: check `./.factory/AGENTS.md` or `~/.factory/AGENTS.md` |
 | LSP tools not working | Install language servers: `npm install -g typescript-language-server` |
 | Token limit errors | Use `/oh-my-droid:ecomode` for token-efficient execution |
 
@@ -596,8 +596,8 @@ curl -fsSL https://raw.githubusercontent.com/coli-dev/oh-my-droid/main/scripts/u
 Or manually:
 
 ```bash
-rm ~/.droid/agents/{architect,researcher,explore,designer,writer,vision,critic,analyst,executor,qa-tester}.md
-rm ~/.droid/commands/{analyze,autopilot,deepsearch,plan,review,ultrawork}.md
+rm ~/.factory/agents/{architect,researcher,explore,designer,writer,vision,critic,analyst,executor,qa-tester}.md
+rm ~/.factory/commands/{analyze,autopilot,deepsearch,plan,review,ultrawork}.md
 ```
 
 ---

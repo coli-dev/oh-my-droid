@@ -15,7 +15,7 @@ export interface ModeConfig {
     activeProperty?: string;
     /** Whether state is SQLite-based (requires marker file) */
     isSqlite?: boolean;
-    /** Whether mode has global state in ~/.droid/ */
+    /** Whether mode has global state in ~/.factory/ */
     hasGlobalState?: boolean;
 }
 export interface ModeStatus {

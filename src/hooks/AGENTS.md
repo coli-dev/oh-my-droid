@@ -256,6 +256,6 @@ return {
 | ultrapilot | `.omd/state/ultrapilot-state.json` |
 | ralph | `.omd/state/ralph-state.json` |
 | swarm | `.omd/state/swarm-tasks.db` (SQLite) |
-| learner | `~/.droid/local-skills/` |
+| learner | `~/.factory/local-skills/` |
 
 <!-- MANUAL: -->

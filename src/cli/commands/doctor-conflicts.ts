@@ -18,11 +18,11 @@ export interface ConflictReport {
 }
 
 /**
- * Check for hook conflicts in ~/.droid/settings.json
+ * Check for hook conflicts in ~/.factory/settings.json
  */
 export function checkHookConflicts(): ConflictReport['hookConflicts'] {
   const conflicts: ConflictReport['hookConflicts'] = [];
-  const settingsPath = join(homedir(), '.droid', 'settings.json');
+  const settingsPath = join(homedir(), '.factory', 'settings.json');
 
   if (!existsSync(settingsPath)) {
     return conflicts;
@@ -68,7 +68,7 @@ export function checkHookConflicts(): ConflictReport['hookConflicts'] {
  * Check AGENTS.md for OMD markers and user content
  */
 export function checkAgentsMdStatus(): ConflictReport['agentsMdStatus'] {
-  const droidMdPath = join(homedir(), '.droid', 'AGENTS.md');
+  const droidMdPath = join(homedir(), '.factory', 'AGENTS.md');
 
   if (!existsSync(droidMdPath)) {
     return null;
@@ -125,7 +125,7 @@ export function checkEnvFlags(): ConflictReport['envFlags'] {
  */
 export function checkConfigIssues(): ConflictReport['configIssues'] {
   const unknownFields: string[] = [];
-  const configPath = join(homedir(), '.droid', '.omd-config.json');
+  const configPath = join(homedir(), '.factory', '.omd-config.json');
 
   if (!existsSync(configPath)) {
     return { unknownFields };

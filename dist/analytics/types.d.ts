@@ -1,5 +1,5 @@
 /**
- * Transcript entry from .droid session logs
+ * Transcript entry from .factory session logs
  */
 export interface TranscriptEntry {
     type: string;

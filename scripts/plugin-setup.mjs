@@ -13,7 +13,7 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const DROID_DIR = join(homedir(), '.droid');
+const DROID_DIR = join(homedir(), '.factory');
 const HUD_DIR = join(DROID_DIR, 'hud');
 const SETTINGS_FILE = join(DROID_DIR, 'settings.json');
 
@@ -58,7 +58,7 @@ async function main() {
   const home = homedir();
 
   // 1. Try plugin cache first (marketplace: omd, plugin: oh-my-droid)
-  const pluginCacheBase = join(home, ".droid/plugins/cache/omd/oh-my-droid");
+  const pluginCacheBase = join(home, ".factory/plugins/cache/omd/oh-my-droid");
   if (existsSync(pluginCacheBase)) {
     try {
       const versions = readdirSync(pluginCacheBase);

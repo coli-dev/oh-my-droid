@@ -33,7 +33,7 @@ const SIGNAL_PATTERNS = {
  * Detect a specific signal in the session transcript
  */
 export function detectSignal(sessionId, signal) {
-    const droidDir = join(homedir(), '.droid');
+    const droidDir = join(homedir(), '.factory');
     const possiblePaths = [
         join(droidDir, 'sessions', sessionId, 'transcript.md'),
         join(droidDir, 'sessions', sessionId, 'messages.json'),

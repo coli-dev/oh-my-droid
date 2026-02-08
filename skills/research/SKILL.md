@@ -460,7 +460,7 @@ Report generator embeds figures:
 
 ## Configuration
 
-Optional settings in `.droid/settings.json`:
+Optional settings in `.factory/settings.json`:
 
 ```json
 {

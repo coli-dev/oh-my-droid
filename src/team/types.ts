@@ -30,7 +30,7 @@ export interface BridgeWorkerPermissions {
   maxFileSize: number;      // max bytes per file write
 }
 
-/** Mirrors the JSON structure of ~/.droid/tasks/{team}/{id}.json */
+/** Mirrors the JSON structure of ~/.factory/tasks/{team}/{id}.json */
 export interface TaskFile {
   id: string;
   subject: string;

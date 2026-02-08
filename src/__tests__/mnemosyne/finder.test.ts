@@ -56,7 +56,7 @@ describe('Skill Finder', () => {
 
   it('should get skills directory for user scope', () => {
     const userDir = getSkillsDir('user');
-    expect(userDir).toContain('.droid');
+    expect(userDir).toContain('.factory');
     expect(userDir).toContain('omd-learned');
   });
 

@@ -148,6 +148,6 @@ Standardized state file locations.
 | pipeline | `pipeline-state.json` |
 | swarm | `swarm-summary.json` + `swarm-active.marker` |
 
-**Important:** Never store OMD state in `~/.droid/` - that directory is reserved for Droid itself.
+**Important:** Never store OMD state in `~/.factory/` - that directory is reserved for Droid itself.
 
 Legacy locations auto-migrated on read.

@@ -2,7 +2,7 @@
  * Installer Module
  *
  * Handles installation of OMD agents, commands, and configuration
- * into the Droid config directory (~/.droid/).
+ * into the Droid config directory (~/.factory/).
  *
  * Cross-platform support via Node.js-based hook scripts (.mjs).
  * Bash hook scripts were removed in v3.9.0.
@@ -21,7 +21,7 @@ import {
 } from './hooks.js';
 
 /** Droid configuration directory */
-export const DROID_CONFIG_DIR = join(homedir(), '.droid');
+export const DROID_CONFIG_DIR = join(homedir(), '.factory');
 export const AGENTS_DIR = join(DROID_CONFIG_DIR, 'agents');
 export const COMMANDS_DIR = join(DROID_CONFIG_DIR, 'commands');
 export const SKILLS_DIR = join(DROID_CONFIG_DIR, 'skills');
@@ -33,7 +33,7 @@ export const VERSION_FILE = join(DROID_CONFIG_DIR, '.omd-version.json');
 /**
  * Core commands - DISABLED for v3.0+
  * All commands are now plugin-scoped skills managed by Droid.
- * The installer no longer copies commands to ~/.droid/commands/
+ * The installer no longer copies commands to ~/.factory/commands/
  */
 export const CORE_COMMANDS: string[] = [];
 
@@ -139,7 +139,7 @@ export function isDroidInstalled(): boolean {
 /**
  * Check if we're running in Droid plugin context
  *
- * When installed as a plugin, we should NOT copy files to ~/.droid/
+ * When installed as a plugin, we should NOT copy files to ~/.factory/
  * because the plugin system already handles file access via ${DROID_PLUGIN_ROOT}.
  *
  * Detection method:
@@ -157,10 +157,10 @@ export function isRunningAsPlugin(): boolean {
 /**
  * Check if we're running as a project-scoped plugin (not global)
  *
- * Project-scoped plugins are installed in the project's .droid/plugins/ directory,
- * while global plugins are installed in ~/.droid/plugins/.
+ * Project-scoped plugins are installed in the project's .factory/plugins/ directory,
+ * while global plugins are installed in ~/.factory/plugins/.
  *
- * When project-scoped, we should NOT modify global settings (like ~/.droid/settings.json)
+ * When project-scoped, we should NOT modify global settings (like ~/.factory/settings.json)
  * because the user explicitly chose project-level installation.
  *
  * @returns true if running as a project-scoped plugin, false otherwise
@@ -171,8 +171,8 @@ export function isProjectScopedPlugin(): boolean {
     return false;
   }
 
-  // Global plugins are installed under ~/.droid/plugins/
-  const globalPluginBase = join(homedir(), '.droid', 'plugins');
+  // Global plugins are installed under ~/.factory/plugins/
+  const globalPluginBase = join(homedir(), '.factory', 'plugins');
 
   // If the plugin root is NOT under the global plugin directory, it's project-scoped
   // Normalize paths for comparison (resolve symlinks, trailing slashes, etc.)
@@ -499,7 +499,7 @@ export function install(options: InstallOptions = {}): InstallResult {
     }
 
     // Install HUD statusline (skip for project-scoped plugins to avoid affecting global settings)
-    // Project-scoped plugins should not modify ~/.droid/settings.json
+    // Project-scoped plugins should not modify ~/.factory/settings.json
     let hudScriptPath: string | null = null;
     if (projectScoped) {
       log('Skipping HUD statusline (project-scoped plugin should not modify global settings)');
@@ -550,7 +550,7 @@ export function install(options: InstallOptions = {}): InstallResult {
         '  }',
         '  ',
         '  // 2. Plugin cache (for production installs)',
-        '  const pluginCacheBase = join(home, ".droid/plugins/cache/omd/oh-my-droid");',
+        '  const pluginCacheBase = join(home, ".factory/plugins/cache/omd/oh-my-droid");',
         '  if (existsSync(pluginCacheBase)) {',
         '    try {',
         '      const versions = readdirSync(pluginCacheBase);',

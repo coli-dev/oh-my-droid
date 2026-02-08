@@ -24,8 +24,8 @@ const MAX_INBOX_READ_SIZE = 10 * 1024 * 1024;
 // --- Path helpers ---
 
 function teamsDir(teamName: string): string {
-  const result = join(homedir(), '.droid', 'teams', sanitizeName(teamName));
-  validateResolvedPath(result, join(homedir(), '.droid', 'teams'));
+  const result = join(homedir(), '.factory', 'teams', sanitizeName(teamName));
+  validateResolvedPath(result, join(homedir(), '.factory', 'teams'));
   return result;
 }
 

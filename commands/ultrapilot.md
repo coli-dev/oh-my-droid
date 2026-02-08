@@ -124,7 +124,7 @@ Verify the complete implementation:
 | Track progress | ✓ | |
 | **ANY code change** | ✗ NEVER | executor workers |
 
-**Path Exception**: Only write to `.omd/`, `.droid/`, `AGENTS.md`, `AGENTS.md`
+**Path Exception**: Only write to `.omd/`, `.factory/`, `AGENTS.md`, `AGENTS.md`
 
 ## State Management
 

@@ -2,10 +2,10 @@
  * Plugin and MCP Server Discovery
  *
  * Discovers external plugins, MCP servers, and tools from:
- * - ~/.droid/plugins/ (Droid plugins)
- * - ~/.droid/settings.json (MCP servers config)
- * - ~/.droid/droid_desktop_config.json (Desktop app MCP config)
- * - Project-local .droid-plugin/ directories
+ * - ~/.factory/plugins/ (Droid plugins)
+ * - ~/.factory/settings.json (MCP servers config)
+ * - ~/.factory/droid_desktop_config.json (Desktop app MCP config)
+ * - Project-local .factory-plugin/ directories
  */
 
 import { existsSync, readdirSync, readFileSync, statSync, realpathSync } from 'fs';
@@ -160,12 +160,12 @@ function isPathWithinDirectory(basePath: string, targetPath: string): boolean {
  * Default paths for discovery
  */
 const DEFAULT_PLUGIN_PATHS = [
-  join(homedir(), '.droid', 'plugins'),
-  join(homedir(), '.droid', 'installed-plugins'),
+  join(homedir(), '.factory', 'plugins'),
+  join(homedir(), '.factory', 'installed-plugins'),
 ];
 
-const DEFAULT_MCP_CONFIG_PATH = join(homedir(), '.droid', 'droid_desktop_config.json');
-const DEFAULT_SETTINGS_PATH = join(homedir(), '.droid', 'settings.json');
+const DEFAULT_MCP_CONFIG_PATH = join(homedir(), '.factory', 'droid_desktop_config.json');
+const DEFAULT_SETTINGS_PATH = join(homedir(), '.factory', 'settings.json');
 
 /**
  * Infer capabilities from tool name and description
@@ -382,10 +382,10 @@ function discoverPluginAgents(pluginPath: string, manifest: PluginManifest): Ext
  * Discover a single plugin from a directory
  */
 function discoverPlugin(pluginPath: string): DiscoveredPlugin | null {
-  // Look for plugin.json in the directory or in .droid-plugin subdirectory
+  // Look for plugin.json in the directory or in .factory-plugin subdirectory
   let manifestPath = join(pluginPath, 'plugin.json');
   if (!existsSync(manifestPath)) {
-    manifestPath = join(pluginPath, '.droid-plugin', 'plugin.json');
+    manifestPath = join(pluginPath, '.factory-plugin', 'plugin.json');
   }
   if (!existsSync(manifestPath)) {
     return null;

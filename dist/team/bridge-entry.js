@@ -14,14 +14,14 @@ import { getWorktreeRoot } from '../lib/worktree-paths.js';
 import { sanitizeName } from './tmux-session.js';
 /**
  * Validate that a config path is under the user's home directory
- * and contains a trusted subpath (/.droid/ or /.omd/).
- * Resolves the path first to defeat traversal attacks like ~/foo/.droid/../../evil.json.
+ * and contains a trusted subpath (/.factory/ or /.omd/).
+ * Resolves the path first to defeat traversal attacks like ~/foo/.factory/../../evil.json.
  */
 export function validateConfigPath(configPath, homeDir) {
     // Resolve to canonical absolute path to defeat ".." traversal
     const resolved = resolve(configPath);
     const isUnderHome = resolved.startsWith(homeDir + '/') || resolved === homeDir;
-    const isTrustedSubpath = resolved.includes('/.droid/') || resolved.includes('/.omd/');
+    const isTrustedSubpath = resolved.includes('/.factory/') || resolved.includes('/.omd/');
     if (!isUnderHome || !isTrustedSubpath)
         return false;
     // Additionally verify via realpathSync on the parent directory (if it exists)
@@ -79,7 +79,7 @@ function main() {
     // Validate config path is from a trusted location
     const home = homedir();
     if (!validateConfigPath(configPath, home)) {
-        console.error(`Config path must be under ~/ with .droid/ or .omd/ subpath: ${configPath}`);
+        console.error(`Config path must be under ~/ with .factory/ or .omd/ subpath: ${configPath}`);
         process.exit(1);
     }
     let config;

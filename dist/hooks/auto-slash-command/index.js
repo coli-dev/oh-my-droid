@@ -3,8 +3,8 @@
  *
  * Detects and expands slash commands in user prompts.
  * Complements Droid's native slash command system by adding:
- * - Skill-based commands from ~/.droid/skills/
- * - Project-level commands from .droid/commands/
+ * - Skill-based commands from ~/.factory/skills/
+ * - Project-level commands from .factory/commands/
  * - Template expansion with $ARGUMENTS placeholder
  *
  * Adapted from oh-my-opencode's auto-slash-command hook.

@@ -275,10 +275,10 @@ function matchesPattern(path: string, pattern?: string): boolean {
 }
 
 /**
- * Scan for all transcript files in ~/.droid/projects/
+ * Scan for all transcript files in ~/.factory/projects/
  */
 export async function scanTranscripts(options: ScanOptions = {}): Promise<ScanResult> {
-  const projectsDir = join(homedir(), '.droid', 'projects');
+  const projectsDir = join(homedir(), '.factory', 'projects');
   const transcripts: TranscriptFile[] = [];
   const projectDirs = new Set<string>();
 

@@ -18,7 +18,7 @@ export declare function calculateDistance(rulePath: string, currentFile: string,
 /**
  * Find all rule files for a given context.
  * Searches from currentFile upward to projectRoot for rule directories,
- * then user-level directory (~/.droid/rules).
+ * then user-level directory (~/.factory/rules).
  */
 export declare function findRuleFiles(projectRoot: string | null, homeDir: string, currentFile: string): RuleFileCandidate[];
 //# sourceMappingURL=finder.d.ts.map

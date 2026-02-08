@@ -13,8 +13,8 @@ NC='\033[0m'
 echo -e "${BLUE}Oh-My-Droid-Sisyphus Uninstaller${NC}"
 echo ""
 
-# Droid config directory (always ~/.droid)
-DROID_CONFIG_DIR="$HOME/.droid"
+# Droid config directory (always ~/.factory)
+DROID_CONFIG_DIR="$HOME/.factory"
 
 echo "This will remove ALL Sisyphus components from:"
 echo "  $DROID_CONFIG_DIR"

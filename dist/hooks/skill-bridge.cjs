@@ -60,7 +60,7 @@ var OmcPaths = {
 // src/hooks/learner/bridge.ts
 var USER_SKILLS_DIR = (0, import_path2.join)(
   (0, import_os.homedir)(),
-  ".droid",
+  ".factory",
   "skills",
   "omd-learned"
 );

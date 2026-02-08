@@ -29,38 +29,38 @@ function detectConflicts(
   return conflicts;
 }
 
-const TEST_DROID_DIR = join(homedir(), '.droid-test-safe-installer');
+const TEST_DROID_DIR = join(homedir(), '.factory-test-safe-installer');
 const TEST_SETTINGS_FILE = join(TEST_DROID_DIR, 'settings.json');
 
 describe('isOmcHook', () => {
   it('returns true for commands containing "omd"', () => {
-    expect(isOmcHook('node ~/.droid/hooks/omd-hook.mjs')).toBe(true);
-    expect(isOmcHook('bash $HOME/.droid/hooks/omd-detector.sh')).toBe(true);
+    expect(isOmcHook('node ~/.factory/hooks/omd-hook.mjs')).toBe(true);
+    expect(isOmcHook('bash $HOME/.factory/hooks/omd-detector.sh')).toBe(true);
     expect(isOmcHook('/usr/bin/omd-tool')).toBe(true);
   });
 
   it('returns true for commands containing "oh-my-droid"', () => {
-    expect(isOmcHook('node ~/.droid/hooks/oh-my-droid-hook.mjs')).toBe(true);
-    expect(isOmcHook('bash $HOME/.droid/hooks/oh-my-droid.sh')).toBe(true);
+    expect(isOmcHook('node ~/.factory/hooks/oh-my-droid-hook.mjs')).toBe(true);
+    expect(isOmcHook('bash $HOME/.factory/hooks/oh-my-droid.sh')).toBe(true);
   });
 
   it('returns false for commands not containing omd or oh-my-droid', () => {
-    expect(isOmcHook('node ~/.droid/hooks/other-plugin.mjs')).toBe(false);
-    expect(isOmcHook('bash $HOME/.droid/hooks/beads-hook.sh')).toBe(false);
+    expect(isOmcHook('node ~/.factory/hooks/other-plugin.mjs')).toBe(false);
+    expect(isOmcHook('bash $HOME/.factory/hooks/beads-hook.sh')).toBe(false);
     expect(isOmcHook('python /usr/bin/custom-hook.py')).toBe(false);
   });
 
   it('is case-insensitive', () => {
-    expect(isOmcHook('node ~/.droid/hooks/OMD-hook.mjs')).toBe(true);
-    expect(isOmcHook('bash $HOME/.droid/hooks/OH-MY-DROID.sh')).toBe(true);
+    expect(isOmcHook('node ~/.factory/hooks/OMD-hook.mjs')).toBe(true);
+    expect(isOmcHook('bash $HOME/.factory/hooks/OH-MY-DROID.sh')).toBe(true);
   });
 });
 
 describe('isOmcHook detection', () => {
   it('detects real OMD hooks correctly', () => {
-    expect(isOmcHook('node ~/.droid/hooks/omd-hook.mjs')).toBe(true);
-    expect(isOmcHook('node ~/.droid/hooks/oh-my-droid-hook.mjs')).toBe(true);
-    expect(isOmcHook('node ~/.droid/hooks/omd-pre-tool-use.mjs')).toBe(true);
+    expect(isOmcHook('node ~/.factory/hooks/omd-hook.mjs')).toBe(true);
+    expect(isOmcHook('node ~/.factory/hooks/oh-my-droid-hook.mjs')).toBe(true);
+    expect(isOmcHook('node ~/.factory/hooks/omd-pre-tool-use.mjs')).toBe(true);
     expect(isOmcHook('/usr/local/bin/omd')).toBe(true);
   });
 
@@ -68,11 +68,11 @@ describe('isOmcHook detection', () => {
     expect(isOmcHook('eslint --fix')).toBe(false);
     expect(isOmcHook('prettier --write')).toBe(false);
     expect(isOmcHook('node custom-hook.mjs')).toBe(false);
-    expect(isOmcHook('node ~/.droid/hooks/beads-hook.mjs')).toBe(false);
+    expect(isOmcHook('node ~/.factory/hooks/beads-hook.mjs')).toBe(false);
   });
 
   it('uses case-insensitive matching', () => {
-    expect(isOmcHook('node ~/.droid/hooks/OMD-hook.mjs')).toBe(true);
+    expect(isOmcHook('node ~/.factory/hooks/OMD-hook.mjs')).toBe(true);
     expect(isOmcHook('OH-MY-DROID-detector.sh')).toBe(true);
   });
 });
@@ -106,7 +106,7 @@ describe('Safe Installer - Hook Conflict Detection', () => {
             hooks: [
               {
                 type: 'command',
-                command: 'node ~/.droid/hooks/beads-hook.mjs'
+                command: 'node ~/.factory/hooks/beads-hook.mjs'
               }
             ]
           }
@@ -126,7 +126,7 @@ describe('Safe Installer - Hook Conflict Detection', () => {
 
     expect(conflicts).toHaveLength(1);
     expect(conflicts[0].eventType).toBe('PreToolUse');
-    expect(conflicts[0].existingCommand).toBe('node ~/.droid/hooks/beads-hook.mjs');
+    expect(conflicts[0].existingCommand).toBe('node ~/.factory/hooks/beads-hook.mjs');
   });
 
   it('does not detect conflict when hook is OMD-owned', () => {
@@ -137,7 +137,7 @@ describe('Safe Installer - Hook Conflict Detection', () => {
             hooks: [
               {
                 type: 'command',
-                command: 'node ~/.droid/hooks/omd-pre-tool-use.mjs'
+                command: 'node ~/.factory/hooks/omd-pre-tool-use.mjs'
               }
             ]
           }
@@ -158,7 +158,7 @@ describe('Safe Installer - Hook Conflict Detection', () => {
             hooks: [
               {
                 type: 'command',
-                command: 'node ~/.droid/hooks/beads-pre-tool-use.mjs'
+                command: 'node ~/.factory/hooks/beads-pre-tool-use.mjs'
               }
             ]
           }
@@ -168,7 +168,7 @@ describe('Safe Installer - Hook Conflict Detection', () => {
             hooks: [
               {
                 type: 'command',
-                command: 'python ~/.droid/hooks/custom-post-tool.py'
+                command: 'python ~/.factory/hooks/custom-post-tool.py'
               }
             ]
           }
@@ -178,7 +178,7 @@ describe('Safe Installer - Hook Conflict Detection', () => {
             hooks: [
               {
                 type: 'command',
-                command: 'node ~/.droid/hooks/omd-keyword-detector.mjs'
+                command: 'node ~/.factory/hooks/omd-keyword-detector.mjs'
               }
             ]
           }

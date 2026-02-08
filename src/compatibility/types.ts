@@ -48,7 +48,7 @@ export interface ExternalTool {
 }
 
 /**
- * Plugin manifest format (compatible with .droid-plugin/plugin.json)
+ * Plugin manifest format (compatible with .factory-plugin/plugin.json)
  */
 export interface PluginManifest {
   /** Plugin name */

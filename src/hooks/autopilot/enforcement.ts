@@ -62,7 +62,7 @@ const SIGNAL_PATTERNS: Record<AutopilotSignal, RegExp> = {
  * Detect a specific signal in the session transcript
  */
 export function detectSignal(sessionId: string, signal: AutopilotSignal): boolean {
-  const droidDir = join(homedir(), '.droid');
+  const droidDir = join(homedir(), '.factory');
   const possiblePaths = [
     join(droidDir, 'sessions', sessionId, 'transcript.md'),
     join(droidDir, 'sessions', sessionId, 'messages.json'),

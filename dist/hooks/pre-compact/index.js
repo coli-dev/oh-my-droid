@@ -194,7 +194,7 @@ export async function saveModeSummary(directory) {
  */
 function readTodoSummary(directory) {
     const todoPaths = [
-        join(directory, ".droid", "todos.json"),
+        join(directory, ".factory", "todos.json"),
         join(directory, ".omd", "state", "todos.json"),
     ];
     for (const todoPath of todoPaths) {

@@ -77,8 +77,8 @@ droid plugin update oh-my-droid@oh-my-droid
 
 | Method | Command | Files Location |
 |--------|---------|----------------|
-| Plugin | `droid plugin install` | `~/.droid/plugins/cache/` |
-| npm global | `npm install -g` | `~/.droid/agents/`, `~/.droid/commands/` |
+| Plugin | `droid plugin install` | `~/.factory/plugins/cache/` |
+| npm global | `npm install -g` | `~/.factory/agents/`, `~/.factory/commands/` |
 
 **Plugin mode is preferred** - it keeps files isolated and uses the native Droid plugin system with `${DROID_PLUGIN_ROOT}` variable for path resolution.
 

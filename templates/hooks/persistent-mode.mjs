@@ -230,7 +230,7 @@ function countIncompleteTasks(sessionId) {
   if (!sessionId || typeof sessionId !== "string") return 0;
   if (!/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,255}$/.test(sessionId)) return 0;
 
-  const taskDir = join(homedir(), ".droid", "tasks", sessionId);
+  const taskDir = join(homedir(), ".factory", "tasks", sessionId);
   if (!existsSync(taskDir)) return 0;
 
   let count = 0;
@@ -264,7 +264,7 @@ function countIncompleteTodos(sessionId, projectDir) {
   ) {
     const sessionTodoPath = join(
       homedir(),
-      ".droid",
+      ".factory",
       "todos",
       `${sessionId}.json`,
     );
@@ -286,7 +286,7 @@ function countIncompleteTodos(sessionId, projectDir) {
   // Project-local todos only
   for (const path of [
     join(projectDir, ".omd", "todos.json"),
-    join(projectDir, ".droid", "todos.json"),
+    join(projectDir, ".factory", "todos.json"),
   ]) {
     try {
       const data = readJsonFile(path);

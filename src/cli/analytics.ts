@@ -108,7 +108,7 @@ program
     try {
       await launchTokscaleTUI({
         view,
-        droid: options.droid
+        droid: options.factory
       });
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);

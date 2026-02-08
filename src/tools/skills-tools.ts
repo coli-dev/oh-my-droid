@@ -121,7 +121,7 @@ export const loadLocalTool = {
 // Tool 2: load_omd_skills_global
 export const loadGlobalTool = {
   name: 'load_omd_skills_global',
-  description: 'Load and list skills from global user directories (~/.omd/skills/ and ~/.droid/skills/omd-learned/). Returns skill metadata for all discovered user-scoped skills.',
+  description: 'Load and list skills from global user directories (~/.omd/skills/ and ~/.factory/skills/omd-learned/). Returns skill metadata for all discovered user-scoped skills.',
   schema: loadGlobalSchema,
   handler: async (_args: Record<string, never>) => {
     const allSkills = loadAllSkills(null);
@@ -158,7 +158,7 @@ export const listSkillsTool = {
     }
 
     if (skills.length === 0) {
-      output = '## No Skills Found\n\nNo skill files were discovered in any searched directories.\n\nSearched:\n- Project: .omd/skills/\n- Global: ~/.omd/skills/\n- Legacy: ~/.droid/skills/omd-learned/';
+      output = '## No Skills Found\n\nNo skill files were discovered in any searched directories.\n\nSearched:\n- Project: .omd/skills/\n- Global: ~/.omd/skills/\n- Legacy: ~/.factory/skills/omd-learned/';
     }
 
     return {

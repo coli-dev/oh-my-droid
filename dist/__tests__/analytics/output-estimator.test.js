@@ -53,22 +53,22 @@ describe('OutputEstimator', () => {
     });
     describe('extractSessionId', () => {
         it('should extract session ID from standard path', () => {
-            const path = '/home/user/.droid/projects/abcdef123456/transcript.jsonl';
+            const path = '/home/user/.factory/projects/abcdef123456/transcript.jsonl';
             const sessionId = extractSessionId(path);
             expect(sessionId).toBe('abcdef123456');
         });
         it('should extract longer session IDs', () => {
-            const path = '/home/user/.droid/projects/a1b2c3d4e5f6abcd/transcript.jsonl';
+            const path = '/home/user/.factory/projects/a1b2c3d4e5f6abcd/transcript.jsonl';
             const sessionId = extractSessionId(path);
             expect(sessionId).toBe('a1b2c3d4e5f6abcd');
         });
         it('should handle uppercase session IDs', () => {
-            const path = '/home/user/.droid/projects/ABCDEF123456/transcript.jsonl';
+            const path = '/home/user/.factory/projects/ABCDEF123456/transcript.jsonl';
             const sessionId = extractSessionId(path);
             expect(sessionId).toBe('ABCDEF123456');
         });
         it('should handle mixed case session IDs', () => {
-            const path = '/home/user/.droid/projects/AbCdEf123456/transcript.jsonl';
+            const path = '/home/user/.factory/projects/AbCdEf123456/transcript.jsonl';
             const sessionId = extractSessionId(path);
             expect(sessionId).toBe('AbCdEf123456');
         });
@@ -92,12 +92,12 @@ describe('OutputEstimator', () => {
             expect(hash1).not.toBe(hash2);
         });
         it('should handle very long paths', () => {
-            const longPath = '/very/long/path/with/many/.droid/projects/a1b2c3d4e5f6abcd/and/more/directories/transcript.jsonl';
+            const longPath = '/very/long/path/with/many/.factory/projects/a1b2c3d4e5f6abcd/and/more/directories/transcript.jsonl';
             const sessionId = extractSessionId(longPath);
             expect(sessionId).toBe('a1b2c3d4e5f6abcd');
         });
         it('should match first projects/ pattern', () => {
-            const path = '/home/.droid/projects/a1b2c3d412345678/other/projects/a1b2c3d487654321/transcript.jsonl';
+            const path = '/home/.factory/projects/a1b2c3d412345678/other/projects/a1b2c3d487654321/transcript.jsonl';
             const sessionId = extractSessionId(path);
             expect(sessionId).toBe('a1b2c3d412345678');
         });

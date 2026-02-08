@@ -35,10 +35,10 @@ const DEFAULT_CONFIG: InvocationConfig = {
 };
 
 /**
- * Load auto-invocation config from ~/.droid/.omd-config.json
+ * Load auto-invocation config from ~/.factory/.omd-config.json
  */
 export function loadInvocationConfig(): InvocationConfig {
-  const configPath = path.join(os.homedir(), '.droid', '.omd-config.json');
+  const configPath = path.join(os.homedir(), '.factory', '.omd-config.json');
 
   try {
     if (!fs.existsSync(configPath)) {

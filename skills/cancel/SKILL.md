@@ -47,7 +47,7 @@ The skill checks state files to determine what's active:
 - `.omd/state/pipeline-state.json` → Pipeline detected
 - `.omd/state/plan-consensus.json` → Plan Consensus detected
 - `.omd/state/ralplan-state.json` → Plan Consensus detected (legacy)
-- `~/.droid/teams/*/config.json` → Team detected (Droid native team)
+- `~/.factory/teams/*/config.json` → Team detected (Droid native team)
 
 If multiple modes are active, they're cancelled in order of dependency:
 1. Autopilot (includes ralph/ultraqa/ecomode cleanup)
@@ -191,8 +191,8 @@ if [[ "$FORCE_MODE" == "true" ]]; then
   rm -f .omd/state/team-state.json
   # Attempt TeamDelete for any existing teams (best-effort)
   # If TeamDelete fails, manually remove:
-  #   rm -rf ~/.droid/teams/*/
-  #   rm -rf ~/.droid/tasks/*/
+  #   rm -rf ~/.factory/teams/*/
+  #   rm -rf ~/.factory/tasks/*/
 
   # Stop rate-limit daemon if running
   if [[ -f .omd/state/rate-limit-daemon.pid ]]; then
@@ -209,18 +209,18 @@ fi
 
 #### If Team Active (Droid native)
 
-Teams are detected by checking for config files in `~/.droid/teams/`:
+Teams are detected by checking for config files in `~/.factory/teams/`:
 
 ```bash
 # Check for active teams
-TEAM_CONFIGS=$(find ~/.droid/teams -name config.json -maxdepth 2 2>/dev/null)
+TEAM_CONFIGS=$(find ~/.factory/teams -name config.json -maxdepth 2 2>/dev/null)
 ```
 
 **Two-pass cancellation protocol:**
 
 **Pass 1: Graceful Shutdown**
 ```
-For each team found in ~/.droid/teams/:
+For each team found in ~/.factory/teams/:
   1. Read config.json to get team_name and members list
   2. For each non-lead member:
      a. Send shutdown_request via SendMessage
@@ -244,7 +244,7 @@ After graceful pass:
 
 **TeamDelete + Cleanup:**
 ```
-  1. Call TeamDelete() — removes ~/.droid/teams/{name}/ and ~/.droid/tasks/{name}/
+  1. Call TeamDelete() — removes ~/.factory/teams/{name}/ and ~/.factory/tasks/{name}/
   2. Remove local state: rm -f .omd/state/team-state.json
   3. Emit structured cancel report
 ```
@@ -257,11 +257,11 @@ Team "{team_name}" cancelled:
   - Unresponsive: K (list names if any)
   - TeamDelete: success/failed
   - Manual cleanup needed: yes/no
-    Path: ~/.droid/teams/{name}/ and ~/.droid/tasks/{name}/
+    Path: ~/.factory/teams/{name}/ and ~/.factory/tasks/{name}/
 ```
 
 **Implementation note:** The cancel skill is executed by the LLM, not as a bash script. When you detect an active team:
-1. Read `~/.droid/teams/*/config.json` to find active teams
+1. Read `~/.factory/teams/*/config.json` to find active teams
 2. If multiple teams exist, cancel oldest first (by `createdAt`)
 3. For each non-lead member, call `SendMessage(type: "shutdown_request", recipient: member-name, content: "Cancelling")`
 4. Wait briefly for shutdown responses (15s per member timeout)

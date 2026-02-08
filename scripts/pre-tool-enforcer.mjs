@@ -43,7 +43,7 @@ function getTodoStatus(directory) {
   // Check project-local todos
   const localPaths = [
     join(directory, '.omd', 'todos.json'),
-    join(directory, '.droid', 'todos.json')
+    join(directory, '.factory', 'todos.json')
   ];
 
   for (const todoFile of localPaths) {
@@ -62,7 +62,7 @@ function getTodoStatus(directory) {
     }
   }
 
-  // NOTE: We intentionally do NOT scan the global ~/.droid/todos/ directory.
+  // NOTE: We intentionally do NOT scan the global ~/.factory/todos/ directory.
   // That directory accumulates todo files from ALL past sessions across all
   // projects, causing phantom task counts in fresh sessions (see issue #354).
 

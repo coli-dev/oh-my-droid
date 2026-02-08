@@ -9,8 +9,8 @@
 
 /**
  * TERMINOLOGY:
- * - "Task" (capitalized): New Droid Task system (~/.droid/tasks/)
- * - "todo" (lowercase): Legacy todo system (~/.droid/todos/)
+ * - "Task" (capitalized): New Droid Task system (~/.factory/tasks/)
+ * - "todo" (lowercase): Legacy todo system (~/.factory/todos/)
  * - "item": Generic term for either Task or todo
  */
 
@@ -59,7 +59,7 @@ export interface Todo {
  * Droid Task system task
  *
  * IMPORTANT: This interface is based on observed behavior and the TaskCreate/TaskUpdate
- * tool schema. The file structure ~/.droid/tasks/{sessionId}/{taskId}.json is inferred
+ * tool schema. The file structure ~/.factory/tasks/{sessionId}/{taskId}.json is inferred
  * from Droid's implementation and may change in future versions.
  *
  * As of 2025-01, Anthropic has not published official documentation for the Task system
@@ -183,7 +183,7 @@ export function isContextLimitStop(context?: StopContext): boolean {
  * Get possible todo file locations
  */
 function getTodoFilePaths(sessionId?: string, directory?: string): string[] {
-  const droidDir = join(homedir(), '.droid');
+  const droidDir = join(homedir(), '.factory');
   const paths: string[] = [];
 
   // Session-specific todos
@@ -195,7 +195,7 @@ function getTodoFilePaths(sessionId?: string, directory?: string): string[] {
   // Project-specific todos
   if (directory) {
     paths.push(join(directory, '.omd', 'todos.json'));
-    paths.push(join(directory, '.droid', 'todos.json'));
+    paths.push(join(directory, '.factory', 'todos.json'));
   }
 
   // NOTE: Global todos directory scan removed to prevent false positives.
@@ -250,7 +250,7 @@ function isIncomplete(todo: Todo): boolean {
 /**
  * Get the Task directory for a session
  *
- * NOTE: This path (~/.droid/tasks/{sessionId}/) is inferred from Droid's
+ * NOTE: This path (~/.factory/tasks/{sessionId}/) is inferred from Droid's
  * implementation. Anthropic has not officially documented this structure.
  * The Task files are created by Droid's TaskCreate tool.
  */
@@ -259,7 +259,7 @@ export function getTaskDirectory(sessionId: string): string {
   if (!isValidSessionId(sessionId)) {
     return ''; // Return empty string for invalid sessions
   }
-  return join(homedir(), '.droid', 'tasks', sessionId);
+  return join(homedir(), '.factory', 'tasks', sessionId);
 }
 
 /**

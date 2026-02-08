@@ -42,7 +42,7 @@ export async function launchTokscaleTUI(options: TokscaleLaunchOptions = {}): Pr
   const args = ['tokscale@latest', subcommand];
 
   // Always use --droid flag for OMD (Droid-focused) unless explicitly disabled
-  if (options.droid !== false) {
+  if (options.factory !== false) {
     args.push('--droid');
   }
 

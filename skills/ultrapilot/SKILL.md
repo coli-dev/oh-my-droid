@@ -345,7 +345,7 @@ Tracks which worker owns which files (see Phase 2 example above).
 
 ## Configuration
 
-Optional settings in `.droid/settings.json`:
+Optional settings in `.factory/settings.json`:
 
 ```json
 {

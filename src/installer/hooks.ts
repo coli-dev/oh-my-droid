@@ -66,7 +66,7 @@ export function shouldUseNodeHooks(): boolean {
 
 /** Get the Droid config directory path (cross-platform) */
 export function getDroidConfigDir(): string {
-  return join(homedir(), ".droid");
+  return join(homedir(), ".factory");
 }
 
 /** Get the hooks directory path */
@@ -313,8 +313,8 @@ export const HOOKS_SETTINGS_CONFIG_NODE = {
             // Note: On Windows, %USERPROFILE% is expanded by cmd.exe
             // On Unix with node hooks, $HOME is expanded by the shell
             command: isWindows()
-              ? 'node "%USERPROFILE%\\.droid\\hooks\\keyword-detector.mjs"'
-              : 'node "$HOME/.droid/hooks/keyword-detector.mjs"',
+              ? 'node "%USERPROFILE%\\.factory\\hooks\\keyword-detector.mjs"'
+              : 'node "$HOME/.factory/hooks/keyword-detector.mjs"',
           },
         ],
       },
@@ -325,8 +325,8 @@ export const HOOKS_SETTINGS_CONFIG_NODE = {
           {
             type: "command" as const,
             command: isWindows()
-              ? 'node "%USERPROFILE%\\.droid\\hooks\\session-start.mjs"'
-              : 'node "$HOME/.droid/hooks/session-start.mjs"',
+              ? 'node "%USERPROFILE%\\.factory\\hooks\\session-start.mjs"'
+              : 'node "$HOME/.factory/hooks/session-start.mjs"',
           },
         ],
       },
@@ -337,8 +337,8 @@ export const HOOKS_SETTINGS_CONFIG_NODE = {
           {
             type: "command" as const,
             command: isWindows()
-              ? 'node "%USERPROFILE%\\.droid\\hooks\\pre-tool-use.mjs"'
-              : 'node "$HOME/.droid/hooks/pre-tool-use.mjs"',
+              ? 'node "%USERPROFILE%\\.factory\\hooks\\pre-tool-use.mjs"'
+              : 'node "$HOME/.factory/hooks/pre-tool-use.mjs"',
           },
         ],
       },
@@ -349,8 +349,8 @@ export const HOOKS_SETTINGS_CONFIG_NODE = {
           {
             type: "command" as const,
             command: isWindows()
-              ? 'node "%USERPROFILE%\\.droid\\hooks\\post-tool-use.mjs"'
-              : 'node "$HOME/.droid/hooks/post-tool-use.mjs"',
+              ? 'node "%USERPROFILE%\\.factory\\hooks\\post-tool-use.mjs"'
+              : 'node "$HOME/.factory/hooks/post-tool-use.mjs"',
           },
         ],
       },
@@ -361,8 +361,8 @@ export const HOOKS_SETTINGS_CONFIG_NODE = {
           {
             type: "command" as const,
             command: isWindows()
-              ? 'node "%USERPROFILE%\\.droid\\hooks\\post-tool-use-failure.mjs"'
-              : 'node "$HOME/.droid/hooks/post-tool-use-failure.mjs"',
+              ? 'node "%USERPROFILE%\\.factory\\hooks\\post-tool-use-failure.mjs"'
+              : 'node "$HOME/.factory/hooks/post-tool-use-failure.mjs"',
           },
         ],
       },
@@ -373,8 +373,8 @@ export const HOOKS_SETTINGS_CONFIG_NODE = {
           {
             type: "command" as const,
             command: isWindows()
-              ? 'node "%USERPROFILE%\\.droid\\hooks\\persistent-mode.mjs"'
-              : 'node "$HOME/.droid/hooks/persistent-mode.mjs"',
+              ? 'node "%USERPROFILE%\\.factory\\hooks\\persistent-mode.mjs"'
+              : 'node "$HOME/.factory/hooks/persistent-mode.mjs"',
           },
         ],
       },

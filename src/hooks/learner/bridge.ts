@@ -23,7 +23,7 @@ import { OmcPaths } from "../../lib/worktree-paths.js";
 // Re-export constants
 export const USER_SKILLS_DIR = join(
   homedir(),
-  ".droid",
+  ".factory",
   "skills",
   "omd-learned",
 );

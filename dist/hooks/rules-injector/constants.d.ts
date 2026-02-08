@@ -17,7 +17,7 @@ export declare const PROJECT_RULE_FILES: string[];
 /** Pattern for GitHub instructions files */
 export declare const GITHUB_INSTRUCTIONS_PATTERN: RegExp;
 /** User-level rule directory */
-export declare const USER_RULE_DIR = ".droid/rules";
+export declare const USER_RULE_DIR = ".factory/rules";
 /** Valid rule file extensions */
 export declare const RULE_EXTENSIONS: string[];
 /** Tools that trigger rule injection */

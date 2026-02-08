@@ -35,7 +35,7 @@ describe('readHudConfig', () => {
     it('reads from settings.json omdHud key first', () => {
       mockExistsSync.mockImplementation((path) => {
         const s = String(path);
-        return /[\\/]Users[\\/]testuser[\\/]\.droid[\\/]settings\.json$/.test(s);
+        return /[\\/]Users[\\/]testuser[\\/]\.factory[\\/]settings\.json$/.test(s);
       });
       mockReadFileSync.mockReturnValue(JSON.stringify({
         omdHud: {
@@ -55,15 +55,15 @@ describe('readHudConfig', () => {
     it('falls back to legacy hud-config.json when settings.json has no omdHud', () => {
       mockExistsSync.mockImplementation((path) => {
         const s = String(path);
-        return /[\\/]Users[\\/]testuser[\\/]\.droid[\\/]settings\.json$/.test(s) ||
-               /[\\/]Users[\\/]testuser[\\/]\.droid[\\/]\.omd[\\/]hud-config\.json$/.test(s);
+        return /[\\/]Users[\\/]testuser[\\/]\.factory[\\/]settings\.json$/.test(s) ||
+               /[\\/]Users[\\/]testuser[\\/]\.factory[\\/]\.omd[\\/]hud-config\.json$/.test(s);
       });
       mockReadFileSync.mockImplementation((path) => {
         const s = String(path);
-        if (/[\\/]Users[\\/]testuser[\\/]\.droid[\\/]settings\.json$/.test(s)) {
+        if (/[\\/]Users[\\/]testuser[\\/]\.factory[\\/]settings\.json$/.test(s)) {
           return JSON.stringify({ someOtherKey: true });
         }
-        if (/[\\/]Users[\\/]testuser[\\/]\.droid[\\/]\.omd[\\/]hud-config\.json$/.test(s)) {
+        if (/[\\/]Users[\\/]testuser[\\/]\.factory[\\/]\.omd[\\/]hud-config\.json$/.test(s)) {
           return JSON.stringify({
             elements: {
               cwd: true,
@@ -82,7 +82,7 @@ describe('readHudConfig', () => {
       mockExistsSync.mockReturnValue(true);
       mockReadFileSync.mockImplementation((path) => {
         const s = String(path);
-        if (/[\\/]Users[\\/]testuser[\\/]\.droid[\\/]settings\.json$/.test(s)) {
+        if (/[\\/]Users[\\/]testuser[\\/]\.factory[\\/]settings\.json$/.test(s)) {
           return JSON.stringify({
             omdHud: {
               elements: {
@@ -91,7 +91,7 @@ describe('readHudConfig', () => {
             }
           });
         }
-        if (/[\\/]Users[\\/]testuser[\\/]\.droid[\\/]\.omd[\\/]hud-config\.json$/.test(s)) {
+        if (/[\\/]Users[\\/]testuser[\\/]\.factory[\\/]\.omd[\\/]hud-config\.json$/.test(s)) {
           return JSON.stringify({
             elements: {
               gitRepo: false,
@@ -113,7 +113,7 @@ describe('readHudConfig', () => {
     it('returns defaults when settings.json is invalid JSON', () => {
       mockExistsSync.mockImplementation((path) => {
         const s = String(path);
-        return /[\\/]Users[\\/]testuser[\\/]\.droid[\\/]settings\.json$/.test(s);
+        return /[\\/]Users[\\/]testuser[\\/]\.factory[\\/]settings\.json$/.test(s);
       });
       mockReadFileSync.mockReturnValue('invalid json');
 
@@ -126,10 +126,10 @@ describe('readHudConfig', () => {
       mockExistsSync.mockReturnValue(true);
       mockReadFileSync.mockImplementation((path) => {
         const s = String(path);
-        if (/[\\/]Users[\\/]testuser[\\/]\.droid[\\/]settings\.json$/.test(s)) {
+        if (/[\\/]Users[\\/]testuser[\\/]\.factory[\\/]settings\.json$/.test(s)) {
           throw new Error('Read error');
         }
-        if (/[\\/]Users[\\/]testuser[\\/]\.droid[\\/]\.omd[\\/]hud-config\.json$/.test(s)) {
+        if (/[\\/]Users[\\/]testuser[\\/]\.factory[\\/]\.omd[\\/]hud-config\.json$/.test(s)) {
           return JSON.stringify({
             elements: { cwd: true }
           });
@@ -147,7 +147,7 @@ describe('readHudConfig', () => {
     it('merges partial config with defaults', () => {
       mockExistsSync.mockImplementation((path) => {
         const s = String(path);
-        return /[\\/]Users[\\/]testuser[\\/]\.droid[\\/]settings\.json$/.test(s);
+        return /[\\/]Users[\\/]testuser[\\/]\.factory[\\/]settings\.json$/.test(s);
       });
       mockReadFileSync.mockReturnValue(JSON.stringify({
         omdHud: {
@@ -170,7 +170,7 @@ describe('readHudConfig', () => {
     it('merges thresholds with defaults', () => {
       mockExistsSync.mockImplementation((path) => {
         const s = String(path);
-        return /[\\/]Users[\\/]testuser[\\/]\.droid[\\/]settings\.json$/.test(s);
+        return /[\\/]Users[\\/]testuser[\\/]\.factory[\\/]settings\.json$/.test(s);
       });
       mockReadFileSync.mockReturnValue(JSON.stringify({
         omdHud: {

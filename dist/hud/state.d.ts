@@ -34,7 +34,7 @@ export declare function getBackgroundTaskCount(state: OmcHudState | null): {
  */
 export declare function readHudConfig(): HudConfig;
 /**
- * Write HUD configuration to ~/.droid/settings.json (omdHud key)
+ * Write HUD configuration to ~/.factory/settings.json (omdHud key)
  */
 export declare function writeHudConfig(config: HudConfig): boolean;
 /**

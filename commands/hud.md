@@ -20,25 +20,25 @@ Configure the OMD HUD (Heads-Up Display) for the statusline.
 ## Auto-Setup
 
 When you run `/hud` or `/hud setup`, the system will automatically:
-1. Check if `~/.droid/hud/omd-hud.mjs` exists
-2. Check if `statusLine` is configured in `~/.droid/settings.json`
+1. Check if `~/.factory/hud/omd-hud.mjs` exists
+2. Check if `statusLine` is configured in `~/.factory/settings.json`
 3. If missing, create the HUD wrapper script and configure settings
 4. Report status and prompt to restart Droid if changes were made
 
-**IMPORTANT**: If the argument is `setup` OR if the HUD script doesn't exist at `~/.droid/hud/omd-hud.mjs`, you MUST create the HUD files directly using the instructions below.
+**IMPORTANT**: If the argument is `setup` OR if the HUD script doesn't exist at `~/.factory/hud/omd-hud.mjs`, you MUST create the HUD files directly using the instructions below.
 
 ### Setup Instructions (Run These Commands)
 
 **Step 1:** Check if setup is needed:
 ```bash
-ls ~/.droid/hud/omd-hud.mjs 2>/dev/null && echo "EXISTS" || echo "MISSING"
+ls ~/.factory/hud/omd-hud.mjs 2>/dev/null && echo "EXISTS" || echo "MISSING"
 ```
 
 **Step 2:** Verify the plugin is installed:
 ```bash
-PLUGIN_VERSION=$(ls ~/.droid/plugins/cache/omd/oh-my-droid/ 2>/dev/null | sort -V | tail -1)
+PLUGIN_VERSION=$(ls ~/.factory/plugins/cache/omd/oh-my-droid/ 2>/dev/null | sort -V | tail -1)
 if [ -n "$PLUGIN_VERSION" ]; then
-  ls ~/.droid/plugins/cache/omd/oh-my-droid/$PLUGIN_VERSION/dist/hud/index.js 2>/dev/null && echo "READY" || echo "NOT_FOUND - try reinstalling: /plugin install oh-my-droid"
+  ls ~/.factory/plugins/cache/omd/oh-my-droid/$PLUGIN_VERSION/dist/hud/index.js 2>/dev/null && echo "READY" || echo "NOT_FOUND - try reinstalling: /plugin install oh-my-droid"
 else
   echo "Plugin not installed - run: /plugin install oh-my-droid"
 fi
@@ -48,10 +48,10 @@ fi
 
 First, create the directory:
 ```bash
-mkdir -p ~/.droid/hud
+mkdir -p ~/.factory/hud
 ```
 
-Then, use the Write tool to create `~/.droid/hud/omd-hud.mjs` with this exact content:
+Then, use the Write tool to create `~/.factory/hud/omd-hud.mjs` with this exact content:
 
 ```javascript
 #!/usr/bin/env node
@@ -88,7 +88,7 @@ async function main() {
   let pluginCacheDir = null;
 
   // 1. Try plugin cache first (marketplace: omd, plugin: oh-my-droid)
-  const pluginCacheBase = join(home, ".droid/plugins/cache/omd/oh-my-droid");
+  const pluginCacheBase = join(home, ".factory/plugins/cache/omd/oh-my-droid");
   if (existsSync(pluginCacheBase)) {
     try {
       const versions = readdirSync(pluginCacheBase);
@@ -134,18 +134,18 @@ main();
 
 **Step 3:** Make it executable:
 ```bash
-chmod +x ~/.droid/hud/omd-hud.mjs
+chmod +x ~/.factory/hud/omd-hud.mjs
 ```
 
 **Step 4:** Update settings.json to use the HUD:
 
-Read `~/.droid/settings.json`, then update/add the `statusLine` field.
+Read `~/.factory/settings.json`, then update/add the `statusLine` field.
 
 **IMPORTANT:** The command must use an absolute path, not `~`, because Windows does not expand `~` in shell commands.
 
 First, determine the correct path:
 ```bash
-node -e "const p=require('path').join(require('os').homedir(),'.droid','hud','omd-hud.mjs');console.log(JSON.stringify(p))"
+node -e "const p=require('path').join(require('os').homedir(),'.factory','hud','omd-hud.mjs');console.log(JSON.stringify(p))"
 ```
 
 Then set the `statusLine` field using the resolved path. On Unix it will look like:
@@ -153,7 +153,7 @@ Then set the `statusLine` field using the resolved path. On Unix it will look li
 {
   "statusLine": {
     "type": "command",
-    "command": "node /home/username/.droid/hud/omd-hud.mjs"
+    "command": "node /home/username/.factory/hud/omd-hud.mjs"
   }
 }
 ```
@@ -163,7 +163,7 @@ On Windows it will look like:
 {
   "statusLine": {
     "type": "command",
-    "command": "node C:\\Users\\username\\.droid\\hud\\omd-hud.mjs"
+    "command": "node C:\\Users\\username\\.factory\\hud\\omd-hud.mjs"
   }
 }
 ```
@@ -172,7 +172,7 @@ Use the Edit tool to add/update this field while preserving other settings.
 
 **Step 5:** Clean up old HUD scripts (if any):
 ```bash
-rm -f ~/.droid/hud/sisyphus-hud.mjs 2>/dev/null
+rm -f ~/.factory/hud/sisyphus-hud.mjs 2>/dev/null
 ```
 
 **Step 6:** Tell the user to restart Droid for changes to take effect.
@@ -230,7 +230,7 @@ When agents are running, the HUD shows detailed information on separate lines:
 
 ## Configuration Location
 
-HUD config is stored at: `~/.droid/.omd/hud-config.json`
+HUD config is stored at: `~/.factory/.omd/hud-config.json`
 
 ## Manual Configuration
 
@@ -273,8 +273,8 @@ If the HUD is not showing:
 3. If still not working, run `/oh-my-droid:doctor` for full diagnostics
 
 Manual verification:
-- HUD script: `~/.droid/hud/omd-hud.mjs`
-- Settings: `~/.droid/settings.json` should have `statusLine` configured
+- HUD script: `~/.factory/hud/omd-hud.mjs`
+- Settings: `~/.factory/settings.json` should have `statusLine` configured
 
 ---
 

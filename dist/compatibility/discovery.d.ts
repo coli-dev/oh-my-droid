@@ -2,10 +2,10 @@
  * Plugin and MCP Server Discovery
  *
  * Discovers external plugins, MCP servers, and tools from:
- * - ~/.droid/plugins/ (Droid plugins)
- * - ~/.droid/settings.json (MCP servers config)
- * - ~/.droid/droid_desktop_config.json (Desktop app MCP config)
- * - Project-local .droid-plugin/ directories
+ * - ~/.factory/plugins/ (Droid plugins)
+ * - ~/.factory/settings.json (MCP servers config)
+ * - ~/.factory/droid_desktop_config.json (Desktop app MCP config)
+ * - Project-local .factory-plugin/ directories
  */
 import type { DiscoveryOptions, DiscoveredPlugin, DiscoveredMcpServer, ExternalTool } from './types.js';
 /**

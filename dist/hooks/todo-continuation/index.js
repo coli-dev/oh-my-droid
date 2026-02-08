@@ -8,8 +8,8 @@
  */
 /**
  * TERMINOLOGY:
- * - "Task" (capitalized): New Droid Task system (~/.droid/tasks/)
- * - "todo" (lowercase): Legacy todo system (~/.droid/todos/)
+ * - "Task" (capitalized): New Droid Task system (~/.factory/tasks/)
+ * - "todo" (lowercase): Legacy todo system (~/.factory/todos/)
  * - "item": Generic term for either Task or todo
  */
 /**
@@ -102,7 +102,7 @@ export function isContextLimitStop(context) {
  * Get possible todo file locations
  */
 function getTodoFilePaths(sessionId, directory) {
-    const droidDir = join(homedir(), '.droid');
+    const droidDir = join(homedir(), '.factory');
     const paths = [];
     // Session-specific todos
     if (sessionId) {
@@ -112,7 +112,7 @@ function getTodoFilePaths(sessionId, directory) {
     // Project-specific todos
     if (directory) {
         paths.push(join(directory, '.omd', 'todos.json'));
-        paths.push(join(directory, '.droid', 'todos.json'));
+        paths.push(join(directory, '.factory', 'todos.json'));
     }
     // NOTE: Global todos directory scan removed to prevent false positives.
     // Only session-specific and project-local todos are now checked.
@@ -156,7 +156,7 @@ function isIncomplete(todo) {
 /**
  * Get the Task directory for a session
  *
- * NOTE: This path (~/.droid/tasks/{sessionId}/) is inferred from Droid's
+ * NOTE: This path (~/.factory/tasks/{sessionId}/) is inferred from Droid's
  * implementation. Anthropic has not officially documented this structure.
  * The Task files are created by Droid's TaskCreate tool.
  */
@@ -165,7 +165,7 @@ export function getTaskDirectory(sessionId) {
     if (!isValidSessionId(sessionId)) {
         return ''; // Return empty string for invalid sessions
     }
-    return join(homedir(), '.droid', 'tasks', sessionId);
+    return join(homedir(), '.factory', 'tasks', sessionId);
 }
 /**
  * Validates that a parsed JSON object is a valid Task.

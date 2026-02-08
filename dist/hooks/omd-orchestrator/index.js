@@ -31,7 +31,7 @@ export function clearEnforcementCache() {
 }
 /**
  * Read enforcement level from config
- * Checks: .omd/config.json → ~/.droid/.omd-config.json → default (warn)
+ * Checks: .omd/config.json → ~/.factory/.omd-config.json → default (warn)
  */
 function getEnforcementLevel(directory) {
     const now = Date.now();
@@ -42,7 +42,7 @@ function getEnforcementLevel(directory) {
         return enforcementCache.level;
     }
     const localConfig = path.join(directory, '.omd', 'config.json');
-    const globalConfig = path.join(os.homedir(), '.droid', '.omd-config.json');
+    const globalConfig = path.join(os.homedir(), '.factory', '.omd-config.json');
     let level = 'warn'; // Default
     for (const configPath of [localConfig, globalConfig]) {
         if (existsSync(configPath)) {

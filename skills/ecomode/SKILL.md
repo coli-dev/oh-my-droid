@@ -93,7 +93,7 @@ Long-running commands (install, build, test) run in background. Maximum 5 concur
 
 Ecomode can be completely disabled via config. When disabled, all ecomode keywords are ignored.
 
-Set in `~/.droid/.omd-config.json`:
+Set in `~/.factory/.omd-config.json`:
 ```json
 {
   "ecomode": {

@@ -134,7 +134,7 @@ Task(
 
 **Before claiming team mode is complete, verify ALL of:**
 
-1. ✅ TeamCreate was called (team config exists at `~/.droid/teams/{team-name}/config.json`)
+1. ✅ TeamCreate was called (team config exists at `~/.factory/teams/{team-name}/config.json`)
 2. ✅ All TaskCreate tasks show `status=completed` in TaskList
 3. ✅ All teammates received `shutdown_request` via SendMessage
 4. ✅ TeamDelete was called to clean up team resources

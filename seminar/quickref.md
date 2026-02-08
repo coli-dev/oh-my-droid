@@ -101,7 +101,7 @@
 - `.omd/state/pipeline-{id}.json` - Pipeline progress
 
 ## Configuration
-**File:** `~/.droid/.omd-config.json`
+**File:** `~/.factory/.omd-config.json`
 ```json
 {
   "defaultExecutionMode": "ultrawork",  // or "ecomode"

@@ -23,7 +23,7 @@ Update version in all locations:
 - `package.json`
 - `src/installer/index.ts` (VERSION constant)
 - `src/__tests__/installer.test.ts` (expected version)
-- `.droid-plugin/plugin.json`
+- `.factory-plugin/plugin.json`
 - `README.md` (version badge and title)
 
 ### 2. Run Tests
@@ -66,7 +66,7 @@ gh release create v<version> --title "v<version> - <title>" --notes "<release no
 | `package.json` | `"version": "X.Y.Z"` |
 | `src/installer/index.ts` | `export const VERSION = 'X.Y.Z'` |
 | `src/__tests__/installer.test.ts` | `expect(VERSION).toBe('X.Y.Z')` |
-| `.droid-plugin/plugin.json` | `"version": "X.Y.Z"` |
+| `.factory-plugin/plugin.json` | `"version": "X.Y.Z"` |
 | `README.md` | Title + version badge |
 
 ## Semantic Versioning

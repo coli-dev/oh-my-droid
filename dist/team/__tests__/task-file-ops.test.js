@@ -4,7 +4,7 @@ import { join } from 'path';
 import { homedir } from 'os';
 import { readTask, updateTask, findNextTask, areBlockersResolved, writeTaskFailure, readTaskFailure, listTaskIds, isTaskRetryExhausted, acquireTaskLock, releaseTaskLock, withTaskLock, } from '../task-file-ops.js';
 const TEST_TEAM = 'test-team-ops';
-const TASKS_DIR = join(homedir(), '.droid', 'tasks', TEST_TEAM);
+const TASKS_DIR = join(homedir(), '.factory', 'tasks', TEST_TEAM);
 function writeTask(task) {
     mkdirSync(TASKS_DIR, { recursive: true });
     writeFileSync(join(TASKS_DIR, `${task.id}.json`), JSON.stringify(task, null, 2));

@@ -3,7 +3,7 @@
  *
  * Handles loading and merging configuration from multiple sources:
  * - User config: ~/.config/droid-sisyphus/config.jsonc
- * - Project config: .droid/sisyphus.jsonc
+ * - Project config: .factory/sisyphus.jsonc
  * - Environment variables
  */
 import type { PluginConfig } from '../shared/types.js';

@@ -3,7 +3,7 @@
  * Task File Operations for MCP Team Bridge
  *
  * Read/write/scan task JSON files with atomic writes (temp + rename).
- * Tasks live at ~/.droid/tasks/{teamName}/{id}.json
+ * Tasks live at ~/.factory/tasks/{teamName}/{id}.json
  */
 import { readFileSync, readdirSync, existsSync, openSync, closeSync, unlinkSync, writeSync, statSync, constants as fsConstants } from 'fs';
 import { join } from 'path';
@@ -141,8 +141,8 @@ function sanitizeTaskId(taskId) {
 }
 /** Paths helper */
 function tasksDir(teamName) {
-    const result = join(homedir(), '.droid', 'tasks', sanitizeName(teamName));
-    validateResolvedPath(result, join(homedir(), '.droid', 'tasks'));
+    const result = join(homedir(), '.factory', 'tasks', sanitizeName(teamName));
+    validateResolvedPath(result, join(homedir(), '.factory', 'tasks'));
     return result;
 }
 function taskPath(teamName, taskId) {

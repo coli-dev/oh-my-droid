@@ -19,7 +19,7 @@ import { sanitizeName } from './tmux-session.js';
 function peekRecentOutboxMessages(teamName, workerName, maxMessages = 10) {
     const safeName = sanitizeName(teamName);
     const safeWorker = sanitizeName(workerName);
-    const outboxPath = join(homedir(), '.droid', 'teams', safeName, 'outbox', `${safeWorker}.jsonl`);
+    const outboxPath = join(homedir(), '.factory', 'teams', safeName, 'outbox', `${safeWorker}.jsonl`);
     if (!existsSync(outboxPath))
         return [];
     try {

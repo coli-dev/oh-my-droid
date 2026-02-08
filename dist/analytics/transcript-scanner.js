@@ -208,10 +208,10 @@ function matchesPattern(path, pattern) {
     return regex.test(path);
 }
 /**
- * Scan for all transcript files in ~/.droid/projects/
+ * Scan for all transcript files in ~/.factory/projects/
  */
 export async function scanTranscripts(options = {}) {
-    const projectsDir = join(homedir(), '.droid', 'projects');
+    const projectsDir = join(homedir(), '.factory', 'projects');
     const transcripts = [];
     const projectDirs = new Set();
     try {

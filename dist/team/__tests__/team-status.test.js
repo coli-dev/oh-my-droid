@@ -7,8 +7,8 @@ import { getTeamStatus } from '../team-status.js';
 import { atomicWriteJson } from '../fs-utils.js';
 import { appendOutbox } from '../inbox-outbox.js';
 const TEST_TEAM = 'test-team-status';
-const TEAMS_DIR = join(homedir(), '.droid', 'teams', TEST_TEAM);
-const TASKS_DIR = join(homedir(), '.droid', 'tasks', TEST_TEAM);
+const TEAMS_DIR = join(homedir(), '.factory', 'teams', TEST_TEAM);
+const TASKS_DIR = join(homedir(), '.factory', 'tasks', TEST_TEAM);
 let WORK_DIR;
 beforeEach(() => {
     WORK_DIR = join(tmpdir(), `omd-team-status-test-${Date.now()}`);
