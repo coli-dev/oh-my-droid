@@ -356,69 +356,69 @@ describe('Installer Constants', () => {
         let originalEnv;
         beforeEach(() => {
             // Save original env var
-            originalEnv = process.env.DROID_PLUGIN_ROOT;
+            originalEnv = process.env.factory_PLUGIN_ROOT;
         });
         afterEach(() => {
             // Restore original env var
             if (originalEnv !== undefined) {
-                process.env.DROID_PLUGIN_ROOT = originalEnv;
+                process.env.factory_PLUGIN_ROOT = originalEnv;
             }
             else {
-                delete process.env.DROID_PLUGIN_ROOT;
+                delete process.env.factory_PLUGIN_ROOT;
             }
         });
         it('should return false when DROID_PLUGIN_ROOT is not set', () => {
-            delete process.env.DROID_PLUGIN_ROOT;
+            delete process.env.factory_PLUGIN_ROOT;
             expect(isRunningAsPlugin()).toBe(false);
         });
         it('should return true when DROID_PLUGIN_ROOT is set', () => {
-            process.env.DROID_PLUGIN_ROOT = '/home/user/.factory/plugins/marketplaces/oh-my-droid';
+            process.env.factory_PLUGIN_ROOT = '/home/user/.factory/plugins/marketplaces/oh-my-droid';
             expect(isRunningAsPlugin()).toBe(true);
         });
         it('should detect plugin context from environment variable', () => {
-            process.env.DROID_PLUGIN_ROOT = '/any/path';
+            process.env.factory_PLUGIN_ROOT = '/any/path';
             expect(isRunningAsPlugin()).toBe(true);
         });
     });
     describe('Project-Scoped Plugin Detection', () => {
         let originalEnv;
         beforeEach(() => {
-            originalEnv = process.env.DROID_PLUGIN_ROOT;
+            originalEnv = process.env.factory_PLUGIN_ROOT;
         });
         afterEach(() => {
             if (originalEnv !== undefined) {
-                process.env.DROID_PLUGIN_ROOT = originalEnv;
+                process.env.factory_PLUGIN_ROOT = originalEnv;
             }
             else {
-                delete process.env.DROID_PLUGIN_ROOT;
+                delete process.env.factory_PLUGIN_ROOT;
             }
         });
         it('should return false when DROID_PLUGIN_ROOT is not set', () => {
-            delete process.env.DROID_PLUGIN_ROOT;
+            delete process.env.factory_PLUGIN_ROOT;
             expect(isProjectScopedPlugin()).toBe(false);
         });
         it('should return false for global plugin installation', () => {
             // Global plugins are under ~/.factory/plugins/
-            process.env.DROID_PLUGIN_ROOT = join(homedir(), '.factory', 'plugins', 'cache', 'omd', 'oh-my-droid', '3.9.0');
+            process.env.factory_PLUGIN_ROOT = join(homedir(), '.factory', 'plugins', 'cache', 'omd', 'oh-my-droid', '3.9.0');
             expect(isProjectScopedPlugin()).toBe(false);
         });
         it('should return true for project-scoped plugin installation', () => {
             // Project-scoped plugins are in the project's .factory/plugins/ directory
-            process.env.DROID_PLUGIN_ROOT = '/home/user/myproject/.factory/plugins/oh-my-droid';
+            process.env.factory_PLUGIN_ROOT = '/home/user/myproject/.factory/plugins/oh-my-droid';
             expect(isProjectScopedPlugin()).toBe(true);
         });
         it('should return true when plugin is outside global plugin directory', () => {
             // Any path that's not under ~/.factory/plugins/ is considered project-scoped
-            process.env.DROID_PLUGIN_ROOT = '/var/projects/app/.factory/plugins/omd';
+            process.env.factory_PLUGIN_ROOT = '/var/projects/app/.factory/plugins/omd';
             expect(isProjectScopedPlugin()).toBe(true);
         });
         it('should handle Windows-style paths', () => {
             // Windows paths with backslashes should be normalized
-            process.env.DROID_PLUGIN_ROOT = 'C:\\Users\\user\\project\\.factory\\plugins\\omd';
+            process.env.factory_PLUGIN_ROOT = 'C:\\Users\\user\\project\\.factory\\plugins\\omd';
             expect(isProjectScopedPlugin()).toBe(true);
         });
         it('should handle trailing slashes in paths', () => {
-            process.env.DROID_PLUGIN_ROOT = join(homedir(), '.factory', 'plugins', 'cache', 'omd') + '/';
+            process.env.factory_PLUGIN_ROOT = join(homedir(), '.factory', 'plugins', 'cache', 'omd') + '/';
             expect(isProjectScopedPlugin()).toBe(false);
         });
     });

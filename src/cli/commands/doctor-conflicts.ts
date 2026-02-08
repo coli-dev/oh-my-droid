@@ -10,9 +10,9 @@ import type { PluginConfig } from '../../shared/types.js';
 import { colors } from '../utils/formatting.js';
 
 export interface ConflictReport {
-  hookConflicts: { event: string; command: string; isOmc: boolean }[];
+  hookConflicts: { event: string; command: string; isOmd: boolean }[];
   agentsMdStatus: { hasMarkers: boolean; hasUserContent: boolean; path: string } | null;
-  envFlags: { disableOmc: boolean; skipHooks: string[] };
+  envFlags: { disableOmd: boolean; skipHooks: string[] };
   configIssues: { unknownFields: string[] };
   hasConflicts: boolean;
 }
@@ -50,8 +50,8 @@ export function checkHookConflicts(): ConflictReport['hookConflicts'] {
           for (const hook of group.hooks) {
             if (hook.type === 'command' && hook.command) {
               const lowerCmd = hook.command.toLowerCase();
-              const isOmc = lowerCmd.includes('omd') || lowerCmd.includes('oh-my-droid');
-              conflicts.push({ event, command: hook.command, isOmc });
+              const isOmd = lowerCmd.includes('omd') || lowerCmd.includes('oh-my-droid');
+              conflicts.push({ event, command: hook.command, isOmd });
             }
           }
         }
@@ -110,14 +110,14 @@ export function checkAgentsMdStatus(): ConflictReport['agentsMdStatus'] {
  * Check environment flags that affect OMD behavior
  */
 export function checkEnvFlags(): ConflictReport['envFlags'] {
-  const disableOmc = process.env.DISABLE_OMD === 'true' || process.env.DISABLE_OMD === '1';
+  const disableOmd = process.env.DISABLE_OMD === 'true' || process.env.DISABLE_OMD === '1';
   const skipHooks: string[] = [];
 
   if (process.env.OMD_SKIP_HOOKS) {
     skipHooks.push(...process.env.OMD_SKIP_HOOKS.split(',').map(h => h.trim()));
   }
 
-  return { disableOmc, skipHooks };
+  return { disableOmd, skipHooks };
 }
 
 /**
@@ -179,8 +179,8 @@ export function runConflictCheck(): ConflictReport {
 
   // Determine if there are actual conflicts
   const hasConflicts =
-    hookConflicts.some(h => !h.isOmc) || // Non-OMD hooks present
-    envFlags.disableOmc || // OMD is disabled
+    hookConflicts.some(h => !h.isOmd) || // Non-OMD hooks present
+    envFlags.disableOmd || // OMD is disabled
     envFlags.skipHooks.length > 0 || // Hooks are being skipped
     configIssues.unknownFields.length > 0; // Unknown config fields
     // Note: Missing OMD markers is informational (normal for fresh install), not a conflict
@@ -215,7 +215,7 @@ export function formatReport(report: ConflictReport, json: boolean): string {
     lines.push(colors.bold('📌 Hook Configuration'));
     lines.push('');
     for (const hook of report.hookConflicts) {
-      const status = hook.isOmc ? colors.green('✓ OMD') : colors.yellow('⚠ Other');
+      const status = hook.isOmd ? colors.green('✓ OMD') : colors.yellow('⚠ Other');
       lines.push(`  ${hook.event.padEnd(20)} ${status}`);
       lines.push(`    ${colors.gray(hook.command)}`);
     }
@@ -254,7 +254,7 @@ export function formatReport(report: ConflictReport, json: boolean): string {
   // Environment flags
   lines.push(colors.bold('🔧 Environment Flags'));
   lines.push('');
-  if (report.envFlags.disableOmc) {
+  if (report.envFlags.disableOmd) {
     lines.push(`  ${colors.red('✗')} DISABLE_OMD is set - OMD is disabled`);
   } else {
     lines.push(`  ${colors.green('✓')} DISABLE_OMD not set`);

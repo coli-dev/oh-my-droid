@@ -874,7 +874,7 @@ else
 fi
 
 # Verify teams env var is present
-if jq -e '.env.DROID_CODE_EXPERIMENTAL_AGENT_TEAMS' "$SETTINGS_FILE" > /dev/null 2>&1; then
+if jq -e '.env.factory_CODE_EXPERIMENTAL_AGENT_TEAMS' "$SETTINGS_FILE" > /dev/null 2>&1; then
   echo "Agent teams: ENABLED"
 else
   echo "WARNING: Agent teams env var not found in settings.json"

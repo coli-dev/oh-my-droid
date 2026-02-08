@@ -1,5 +1,5 @@
-import { PRICING, ModelPricing, CostBreakdown } from './types.js';
-import { lookupPricingWithFallback } from './tokscale-adapter.js';
+import { PRICING, ModelPricing, CostBreakdown } from "./types.js";
+import { lookupPricingWithFallback } from "./tokscale-adapter.js";
 
 export interface CostInput {
   modelName: string;
@@ -20,15 +20,20 @@ export function calculateCost(input: CostInput): CostBreakdown {
   const inputCost = (input.inputTokens / 1_000_000) * pricing.inputPerMillion;
 
   // Output cost
-  const outputCost = (input.outputTokens / 1_000_000) * pricing.outputPerMillion;
+  const outputCost =
+    (input.outputTokens / 1_000_000) * pricing.outputPerMillion;
 
   // Cache write cost (25% markup on input price)
-  const cacheWriteCost = (input.cacheCreationTokens / 1_000_000) *
-    pricing.inputPerMillion * (1 + pricing.cacheWriteMarkup);
+  const cacheWriteCost =
+    (input.cacheCreationTokens / 1_000_000) *
+    pricing.inputPerMillion *
+    (1 + pricing.cacheWriteMarkup);
 
   // Cache read cost (90% discount on input price)
-  const cacheReadCost = (input.cacheReadTokens / 1_000_000) *
-    pricing.inputPerMillion * (1 - pricing.cacheReadDiscount);
+  const cacheReadCost =
+    (input.cacheReadTokens / 1_000_000) *
+    pricing.inputPerMillion *
+    (1 - pricing.cacheReadDiscount);
 
   const totalCost = inputCost + outputCost + cacheWriteCost + cacheReadCost;
 
@@ -37,7 +42,7 @@ export function calculateCost(input: CostInput): CostBreakdown {
     outputCost,
     cacheWriteCost,
     cacheReadCost,
-    totalCost
+    totalCost,
   };
 }
 
@@ -45,22 +50,29 @@ export function calculateCost(input: CostInput): CostBreakdown {
  * Asynchronous cost calculation using live TokScale pricing.
  * Provides up-to-date pricing with fallback to hardcoded values.
  */
-export async function calculateCostAsync(input: CostInput): Promise<CostBreakdown> {
+export async function calculateCostAsync(
+  input: CostInput,
+): Promise<CostBreakdown> {
   const pricing = await lookupPricingWithFallback(input.modelName);
 
   // Base input cost
   const inputCost = (input.inputTokens / 1_000_000) * pricing.inputPerMillion;
 
   // Output cost
-  const outputCost = (input.outputTokens / 1_000_000) * pricing.outputPerMillion;
+  const outputCost =
+    (input.outputTokens / 1_000_000) * pricing.outputPerMillion;
 
   // Cache write cost (25% markup on input price)
-  const cacheWriteCost = (input.cacheCreationTokens / 1_000_000) *
-    pricing.inputPerMillion * (1 + pricing.cacheWriteMarkup);
+  const cacheWriteCost =
+    (input.cacheCreationTokens / 1_000_000) *
+    pricing.inputPerMillion *
+    (1 + pricing.cacheWriteMarkup);
 
   // Cache read cost (90% discount on input price)
-  const cacheReadCost = (input.cacheReadTokens / 1_000_000) *
-    pricing.inputPerMillion * (1 - pricing.cacheReadDiscount);
+  const cacheReadCost =
+    (input.cacheReadTokens / 1_000_000) *
+    pricing.inputPerMillion *
+    (1 - pricing.cacheReadDiscount);
 
   const totalCost = inputCost + outputCost + cacheWriteCost + cacheReadCost;
 
@@ -69,7 +81,7 @@ export async function calculateCostAsync(input: CostInput): Promise<CostBreakdow
     outputCost,
     cacheWriteCost,
     cacheReadCost,
-    totalCost
+    totalCost,
   };
 }
 
@@ -77,9 +89,11 @@ export async function calculateCostAsync(input: CostInput): Promise<CostBreakdow
  * Batch cost calculation with efficient pricing lookup.
  * Fetches pricing once per unique model for better performance.
  */
-export async function batchCalculateCost(inputs: CostInput[]): Promise<CostBreakdown[]> {
+export async function batchCalculateCost(
+  inputs: CostInput[],
+): Promise<CostBreakdown[]> {
   // Get all unique models first
-  const models = [...new Set(inputs.map(i => i.modelName))];
+  const models = [...new Set(inputs.map((i) => i.modelName))];
   const pricingMap = new Map<string, ModelPricing>();
 
   // Fetch pricing for all unique models
@@ -88,22 +102,27 @@ export async function batchCalculateCost(inputs: CostInput[]): Promise<CostBreak
   }
 
   // Calculate costs using cached pricing
-  return inputs.map(input => {
+  return inputs.map((input) => {
     const pricing = pricingMap.get(input.modelName)!;
 
     // Base input cost
     const inputCost = (input.inputTokens / 1_000_000) * pricing.inputPerMillion;
 
     // Output cost
-    const outputCost = (input.outputTokens / 1_000_000) * pricing.outputPerMillion;
+    const outputCost =
+      (input.outputTokens / 1_000_000) * pricing.outputPerMillion;
 
     // Cache write cost (25% markup on input price)
-    const cacheWriteCost = (input.cacheCreationTokens / 1_000_000) *
-      pricing.inputPerMillion * (1 + pricing.cacheWriteMarkup);
+    const cacheWriteCost =
+      (input.cacheCreationTokens / 1_000_000) *
+      pricing.inputPerMillion *
+      (1 + pricing.cacheWriteMarkup);
 
     // Cache read cost (90% discount on input price)
-    const cacheReadCost = (input.cacheReadTokens / 1_000_000) *
-      pricing.inputPerMillion * (1 - pricing.cacheReadDiscount);
+    const cacheReadCost =
+      (input.cacheReadTokens / 1_000_000) *
+      pricing.inputPerMillion *
+      (1 - pricing.cacheReadDiscount);
 
     const totalCost = inputCost + outputCost + cacheWriteCost + cacheReadCost;
 
@@ -112,7 +131,7 @@ export async function batchCalculateCost(inputs: CostInput[]): Promise<CostBreak
       outputCost,
       cacheWriteCost,
       cacheReadCost,
-      totalCost
+      totalCost,
     };
   });
 }
@@ -127,22 +146,22 @@ function getPricingForModel(modelName: string): ModelPricing {
 
   // Default to Sonnet if unknown
   console.warn(`Unknown model: ${modelName}, defaulting to Sonnet pricing`);
-  return PRICING['claude-sonnet-4.5'];
+  return PRICING["claude-sonnet-4.5"];
 }
 
 export function normalizeModelName(modelName: string): string {
   // Handle various model name formats
   const lower = modelName.toLowerCase();
 
-  if (lower.includes('haiku')) return 'claude-haiku-4';
-  if (lower.includes('sonnet')) return 'claude-sonnet-4.5';
-  if (lower.includes('opus')) return 'claude-opus-4.6';
+  if (lower.includes("haiku")) return "claude-haiku-4";
+  if (lower.includes("sonnet")) return "claude-sonnet-4.5";
+  if (lower.includes("opus")) return "claude-opus-4.6";
 
   // Check exact matches
   if (PRICING[modelName]) return modelName;
 
   // Default
-  return 'claude-sonnet-4.5';
+  return "claude-sonnet-4.5";
 }
 
 export function formatCost(cost: number): string {
@@ -152,19 +171,25 @@ export function formatCost(cost: number): string {
   return `$${cost.toFixed(4)}`;
 }
 
-export function getCostColor(cost: number): 'green' | 'yellow' | 'red' {
-  if (cost < 1.0) return 'green';
-  if (cost < 5.0) return 'yellow';
-  return 'red';
+export function getCostColor(cost: number): "green" | "yellow" | "red" {
+  if (cost < 1.0) return "green";
+  if (cost < 5.0) return "yellow";
+  return "red";
 }
 
-export function estimateDailyCost(tokensPerHour: number, modelName: string): number {
+export function estimateDailyCost(
+  tokensPerHour: number,
+  modelName: string,
+): number {
   const pricing = getPricingForModel(modelName);
   const tokensPerDay = tokensPerHour * 24;
   const costPerDay = (tokensPerDay / 1_000_000) * pricing.inputPerMillion;
   return costPerDay;
 }
 
-export function estimateMonthlyCost(tokensPerHour: number, modelName: string): number {
+export function estimateMonthlyCost(
+  tokensPerHour: number,
+  modelName: string,
+): number {
   return estimateDailyCost(tokensPerHour, modelName) * 30;
 }

@@ -45,9 +45,9 @@ const SIMPLE_ESC_REGEX = /\x1b[^[\]]/g;
  */
 export function stripAnsi(text: string): string {
   return text
-    .replace(CSI_NON_SGR_REGEX, '') // Strip non-SGR CSI sequences
-    .replace(OSC_REGEX, '') // Strip OSC sequences
-    .replace(SIMPLE_ESC_REGEX, ''); // Strip simple escape sequences
+    .replace(CSI_NON_SGR_REGEX, "") // Strip non-SGR CSI sequences
+    .replace(OSC_REGEX, "") // Strip OSC sequences
+    .replace(SIMPLE_ESC_REGEX, ""); // Strip simple escape sequences
 }
 
 /**
@@ -57,10 +57,10 @@ export function stripAnsi(text: string): string {
  */
 export function replaceUnicodeBlocks(text: string): string {
   return text
-    .replace(/█/g, '#')
-    .replace(/░/g, '-')
-    .replace(/▓/g, '=')
-    .replace(/▒/g, '-');
+    .replace(/█/g, "#")
+    .replace(/░/g, "-")
+    .replace(/▓/g, "=")
+    .replace(/▒/g, "-");
 }
 
 /**
@@ -87,11 +87,11 @@ export function sanitizeOutput(output: string): string {
 
   // Step 3: Preserve multi-line output, just trim each line
   // Do NOT collapse to single line - HUD needs proper line breaks for tree display
-  const lines = sanitized.split('\n').map(line => line.trimEnd());
-  sanitized = lines.join('\n');
+  const lines = sanitized.split("\n").map((line) => line.trimEnd());
+  sanitized = lines.join("\n");
 
   // Step 4: Remove leading/trailing empty lines
-  sanitized = sanitized.replace(/^\n+|\n+$/g, '');
+  sanitized = sanitized.replace(/^\n+|\n+$/g, "");
 
   return sanitized;
 }

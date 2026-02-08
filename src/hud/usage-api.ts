@@ -12,25 +12,32 @@
  * Response: { five_hour: { utilization }, seven_day: { utilization } }
  */
 
-import { existsSync, readFileSync, writeFileSync, renameSync, unlinkSync, mkdirSync } from 'fs';
-import { homedir } from 'os';
-import { join, dirname } from 'path';
-import { execSync } from 'child_process';
-import https from 'https';
-import type { RateLimits } from './types.js';
+import {
+  existsSync,
+  readFileSync,
+  writeFileSync,
+  renameSync,
+  unlinkSync,
+  mkdirSync,
+} from "fs";
+import { homedir } from "os";
+import { join, dirname } from "path";
+import { execSync } from "child_process";
+import https from "https";
+import type { RateLimits } from "./types.js";
 
 // Cache configuration
 const CACHE_TTL_SUCCESS_MS = 30 * 1000; // 30 seconds for successful responses
 const CACHE_TTL_FAILURE_MS = 15 * 1000; // 15 seconds for failures
 const API_TIMEOUT_MS = 10000;
-const TOKEN_REFRESH_URL_HOSTNAME = 'platform.factory.com';
-const TOKEN_REFRESH_URL_PATH = '/v1/oauth/token';
+const TOKEN_REFRESH_URL_HOSTNAME = "platform.factory.com";
+const TOKEN_REFRESH_URL_PATH = "/v1/oauth/token";
 
 /**
  * OAuth client_id for Droid (public client).
  * This is the production value; can be overridden via DROID_CODE_OAUTH_CLIENT_ID env var.
  */
-const DEFAULT_OAUTH_CLIENT_ID = '9d1c250a-e61b-44d9-88ed-5944d1962f5e';
+const DEFAULT_OAUTH_CLIENT_ID = "9d1c250a-e61b-44d9-88ed-5944d1962f5e";
 
 interface UsageCache {
   timestamp: number;
@@ -43,7 +50,7 @@ interface OAuthCredentials {
   expiresAt?: number;
   refreshToken?: string;
   /** Where the credentials were read from, needed for write-back */
-  source?: 'keychain' | 'file';
+  source?: "keychain" | "file";
 }
 
 interface UsageApiResponse {
@@ -58,7 +65,7 @@ interface UsageApiResponse {
  * Get the cache file path
  */
 function getCachePath(): string {
-  return join(homedir(), '.factory/plugins/oh-my-droid/.usage-cache.json');
+  return join(homedir(), ".factory/plugins/oh-my-droid/.usage-cache.json");
 }
 
 /**
@@ -69,16 +76,20 @@ function readCache(): UsageCache | null {
     const cachePath = getCachePath();
     if (!existsSync(cachePath)) return null;
 
-    const content = readFileSync(cachePath, 'utf-8');
+    const content = readFileSync(cachePath, "utf-8");
     const cache = JSON.parse(content) as UsageCache;
 
     // Re-hydrate Date objects from JSON strings
     if (cache.data) {
       if (cache.data.fiveHourResetsAt) {
-        cache.data.fiveHourResetsAt = new Date(cache.data.fiveHourResetsAt as unknown as string);
+        cache.data.fiveHourResetsAt = new Date(
+          cache.data.fiveHourResetsAt as unknown as string,
+        );
       }
       if (cache.data.weeklyResetsAt) {
-        cache.data.weeklyResetsAt = new Date(cache.data.weeklyResetsAt as unknown as string);
+        cache.data.weeklyResetsAt = new Date(
+          cache.data.weeklyResetsAt as unknown as string,
+        );
       }
     }
 
@@ -124,12 +135,12 @@ function isCacheValid(cache: UsageCache): boolean {
  * Read OAuth credentials from macOS Keychain
  */
 function readKeychainCredentials(): OAuthCredentials | null {
-  if (process.platform !== 'darwin') return null;
+  if (process.platform !== "darwin") return null;
 
   try {
     const result = execSync(
       '/usr/bin/security find-generic-password -s "Droid-credentials" -w 2>/dev/null',
-      { encoding: 'utf-8', timeout: 2000 }
+      { encoding: "utf-8", timeout: 2000 },
     ).trim();
 
     if (!result) return null;
@@ -137,14 +148,14 @@ function readKeychainCredentials(): OAuthCredentials | null {
     const parsed = JSON.parse(result);
 
     // Handle nested structure (droidAiOauth wrapper)
-    const creds = parsed.droidAiOauth || parsed;
+    const creds = parsed.factoryAiOauth || parsed;
 
     if (creds.accessToken) {
       return {
         accessToken: creds.accessToken,
         expiresAt: creds.expiresAt,
         refreshToken: creds.refreshToken,
-        source: 'keychain' as const,
+        source: "keychain" as const,
       };
     }
   } catch {
@@ -159,21 +170,21 @@ function readKeychainCredentials(): OAuthCredentials | null {
  */
 function readFileCredentials(): OAuthCredentials | null {
   try {
-    const credPath = join(homedir(), '.factory/.credentials.json');
+    const credPath = join(homedir(), ".factory/.credentials.json");
     if (!existsSync(credPath)) return null;
 
-    const content = readFileSync(credPath, 'utf-8');
+    const content = readFileSync(credPath, "utf-8");
     const parsed = JSON.parse(content);
 
     // Handle nested structure (droidAiOauth wrapper)
-    const creds = parsed.droidAiOauth || parsed;
+    const creds = parsed.factoryAiOauth || parsed;
 
     if (creds.accessToken) {
       return {
         accessToken: creds.accessToken,
         expiresAt: creds.expiresAt,
         refreshToken: creds.refreshToken,
-        source: 'file' as const,
+        source: "file" as const,
       };
     }
   } catch {
@@ -213,11 +224,14 @@ function validateCredentials(creds: OAuthCredentials): boolean {
  * Attempt to refresh an expired OAuth access token using the refresh token.
  * Returns updated credentials on success, null on failure.
  */
-function refreshAccessToken(refreshToken: string): Promise<OAuthCredentials | null> {
+function refreshAccessToken(
+  refreshToken: string,
+): Promise<OAuthCredentials | null> {
   return new Promise((resolve) => {
-    const clientId = process.env.DROID_CODE_OAUTH_CLIENT_ID || DEFAULT_OAUTH_CLIENT_ID;
+    const clientId =
+      process.env.factory_CODE_OAUTH_CLIENT_ID || DEFAULT_OAUTH_CLIENT_ID;
     const body = new URLSearchParams({
-      grant_type: 'refresh_token',
+      grant_type: "refresh_token",
       refresh_token: refreshToken,
       client_id: clientId,
     }).toString();
@@ -226,17 +240,19 @@ function refreshAccessToken(refreshToken: string): Promise<OAuthCredentials | nu
       {
         hostname: TOKEN_REFRESH_URL_HOSTNAME,
         path: TOKEN_REFRESH_URL_PATH,
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Content-Length': Buffer.byteLength(body),
+          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Length": Buffer.byteLength(body),
         },
         timeout: API_TIMEOUT_MS,
       },
       (res) => {
-        let data = '';
-        res.on('data', (chunk) => { data += chunk; });
-        res.on('end', () => {
+        let data = "";
+        res.on("data", (chunk) => {
+          data += chunk;
+        });
+        res.on("end", () => {
           if (res.statusCode === 200) {
             try {
               const parsed = JSON.parse(data);
@@ -255,15 +271,20 @@ function refreshAccessToken(refreshToken: string): Promise<OAuthCredentials | nu
             }
           }
           if (process.env.OMD_DEBUG) {
-            console.error(`[usage-api] Token refresh failed: HTTP ${res.statusCode}`);
+            console.error(
+              `[usage-api] Token refresh failed: HTTP ${res.statusCode}`,
+            );
           }
           resolve(null);
         });
-      }
+      },
     );
 
-    req.on('error', () => resolve(null));
-    req.on('timeout', () => { req.destroy(); resolve(null); });
+    req.on("error", () => resolve(null));
+    req.on("timeout", () => {
+      req.destroy();
+      resolve(null);
+    });
     req.end(body);
   });
 }
@@ -271,28 +292,30 @@ function refreshAccessToken(refreshToken: string): Promise<OAuthCredentials | nu
 /**
  * Fetch usage from Anthropic API
  */
-function fetchUsageFromApi(accessToken: string): Promise<UsageApiResponse | null> {
+function fetchUsageFromApi(
+  accessToken: string,
+): Promise<UsageApiResponse | null> {
   return new Promise((resolve) => {
     const req = https.request(
       {
-        hostname: 'api.anthropic.com',
-        path: '/api/oauth/usage',
-        method: 'GET',
+        hostname: "api.anthropic.com",
+        path: "/api/oauth/usage",
+        method: "GET",
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'anthropic-beta': 'oauth-2025-04-20',
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+          "anthropic-beta": "oauth-2025-04-20",
+          "Content-Type": "application/json",
         },
         timeout: API_TIMEOUT_MS,
       },
       (res) => {
-        let data = '';
+        let data = "";
 
-        res.on('data', (chunk) => {
+        res.on("data", (chunk) => {
           data += chunk;
         });
 
-        res.on('end', () => {
+        res.on("end", () => {
           if (res.statusCode === 200) {
             try {
               resolve(JSON.parse(data));
@@ -303,11 +326,11 @@ function fetchUsageFromApi(accessToken: string): Promise<UsageApiResponse | null
             resolve(null);
           }
         });
-      }
+      },
     );
 
-    req.on('error', () => resolve(null));
-    req.on('timeout', () => {
+    req.on("error", () => resolve(null));
+    req.on("timeout", () => {
       req.destroy();
       resolve(null);
     });
@@ -323,20 +346,20 @@ function fetchUsageFromApi(accessToken: string): Promise<UsageApiResponse | null
  */
 function writeBackCredentials(creds: OAuthCredentials): void {
   try {
-    const credPath = join(homedir(), '.factory/.credentials.json');
+    const credPath = join(homedir(), ".factory/.credentials.json");
     if (!existsSync(credPath)) return;
 
-    const content = readFileSync(credPath, 'utf-8');
+    const content = readFileSync(credPath, "utf-8");
     const parsed = JSON.parse(content);
 
     // Update the nested structure
-    if (parsed.droidAiOauth) {
-      parsed.droidAiOauth.accessToken = creds.accessToken;
+    if (parsed.factoryAiOauth) {
+      parsed.factoryAiOauth.accessToken = creds.accessToken;
       if (creds.expiresAt != null) {
-        parsed.droidAiOauth.expiresAt = creds.expiresAt;
+        parsed.factoryAiOauth.expiresAt = creds.expiresAt;
       }
       if (creds.refreshToken) {
-        parsed.droidAiOauth.refreshToken = creds.refreshToken;
+        parsed.factoryAiOauth.refreshToken = creds.refreshToken;
       }
     } else {
       // Flat structure
@@ -368,7 +391,7 @@ function writeBackCredentials(creds: OAuthCredentials): void {
   } catch {
     // Silent failure - credential write-back is best-effort
     if (process.env.OMD_DEBUG) {
-      console.error('[usage-api] Failed to write back refreshed credentials');
+      console.error("[usage-api] Failed to write back refreshed credentials");
     }
   }
 }

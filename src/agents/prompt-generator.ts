@@ -5,7 +5,7 @@
  * Adding a new agent to definitions.ts automatically includes it in the generated prompt.
  */
 
-import type { AgentConfig } from './types.js';
+import type { AgentConfig } from "./types.js";
 import {
   buildHeader,
   buildAgentRegistry,
@@ -15,8 +15,8 @@ import {
   buildOrchestrationPrinciples,
   buildWorkflow,
   buildCriticalRules,
-  buildCompletionChecklist
-} from './prompt-sections/index.js';
+  buildCompletionChecklist,
+} from "./prompt-sections/index.js";
 
 /**
  * Options for controlling what sections are included in generated prompt
@@ -51,7 +51,7 @@ const DEFAULT_OPTIONS: Required<GeneratorOptions> = {
   includePrinciples: true,
   includeWorkflow: true,
   includeRules: true,
-  includeChecklist: true
+  includeChecklist: true,
 };
 
 /**
@@ -81,14 +81,14 @@ const DEFAULT_OPTIONS: Required<GeneratorOptions> = {
  */
 export function generateOrchestratorPrompt(
   agents: AgentConfig[],
-  options?: GeneratorOptions
+  options?: GeneratorOptions,
 ): string {
   const opts = { ...DEFAULT_OPTIONS, ...options };
   const sections: string[] = [];
 
   // Always include header
   sections.push(buildHeader());
-  sections.push('');
+  sections.push("");
 
   // Agent registry
   if (opts.includeAgents) {
@@ -98,7 +98,7 @@ export function generateOrchestratorPrompt(
   // Orchestration principles
   if (opts.includePrinciples) {
     sections.push(buildOrchestrationPrinciples());
-    sections.push('');
+    sections.push("");
   }
 
   // Trigger table
@@ -122,13 +122,13 @@ export function generateOrchestratorPrompt(
   // Workflow
   if (opts.includeWorkflow) {
     sections.push(buildWorkflow());
-    sections.push('');
+    sections.push("");
   }
 
   // Critical rules
   if (opts.includeRules) {
     sections.push(buildCriticalRules());
-    sections.push('');
+    sections.push("");
   }
 
   // Completion checklist
@@ -136,7 +136,7 @@ export function generateOrchestratorPrompt(
     sections.push(buildCompletionChecklist());
   }
 
-  return sections.join('\n');
+  return sections.join("\n");
 }
 
 /**
@@ -182,14 +182,17 @@ export function buildDelegationTableSection(agents: AgentConfig[]): string {
  * ```
  */
 export function convertDefinitionsToConfigs(
-  definitions: Record<string, {
-    description: string;
-    prompt: string;
-    tools?: string[];
-    disallowedTools?: string[];
-    model?: string;
-    metadata?: any;
-  }>
+  definitions: Record<
+    string,
+    {
+      description: string;
+      prompt: string;
+      tools?: string[];
+      disallowedTools?: string[];
+      model?: string;
+      metadata?: any;
+    }
+  >,
 ): AgentConfig[] {
   return Object.entries(definitions).map(([name, def]) => ({
     name,
@@ -198,6 +201,6 @@ export function convertDefinitionsToConfigs(
     tools: def.tools,
     disallowedTools: def.disallowedTools,
     model: def.model as any,
-    metadata: def.metadata
+    metadata: def.metadata,
   }));
 }

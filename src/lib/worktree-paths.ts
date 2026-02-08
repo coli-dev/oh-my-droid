@@ -5,25 +5,25 @@
  * ensuring all operations stay within the worktree boundary.
  */
 
-import { execSync } from 'child_process';
-import { existsSync, mkdirSync, realpathSync, readdirSync } from 'fs';
-import { resolve, normalize, relative, sep, join, isAbsolute } from 'path';
+import { execSync } from "child_process";
+import { existsSync, mkdirSync, realpathSync, readdirSync } from "fs";
+import { resolve, normalize, relative, sep, join, isAbsolute } from "path";
 
 /** Standard .omd subdirectories */
-export const OmcPaths = {
-  ROOT: '.omd',
-  STATE: '.omd/state',
-  SESSIONS: '.omd/state/sessions',
-  PLANS: '.omd/plans',
-  RESEARCH: '.omd/research',
-  NOTEPAD: '.omd/notepad.md',
-  PROJECT_MEMORY: '.omd/project-memory.json',
-  DRAFTS: '.omd/drafts',
-  NOTEPADS: '.omd/notepads',
-  LOGS: '.omd/logs',
-  SCIENTIST: '.omd/scientist',
-  AUTOPILOT: '.omd/autopilot',
-  SKILLS: '.omd/skills',
+export const OmdPaths = {
+  ROOT: ".omd",
+  STATE: ".omd/state",
+  SESSIONS: ".omd/state/sessions",
+  PLANS: ".omd/plans",
+  RESEARCH: ".omd/research",
+  NOTEPAD: ".omd/notepad.md",
+  PROJECT_MEMORY: ".omd/project-memory.json",
+  DRAFTS: ".omd/drafts",
+  NOTEPADS: ".omd/notepads",
+  LOGS: ".omd/logs",
+  SCIENTIST: ".omd/scientist",
+  AUTOPILOT: ".omd/autopilot",
+  SKILLS: ".omd/skills",
 } as const;
 
 /** Cache for worktree root to avoid repeated git calls */
@@ -42,10 +42,10 @@ export function getWorktreeRoot(cwd?: string): string | null {
   }
 
   try {
-    const root = execSync('git rev-parse --show-toplevel', {
+    const root = execSync("git rev-parse --show-toplevel", {
       cwd: effectiveCwd,
-      encoding: 'utf-8',
-      stdio: ['pipe', 'pipe', 'pipe'],
+      encoding: "utf-8",
+      stdio: ["pipe", "pipe", "pipe"],
     }).trim();
 
     // Only cache actual git worktree roots
@@ -65,13 +65,13 @@ export function getWorktreeRoot(cwd?: string): string | null {
  */
 export function validatePath(inputPath: string): void {
   // Reject explicit path traversal
-  if (inputPath.includes('..')) {
+  if (inputPath.includes("..")) {
     throw new Error(`Invalid path: path traversal not allowed (${inputPath})`);
   }
 
   // Reject absolute paths - use isAbsolute() for cross-platform coverage
   // Covers: /unix, ~/home, C:\windows, D:/windows, \\UNC
-  if (inputPath.startsWith('~') || isAbsolute(inputPath)) {
+  if (inputPath.startsWith("~") || isAbsolute(inputPath)) {
     throw new Error(`Invalid path: absolute paths not allowed (${inputPath})`);
   }
 }
@@ -85,16 +85,22 @@ export function validatePath(inputPath: string): void {
  * @returns Absolute path
  * @throws Error if path would escape worktree
  */
-export function resolveOmcPath(relativePath: string, worktreeRoot?: string): string {
+export function resolveOmdPath(
+  relativePath: string,
+  worktreeRoot?: string,
+): string {
   validatePath(relativePath);
 
   const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-  const omdDir = join(root, OmcPaths.ROOT);
+  const omdDir = join(root, OmdPaths.ROOT);
   const fullPath = normalize(resolve(omdDir, relativePath));
 
   // Verify resolved path is still under worktree
   const relativeToRoot = relative(root, fullPath);
-  if (relativeToRoot.startsWith('..') || relativeToRoot.startsWith(sep + '..')) {
+  if (
+    relativeToRoot.startsWith("..") ||
+    relativeToRoot.startsWith(sep + "..")
+  ) {
     throw new Error(`Path escapes worktree boundary: ${relativePath}`);
   }
 
@@ -114,15 +120,22 @@ export function resolveOmcPath(relativePath: string, worktreeRoot?: string): str
  * @param worktreeRoot - Optional worktree root
  * @returns Absolute path to state file
  */
-export function resolveStatePath(stateName: string, worktreeRoot?: string): string {
+export function resolveStatePath(
+  stateName: string,
+  worktreeRoot?: string,
+): string {
   // Special case: swarm uses swarm.db, not swarm-state.json
-  if (stateName === 'swarm' || stateName === 'swarm-state') {
-    throw new Error('Swarm uses SQLite (swarm.db), not JSON state. Use getStateFilePath from mode-registry instead.');
+  if (stateName === "swarm" || stateName === "swarm-state") {
+    throw new Error(
+      "Swarm uses SQLite (swarm.db), not JSON state. Use getStateFilePath from mode-registry instead.",
+    );
   }
 
   // Normalize: ensure -state suffix is present, then add .json
-  const normalizedName = stateName.endsWith('-state') ? stateName : `${stateName}-state`;
-  return resolveOmcPath(`state/${normalizedName}.json`, worktreeRoot);
+  const normalizedName = stateName.endsWith("-state")
+    ? stateName
+    : `${stateName}-state`;
+  return resolveOmdPath(`state/${normalizedName}.json`, worktreeRoot);
 }
 
 /**
@@ -133,8 +146,11 @@ export function resolveStatePath(stateName: string, worktreeRoot?: string): stri
  * @param worktreeRoot - Optional worktree root
  * @returns Absolute path to the created directory
  */
-export function ensureOmcDir(relativePath: string, worktreeRoot?: string): string {
-  const fullPath = resolveOmcPath(relativePath, worktreeRoot);
+export function ensureOmdDir(
+  relativePath: string,
+  worktreeRoot?: string,
+): string {
+  const fullPath = resolveOmdPath(relativePath, worktreeRoot);
 
   if (!existsSync(fullPath)) {
     mkdirSync(fullPath, { recursive: true });
@@ -150,7 +166,7 @@ export function ensureOmcDir(relativePath: string, worktreeRoot?: string): strin
  */
 export function getWorktreeNotepadPath(worktreeRoot?: string): string {
   const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-  return join(root, OmcPaths.NOTEPAD);
+  return join(root, OmdPaths.NOTEPAD);
 }
 
 /**
@@ -158,35 +174,41 @@ export function getWorktreeNotepadPath(worktreeRoot?: string): string {
  */
 export function getWorktreeProjectMemoryPath(worktreeRoot?: string): string {
   const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-  return join(root, OmcPaths.PROJECT_MEMORY);
+  return join(root, OmdPaths.PROJECT_MEMORY);
 }
 
 /**
  * Get the .omd root directory path.
  */
-export function getOmcRoot(worktreeRoot?: string): string {
+export function getOmdRoot(worktreeRoot?: string): string {
   const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-  return join(root, OmcPaths.ROOT);
+  return join(root, OmdPaths.ROOT);
 }
 
 /**
  * Resolve a plan file path.
  * @param planName - Plan name (without .md extension)
  */
-export function resolvePlanPath(planName: string, worktreeRoot?: string): string {
+export function resolvePlanPath(
+  planName: string,
+  worktreeRoot?: string,
+): string {
   validatePath(planName);
   const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-  return join(root, OmcPaths.PLANS, `${planName}.md`);
+  return join(root, OmdPaths.PLANS, `${planName}.md`);
 }
 
 /**
  * Resolve a research directory path.
  * @param name - Research folder name
  */
-export function resolveResearchPath(name: string, worktreeRoot?: string): string {
+export function resolveResearchPath(
+  name: string,
+  worktreeRoot?: string,
+): string {
   validatePath(name);
   const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-  return join(root, OmcPaths.RESEARCH, name);
+  return join(root, OmdPaths.RESEARCH, name);
 }
 
 /**
@@ -194,44 +216,53 @@ export function resolveResearchPath(name: string, worktreeRoot?: string): string
  */
 export function resolveLogsPath(worktreeRoot?: string): string {
   const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-  return join(root, OmcPaths.LOGS);
+  return join(root, OmdPaths.LOGS);
 }
 
 /**
  * Resolve a wisdom/plan-scoped notepad directory path.
  * @param planName - Plan name for the scoped notepad
  */
-export function resolveWisdomPath(planName: string, worktreeRoot?: string): string {
+export function resolveWisdomPath(
+  planName: string,
+  worktreeRoot?: string,
+): string {
   validatePath(planName);
   const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-  return join(root, OmcPaths.NOTEPADS, planName);
+  return join(root, OmdPaths.NOTEPADS, planName);
 }
 
 /**
  * Check if an absolute path is under the .omd directory.
  * @param absolutePath - Absolute path to check
  */
-export function isPathUnderOmc(absolutePath: string, worktreeRoot?: string): boolean {
+export function isPathUnderOmd(
+  absolutePath: string,
+  worktreeRoot?: string,
+): boolean {
   const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-  const omdRoot = join(root, OmcPaths.ROOT);
+  const omdRoot = join(root, OmdPaths.ROOT);
   const normalizedPath = normalize(absolutePath);
-  const normalizedOmc = normalize(omdRoot);
-  return normalizedPath.startsWith(normalizedOmc + sep) || normalizedPath === normalizedOmc;
+  const normalizedOmd = normalize(omdRoot);
+  return (
+    normalizedPath.startsWith(normalizedOmd + sep) ||
+    normalizedPath === normalizedOmd
+  );
 }
 
 /**
  * Ensure all standard .omd subdirectories exist.
  */
-export function ensureAllOmcDirs(worktreeRoot?: string): void {
+export function ensureAllOmdDirs(worktreeRoot?: string): void {
   const root = worktreeRoot || getWorktreeRoot() || process.cwd();
   const dirs = [
-    OmcPaths.ROOT,
-    OmcPaths.STATE,
-    OmcPaths.PLANS,
-    OmcPaths.RESEARCH,
-    OmcPaths.LOGS,
-    OmcPaths.NOTEPADS,
-    OmcPaths.DRAFTS,
+    OmdPaths.ROOT,
+    OmdPaths.STATE,
+    OmdPaths.PLANS,
+    OmdPaths.RESEARCH,
+    OmdPaths.LOGS,
+    OmdPaths.NOTEPADS,
+    OmdPaths.DRAFTS,
   ];
   for (const dir of dirs) {
     const fullPath = join(root, dir);
@@ -305,13 +336,21 @@ export function resetProcessSessionId(): void {
  */
 export function validateSessionId(sessionId: string): void {
   if (!sessionId) {
-    throw new Error('Session ID cannot be empty');
+    throw new Error("Session ID cannot be empty");
   }
-  if (sessionId.includes('..') || sessionId.includes('/') || sessionId.includes('\\')) {
-    throw new Error(`Invalid session ID: path traversal not allowed (${sessionId})`);
+  if (
+    sessionId.includes("..") ||
+    sessionId.includes("/") ||
+    sessionId.includes("\\")
+  ) {
+    throw new Error(
+      `Invalid session ID: path traversal not allowed (${sessionId})`,
+    );
   }
   if (!SESSION_ID_REGEX.test(sessionId)) {
-    throw new Error(`Invalid session ID: must be alphanumeric with hyphens/underscores, max 256 chars (${sessionId})`);
+    throw new Error(
+      `Invalid session ID: must be alphanumeric with hyphens/underscores, max 256 chars (${sessionId})`,
+    );
   }
 }
 
@@ -324,16 +363,27 @@ export function validateSessionId(sessionId: string): void {
  * @param worktreeRoot - Optional worktree root
  * @returns Absolute path to session-scoped state file
  */
-export function resolveSessionStatePath(stateName: string, sessionId: string, worktreeRoot?: string): string {
+export function resolveSessionStatePath(
+  stateName: string,
+  sessionId: string,
+  worktreeRoot?: string,
+): string {
   validateSessionId(sessionId);
 
   // Special case: swarm uses SQLite, not session-scoped JSON
-  if (stateName === 'swarm' || stateName === 'swarm-state') {
-    throw new Error('Swarm uses SQLite (swarm.db), not session-scoped JSON state.');
+  if (stateName === "swarm" || stateName === "swarm-state") {
+    throw new Error(
+      "Swarm uses SQLite (swarm.db), not session-scoped JSON state.",
+    );
   }
 
-  const normalizedName = stateName.endsWith('-state') ? stateName : `${stateName}-state`;
-  return resolveOmcPath(`state/sessions/${sessionId}/${normalizedName}.json`, worktreeRoot);
+  const normalizedName = stateName.endsWith("-state")
+    ? stateName
+    : `${stateName}-state`;
+  return resolveOmdPath(
+    `state/sessions/${sessionId}/${normalizedName}.json`,
+    worktreeRoot,
+  );
 }
 
 /**
@@ -344,10 +394,13 @@ export function resolveSessionStatePath(stateName: string, sessionId: string, wo
  * @param worktreeRoot - Optional worktree root
  * @returns Absolute path to session state directory
  */
-export function getSessionStateDir(sessionId: string, worktreeRoot?: string): string {
+export function getSessionStateDir(
+  sessionId: string,
+  worktreeRoot?: string,
+): string {
   validateSessionId(sessionId);
   const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-  return join(root, OmcPaths.SESSIONS, sessionId);
+  return join(root, OmdPaths.SESSIONS, sessionId);
 }
 
 /**
@@ -358,7 +411,7 @@ export function getSessionStateDir(sessionId: string, worktreeRoot?: string): st
  */
 export function listSessionIds(worktreeRoot?: string): string[] {
   const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-  const sessionsDir = join(root, OmcPaths.SESSIONS);
+  const sessionsDir = join(root, OmdPaths.SESSIONS);
 
   if (!existsSync(sessionsDir)) {
     return [];
@@ -367,8 +420,10 @@ export function listSessionIds(worktreeRoot?: string): string[] {
   try {
     const entries = readdirSync(sessionsDir, { withFileTypes: true });
     return entries
-      .filter(entry => entry.isDirectory() && SESSION_ID_REGEX.test(entry.name))
-      .map(entry => entry.name);
+      .filter(
+        (entry) => entry.isDirectory() && SESSION_ID_REGEX.test(entry.name),
+      )
+      .map((entry) => entry.name);
   } catch {
     return [];
   }
@@ -381,7 +436,10 @@ export function listSessionIds(worktreeRoot?: string): string[] {
  * @param worktreeRoot - Optional worktree root
  * @returns Absolute path to the session state directory
  */
-export function ensureSessionStateDir(sessionId: string, worktreeRoot?: string): string {
+export function ensureSessionStateDir(
+  sessionId: string,
+  worktreeRoot?: string,
+): string {
   const sessionDir = getSessionStateDir(sessionId, worktreeRoot);
 
   if (!existsSync(sessionDir)) {
@@ -423,12 +481,16 @@ export function validateWorkingDirectory(workingDirectory?: string): string {
   try {
     providedRootReal = realpathSync(providedRoot);
   } catch {
-    throw new Error(`workingDirectory '${workingDirectory}' does not exist or is not accessible.`);
+    throw new Error(
+      `workingDirectory '${workingDirectory}' does not exist or is not accessible.`,
+    );
   }
 
   const rel = relative(trustedRootReal, providedRootReal);
-  if (rel.startsWith('..') || isAbsolute(rel)) {
-    throw new Error(`workingDirectory '${workingDirectory}' is outside the trusted worktree root '${trustedRoot}'.`);
+  if (rel.startsWith("..") || isAbsolute(rel)) {
+    throw new Error(
+      `workingDirectory '${workingDirectory}' is outside the trusted worktree root '${trustedRoot}'.`,
+    );
   }
 
   return providedRoot;

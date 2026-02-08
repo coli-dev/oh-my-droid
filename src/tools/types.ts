@@ -5,7 +5,7 @@
  * state-tools, notepad-tools, memory-tools, and lsp-tools.
  */
 
-import { z } from 'zod';
+import { z } from "zod";
 
 /**
  * Tool Definition interface for MCP tools.
@@ -20,5 +20,7 @@ export interface ToolDefinition<T extends z.ZodRawShape> {
   name: string;
   description: string;
   schema: T;
-  handler: (args: z.infer<z.ZodObject<T>>) => Promise<{ content: Array<{ type: 'text'; text: string }> }>;
+  handler: (
+    args: z.infer<z.ZodObject<T>>,
+  ) => Promise<{ content: Array<{ type: "text"; text: string }> }>;
 }

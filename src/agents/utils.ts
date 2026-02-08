@@ -7,17 +7,17 @@
  * Ported from oh-my-opencode's agent utils.
  */
 
-import { readFileSync } from 'fs';
-import { join, dirname, resolve, relative, isAbsolute } from 'path';
-import { fileURLToPath } from 'url';
+import { readFileSync } from "fs";
+import { join, dirname, resolve, relative, isAbsolute } from "path";
+import { fileURLToPath } from "url";
 
 import type {
   AgentConfig,
   AgentPromptMetadata,
   AvailableAgent,
   AgentOverrideConfig,
-  ModelType
-} from './types.js';
+  ModelType,
+} from "./types.js";
 
 // ============================================================
 // DYNAMIC PROMPT LOADING
@@ -30,7 +30,7 @@ function getPackageDir(): string {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
   // From src/agents/ go up to package root
-  return join(__dirname, '..', '..');
+  return join(__dirname, "..", "..");
 }
 
 /**
@@ -47,26 +47,27 @@ export function loadAgentPrompt(agentName: string): string {
   }
 
   try {
-    const agentsDir = join(getPackageDir(), 'agents');
+    const agentsDir = join(getPackageDir(), "agents");
     const agentPath = join(agentsDir, `${agentName}.md`);
 
     // Security: Verify resolved path is within the agents directory
     const resolvedPath = resolve(agentPath);
     const resolvedAgentsDir = resolve(agentsDir);
     const rel = relative(resolvedAgentsDir, resolvedPath);
-    if (rel.startsWith('..') || isAbsolute(rel)) {
+    if (rel.startsWith("..") || isAbsolute(rel)) {
       throw new Error(`Invalid agent name: path traversal detected`);
     }
 
-    const content = readFileSync(agentPath, 'utf-8');
+    const content = readFileSync(agentPath, "utf-8");
     // Extract content after YAML frontmatter (---\n...\n---\n)
     const match = content.match(/^---[\s\S]*?---\s*([\s\S]*)$/);
     return match ? match[1].trim() : content.trim();
   } catch (error) {
     // Don't leak internal paths in error messages
-    const message = error instanceof Error && error.message.includes('Invalid agent name')
-      ? error.message
-      : 'Agent prompt file not found';
+    const message =
+      error instanceof Error && error.message.includes("Invalid agent name")
+        ? error.message
+        : "Agent prompt file not found";
     console.warn(`[loadAgentPrompt] ${message}`);
     return `Agent: ${agentName}\n\nPrompt unavailable.`;
   }
@@ -76,9 +77,9 @@ export function loadAgentPrompt(agentName: string): string {
  * Create tool restrictions configuration
  * Returns an object that can be spread into agent config to restrict tools
  */
-export function createAgentToolRestrictions(
-  blockedTools: string[]
-): { tools: Record<string, boolean> } {
+export function createAgentToolRestrictions(blockedTools: string[]): {
+  tools: Record<string, boolean>;
+} {
   const restrictions: Record<string, boolean> = {};
   for (const tool of blockedTools) {
     restrictions[tool.toLowerCase()] = false;
@@ -91,18 +92,18 @@ export function createAgentToolRestrictions(
  */
 export function mergeAgentConfig(
   base: AgentConfig,
-  override: AgentOverrideConfig
+  override: AgentOverrideConfig,
 ): AgentConfig {
   const { prompt_append, ...rest } = override;
 
   const merged: AgentConfig = {
     ...base,
     ...(rest.model && { model: rest.model as ModelType }),
-    ...(rest.enabled !== undefined && { enabled: rest.enabled })
+    ...(rest.enabled !== undefined && { enabled: rest.enabled }),
   };
 
   if (prompt_append && merged.prompt) {
-    merged.prompt = merged.prompt + '\n\n' + prompt_append;
+    merged.prompt = merged.prompt + "\n\n" + prompt_append;
   }
 
   return merged;
@@ -111,29 +112,31 @@ export function mergeAgentConfig(
 /**
  * Build delegation table section for Sisyphus prompt
  */
-export function buildDelegationTable(availableAgents: AvailableAgent[]): string {
+export function buildDelegationTable(
+  availableAgents: AvailableAgent[],
+): string {
   if (availableAgents.length === 0) {
-    return '';
+    return "";
   }
 
   const rows = availableAgents
-    .filter(a => a.metadata.triggers.length > 0)
-    .map(a => {
+    .filter((a) => a.metadata.triggers.length > 0)
+    .map((a) => {
       const triggers = a.metadata.triggers
-        .map(t => `${t.domain}: ${t.trigger}`)
-        .join('; ');
+        .map((t) => `${t.domain}: ${t.trigger}`)
+        .join("; ");
       return `| ${a.metadata.promptAlias || a.name} | ${a.metadata.cost} | ${triggers} |`;
     });
 
   if (rows.length === 0) {
-    return '';
+    return "";
   }
 
   return `### Agent Delegation Table
 
 | Agent | Cost | When to Use |
 |-------|------|-------------|
-${rows.join('\n')}`;
+${rows.join("\n")}`;
 }
 
 /**
@@ -144,15 +147,15 @@ export function buildUseAvoidSection(metadata: AgentPromptMetadata): string {
 
   if (metadata.useWhen && metadata.useWhen.length > 0) {
     sections.push(`**USE when:**
-${metadata.useWhen.map(u => `- ${u}`).join('\n')}`);
+${metadata.useWhen.map((u) => `- ${u}`).join("\n")}`);
   }
 
   if (metadata.avoidWhen && metadata.avoidWhen.length > 0) {
     sections.push(`**AVOID when:**
-${metadata.avoidWhen.map(a => `- ${a}`).join('\n')}`);
+${metadata.avoidWhen.map((a) => `- ${a}`).join("\n")}`);
   }
 
-  return sections.join('\n\n');
+  return sections.join("\n\n");
 }
 
 /**
@@ -163,10 +166,10 @@ export function createEnvContext(): string {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const locale = Intl.DateTimeFormat().resolvedOptions().locale;
 
-  const timeStr = now.toLocaleTimeString('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
+  const timeStr = now.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
     hour12: true,
   });
 
@@ -182,14 +185,14 @@ export function createEnvContext(): string {
  * Get all available agents as AvailableAgent descriptors
  */
 export function getAvailableAgents(
-  agents: Record<string, AgentConfig>
+  agents: Record<string, AgentConfig>,
 ): AvailableAgent[] {
   return Object.entries(agents)
     .filter(([_, config]) => config.metadata)
     .map(([name, config]) => ({
       name,
       description: config.description,
-      metadata: config.metadata!
+      metadata: config.metadata!,
     }));
 }
 
@@ -197,23 +200,25 @@ export function getAvailableAgents(
  * Build key triggers section for Sisyphus prompt
  */
 export function buildKeyTriggersSection(
-  availableAgents: AvailableAgent[]
+  availableAgents: AvailableAgent[],
 ): string {
   const triggers: string[] = [];
 
   for (const agent of availableAgents) {
     for (const trigger of agent.metadata.triggers) {
-      triggers.push(`- **${trigger.domain}** → ${agent.metadata.promptAlias || agent.name}: ${trigger.trigger}`);
+      triggers.push(
+        `- **${trigger.domain}** → ${agent.metadata.promptAlias || agent.name}: ${trigger.trigger}`,
+      );
     }
   }
 
   if (triggers.length === 0) {
-    return '';
+    return "";
   }
 
   return `### Key Triggers (CHECK BEFORE ACTING)
 
-${triggers.join('\n')}`;
+${triggers.join("\n")}`;
 }
 
 /**
@@ -223,15 +228,15 @@ export function validateAgentConfig(config: AgentConfig): string[] {
   const errors: string[] = [];
 
   if (!config.name) {
-    errors.push('Agent name is required');
+    errors.push("Agent name is required");
   }
 
   if (!config.description) {
-    errors.push('Agent description is required');
+    errors.push("Agent description is required");
   }
 
   if (!config.prompt) {
-    errors.push('Agent prompt is required');
+    errors.push("Agent prompt is required");
   }
 
   // Note: tools is now optional - agents get all tools by default if omitted
@@ -249,18 +254,18 @@ export function parseDisallowedTools(agentName: string): string[] | undefined {
   }
 
   try {
-    const agentsDir = join(getPackageDir(), 'agents');
+    const agentsDir = join(getPackageDir(), "agents");
     const agentPath = join(agentsDir, `${agentName}.md`);
 
     // Security: Verify resolved path is within the agents directory
     const resolvedPath = resolve(agentPath);
     const resolvedAgentsDir = resolve(agentsDir);
     const rel = relative(resolvedAgentsDir, resolvedPath);
-    if (rel.startsWith('..') || isAbsolute(rel)) {
+    if (rel.startsWith("..") || isAbsolute(rel)) {
       return undefined;
     }
 
-    const content = readFileSync(agentPath, 'utf-8');
+    const content = readFileSync(agentPath, "utf-8");
 
     // Extract frontmatter
     const match = content.match(/^---[\s\S]*?---/);
@@ -271,7 +276,10 @@ export function parseDisallowedTools(agentName: string): string[] | undefined {
     if (!disallowedMatch) return undefined;
 
     // Parse comma-separated list
-    return disallowedMatch[1].split(',').map(t => t.trim()).filter(Boolean);
+    return disallowedMatch[1]
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
   } catch {
     return undefined;
   }
@@ -282,7 +290,7 @@ export function parseDisallowedTools(agentName: string): string[] | undefined {
  */
 export function deepMerge<T extends Record<string, unknown>>(
   target: T,
-  source: Partial<T>
+  source: Partial<T>,
 ): T {
   const result = { ...target };
 
@@ -292,15 +300,15 @@ export function deepMerge<T extends Record<string, unknown>>(
 
     if (
       sourceValue &&
-      typeof sourceValue === 'object' &&
+      typeof sourceValue === "object" &&
       !Array.isArray(sourceValue) &&
       targetValue &&
-      typeof targetValue === 'object' &&
+      typeof targetValue === "object" &&
       !Array.isArray(targetValue)
     ) {
       (result as Record<string, unknown>)[key] = deepMerge(
         targetValue as Record<string, unknown>,
-        sourceValue as Record<string, unknown>
+        sourceValue as Record<string, unknown>,
       );
     } else if (sourceValue !== undefined) {
       (result as Record<string, unknown>)[key] = sourceValue;

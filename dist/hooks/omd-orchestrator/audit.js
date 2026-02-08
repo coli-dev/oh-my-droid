@@ -4,8 +4,8 @@
  */
 import * as fs from 'fs';
 import * as path from 'path';
-import { OmcPaths } from '../../lib/worktree-paths.js';
-const LOG_DIR = OmcPaths.LOGS;
+import { OmdPaths } from '../../lib/worktree-paths.js';
+const LOG_DIR = OmdPaths.LOGS;
 const LOG_FILE = 'delegation-audit.jsonl';
 /**
  * Log an audit entry for delegation enforcement

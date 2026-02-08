@@ -57,7 +57,7 @@ function semverCompare(a, b) {
 }
 
 // Extract OMD version from AGENTS.md content
-function extractOmcVersion(content) {
+function extractOmdVersion(content) {
   const match = content.match(/<!-- OMD:VERSION:(\d+\.\d+\.\d+[^\s]*?) -->/);
   return match ? match[1] : null;
 }
@@ -65,7 +65,7 @@ function extractOmcVersion(content) {
 // Get plugin version from DROID_PLUGIN_ROOT
 function getPluginVersion() {
   try {
-    const pluginRoot = process.env.DROID_PLUGIN_ROOT;
+    const pluginRoot = process.env.factory_PLUGIN_ROOT;
     if (!pluginRoot) return null;
     const pkg = readJsonFile(join(pluginRoot, 'package.json'));
     return pkg?.version || null;
@@ -87,7 +87,7 @@ function getDroidMdVersion() {
     const droidMdPath = join(homedir(), '.factory', 'AGENTS.md');
     if (!existsSync(droidMdPath)) return null;  // File doesn't exist
     const content = readFileSync(droidMdPath, 'utf-8');
-    const version = extractOmcVersion(content);
+    const version = extractOmdVersion(content);
     return version || 'unknown';  // File exists but no marker = 'unknown'
   } catch { return null; }
 }
@@ -129,7 +129,7 @@ function detectVersionDrift() {
 // Check if we should notify (once per unique drift combination)
 function shouldNotifyDrift(driftInfo) {
   const stateFile = join(homedir(), '.factory', '.omd', 'update-state.json');
-  const driftKey = `plugin:${driftInfo.pluginVersion}-npm:${driftInfo.npmVersion}-droid:${driftInfo.droidMdVersion}`;
+  const driftKey = `plugin:${driftInfo.pluginVersion}-npm:${driftInfo.npmVersion}-droid:${driftInfo.factoryMdVersion}`;
 
   try {
     if (existsSync(stateFile)) {
@@ -198,7 +198,7 @@ async function checkNpmUpdate(currentVersion) {
 async function checkHudInstallation(retryCount = 0) {
   const hudDir = join(homedir(), '.factory', 'hud');
   // Support both legacy (sisyphus-hud.mjs) and current (omd-hud.mjs) naming
-  const hudScriptOmc = join(hudDir, 'omd-hud.mjs');
+  const hudScriptOmd = join(hudDir, 'omd-hud.mjs');
   const hudScriptSisyphus = join(hudDir, 'sisyphus-hud.mjs');
   const settingsFile = join(homedir(), '.factory', 'settings.json');
 
@@ -206,7 +206,7 @@ async function checkHudInstallation(retryCount = 0) {
   const RETRY_DELAY_MS = 100;
 
   // Check if HUD script exists (either naming convention)
-  const hudScriptExists = existsSync(hudScriptOmc) || existsSync(hudScriptSisyphus);
+  const hudScriptExists = existsSync(hudScriptOmd) || existsSync(hudScriptSisyphus);
   if (!hudScriptExists) {
     return { installed: false, reason: 'HUD script missing' };
   }

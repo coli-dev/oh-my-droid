@@ -1,14 +1,14 @@
-import type { StatuslineStdin } from '../hud/types.js';
-import { estimateOutputTokens } from './output-estimator.js';
+import type { StatuslineStdin } from "../hud/types.js";
+import { estimateOutputTokens } from "./output-estimator.js";
 
 export interface ExtractedTokens {
   inputTokens: number;
-  outputTokens: number;  // ESTIMATED
+  outputTokens: number; // ESTIMATED
   cacheCreationTokens: number;
   cacheReadTokens: number;
   modelName: string;
   agentName?: string;
-  isEstimated: boolean;  // Always true for output tokens
+  isEstimated: boolean; // Always true for output tokens
   timestamp: string;
 }
 
@@ -32,7 +32,7 @@ export function extractTokens(
   stdin: StatuslineStdin,
   previousSnapshot: TokenSnapshot | null,
   modelName: string,
-  agentName?: string
+  agentName?: string,
 ): ExtractedTokens {
   const currentUsage = stdin.context_window?.current_usage;
 
@@ -46,7 +46,8 @@ export function extractTokens(
     : currentUsage.input_tokens;
 
   const cacheDelta = previousSnapshot
-    ? currentUsage.cache_creation_input_tokens - previousSnapshot.cacheCreationTokens
+    ? currentUsage.cache_creation_input_tokens -
+      previousSnapshot.cacheCreationTokens
     : currentUsage.cache_creation_input_tokens;
 
   const cacheReadDelta = previousSnapshot
@@ -64,7 +65,7 @@ export function extractTokens(
     modelName,
     agentName,
     isEstimated: true,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 }
 
@@ -78,11 +79,14 @@ export function createSnapshot(stdin: StatuslineStdin): TokenSnapshot {
     inputTokens: usage?.input_tokens ?? 0,
     cacheCreationTokens: usage?.cache_creation_input_tokens ?? 0,
     cacheReadTokens: usage?.cache_read_input_tokens ?? 0,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 }
 
-function createEmptyExtraction(modelName: string, agentName?: string): ExtractedTokens {
+function createEmptyExtraction(
+  modelName: string,
+  agentName?: string,
+): ExtractedTokens {
   return {
     inputTokens: 0,
     outputTokens: 0,
@@ -91,6 +95,6 @@ function createEmptyExtraction(modelName: string, agentName?: string): Extracted
     modelName,
     agentName,
     isEstimated: true,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 }

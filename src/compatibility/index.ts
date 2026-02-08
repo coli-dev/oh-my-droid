@@ -42,7 +42,7 @@ export type {
   RegistryEvent,
   RegistryEventListener,
   SafeCommandPattern,
-} from './types.js';
+} from "./types.js";
 
 // Discovery
 export {
@@ -55,7 +55,7 @@ export {
   isPluginInstalled,
   getPluginInfo,
   type DiscoveryResult,
-} from './discovery.js';
+} from "./discovery.js";
 
 // Registry
 export {
@@ -67,7 +67,7 @@ export {
   listExternalTools,
   hasExternalPlugins,
   hasMcpServers,
-} from './registry.js';
+} from "./registry.js";
 
 // Permission Adapter
 export {
@@ -83,7 +83,7 @@ export {
   getDelegationTarget,
   integrateWithPermissionSystem,
   processExternalToolPermission,
-} from './permission-adapter.js';
+} from "./permission-adapter.js";
 
 // MCP Bridge
 export {
@@ -92,16 +92,16 @@ export {
   resetMcpBridge,
   invokeMcpTool,
   readMcpResource,
-} from './mcp-bridge.js';
+} from "./mcp-bridge.js";
 
 // ============================================================
 // Convenience initialization function
 // ============================================================
 
-import { initializeRegistry } from './registry.js';
-import { integrateWithPermissionSystem } from './permission-adapter.js';
-import { getMcpBridge } from './mcp-bridge.js';
-import type { DiscoveryOptions } from './types.js';
+import { initializeRegistry } from "./registry.js";
+import { integrateWithPermissionSystem } from "./permission-adapter.js";
+import { getMcpBridge } from "./mcp-bridge.js";
+import type { DiscoveryOptions } from "./types.js";
 
 /**
  * Initialize the complete compatibility layer
@@ -115,10 +115,12 @@ import type { DiscoveryOptions } from './types.js';
  * @param options Discovery options
  * @returns Summary of discovered resources
  */
-export async function initializeCompatibility(options?: DiscoveryOptions & {
-  /** Whether to auto-connect to discovered MCP servers */
-  autoConnect?: boolean;
-}): Promise<{
+export async function initializeCompatibility(
+  options?: DiscoveryOptions & {
+    /** Whether to auto-connect to discovered MCP servers */
+    autoConnect?: boolean;
+  },
+): Promise<{
   pluginCount: number;
   mcpServerCount: number;
   toolCount: number;

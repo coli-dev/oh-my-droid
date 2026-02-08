@@ -45,7 +45,7 @@ export declare function getProgressPath(directory: string): string;
 /**
  * Get the path to progress.txt in .omd subdirectory
  */
-export declare function getOmcProgressPath(directory: string): string;
+export declare function getOmdProgressPath(directory: string): string;
 /**
  * Find progress.txt in a directory (checks both root and .omd)
  */

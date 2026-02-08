@@ -9,17 +9,17 @@
  * - Resource access
  */
 
-import { spawn, type ChildProcess } from 'child_process';
-import { EventEmitter } from 'events';
-import { basename } from 'path';
+import { spawn, type ChildProcess } from "child_process";
+import { EventEmitter } from "events";
+import { basename } from "path";
 import type {
   DiscoveredMcpServer,
   McpServerEntry,
   ExternalTool,
   McpToolResult,
   ToolCapability,
-} from './types.js';
-import { getRegistry } from './registry.js';
+} from "./types.js";
+import { getRegistry } from "./registry.js";
 
 /**
  * Security Error for MCP bridge operations
@@ -27,7 +27,7 @@ import { getRegistry } from './registry.js';
 export class McpSecurityError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = 'McpSecurityError';
+    this.name = "McpSecurityError";
   }
 }
 
@@ -36,53 +36,53 @@ export class McpSecurityError extends Error {
  * Only these executables can be spawned as MCP servers
  */
 const ALLOWED_COMMANDS = new Set([
-  'node',
-  'npx',
-  'python',
-  'python3',
-  'ruby',
-  'go',
-  'deno',
-  'bun',
-  'uvx',
-  'uv',
-  'cargo',
-  'java',
-  'dotnet',
+  "node",
+  "npx",
+  "python",
+  "python3",
+  "ruby",
+  "go",
+  "deno",
+  "bun",
+  "uvx",
+  "uv",
+  "cargo",
+  "java",
+  "dotnet",
 ]);
 
 /**
  * Dangerous environment variables that could be used for code injection
  */
 const BLOCKED_ENV_VARS = new Set([
-  'LD_PRELOAD',
-  'LD_LIBRARY_PATH',
-  'DYLD_INSERT_LIBRARIES',
-  'DYLD_LIBRARY_PATH',
-  'NODE_OPTIONS',
-  'NODE_DEBUG',
-  'ELECTRON_RUN_AS_NODE',
-  'PYTHONSTARTUP',
-  'PYTHONPATH',
-  'RUBYOPT',
-  'PERL5OPT',
-  'BASH_ENV',
-  'ENV',
-  'ZDOTDIR',
+  "LD_PRELOAD",
+  "LD_LIBRARY_PATH",
+  "DYLD_INSERT_LIBRARIES",
+  "DYLD_LIBRARY_PATH",
+  "NODE_OPTIONS",
+  "NODE_DEBUG",
+  "ELECTRON_RUN_AS_NODE",
+  "PYTHONSTARTUP",
+  "PYTHONPATH",
+  "RUBYOPT",
+  "PERL5OPT",
+  "BASH_ENV",
+  "ENV",
+  "ZDOTDIR",
 ]);
 
 /**
  * MCP message types
  */
 interface McpRequest {
-  jsonrpc: '2.0';
+  jsonrpc: "2.0";
   id: number;
   method: string;
   params?: unknown;
 }
 
 interface McpResponse {
-  jsonrpc: '2.0';
+  jsonrpc: "2.0";
   id: number;
   result?: unknown;
   error?: {
@@ -112,10 +112,13 @@ interface McpConnection {
   process: ChildProcess;
   serverName: string;
   requestId: number;
-  pendingRequests: Map<number, {
-    resolve: (result: unknown) => void;
-    reject: (error: Error) => void;
-  }>;
+  pendingRequests: Map<
+    number,
+    {
+      resolve: (result: unknown) => void;
+      reject: (error: Error) => void;
+    }
+  >;
   tools: McpToolDefinition[];
   resources: McpResourceDefinition[];
   buffer: string;
@@ -155,16 +158,19 @@ export class McpBridge extends EventEmitter {
     if (!ALLOWED_COMMANDS.has(commandBasename)) {
       throw new McpSecurityError(
         `Command not in whitelist: ${config.command}. ` +
-        `Allowed commands: ${[...ALLOWED_COMMANDS].join(', ')}`
+          `Allowed commands: ${[...ALLOWED_COMMANDS].join(", ")}`,
       );
     }
 
     // SECURITY: Filter out dangerous environment variables
-    const safeEnv: Record<string, string> = { ...process.env } as Record<string, string>;
+    const safeEnv: Record<string, string> = { ...process.env } as Record<
+      string,
+      string
+    >;
     if (config.env) {
       for (const [key, value] of Object.entries(config.env)) {
         if (BLOCKED_ENV_VARS.has(key.toUpperCase())) {
-          this.emit('security-warning', {
+          this.emit("security-warning", {
             server: serverName,
             message: `Blocked dangerous environment variable: ${key}`,
           });
@@ -177,7 +183,7 @@ export class McpBridge extends EventEmitter {
     // Spawn the server process
     const child = spawn(config.command, config.args || [], {
       env: safeEnv,
-      stdio: ['pipe', 'pipe', 'pipe'],
+      stdio: ["pipe", "pipe", "pipe"],
     });
 
     const connection: McpConnection = {
@@ -187,15 +193,15 @@ export class McpBridge extends EventEmitter {
       pendingRequests: new Map(),
       tools: [],
       resources: [],
-      buffer: '',
+      buffer: "",
     };
 
     this.connections.set(serverName, connection);
 
     // SECURITY: Set up error handler for spawn failures
-    child.on('error', (error: Error) => {
+    child.on("error", (error: Error) => {
       this.connections.delete(serverName);
-      this.emit('spawn-error', { server: serverName, error: error.message });
+      this.emit("spawn-error", { server: serverName, error: error.message });
       // Update registry with error state
       const registry = getRegistry();
       registry.updateMcpServer(serverName, {
@@ -205,17 +211,17 @@ export class McpBridge extends EventEmitter {
     });
 
     // Set up message handling
-    child.stdout?.on('data', (data: Buffer) => {
+    child.stdout?.on("data", (data: Buffer) => {
       this.handleData(serverName, data);
     });
 
-    child.stderr?.on('data', (data: Buffer) => {
-      this.emit('server-error', { server: serverName, error: data.toString() });
+    child.stderr?.on("data", (data: Buffer) => {
+      this.emit("server-error", { server: serverName, error: data.toString() });
     });
 
-    child.on('exit', (code) => {
+    child.on("exit", (code) => {
       this.connections.delete(serverName);
-      this.emit('server-disconnected', { server: serverName, code });
+      this.emit("server-disconnected", { server: serverName, code });
 
       // Update registry
       const registry = getRegistry();
@@ -248,7 +254,10 @@ export class McpBridge extends EventEmitter {
       tools: externalTools,
     });
 
-    this.emit('server-connected', { server: serverName, toolCount: tools.length });
+    this.emit("server-connected", {
+      server: serverName,
+      toolCount: tools.length,
+    });
 
     return externalTools;
   }
@@ -295,7 +304,7 @@ export class McpBridge extends EventEmitter {
   async invokeTool(
     serverName: string,
     toolName: string,
-    arguments_: Record<string, unknown>
+    arguments_: Record<string, unknown>,
   ): Promise<McpToolResult> {
     const connection = this.connections.get(serverName);
     if (!connection) {
@@ -308,7 +317,7 @@ export class McpBridge extends EventEmitter {
     const startTime = Date.now();
 
     try {
-      const result = await this.sendRequest(serverName, 'tools/call', {
+      const result = await this.sendRequest(serverName, "tools/call", {
         name: toolName,
         arguments: arguments_,
       });
@@ -330,10 +339,7 @@ export class McpBridge extends EventEmitter {
   /**
    * Read a resource from an MCP server
    */
-  async readResource(
-    serverName: string,
-    uri: string
-  ): Promise<McpToolResult> {
+  async readResource(serverName: string, uri: string): Promise<McpToolResult> {
     const connection = this.connections.get(serverName);
     if (!connection) {
       return {
@@ -343,7 +349,9 @@ export class McpBridge extends EventEmitter {
     }
 
     try {
-      const result = await this.sendRequest(serverName, 'resources/read', { uri });
+      const result = await this.sendRequest(serverName, "resources/read", {
+        uri,
+      });
       return {
         success: true,
         data: result,
@@ -373,22 +381,25 @@ export class McpBridge extends EventEmitter {
   /**
    * Wait for server to be ready
    */
-  private async waitForReady(serverName: string, timeout = 10000): Promise<void> {
+  private async waitForReady(
+    serverName: string,
+    timeout = 10000,
+  ): Promise<void> {
     const start = Date.now();
 
     while (Date.now() - start < timeout) {
       const connection = this.connections.get(serverName);
       if (!connection) {
-        throw new Error('Server connection lost');
+        throw new Error("Server connection lost");
       }
 
       // Try to ping the server
       try {
-        await this.sendRequest(serverName, 'ping', undefined, 1000);
+        await this.sendRequest(serverName, "ping", undefined, 1000);
         return;
       } catch {
         // Server not ready yet, wait and retry
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
       }
     }
 
@@ -399,27 +410,27 @@ export class McpBridge extends EventEmitter {
    * Initialize the MCP connection
    */
   private async initialize(serverName: string): Promise<void> {
-    await this.sendRequest(serverName, 'initialize', {
-      protocolVersion: '2024-11-05',
+    await this.sendRequest(serverName, "initialize", {
+      protocolVersion: "2024-11-05",
       capabilities: {
         tools: {},
         resources: {},
       },
       clientInfo: {
-        name: 'oh-my-droid',
-        version: '3.7.2',
+        name: "oh-my-droid",
+        version: "3.7.2",
       },
     });
 
     // Send initialized notification
-    this.sendNotification(serverName, 'initialized', {});
+    this.sendNotification(serverName, "initialized", {});
   }
 
   /**
    * List available tools from server
    */
   private async listTools(serverName: string): Promise<McpToolDefinition[]> {
-    const result = await this.sendRequest(serverName, 'tools/list', {}) as {
+    const result = (await this.sendRequest(serverName, "tools/list", {})) as {
       tools: McpToolDefinition[];
     };
     return result.tools || [];
@@ -428,8 +439,14 @@ export class McpBridge extends EventEmitter {
   /**
    * List available resources from server
    */
-  private async listResources(serverName: string): Promise<McpResourceDefinition[]> {
-    const result = await this.sendRequest(serverName, 'resources/list', {}) as {
+  private async listResources(
+    serverName: string,
+  ): Promise<McpResourceDefinition[]> {
+    const result = (await this.sendRequest(
+      serverName,
+      "resources/list",
+      {},
+    )) as {
       resources: McpResourceDefinition[];
     };
     return result.resources || [];
@@ -442,16 +459,18 @@ export class McpBridge extends EventEmitter {
     serverName: string,
     method: string,
     params?: unknown,
-    timeout = 30000
+    timeout = 30000,
   ): Promise<unknown> {
     const connection = this.connections.get(serverName);
     if (!connection) {
-      return Promise.reject(new Error(`Not connected to server: ${serverName}`));
+      return Promise.reject(
+        new Error(`Not connected to server: ${serverName}`),
+      );
     }
 
     const id = ++connection.requestId;
     const request: McpRequest = {
-      jsonrpc: '2.0',
+      jsonrpc: "2.0",
       id,
       method,
       params,
@@ -475,7 +494,7 @@ export class McpBridge extends EventEmitter {
       });
 
       // Send the request
-      const message = JSON.stringify(request) + '\n';
+      const message = JSON.stringify(request) + "\n";
       connection.process.stdin?.write(message);
     });
   }
@@ -483,17 +502,21 @@ export class McpBridge extends EventEmitter {
   /**
    * Send an MCP notification (no response expected)
    */
-  private sendNotification(serverName: string, method: string, params?: unknown): void {
+  private sendNotification(
+    serverName: string,
+    method: string,
+    params?: unknown,
+  ): void {
     const connection = this.connections.get(serverName);
     if (!connection) return;
 
     const notification = {
-      jsonrpc: '2.0',
+      jsonrpc: "2.0",
       method,
       params,
     };
 
-    const message = JSON.stringify(notification) + '\n';
+    const message = JSON.stringify(notification) + "\n";
     connection.process.stdin?.write(message);
   }
 
@@ -507,8 +530,8 @@ export class McpBridge extends EventEmitter {
     connection.buffer += data.toString();
 
     // Process complete messages (newline-delimited JSON)
-    const lines = connection.buffer.split('\n');
-    connection.buffer = lines.pop() || '';
+    const lines = connection.buffer.split("\n");
+    connection.buffer = lines.pop() || "";
 
     for (const line of lines) {
       if (!line.trim()) continue;
@@ -517,7 +540,7 @@ export class McpBridge extends EventEmitter {
         const message = JSON.parse(line) as McpResponse;
         this.handleMessage(serverName, message);
       } catch {
-        this.emit('parse-error', { server: serverName, data: line });
+        this.emit("parse-error", { server: serverName, data: line });
       }
     }
   }
@@ -549,11 +572,11 @@ export class McpBridge extends EventEmitter {
    */
   private convertToExternalTools(
     serverName: string,
-    tools: McpToolDefinition[]
+    tools: McpToolDefinition[],
   ): ExternalTool[] {
-    return tools.map(tool => ({
+    return tools.map((tool) => ({
       name: `mcp__${serverName}__${tool.name}`,
-      type: 'mcp' as const,
+      type: "mcp" as const,
       source: serverName,
       description: tool.description,
       capabilities: this.inferCapabilities(tool.name, tool.description),
@@ -566,24 +589,45 @@ export class McpBridge extends EventEmitter {
   /**
    * Infer capabilities from tool name and description
    */
-  private inferCapabilities(name: string, description?: string): ToolCapability[] {
+  private inferCapabilities(
+    name: string,
+    description?: string,
+  ): ToolCapability[] {
     const capabilities: ToolCapability[] = [];
-    const text = `${name} ${description || ''}`.toLowerCase();
+    const text = `${name} ${description || ""}`.toLowerCase();
 
-    if (text.includes('read') || text.includes('get') || text.includes('list') || text.includes('fetch')) {
-      capabilities.push('read');
+    if (
+      text.includes("read") ||
+      text.includes("get") ||
+      text.includes("list") ||
+      text.includes("fetch")
+    ) {
+      capabilities.push("read");
     }
-    if (text.includes('write') || text.includes('create') || text.includes('edit') || text.includes('update')) {
-      capabilities.push('write');
+    if (
+      text.includes("write") ||
+      text.includes("create") ||
+      text.includes("edit") ||
+      text.includes("update")
+    ) {
+      capabilities.push("write");
     }
-    if (text.includes('exec') || text.includes('run') || text.includes('execute')) {
-      capabilities.push('execute');
+    if (
+      text.includes("exec") ||
+      text.includes("run") ||
+      text.includes("execute")
+    ) {
+      capabilities.push("execute");
     }
-    if (text.includes('search') || text.includes('find') || text.includes('query')) {
-      capabilities.push('search');
+    if (
+      text.includes("search") ||
+      text.includes("find") ||
+      text.includes("query")
+    ) {
+      capabilities.push("search");
     }
 
-    return capabilities.length > 0 ? capabilities : ['unknown'];
+    return capabilities.length > 0 ? capabilities : ["unknown"];
   }
 
   /**
@@ -606,7 +650,7 @@ export class McpBridge extends EventEmitter {
           connected: false,
           error: error instanceof Error ? error.message : String(error),
         });
-        this.emit('connect-error', { server: server.name, error });
+        this.emit("connect-error", { server: server.name, error });
       }
     }
 
@@ -656,7 +700,7 @@ export function resetMcpBridge(): void {
 export async function invokeMcpTool(
   serverName: string,
   toolName: string,
-  arguments_: Record<string, unknown>
+  arguments_: Record<string, unknown>,
 ): Promise<McpToolResult> {
   return getMcpBridge().invokeTool(serverName, toolName, arguments_);
 }
@@ -666,7 +710,7 @@ export async function invokeMcpTool(
  */
 export async function readMcpResource(
   serverName: string,
-  uri: string
+  uri: string,
 ): Promise<McpToolResult> {
   return getMcpBridge().readResource(serverName, uri);
 }

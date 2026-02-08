@@ -19,9 +19,9 @@ createRalphLoopHook, readRalphState, writeRalphState, clearRalphState, clearLink
 // PRD Integration
 hasPrd, getPrdCompletionStatus, getRalphContext, setCurrentStory, enablePrdMode, recordStoryProgress, recordPattern, shouldCompleteByPrd, 
 // PRD (Structured Task Tracking)
-readPrd, writePrd, findPrdPath, getPrdPath, getOmcPrdPath, getPrdStatus, markStoryComplete, markStoryIncomplete, getStory, getNextStory, createPrd, createSimplePrd, initPrd, formatPrdStatus, formatStory, formatPrd, formatNextStoryPrompt, PRD_FILENAME, PRD_EXAMPLE_FILENAME, 
+readPrd, writePrd, findPrdPath, getPrdPath, getOmdPrdPath, getPrdStatus, markStoryComplete, markStoryIncomplete, getStory, getNextStory, createPrd, createSimplePrd, initPrd, formatPrdStatus, formatStory, formatPrd, formatNextStoryPrompt, PRD_FILENAME, PRD_EXAMPLE_FILENAME, 
 // Progress (Memory Persistence)
-readProgress, readProgressRaw, parseProgress, findProgressPath, getProgressPath, getOmcProgressPath, initProgress, appendProgress, addPattern, getPatterns, getRecentLearnings, formatPatternsForContext, formatProgressForContext, formatLearningsForContext, getProgressContext, PROGRESS_FILENAME, PATTERNS_HEADER, ENTRY_SEPARATOR, 
+readProgress, readProgressRaw, parseProgress, findProgressPath, getProgressPath, getOmdProgressPath, initProgress, appendProgress, addPattern, getPatterns, getRecentLearnings, formatPatternsForContext, formatProgressForContext, formatLearningsForContext, getProgressContext, PROGRESS_FILENAME, PATTERNS_HEADER, ENTRY_SEPARATOR, 
 // Verifier (Architect Verification)
 readVerificationState, writeVerificationState, clearVerificationState, startVerification, recordArchitectFeedback, getArchitectVerificationPrompt, getArchitectRejectionContinuationPrompt, detectArchitectApproval, detectArchitectRejection } from './ralph/index.js';
 export { 

@@ -11,5 +11,5 @@ export {
   findContextFiles,
   loadContextFromFiles,
   generateConfigSchema,
-  DEFAULT_CONFIG
-} from './loader.js';
+  DEFAULT_CONFIG,
+} from "./loader.js";

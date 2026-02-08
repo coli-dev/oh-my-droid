@@ -15,7 +15,7 @@ export interface BackgroundTask {
     startTime?: string;
     exitCode?: number;
 }
-export interface OmcHudState {
+export interface OmdHudState {
     timestamp: string;
     backgroundTasks: BackgroundTask[];
 }

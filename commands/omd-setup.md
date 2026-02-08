@@ -321,7 +321,7 @@ echo "$EXISTING" | jq \
 
 ```bash
 jq empty "$SETTINGS_FILE" 2>/dev/null && echo "settings.json: valid" || echo "ERROR: invalid JSON!"
-jq -e '.env.DROID_CODE_EXPERIMENTAL_AGENT_TEAMS' "$SETTINGS_FILE" > /dev/null 2>&1 && echo "Agent teams: ENABLED" || echo "WARNING: not enabled"
+jq -e '.env.factory_CODE_EXPERIMENTAL_AGENT_TEAMS' "$SETTINGS_FILE" > /dev/null 2>&1 && echo "Agent teams: ENABLED" || echo "WARNING: not enabled"
 ```
 
 ### If User Chooses NO:

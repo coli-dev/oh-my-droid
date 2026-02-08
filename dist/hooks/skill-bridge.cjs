@@ -41,7 +41,7 @@ var import_os = require("os");
 var import_child_process = require("child_process");
 var import_fs = require("fs");
 var import_path = require("path");
-var OmcPaths = {
+var OmdPaths = {
   ROOT: ".omd",
   STATE: ".omd/state",
   SESSIONS: ".omd/state/sessions",
@@ -65,7 +65,7 @@ var USER_SKILLS_DIR = (0, import_path2.join)(
   "omd-learned"
 );
 var GLOBAL_SKILLS_DIR = (0, import_path2.join)((0, import_os.homedir)(), ".omd", "skills");
-var PROJECT_SKILLS_SUBDIR = OmcPaths.SKILLS;
+var PROJECT_SKILLS_SUBDIR = OmdPaths.SKILLS;
 var SKILL_EXTENSION = ".md";
 var SESSION_TTL_MS = 60 * 60 * 1e3;
 var MAX_RECURSION_DEPTH = 10;
@@ -129,7 +129,7 @@ function clearSkillMetadataCache() {
 function clearLevenshteinCache() {
   levenshteinCache.clear();
 }
-var STATE_FILE = `${OmcPaths.STATE}/skill-sessions.json`;
+var STATE_FILE = `${OmdPaths.STATE}/skill-sessions.json`;
 function getStateFilePath(projectRoot) {
   return (0, import_path2.join)(projectRoot, STATE_FILE);
 }

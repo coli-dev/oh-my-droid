@@ -5,14 +5,14 @@
  * for creating MCP servers with the Droid Agent SDK.
  */
 
-import { z } from 'zod';
-import { lspTools } from './lsp-tools.js';
-import { astTools } from './ast-tools.js';
-import { pythonReplTool } from './python-repl/index.js';
+import { z } from "zod";
+import { lspTools } from "./lsp-tools.js";
+import { astTools } from "./ast-tools.js";
+import { pythonReplTool } from "./python-repl/index.js";
 
-export { lspTools } from './lsp-tools.js';
-export { astTools } from './ast-tools.js';
-export { pythonReplTool } from './python-repl/index.js';
+export { lspTools } from "./lsp-tools.js";
+export { astTools } from "./ast-tools.js";
+export { pythonReplTool } from "./python-repl/index.js";
 
 /**
  * Generic tool definition type
@@ -21,28 +21,32 @@ export interface GenericToolDefinition {
   name: string;
   description: string;
   schema: z.ZodRawShape;
-  handler: (args: unknown) => Promise<{ content: Array<{ type: 'text'; text: string }> }>;
+  handler: (
+    args: unknown,
+  ) => Promise<{ content: Array<{ type: "text"; text: string }> }>;
 }
 
 /**
  * All custom tools available in the system
  */
 export const allCustomTools: GenericToolDefinition[] = [
-  ...lspTools as unknown as GenericToolDefinition[],
-  ...astTools as unknown as GenericToolDefinition[],
-  pythonReplTool as unknown as GenericToolDefinition
+  ...(lspTools as unknown as GenericToolDefinition[]),
+  ...(astTools as unknown as GenericToolDefinition[]),
+  pythonReplTool as unknown as GenericToolDefinition,
 ];
 
 /**
  * Get tools by category
  */
-export function getToolsByCategory(category: 'lsp' | 'ast' | 'all'): GenericToolDefinition[] {
+export function getToolsByCategory(
+  category: "lsp" | "ast" | "all",
+): GenericToolDefinition[] {
   switch (category) {
-    case 'lsp':
+    case "lsp":
       return lspTools as unknown as GenericToolDefinition[];
-    case 'ast':
+    case "ast":
       return astTools as unknown as GenericToolDefinition[];
-    case 'all':
+    case "all":
       return allCustomTools;
   }
 }
@@ -50,7 +54,9 @@ export function getToolsByCategory(category: 'lsp' | 'ast' | 'all'): GenericTool
 /**
  * Create a Zod schema object from a tool's schema definition
  */
-export function createZodSchema<T extends z.ZodRawShape>(schema: T): z.ZodObject<T> {
+export function createZodSchema<T extends z.ZodRawShape>(
+  schema: T,
+): z.ZodObject<T> {
   return z.object(schema);
 }
 
@@ -61,7 +67,7 @@ export interface SdkToolFormat {
   name: string;
   description: string;
   inputSchema: {
-    type: 'object';
+    type: "object";
     properties: Record<string, unknown>;
     required: string[];
   };
@@ -77,7 +83,7 @@ export function toSdkToolFormat(tool: GenericToolDefinition): SdkToolFormat {
   return {
     name: tool.name,
     description: tool.description,
-    inputSchema: jsonSchema
+    inputSchema: jsonSchema,
   };
 }
 
@@ -85,7 +91,7 @@ export function toSdkToolFormat(tool: GenericToolDefinition): SdkToolFormat {
  * Simple Zod to JSON Schema converter for tool definitions
  */
 function zodToJsonSchema(schema: z.ZodObject<z.ZodRawShape>): {
-  type: 'object';
+  type: "object";
   properties: Record<string, unknown>;
   required: string[];
 } {
@@ -104,9 +110,9 @@ function zodToJsonSchema(schema: z.ZodObject<z.ZodRawShape>): {
   }
 
   return {
-    type: 'object',
+    type: "object",
     properties,
-    required
+    required,
   };
 }
 
@@ -136,24 +142,26 @@ function zodTypeToJsonSchema(zodType: z.ZodTypeAny): Record<string, unknown> {
 
   // Handle basic types
   if (zodType instanceof z.ZodString) {
-    result.type = 'string';
+    result.type = "string";
   } else if (zodType instanceof z.ZodNumber) {
-    result.type = zodType._def.checks?.some((c: { kind: string }) => c.kind === 'int')
-      ? 'integer'
-      : 'number';
+    result.type = zodType._def.checks?.some(
+      (c: { kind: string }) => c.kind === "int",
+    )
+      ? "integer"
+      : "number";
   } else if (zodType instanceof z.ZodBoolean) {
-    result.type = 'boolean';
+    result.type = "boolean";
   } else if (zodType instanceof z.ZodArray) {
-    result.type = 'array';
+    result.type = "array";
     result.items = zodTypeToJsonSchema(zodType._def.type);
   } else if (zodType instanceof z.ZodEnum) {
-    result.type = 'string';
+    result.type = "string";
     result.enum = zodType._def.values;
   } else if (zodType instanceof z.ZodObject) {
     return zodToJsonSchema(zodType);
   } else {
     // Fallback for unknown types
-    result.type = 'string';
+    result.type = "string";
   }
 
   return result;

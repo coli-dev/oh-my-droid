@@ -20982,7 +20982,7 @@ var import_fs8 = require("fs");
 var import_child_process8 = require("child_process");
 var import_fs6 = require("fs");
 var import_path7 = require("path");
-var OmcPaths = {
+var OmdPaths = {
   ROOT: ".omd",
   STATE: ".omd/state",
   SESSIONS: ".omd/state/sessions",
@@ -21023,10 +21023,10 @@ function validatePath(inputPath) {
     throw new Error(`Invalid path: absolute paths not allowed (${inputPath})`);
   }
 }
-function resolveOmcPath(relativePath, worktreeRoot) {
+function resolveOmdPath(relativePath, worktreeRoot) {
   validatePath(relativePath);
   const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-  const omdDir = (0, import_path7.join)(root, OmcPaths.ROOT);
+  const omdDir = (0, import_path7.join)(root, OmdPaths.ROOT);
   const fullPath = (0, import_path7.normalize)((0, import_path7.resolve)(omdDir, relativePath));
   const relativeToRoot = (0, import_path7.relative)(root, fullPath);
   if (relativeToRoot.startsWith("..") || relativeToRoot.startsWith(import_path7.sep + "..")) {
@@ -21039,10 +21039,10 @@ function resolveStatePath(stateName, worktreeRoot) {
     throw new Error("Swarm uses SQLite (swarm.db), not JSON state. Use getStateFilePath from mode-registry instead.");
   }
   const normalizedName = stateName.endsWith("-state") ? stateName : `${stateName}-state`;
-  return resolveOmcPath(`state/${normalizedName}.json`, worktreeRoot);
+  return resolveOmdPath(`state/${normalizedName}.json`, worktreeRoot);
 }
-function ensureOmcDir(relativePath, worktreeRoot) {
-  const fullPath = resolveOmcPath(relativePath, worktreeRoot);
+function ensureOmdDir(relativePath, worktreeRoot) {
+  const fullPath = resolveOmdPath(relativePath, worktreeRoot);
   if (!(0, import_fs6.existsSync)(fullPath)) {
     (0, import_fs6.mkdirSync)(fullPath, { recursive: true });
   }
@@ -21050,11 +21050,11 @@ function ensureOmcDir(relativePath, worktreeRoot) {
 }
 function getWorktreeNotepadPath(worktreeRoot) {
   const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-  return (0, import_path7.join)(root, OmcPaths.NOTEPAD);
+  return (0, import_path7.join)(root, OmdPaths.NOTEPAD);
 }
 function getWorktreeProjectMemoryPath(worktreeRoot) {
   const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-  return (0, import_path7.join)(root, OmcPaths.PROJECT_MEMORY);
+  return (0, import_path7.join)(root, OmdPaths.PROJECT_MEMORY);
 }
 var SESSION_ID_REGEX = /^[a-zA-Z0-9][a-zA-Z0-9_-]{0,255}$/;
 var processSessionId = null;
@@ -21083,16 +21083,16 @@ function resolveSessionStatePath(stateName, sessionId, worktreeRoot) {
     throw new Error("Swarm uses SQLite (swarm.db), not session-scoped JSON state.");
   }
   const normalizedName = stateName.endsWith("-state") ? stateName : `${stateName}-state`;
-  return resolveOmcPath(`state/sessions/${sessionId}/${normalizedName}.json`, worktreeRoot);
+  return resolveOmdPath(`state/sessions/${sessionId}/${normalizedName}.json`, worktreeRoot);
 }
 function getSessionStateDir(sessionId, worktreeRoot) {
   validateSessionId(sessionId);
   const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-  return (0, import_path7.join)(root, OmcPaths.SESSIONS, sessionId);
+  return (0, import_path7.join)(root, OmdPaths.SESSIONS, sessionId);
 }
 function listSessionIds(worktreeRoot) {
   const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-  const sessionsDir = (0, import_path7.join)(root, OmcPaths.SESSIONS);
+  const sessionsDir = (0, import_path7.join)(root, OmdPaths.SESSIONS);
   if (!(0, import_fs6.existsSync)(sessionsDir)) {
     return [];
   }
@@ -21564,7 +21564,7 @@ var stateWriteTool = {
         ensureSessionStateDir(sessionId, root);
         statePath = MODE_CONFIGS[mode] ? getStateFilePath(root, mode, sessionId) : resolveSessionStatePath(mode, sessionId, root);
       } else {
-        ensureOmcDir("state", root);
+        ensureOmdDir("state", root);
         statePath = getStatePath(mode, root);
       }
       const builtState = {};
@@ -22341,7 +22341,7 @@ var notepadWritePriorityTool = {
     const { content, workingDirectory } = args;
     try {
       const root = validateWorkingDirectory(workingDirectory);
-      ensureOmcDir("", root);
+      ensureOmdDir("", root);
       const result = setPriorityContext(root, content);
       if (!result.success) {
         return {
@@ -22384,7 +22384,7 @@ var notepadWriteWorkingTool = {
     const { content, workingDirectory } = args;
     try {
       const root = validateWorkingDirectory(workingDirectory);
-      ensureOmcDir("", root);
+      ensureOmdDir("", root);
       const success = addWorkingMemoryEntry(root, content);
       if (!success) {
         return {
@@ -22421,7 +22421,7 @@ var notepadWriteManualTool = {
     const { content, workingDirectory } = args;
     try {
       const root = validateWorkingDirectory(workingDirectory);
-      ensureOmcDir("", root);
+      ensureOmdDir("", root);
       const success = addManualEntry(root, content);
       if (!success) {
         return {
@@ -22818,7 +22818,7 @@ var projectMemoryWriteTool = {
     const { memory, merge: merge2 = false, workingDirectory } = args;
     try {
       const root = validateWorkingDirectory(workingDirectory);
-      ensureOmcDir("", root);
+      ensureOmdDir("", root);
       let finalMemory;
       if (merge2) {
         const existing = await loadProjectMemory(root);

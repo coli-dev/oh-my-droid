@@ -104,7 +104,7 @@ Sets environment variables for OMD initialization.
 
 **Returns:** Array of environment variable names set.
 
-**Note:** Only works if `process.env.DROID_ENV_FILE` is set.
+**Note:** Only works if `process.env.factory_ENV_FILE` is set.
 
 ```typescript
 const envVars = setEnvironmentVariables();

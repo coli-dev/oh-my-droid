@@ -36,8 +36,8 @@ export function checkHookConflicts() {
                     for (const hook of group.hooks) {
                         if (hook.type === 'command' && hook.command) {
                             const lowerCmd = hook.command.toLowerCase();
-                            const isOmc = lowerCmd.includes('omd') || lowerCmd.includes('oh-my-droid');
-                            conflicts.push({ event, command: hook.command, isOmc });
+                            const isOmd = lowerCmd.includes('omd') || lowerCmd.includes('oh-my-droid');
+                            conflicts.push({ event, command: hook.command, isOmd });
                         }
                     }
                 }
@@ -89,12 +89,12 @@ export function checkAgentsMdStatus() {
  * Check environment flags that affect OMD behavior
  */
 export function checkEnvFlags() {
-    const disableOmc = process.env.DISABLE_OMD === 'true' || process.env.DISABLE_OMD === '1';
+    const disableOmd = process.env.DISABLE_OMD === 'true' || process.env.DISABLE_OMD === '1';
     const skipHooks = [];
     if (process.env.OMD_SKIP_HOOKS) {
         skipHooks.push(...process.env.OMD_SKIP_HOOKS.split(',').map(h => h.trim()));
     }
-    return { disableOmc, skipHooks };
+    return { disableOmd, skipHooks };
 }
 /**
  * Check for unknown fields in config files
@@ -148,8 +148,8 @@ export function runConflictCheck() {
     const envFlags = checkEnvFlags();
     const configIssues = checkConfigIssues();
     // Determine if there are actual conflicts
-    const hasConflicts = hookConflicts.some(h => !h.isOmc) || // Non-OMD hooks present
-        envFlags.disableOmc || // OMD is disabled
+    const hasConflicts = hookConflicts.some(h => !h.isOmd) || // Non-OMD hooks present
+        envFlags.disableOmd || // OMD is disabled
         envFlags.skipHooks.length > 0 || // Hooks are being skipped
         configIssues.unknownFields.length > 0; // Unknown config fields
     // Note: Missing OMD markers is informational (normal for fresh install), not a conflict
@@ -179,7 +179,7 @@ export function formatReport(report, json) {
         lines.push(colors.bold('📌 Hook Configuration'));
         lines.push('');
         for (const hook of report.hookConflicts) {
-            const status = hook.isOmc ? colors.green('✓ OMD') : colors.yellow('⚠ Other');
+            const status = hook.isOmd ? colors.green('✓ OMD') : colors.yellow('⚠ Other');
             lines.push(`  ${hook.event.padEnd(20)} ${status}`);
             lines.push(`    ${colors.gray(hook.command)}`);
         }
@@ -218,7 +218,7 @@ export function formatReport(report, json) {
     // Environment flags
     lines.push(colors.bold('🔧 Environment Flags'));
     lines.push('');
-    if (report.envFlags.disableOmc) {
+    if (report.envFlags.disableOmd) {
         lines.push(`  ${colors.red('✗')} DISABLE_OMD is set - OMD is disabled`);
     }
     else {

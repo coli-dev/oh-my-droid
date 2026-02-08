@@ -8,29 +8,31 @@
  * Usage: node dist/mcp/standalone-server.js
  */
 
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js';
-import { lspTools } from '../tools/lsp-tools.js';
-import { astTools } from '../tools/ast-tools.js';
+} from "@modelcontextprotocol/sdk/types.js";
+import { lspTools } from "../tools/lsp-tools.js";
+import { astTools } from "../tools/ast-tools.js";
 // IMPORTANT: Import from tool.js, NOT index.js!
 // tool.js exports pythonReplTool with wrapped handler returning { content: [...] }
 // index.js exports pythonReplTool with raw handler returning string
-import { pythonReplTool } from '../tools/python-repl/tool.js';
-import { stateTools } from '../tools/state-tools.js';
-import { notepadTools } from '../tools/notepad-tools.js';
-import { memoryTools } from '../tools/memory-tools.js';
-import { z } from 'zod';
+import { pythonReplTool } from "../tools/python-repl/tool.js";
+import { stateTools } from "../tools/state-tools.js";
+import { notepadTools } from "../tools/notepad-tools.js";
+import { memoryTools } from "../tools/memory-tools.js";
+import { z } from "zod";
 
 // Tool interface matching our tool definitions
 interface ToolDef {
   name: string;
   description: string;
   schema: z.ZodRawShape | z.ZodObject<z.ZodRawShape>;
-  handler: (args: unknown) => Promise<{ content: Array<{ type: 'text'; text: string }> }>;
+  handler: (
+    args: unknown,
+  ) => Promise<{ content: Array<{ type: "text"; text: string }> }>;
 }
 
 // Aggregate all tools - AST tools gracefully degrade if @ast-grep/napi is unavailable
@@ -45,7 +47,7 @@ const allTools: ToolDef[] = [
 
 // Convert Zod schema to JSON Schema for MCP
 function zodToJsonSchema(schema: z.ZodRawShape | z.ZodObject<z.ZodRawShape>): {
-  type: 'object';
+  type: "object";
   properties: Record<string, unknown>;
   required: string[];
 } {
@@ -60,16 +62,19 @@ function zodToJsonSchema(schema: z.ZodRawShape | z.ZodObject<z.ZodRawShape>): {
     properties[key] = zodTypeToJsonSchema(zodType);
 
     // Check if required (not optional) - with safety check
-    const isOptional = zodType && typeof zodType.isOptional === 'function' && zodType.isOptional();
+    const isOptional =
+      zodType &&
+      typeof zodType.isOptional === "function" &&
+      zodType.isOptional();
     if (!isOptional) {
       required.push(key);
     }
   }
 
   return {
-    type: 'object',
+    type: "object",
     properties,
-    required
+    required,
   };
 }
 
@@ -78,7 +83,7 @@ function zodTypeToJsonSchema(zodType: z.ZodTypeAny): Record<string, unknown> {
 
   // Safety check for undefined zodType
   if (!zodType || !zodType._def) {
-    return { type: 'string' };
+    return { type: "string" };
   }
 
   // Handle optional wrapper
@@ -101,29 +106,33 @@ function zodTypeToJsonSchema(zodType: z.ZodTypeAny): Record<string, unknown> {
 
   // Handle basic types
   if (zodType instanceof z.ZodString) {
-    result.type = 'string';
+    result.type = "string";
   } else if (zodType instanceof z.ZodNumber) {
-    result.type = zodType._def?.checks?.some((c: { kind: string }) => c.kind === 'int')
-      ? 'integer'
-      : 'number';
+    result.type = zodType._def?.checks?.some(
+      (c: { kind: string }) => c.kind === "int",
+    )
+      ? "integer"
+      : "number";
   } else if (zodType instanceof z.ZodBoolean) {
-    result.type = 'boolean';
+    result.type = "boolean";
   } else if (zodType instanceof z.ZodArray) {
-    result.type = 'array';
-    result.items = zodType._def?.type ? zodTypeToJsonSchema(zodType._def.type) : { type: 'string' };
+    result.type = "array";
+    result.items = zodType._def?.type
+      ? zodTypeToJsonSchema(zodType._def.type)
+      : { type: "string" };
   } else if (zodType instanceof z.ZodEnum) {
-    result.type = 'string';
+    result.type = "string";
     result.enum = zodType._def?.values;
   } else if (zodType instanceof z.ZodObject) {
     return zodToJsonSchema(zodType.shape);
   } else if (zodType instanceof z.ZodRecord) {
     // Handle z.record() - maps to JSON object with additionalProperties
-    result.type = 'object';
+    result.type = "object";
     if (zodType._def?.valueType) {
       result.additionalProperties = zodTypeToJsonSchema(zodType._def.valueType);
     }
   } else {
-    result.type = 'string';
+    result.type = "string";
   }
 
   return result;
@@ -132,20 +141,20 @@ function zodTypeToJsonSchema(zodType: z.ZodTypeAny): Record<string, unknown> {
 // Create the MCP server
 const server = new Server(
   {
-    name: 't',
-    version: '1.0.0',
+    name: "t",
+    version: "1.0.0",
   },
   {
     capabilities: {
       tools: {},
     },
-  }
+  },
 );
 
 // List available tools
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
-    tools: allTools.map(tool => ({
+    tools: allTools.map((tool) => ({
       name: tool.name,
       description: tool.description,
       inputSchema: zodToJsonSchema(tool.schema),
@@ -157,10 +166,10 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
 
-  const tool = allTools.find(t => t.name === name);
+  const tool = allTools.find((t) => t.name === name);
   if (!tool) {
     return {
-      content: [{ type: 'text', text: `Unknown tool: ${name}` }],
+      content: [{ type: "text", text: `Unknown tool: ${name}` }],
       isError: true,
     };
   }
@@ -174,7 +183,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     return {
-      content: [{ type: 'text', text: `Error: ${errorMessage}` }],
+      content: [{ type: "text", text: `Error: ${errorMessage}` }],
       isError: true,
     };
   }
@@ -184,10 +193,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error('OMD Tools MCP Server running on stdio');
+  console.error("OMD Tools MCP Server running on stdio");
 }
 
 main().catch((error) => {
-  console.error('Failed to start server:', error);
+  console.error("Failed to start server:", error);
   process.exit(1);
 });

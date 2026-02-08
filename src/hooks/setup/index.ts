@@ -112,10 +112,10 @@ export function setEnvironmentVariables(): string[] {
   const envVars: string[] = [];
 
   // Check if DROID_ENV_FILE is available
-  if (process.env.DROID_ENV_FILE) {
+  if (process.env.factory_ENV_FILE) {
     try {
       const envContent = `export OMD_INITIALIZED=true\n`;
-      appendFileSync(process.env.DROID_ENV_FILE, envContent);
+      appendFileSync(process.env.factory_ENV_FILE, envContent);
       envVars.push('OMD_INITIALIZED');
     } catch {
       // Silently fail if can't write

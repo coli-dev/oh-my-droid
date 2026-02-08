@@ -124,9 +124,9 @@ describe('mergeDroidMd', () => {
             expect(result).toContain(existingContent);
         });
         it('handles multi-line omdContent', () => {
-            const multiLineOmc = 'Line 1\nLine 2\nLine 3\n\nLine 5';
-            const result = mergeDroidMd(null, multiLineOmc);
-            expect(result).toContain(multiLineOmc);
+            const multiLineOmd = 'Line 1\nLine 2\nLine 3\n\nLine 5';
+            const result = mergeDroidMd(null, multiLineOmd);
+            expect(result).toContain(multiLineOmd);
             expect(result.split('\n').length).toBeGreaterThan(5);
         });
         it('preserves multiple occurrences of marker-like text in user content', () => {
@@ -161,8 +161,8 @@ ${USER_CUSTOMIZATIONS}
 # My Project-Specific Instructions
 - Use TypeScript strict mode
 - Follow company coding standards`;
-            const newOmcContent = '# OMD Config v2.0\nNew instructions with updates.';
-            const result = mergeDroidMd(existingContent, newOmcContent);
+            const newOmdContent = '# OMD Config v2.0\nNew instructions with updates.';
+            const result = mergeDroidMd(existingContent, newOmdContent);
             expect(result).toContain('# OMD Config v2.0');
             expect(result).not.toContain('Old instructions here');
             expect(result).toContain('# My Project-Specific Instructions');

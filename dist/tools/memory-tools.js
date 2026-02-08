@@ -4,7 +4,7 @@
  * Provides tools for reading and writing project memory.
  */
 import { z } from 'zod';
-import { getWorktreeProjectMemoryPath, ensureOmcDir, validateWorkingDirectory, } from '../lib/worktree-paths.js';
+import { getWorktreeProjectMemoryPath, ensureOmdDir, validateWorkingDirectory, } from '../lib/worktree-paths.js';
 import { loadProjectMemory, saveProjectMemory, addCustomNote, addDirective, } from '../hooks/project-memory/index.js';
 // ============================================================================
 // project_memory_read - Read project memory
@@ -84,7 +84,7 @@ export const projectMemoryWriteTool = {
         try {
             const root = validateWorkingDirectory(workingDirectory);
             // Ensure .omd directory exists
-            ensureOmcDir('', root);
+            ensureOmdDir('', root);
             let finalMemory;
             if (merge) {
                 const existing = await loadProjectMemory(root);

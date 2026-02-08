@@ -3,7 +3,7 @@
  */
 export { createExaServer, createContext7Server, createPlaywrightServer, createFilesystemServer, createMemoryServer, getDefaultMcpServers, toSdkMcpFormat } from './servers.js';
 // OMD Tools Server - in-process MCP server for custom tools
-export { omdToolsServer, omdToolNames, getOmcToolNames } from './omd-tools-server.js';
+export { omdToolsServer, omdToolNames, getOmdToolNames } from './omd-tools-server.js';
 // Codex MCP Server - in-process MCP server for Codex CLI integration
 export { codexMcpServer, codexToolNames } from './codex-server.js';
 // Gemini MCP Server - in-process MCP server for Gemini CLI integration

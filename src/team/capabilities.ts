@@ -7,21 +7,28 @@
  * scoring functions for task-worker matching.
  */
 
-import type { WorkerBackend, WorkerCapability } from './types.js';
-import type { UnifiedTeamMember } from './unified-team.js';
+import type { WorkerBackend, WorkerCapability } from "./types.js";
+import type { UnifiedTeamMember } from "./unified-team.js";
 
 /** Default capabilities by worker backend */
 const DEFAULT_CAPABILITIES: Record<WorkerBackend, WorkerCapability[]> = {
-  'droid-native': ['code-edit', 'testing', 'general'],
-  'mcp-codex': ['code-review', 'security-review', 'architecture', 'refactoring'],
-  'mcp-gemini': ['ui-design', 'documentation', 'research', 'code-edit'],
+  "droid-native": ["code-edit", "testing", "general"],
+  "mcp-codex": [
+    "code-review",
+    "security-review",
+    "architecture",
+    "refactoring",
+  ],
+  "mcp-gemini": ["ui-design", "documentation", "research", "code-edit"],
 };
 
 /**
  * Get default capabilities for a worker backend.
  */
-export function getDefaultCapabilities(backend: WorkerBackend): WorkerCapability[] {
-  return [...(DEFAULT_CAPABILITIES[backend] || ['general'])];
+export function getDefaultCapabilities(
+  backend: WorkerBackend,
+): WorkerCapability[] {
+  return [...(DEFAULT_CAPABILITIES[backend] || ["general"])];
 }
 
 /**
@@ -36,7 +43,7 @@ export function getDefaultCapabilities(backend: WorkerBackend): WorkerCapability
  */
 export function scoreWorkerFitness(
   worker: UnifiedTeamMember,
-  requiredCapabilities: WorkerCapability[]
+  requiredCapabilities: WorkerCapability[],
 ): number {
   if (requiredCapabilities.length === 0) return 1.0; // No requirements = everyone fits
 
@@ -46,7 +53,7 @@ export function scoreWorkerFitness(
   for (const req of requiredCapabilities) {
     if (workerCaps.has(req)) {
       score += 1.0;
-    } else if (workerCaps.has('general')) {
+    } else if (workerCaps.has("general")) {
       score += 0.5;
     }
   }
@@ -61,12 +68,15 @@ export function scoreWorkerFitness(
  */
 export function rankWorkersForTask(
   workers: UnifiedTeamMember[],
-  requiredCapabilities: WorkerCapability[]
+  requiredCapabilities: WorkerCapability[],
 ): UnifiedTeamMember[] {
   const scored = workers
-    .map(w => ({ worker: w, score: scoreWorkerFitness(w, requiredCapabilities) }))
-    .filter(s => s.score > 0)
+    .map((w) => ({
+      worker: w,
+      score: scoreWorkerFitness(w, requiredCapabilities),
+    }))
+    .filter((s) => s.score > 0)
     .sort((a, b) => b.score - a.score);
 
-  return scored.map(s => s.worker);
+  return scored.map((s) => s.worker);
 }

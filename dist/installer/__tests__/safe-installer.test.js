@@ -6,9 +6,9 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { existsSync, mkdirSync, writeFileSync, rmSync } from 'fs';
 import { join } from 'path';
 import { homedir } from 'os';
-import { isOmcHook } from '../index.js';
+import { isOmdHook } from '../index.js';
 /**
- * Detect hook conflicts using the real isOmcHook function.
+ * Detect hook conflicts using the real isOmdHook function.
  * Mirrors the install() logic to avoid test duplication.
  */
 function detectConflicts(hooks) {
@@ -16,7 +16,7 @@ function detectConflicts(hooks) {
     for (const [eventType, eventHooks] of Object.entries(hooks)) {
         for (const hookGroup of eventHooks) {
             for (const hook of hookGroup.hooks) {
-                if (hook.type === 'command' && !isOmcHook(hook.command)) {
+                if (hook.type === 'command' && !isOmdHook(hook.command)) {
                     conflicts.push({ eventType, existingCommand: hook.command });
                 }
             }
@@ -26,42 +26,42 @@ function detectConflicts(hooks) {
 }
 const TEST_DROID_DIR = join(homedir(), '.factory-test-safe-installer');
 const TEST_SETTINGS_FILE = join(TEST_DROID_DIR, 'settings.json');
-describe('isOmcHook', () => {
+describe('isOmdHook', () => {
     it('returns true for commands containing "omd"', () => {
-        expect(isOmcHook('node ~/.factory/hooks/omd-hook.mjs')).toBe(true);
-        expect(isOmcHook('bash $HOME/.factory/hooks/omd-detector.sh')).toBe(true);
-        expect(isOmcHook('/usr/bin/omd-tool')).toBe(true);
+        expect(isOmdHook('node ~/.factory/hooks/omd-hook.mjs')).toBe(true);
+        expect(isOmdHook('bash $HOME/.factory/hooks/omd-detector.sh')).toBe(true);
+        expect(isOmdHook('/usr/bin/omd-tool')).toBe(true);
     });
     it('returns true for commands containing "oh-my-droid"', () => {
-        expect(isOmcHook('node ~/.factory/hooks/oh-my-droid-hook.mjs')).toBe(true);
-        expect(isOmcHook('bash $HOME/.factory/hooks/oh-my-droid.sh')).toBe(true);
+        expect(isOmdHook('node ~/.factory/hooks/oh-my-droid-hook.mjs')).toBe(true);
+        expect(isOmdHook('bash $HOME/.factory/hooks/oh-my-droid.sh')).toBe(true);
     });
     it('returns false for commands not containing omd or oh-my-droid', () => {
-        expect(isOmcHook('node ~/.factory/hooks/other-plugin.mjs')).toBe(false);
-        expect(isOmcHook('bash $HOME/.factory/hooks/beads-hook.sh')).toBe(false);
-        expect(isOmcHook('python /usr/bin/custom-hook.py')).toBe(false);
+        expect(isOmdHook('node ~/.factory/hooks/other-plugin.mjs')).toBe(false);
+        expect(isOmdHook('bash $HOME/.factory/hooks/beads-hook.sh')).toBe(false);
+        expect(isOmdHook('python /usr/bin/custom-hook.py')).toBe(false);
     });
     it('is case-insensitive', () => {
-        expect(isOmcHook('node ~/.factory/hooks/OMD-hook.mjs')).toBe(true);
-        expect(isOmcHook('bash $HOME/.factory/hooks/OH-MY-DROID.sh')).toBe(true);
+        expect(isOmdHook('node ~/.factory/hooks/OMD-hook.mjs')).toBe(true);
+        expect(isOmdHook('bash $HOME/.factory/hooks/OH-MY-DROID.sh')).toBe(true);
     });
 });
-describe('isOmcHook detection', () => {
+describe('isOmdHook detection', () => {
     it('detects real OMD hooks correctly', () => {
-        expect(isOmcHook('node ~/.factory/hooks/omd-hook.mjs')).toBe(true);
-        expect(isOmcHook('node ~/.factory/hooks/oh-my-droid-hook.mjs')).toBe(true);
-        expect(isOmcHook('node ~/.factory/hooks/omd-pre-tool-use.mjs')).toBe(true);
-        expect(isOmcHook('/usr/local/bin/omd')).toBe(true);
+        expect(isOmdHook('node ~/.factory/hooks/omd-hook.mjs')).toBe(true);
+        expect(isOmdHook('node ~/.factory/hooks/oh-my-droid-hook.mjs')).toBe(true);
+        expect(isOmdHook('node ~/.factory/hooks/omd-pre-tool-use.mjs')).toBe(true);
+        expect(isOmdHook('/usr/local/bin/omd')).toBe(true);
     });
     it('rejects non-OMD hooks correctly', () => {
-        expect(isOmcHook('eslint --fix')).toBe(false);
-        expect(isOmcHook('prettier --write')).toBe(false);
-        expect(isOmcHook('node custom-hook.mjs')).toBe(false);
-        expect(isOmcHook('node ~/.factory/hooks/beads-hook.mjs')).toBe(false);
+        expect(isOmdHook('eslint --fix')).toBe(false);
+        expect(isOmdHook('prettier --write')).toBe(false);
+        expect(isOmdHook('node custom-hook.mjs')).toBe(false);
+        expect(isOmdHook('node ~/.factory/hooks/beads-hook.mjs')).toBe(false);
     });
     it('uses case-insensitive matching', () => {
-        expect(isOmcHook('node ~/.factory/hooks/OMD-hook.mjs')).toBe(true);
-        expect(isOmcHook('OH-MY-DROID-detector.sh')).toBe(true);
+        expect(isOmdHook('node ~/.factory/hooks/OMD-hook.mjs')).toBe(true);
+        expect(isOmdHook('OH-MY-DROID-detector.sh')).toBe(true);
     });
 });
 describe('Safe Installer - Hook Conflict Detection', () => {

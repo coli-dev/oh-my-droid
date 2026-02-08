@@ -3,7 +3,7 @@
  */
 export { createExaServer, createContext7Server, createPlaywrightServer, createFilesystemServer, createMemoryServer, getDefaultMcpServers, toSdkMcpFormat } from './servers.js';
 export type { McpServerConfig, McpServersConfig } from './servers.js';
-export { omdToolsServer, omdToolNames, getOmcToolNames } from './omd-tools-server.js';
+export { omdToolsServer, omdToolNames, getOmdToolNames } from './omd-tools-server.js';
 export { codexMcpServer, codexToolNames } from './codex-server.js';
 export { geminiMcpServer, geminiToolNames } from './gemini-server.js';
 export { resolveSystemPrompt, buildPromptWithSystemContext, VALID_AGENT_ROLES } from './prompt-injection.js';

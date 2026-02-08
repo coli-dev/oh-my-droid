@@ -151,10 +151,10 @@ describe('mergeDroidMd', () => {
     });
 
     it('handles multi-line omdContent', () => {
-      const multiLineOmc = 'Line 1\nLine 2\nLine 3\n\nLine 5';
-      const result = mergeDroidMd(null, multiLineOmc);
+      const multiLineOmd = 'Line 1\nLine 2\nLine 3\n\nLine 5';
+      const result = mergeDroidMd(null, multiLineOmd);
 
-      expect(result).toContain(multiLineOmc);
+      expect(result).toContain(multiLineOmd);
       expect(result.split('\n').length).toBeGreaterThan(5);
     });
 
@@ -196,8 +196,8 @@ ${USER_CUSTOMIZATIONS}
 - Use TypeScript strict mode
 - Follow company coding standards`;
 
-      const newOmcContent = '# OMD Config v2.0\nNew instructions with updates.';
-      const result = mergeDroidMd(existingContent, newOmcContent);
+      const newOmdContent = '# OMD Config v2.0\nNew instructions with updates.';
+      const result = mergeDroidMd(existingContent, newOmdContent);
 
       expect(result).toContain('# OMD Config v2.0');
       expect(result).not.toContain('Old instructions here');

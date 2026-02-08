@@ -22,7 +22,7 @@ import { createRequire } from "module";
 // via NODE_PATH set in the bundle's startup banner.
 let sgModule: typeof import("@ast-grep/napi") | null = null;
 let sgLoadFailed = false;
-let sgLoadError = '';
+let sgLoadError = "";
 
 async function getSgModule(): Promise<typeof import("@ast-grep/napi") | null> {
   if (sgLoadFailed) {
@@ -31,7 +31,9 @@ async function getSgModule(): Promise<typeof import("@ast-grep/napi") | null> {
   if (!sgModule) {
     try {
       // Use createRequire for CJS-style resolution (respects NODE_PATH)
-      const require = createRequire(import.meta.url || __filename || process.cwd() + '/');
+      const require = createRequire(
+        import.meta.url || __filename || process.cwd() + "/",
+      );
       sgModule = require("@ast-grep/napi") as typeof import("@ast-grep/napi");
     } catch {
       // Fallback to dynamic import for pure ESM environments

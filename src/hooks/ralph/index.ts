@@ -50,7 +50,7 @@ export {
   writePrd,
   findPrdPath,
   getPrdPath,
-  getOmcPrdPath,
+  getOmdPrdPath,
 
   // PRD status & operations
   getPrdStatus,
@@ -89,7 +89,7 @@ export {
   parseProgress,
   findProgressPath,
   getProgressPath,
-  getOmcProgressPath,
+  getOmdProgressPath,
 
   // Progress operations
   initProgress,

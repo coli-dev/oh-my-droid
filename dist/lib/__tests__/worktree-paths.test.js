@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { mkdirSync, rmSync, existsSync } from 'fs';
 import { join } from 'path';
-import { validatePath, resolveOmcPath, resolveStatePath, ensureOmcDir, getWorktreeNotepadPath, getWorktreeProjectMemoryPath, getOmcRoot, resolvePlanPath, resolveResearchPath, resolveLogsPath, resolveWisdomPath, isPathUnderOmc, ensureAllOmcDirs, clearWorktreeCache, getProcessSessionId, resetProcessSessionId, validateSessionId, } from '../worktree-paths.js';
+import { validatePath, resolveOmdPath, resolveStatePath, ensureOmdDir, getWorktreeNotepadPath, getWorktreeProjectMemoryPath, getOmdRoot, resolvePlanPath, resolveResearchPath, resolveLogsPath, resolveWisdomPath, isPathUnderOmd, ensureAllOmdDirs, clearWorktreeCache, getProcessSessionId, resetProcessSessionId, validateSessionId, } from '../worktree-paths.js';
 const TEST_DIR = '/tmp/worktree-paths-test';
 describe('worktree-paths', () => {
     beforeEach(() => {
@@ -27,13 +27,13 @@ describe('worktree-paths', () => {
             expect(() => validatePath('plans/my-plan.md')).not.toThrow();
         });
     });
-    describe('resolveOmcPath', () => {
+    describe('resolveOmdPath', () => {
         it('should resolve paths under .omd directory', () => {
-            const result = resolveOmcPath('state/ralph.json', TEST_DIR);
+            const result = resolveOmdPath('state/ralph.json', TEST_DIR);
             expect(result).toBe(join(TEST_DIR, '.omd', 'state', 'ralph.json'));
         });
         it('should reject paths that escape .omd boundary', () => {
-            expect(() => resolveOmcPath('../secret.txt', TEST_DIR)).toThrow('path traversal');
+            expect(() => resolveOmdPath('../secret.txt', TEST_DIR)).toThrow('path traversal');
         });
     });
     describe('resolveStatePath', () => {
@@ -50,9 +50,9 @@ describe('worktree-paths', () => {
             expect(() => resolveStatePath('swarm-state', TEST_DIR)).toThrow('SQLite');
         });
     });
-    describe('ensureOmcDir', () => {
+    describe('ensureOmdDir', () => {
         it('should create directories under .omd', () => {
-            const result = ensureOmcDir('state', TEST_DIR);
+            const result = ensureOmdDir('state', TEST_DIR);
             expect(result).toBe(join(TEST_DIR, '.omd', 'state'));
             expect(existsSync(result)).toBe(true);
         });
@@ -66,8 +66,8 @@ describe('worktree-paths', () => {
             const result = getWorktreeProjectMemoryPath(TEST_DIR);
             expect(result).toBe(join(TEST_DIR, '.omd', 'project-memory.json'));
         });
-        it('getOmcRoot returns correct path', () => {
-            const result = getOmcRoot(TEST_DIR);
+        it('getOmdRoot returns correct path', () => {
+            const result = getOmdRoot(TEST_DIR);
             expect(result).toBe(join(TEST_DIR, '.omd'));
         });
         it('resolvePlanPath returns correct path', () => {
@@ -87,19 +87,19 @@ describe('worktree-paths', () => {
             expect(result).toBe(join(TEST_DIR, '.omd', 'notepads', 'my-plan'));
         });
     });
-    describe('isPathUnderOmc', () => {
+    describe('isPathUnderOmd', () => {
         it('should return true for paths under .omd', () => {
-            expect(isPathUnderOmc(join(TEST_DIR, '.omd', 'state', 'ralph.json'), TEST_DIR)).toBe(true);
-            expect(isPathUnderOmc(join(TEST_DIR, '.omd'), TEST_DIR)).toBe(true);
+            expect(isPathUnderOmd(join(TEST_DIR, '.omd', 'state', 'ralph.json'), TEST_DIR)).toBe(true);
+            expect(isPathUnderOmd(join(TEST_DIR, '.omd'), TEST_DIR)).toBe(true);
         });
         it('should return false for paths outside .omd', () => {
-            expect(isPathUnderOmc(join(TEST_DIR, 'src', 'file.ts'), TEST_DIR)).toBe(false);
-            expect(isPathUnderOmc('/etc/passwd', TEST_DIR)).toBe(false);
+            expect(isPathUnderOmd(join(TEST_DIR, 'src', 'file.ts'), TEST_DIR)).toBe(false);
+            expect(isPathUnderOmd('/etc/passwd', TEST_DIR)).toBe(false);
         });
     });
-    describe('ensureAllOmcDirs', () => {
+    describe('ensureAllOmdDirs', () => {
         it('should create all standard .omd subdirectories', () => {
-            ensureAllOmcDirs(TEST_DIR);
+            ensureAllOmdDirs(TEST_DIR);
             expect(existsSync(join(TEST_DIR, '.omd'))).toBe(true);
             expect(existsSync(join(TEST_DIR, '.omd', 'state'))).toBe(true);
             expect(existsSync(join(TEST_DIR, '.omd', 'plans'))).toBe(true);

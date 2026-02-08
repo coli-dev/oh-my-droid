@@ -13,7 +13,7 @@
  * ```
  */
 
-import { pathToFileURL } from 'url';
+import { pathToFileURL } from "url";
 import { removeCodeBlocks, getAllKeywords } from "./keyword-detector/index.js";
 import {
   readRalphState,

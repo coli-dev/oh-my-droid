@@ -98,7 +98,7 @@ function readKeychainCredentials() {
             return null;
         const parsed = JSON.parse(result);
         // Handle nested structure (droidAiOauth wrapper)
-        const creds = parsed.droidAiOauth || parsed;
+        const creds = parsed.factoryAiOauth || parsed;
         if (creds.accessToken) {
             return {
                 accessToken: creds.accessToken,
@@ -124,7 +124,7 @@ function readFileCredentials() {
         const content = readFileSync(credPath, 'utf-8');
         const parsed = JSON.parse(content);
         // Handle nested structure (droidAiOauth wrapper)
-        const creds = parsed.droidAiOauth || parsed;
+        const creds = parsed.factoryAiOauth || parsed;
         if (creds.accessToken) {
             return {
                 accessToken: creds.accessToken,
@@ -169,7 +169,7 @@ function validateCredentials(creds) {
  */
 function refreshAccessToken(refreshToken) {
     return new Promise((resolve) => {
-        const clientId = process.env.DROID_CODE_OAUTH_CLIENT_ID || DEFAULT_OAUTH_CLIENT_ID;
+        const clientId = process.env.factory_CODE_OAUTH_CLIENT_ID || DEFAULT_OAUTH_CLIENT_ID;
         const body = new URLSearchParams({
             grant_type: 'refresh_token',
             refresh_token: refreshToken,
@@ -272,13 +272,13 @@ function writeBackCredentials(creds) {
         const content = readFileSync(credPath, 'utf-8');
         const parsed = JSON.parse(content);
         // Update the nested structure
-        if (parsed.droidAiOauth) {
-            parsed.droidAiOauth.accessToken = creds.accessToken;
+        if (parsed.factoryAiOauth) {
+            parsed.factoryAiOauth.accessToken = creds.accessToken;
             if (creds.expiresAt != null) {
-                parsed.droidAiOauth.expiresAt = creds.expiresAt;
+                parsed.factoryAiOauth.expiresAt = creds.expiresAt;
             }
             if (creds.refreshToken) {
-                parsed.droidAiOauth.refreshToken = creds.refreshToken;
+                parsed.factoryAiOauth.refreshToken = creds.refreshToken;
             }
         }
         else {

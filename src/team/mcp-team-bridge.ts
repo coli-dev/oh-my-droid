@@ -7,23 +7,46 @@
  * Polls task files, builds prompts, spawns CLI processes, reports results.
  */
 
-import { spawn, ChildProcess } from 'child_process';
-import { existsSync, readFileSync, openSync, readSync, closeSync } from 'fs';
-import { join } from 'path';
-import { writeFileWithMode, ensureDirWithMode } from './fs-utils.js';
-import type { BridgeConfig, TaskFile, OutboxMessage, HeartbeatData, InboxMessage } from './types.js';
-import { findNextTask, updateTask, readTask, writeTaskFailure, readTaskFailure, isTaskRetryExhausted } from './task-file-ops.js';
+import { spawn, ChildProcess } from "child_process";
+import { existsSync, readFileSync, openSync, readSync, closeSync } from "fs";
+import { join } from "path";
+import { writeFileWithMode, ensureDirWithMode } from "./fs-utils.js";
+import type {
+  BridgeConfig,
+  TaskFile,
+  OutboxMessage,
+  HeartbeatData,
+  InboxMessage,
+} from "./types.js";
 import {
-  readNewInboxMessages, appendOutbox, rotateOutboxIfNeeded, rotateInboxIfNeeded,
-  checkShutdownSignal, deleteShutdownSignal, checkDrainSignal, deleteDrainSignal
-} from './inbox-outbox.js';
-import { unregisterMcpWorker } from './team-registration.js';
-import { writeHeartbeat, deleteHeartbeat } from './heartbeat.js';
-import { killSession } from './tmux-session.js';
-import { logAuditEvent } from './audit-log.js';
-import type { AuditEvent } from './audit-log.js';
-import { getEffectivePermissions, findPermissionViolations, getDefaultPermissions } from './permissions.js';
-import type { WorkerPermissions, PermissionViolation } from './permissions.js';
+  findNextTask,
+  updateTask,
+  readTask,
+  writeTaskFailure,
+  readTaskFailure,
+  isTaskRetryExhausted,
+} from "./task-file-ops.js";
+import {
+  readNewInboxMessages,
+  appendOutbox,
+  rotateOutboxIfNeeded,
+  rotateInboxIfNeeded,
+  checkShutdownSignal,
+  deleteShutdownSignal,
+  checkDrainSignal,
+  deleteDrainSignal,
+} from "./inbox-outbox.js";
+import { unregisterMcpWorker } from "./team-registration.js";
+import { writeHeartbeat, deleteHeartbeat } from "./heartbeat.js";
+import { killSession } from "./tmux-session.js";
+import { logAuditEvent } from "./audit-log.js";
+import type { AuditEvent } from "./audit-log.js";
+import {
+  getEffectivePermissions,
+  findPermissionViolations,
+  getDefaultPermissions,
+} from "./permissions.js";
+import type { WorkerPermissions, PermissionViolation } from "./permissions.js";
 
 /** Simple logger */
 function log(message: string): void {
@@ -32,7 +55,12 @@ function log(message: string): void {
 }
 
 /** Emit audit event, never throws (logging must not crash the bridge) */
-function audit(config: BridgeConfig, eventType: AuditEvent['eventType'], taskId?: string, details?: Record<string, unknown>): void {
+function audit(
+  config: BridgeConfig,
+  eventType: AuditEvent["eventType"],
+  taskId?: string,
+  details?: Record<string, unknown>,
+): void {
   try {
     logAuditEvent(config.workingDirectory, {
       timestamp: new Date().toISOString(),
@@ -42,12 +70,14 @@ function audit(config: BridgeConfig, eventType: AuditEvent['eventType'], taskId?
       taskId,
       details,
     });
-  } catch { /* audit logging must never crash the bridge */ }
+  } catch {
+    /* audit logging must never crash the bridge */
+  }
 }
 
 /** Sleep helper */
 function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
@@ -56,23 +86,32 @@ function sleep(ms: number): Promise<void> {
  * Returns a Set of relative file paths that currently exist or are modified.
  */
 function captureFileSnapshot(cwd: string): Set<string> {
-  const { execSync } = require('child_process') as typeof import('child_process');
+  const { execSync } =
+    require("child_process") as typeof import("child_process");
   const files = new Set<string>();
   try {
     // Get all tracked files that are modified, added, or staged
-    const statusOutput = execSync('git status --porcelain', { cwd, encoding: 'utf-8', timeout: 10000 });
-    for (const line of statusOutput.split('\n')) {
+    const statusOutput = execSync("git status --porcelain", {
+      cwd,
+      encoding: "utf-8",
+      timeout: 10000,
+    });
+    for (const line of statusOutput.split("\n")) {
       if (!line.trim()) continue;
       // Format: "XY filename" or "XY filename -> newname"
       const filePart = line.slice(3);
-      const arrowIdx = filePart.indexOf(' -> ');
-      const fileName = arrowIdx !== -1 ? filePart.slice(arrowIdx + 4) : filePart;
+      const arrowIdx = filePart.indexOf(" -> ");
+      const fileName =
+        arrowIdx !== -1 ? filePart.slice(arrowIdx + 4) : filePart;
       files.add(fileName.trim());
     }
 
     // Get untracked files
-    const untrackedOutput = execSync('git ls-files --others --exclude-standard', { cwd, encoding: 'utf-8', timeout: 10000 });
-    for (const line of untrackedOutput.split('\n')) {
+    const untrackedOutput = execSync(
+      "git ls-files --others --exclude-standard",
+      { cwd, encoding: "utf-8", timeout: 10000 },
+    );
+    for (const line of untrackedOutput.split("\n")) {
       if (line.trim()) files.add(line.trim());
     }
   } catch {
@@ -124,9 +163,9 @@ const INBOX_ROTATION_THRESHOLD = 10 * 1024 * 1024; // 10MB
 /** Build heartbeat data */
 function buildHeartbeat(
   config: BridgeConfig,
-  status: HeartbeatData['status'],
+  status: HeartbeatData["status"],
   currentTaskId: string | null,
-  consecutiveErrors: number
+  consecutiveErrors: number,
 ): HeartbeatData {
   return {
     workerName: config.workerName,
@@ -151,20 +190,24 @@ const MAX_INBOX_CONTEXT_SIZE = 20000;
  * - Escapes XML-like delimiter tags that could confuse the prompt structure
  * @internal
  */
-export function sanitizePromptContent(content: string, maxLength: number): string {
-  let sanitized = content.length > maxLength ? content.slice(0, maxLength) : content;
+export function sanitizePromptContent(
+  content: string,
+  maxLength: number,
+): string {
+  let sanitized =
+    content.length > maxLength ? content.slice(0, maxLength) : content;
   // If truncation split a surrogate pair, remove the dangling high surrogate
   if (sanitized.length > 0) {
     const lastCode = sanitized.charCodeAt(sanitized.length - 1);
-    if (lastCode >= 0xD800 && lastCode <= 0xDBFF) {
+    if (lastCode >= 0xd800 && lastCode <= 0xdbff) {
       sanitized = sanitized.slice(0, -1);
     }
   }
   // Escape XML-like tags that match our prompt delimiters (including tags with attributes)
-  sanitized = sanitized.replace(/<(\/?)(TASK_SUBJECT)[^>]*>/gi, '[$1$2]');
-  sanitized = sanitized.replace(/<(\/?)(TASK_DESCRIPTION)[^>]*>/gi, '[$1$2]');
-  sanitized = sanitized.replace(/<(\/?)(INBOX_MESSAGE)[^>]*>/gi, '[$1$2]');
-  sanitized = sanitized.replace(/<(\/?)(INSTRUCTIONS)[^>]*>/gi, '[$1$2]');
+  sanitized = sanitized.replace(/<(\/?)(TASK_SUBJECT)[^>]*>/gi, "[$1$2]");
+  sanitized = sanitized.replace(/<(\/?)(TASK_DESCRIPTION)[^>]*>/gi, "[$1$2]");
+  sanitized = sanitized.replace(/<(\/?)(INBOX_MESSAGE)[^>]*>/gi, "[$1$2]");
+  sanitized = sanitized.replace(/<(\/?)(INSTRUCTIONS)[^>]*>/gi, "[$1$2]");
   return sanitized;
 }
 
@@ -173,7 +216,7 @@ function formatPromptTemplate(
   sanitizedSubject: string,
   sanitizedDescription: string,
   workingDirectory: string,
-  inboxContext: string
+  inboxContext: string,
 ): string {
   return `CONTEXT: You are an autonomous code executor working on a specific task.
 You have FULL filesystem access within the working directory.
@@ -205,11 +248,15 @@ OUTPUT EXPECTATIONS:
 }
 
 /** Build prompt for CLI from task + inbox messages */
-function buildTaskPrompt(task: TaskFile, messages: InboxMessage[], config: BridgeConfig): string {
+function buildTaskPrompt(
+  task: TaskFile,
+  messages: InboxMessage[],
+  config: BridgeConfig,
+): string {
   const sanitizedSubject = sanitizePromptContent(task.subject, 500);
   let sanitizedDescription = sanitizePromptContent(task.description, 10000);
 
-  let inboxContext = '';
+  let inboxContext = "";
   if (messages.length > 0) {
     let totalInboxSize = 0;
     const inboxParts: string[] = [];
@@ -220,23 +267,44 @@ function buildTaskPrompt(task: TaskFile, messages: InboxMessage[], config: Bridg
       totalInboxSize += part.length;
       inboxParts.push(part);
     }
-    inboxContext = '\nCONTEXT FROM TEAM LEAD:\n' + inboxParts.join('\n') + '\n';
+    inboxContext = "\nCONTEXT FROM TEAM LEAD:\n" + inboxParts.join("\n") + "\n";
   }
 
-  let result = formatPromptTemplate(sanitizedSubject, sanitizedDescription, config.workingDirectory, inboxContext);
+  let result = formatPromptTemplate(
+    sanitizedSubject,
+    sanitizedDescription,
+    config.workingDirectory,
+    inboxContext,
+  );
 
   // Total prompt cap: truncate description portion if over limit
   if (result.length > MAX_PROMPT_SIZE) {
     const overBy = result.length - MAX_PROMPT_SIZE;
-    sanitizedDescription = sanitizedDescription.slice(0, Math.max(0, sanitizedDescription.length - overBy));
+    sanitizedDescription = sanitizedDescription.slice(
+      0,
+      Math.max(0, sanitizedDescription.length - overBy),
+    );
     // Rebuild with truncated description
-    result = formatPromptTemplate(sanitizedSubject, sanitizedDescription, config.workingDirectory, inboxContext);
+    result = formatPromptTemplate(
+      sanitizedSubject,
+      sanitizedDescription,
+      config.workingDirectory,
+      inboxContext,
+    );
 
     // Final safety check: if still over limit after rebuild, hard-trim the description further
     if (result.length > MAX_PROMPT_SIZE) {
       const stillOverBy = result.length - MAX_PROMPT_SIZE;
-      sanitizedDescription = sanitizedDescription.slice(0, Math.max(0, sanitizedDescription.length - stillOverBy));
-      result = formatPromptTemplate(sanitizedSubject, sanitizedDescription, config.workingDirectory, inboxContext);
+      sanitizedDescription = sanitizedDescription.slice(
+        0,
+        Math.max(0, sanitizedDescription.length - stillOverBy),
+      );
+      result = formatPromptTemplate(
+        sanitizedSubject,
+        sanitizedDescription,
+        config.workingDirectory,
+        inboxContext,
+      );
     }
   }
 
@@ -244,8 +312,12 @@ function buildTaskPrompt(task: TaskFile, messages: InboxMessage[], config: Bridg
 }
 
 /** Write prompt to a file for audit trail */
-function writePromptFile(config: BridgeConfig, taskId: string, prompt: string): string {
-  const dir = join(config.workingDirectory, '.omd', 'prompts');
+function writePromptFile(
+  config: BridgeConfig,
+  taskId: string,
+  prompt: string,
+): string {
+  const dir = join(config.workingDirectory, ".omd", "prompts");
   ensureDirWithMode(dir);
   const filename = `team-${config.teamName}-task-${taskId}-${Date.now()}.md`;
   const filePath = join(dir, filename);
@@ -255,31 +327,34 @@ function writePromptFile(config: BridgeConfig, taskId: string, prompt: string): 
 
 /** Get output file path for a task */
 function getOutputPath(config: BridgeConfig, taskId: string): string {
-  const dir = join(config.workingDirectory, '.omd', 'outputs');
+  const dir = join(config.workingDirectory, ".omd", "outputs");
   ensureDirWithMode(dir);
   const suffix = Math.random().toString(36).slice(2, 8);
-  return join(dir, `team-${config.teamName}-task-${taskId}-${Date.now()}-${suffix}.md`);
+  return join(
+    dir,
+    `team-${config.teamName}-task-${taskId}-${Date.now()}-${suffix}.md`,
+  );
 }
 
 /** Read output summary (first 500 chars) */
 function readOutputSummary(outputFile: string): string {
   try {
-    if (!existsSync(outputFile)) return '(no output file)';
+    if (!existsSync(outputFile)) return "(no output file)";
     const buf = Buffer.alloc(1024);
-    const fd = openSync(outputFile, 'r');
+    const fd = openSync(outputFile, "r");
     try {
       const bytesRead = readSync(fd, buf, 0, 1024, 0);
-      if (bytesRead === 0) return '(empty output)';
-      const content = buf.toString('utf-8', 0, bytesRead);
+      if (bytesRead === 0) return "(empty output)";
+      const content = buf.toString("utf-8", 0, bytesRead);
       if (content.length > 500) {
-        return content.slice(0, 500) + '... (truncated)';
+        return content.slice(0, 500) + "... (truncated)";
       }
       return content;
     } finally {
       closeSync(fd);
     }
   } catch {
-    return '(error reading output)';
+    return "(error reading output)";
   }
 }
 
@@ -288,42 +363,51 @@ const MAX_CODEX_OUTPUT_SIZE = 1024 * 1024;
 
 /** Parse Codex JSONL output to extract text responses */
 function parseCodexOutput(output: string): string {
-  const lines = output.trim().split('\n').filter(l => l.trim());
+  const lines = output
+    .trim()
+    .split("\n")
+    .filter((l) => l.trim());
   const messages: string[] = [];
   let totalSize = 0;
 
   for (const line of lines) {
     if (totalSize >= MAX_CODEX_OUTPUT_SIZE) {
-      messages.push('[output truncated]');
+      messages.push("[output truncated]");
       break;
     }
     try {
       const event = JSON.parse(line);
-      if (event.type === 'item.completed' && event.item?.type === 'agent_message' && event.item.text) {
+      if (
+        event.type === "item.completed" &&
+        event.item?.type === "agent_message" &&
+        event.item.text
+      ) {
         messages.push(event.item.text);
         totalSize += event.item.text.length;
       }
-      if (event.type === 'message' && event.content) {
-        if (typeof event.content === 'string') {
+      if (event.type === "message" && event.content) {
+        if (typeof event.content === "string") {
           messages.push(event.content);
           totalSize += event.content.length;
         } else if (Array.isArray(event.content)) {
           for (const part of event.content) {
-            if (part.type === 'text' && part.text) {
+            if (part.type === "text" && part.text) {
               messages.push(part.text);
               totalSize += part.text.length;
             }
           }
         }
       }
-      if (event.type === 'output_text' && event.text) {
+      if (event.type === "output_text" && event.text) {
         messages.push(event.text);
         totalSize += event.text.length;
       }
-    } catch { /* skip non-JSON lines */ }
+    } catch {
+      /* skip non-JSON lines */
+    }
   }
 
-  return messages.join('\n') || output;
+  return messages.join("\n") || output;
 }
 
 /**
@@ -331,65 +415,66 @@ function parseCodexOutput(output: string): string {
  * This allows the bridge to kill the child on shutdown while still awaiting the result.
  */
 function spawnCliProcess(
-  provider: 'codex' | 'gemini',
+  provider: "codex" | "gemini",
   prompt: string,
   model: string | undefined,
   cwd: string,
-  timeoutMs: number
+  timeoutMs: number,
 ): { child: ChildProcess; result: Promise<string> } {
   let args: string[];
   let cmd: string;
 
-  if (provider === 'codex') {
-    cmd = 'codex';
-    args = ['exec', '-m', model || 'gpt-5.3-codex', '--json', '--full-auto'];
+  if (provider === "codex") {
+    cmd = "codex";
+    args = ["exec", "-m", model || "gpt-5.3-codex", "--json", "--full-auto"];
   } else {
-    cmd = 'gemini';
-    args = ['--yolo'];
-    if (model) args.push('--model', model);
+    cmd = "gemini";
+    args = ["--yolo"];
+    if (model) args.push("--model", model);
   }
 
   const child = spawn(cmd, args, {
-    stdio: ['pipe', 'pipe', 'pipe'],
+    stdio: ["pipe", "pipe", "pipe"],
     cwd,
-    ...(process.platform === 'win32' ? { shell: true } : {})
+    ...(process.platform === "win32" ? { shell: true } : {}),
   });
 
   const result = new Promise<string>((resolve, reject) => {
-    let stdout = '';
-    let stderr = '';
+    let stdout = "";
+    let stderr = "";
     let settled = false;
 
     const timeoutHandle = setTimeout(() => {
       if (!settled) {
         settled = true;
-        child.kill('SIGTERM');
+        child.kill("SIGTERM");
         reject(new Error(`CLI timed out after ${timeoutMs}ms`));
       }
     }, timeoutMs);
 
-    child.stdout?.on('data', (data: Buffer) => {
+    child.stdout?.on("data", (data: Buffer) => {
       if (stdout.length < MAX_BUFFER_SIZE) stdout += data.toString();
     });
-    child.stderr?.on('data', (data: Buffer) => {
+    child.stderr?.on("data", (data: Buffer) => {
       if (stderr.length < MAX_BUFFER_SIZE) stderr += data.toString();
     });
 
-    child.on('close', (code) => {
+    child.on("close", (code) => {
       if (!settled) {
         settled = true;
         clearTimeout(timeoutHandle);
         if (code === 0) {
-          const response = provider === 'codex' ? parseCodexOutput(stdout) : stdout.trim();
+          const response =
+            provider === "codex" ? parseCodexOutput(stdout) : stdout.trim();
           resolve(response);
         } else {
-          const detail = stderr || stdout.trim() || 'No output';
+          const detail = stderr || stdout.trim() || "No output";
           reject(new Error(`CLI exited with code ${code}: ${detail}`));
         }
       }
     });
 
-    child.on('error', (err) => {
+    child.on("error", (err) => {
       if (!settled) {
         settled = true;
         clearTimeout(timeoutHandle);
@@ -398,11 +483,11 @@ function spawnCliProcess(
     });
 
     // Write prompt via stdin
-    child.stdin?.on('error', (err) => {
+    child.stdin?.on("error", (err) => {
       if (!settled) {
         settled = true;
         clearTimeout(timeoutHandle);
-        child.kill('SIGTERM');
+        child.kill("SIGTERM");
         reject(new Error(`Stdin write error: ${err.message}`));
       }
     });
@@ -417,7 +502,7 @@ function spawnCliProcess(
 async function handleShutdown(
   config: BridgeConfig,
   signal: { requestId: string; reason: string },
-  activeChild: ChildProcess | null
+  activeChild: ChildProcess | null,
 ): Promise<void> {
   const { teamName, workerName, workingDirectory } = config;
 
@@ -426,28 +511,32 @@ async function handleShutdown(
   // 1. Kill running CLI subprocess
   if (activeChild && !activeChild.killed) {
     let closed = false;
-    activeChild.on('close', () => { closed = true; });
-    activeChild.kill('SIGTERM');
+    activeChild.on("close", () => {
+      closed = true;
+    });
+    activeChild.kill("SIGTERM");
     await Promise.race([
-      new Promise<void>(resolve => activeChild!.on('close', () => resolve())),
-      sleep(5000)
+      new Promise<void>((resolve) => activeChild!.on("close", () => resolve())),
+      sleep(5000),
     ]);
     if (!closed) {
-      activeChild.kill('SIGKILL');
+      activeChild.kill("SIGKILL");
     }
   }
 
   // 2. Write shutdown ack to outbox
   appendOutbox(teamName, workerName, {
-    type: 'shutdown_ack',
+    type: "shutdown_ack",
     requestId: signal.requestId,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 
   // 3. Unregister from config.json / shadow registry
   try {
     unregisterMcpWorker(teamName, workerName, workingDirectory);
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
 
   // 4. Clean up signal file
   deleteShutdownSignal(teamName, workerName);
@@ -457,13 +546,15 @@ async function handleShutdown(
 
   // 6. Outbox/inbox preserved for lead to read final ack
 
-  audit(config, 'bridge_shutdown');
+  audit(config, "bridge_shutdown");
   log(`[bridge] Shutdown complete. Goodbye.`);
 
   // 7. Kill own tmux session (terminates this process)
   try {
     killSession(teamName, workerName);
-  } catch { /* ignore — this kills us */ }
+  } catch {
+    /* ignore — this kills us */
+  }
 }
 
 /** Main bridge daemon entry point */
@@ -475,14 +566,17 @@ export async function runBridge(config: BridgeConfig): Promise<void> {
   let activeChild: ChildProcess | null = null;
 
   log(`[bridge] ${workerName}@${teamName} starting (${provider})`);
-  audit(config, 'bridge_start');
+  audit(config, "bridge_start");
 
   while (true) {
     try {
       // --- 1. Check shutdown signal ---
       const shutdown = checkShutdownSignal(teamName, workerName);
       if (shutdown) {
-        audit(config, 'shutdown_received', undefined, { requestId: shutdown.requestId, reason: shutdown.reason });
+        audit(config, "shutdown_received", undefined, {
+          requestId: shutdown.requestId,
+          reason: shutdown.reason,
+        });
         await handleShutdown(config, shutdown, activeChild);
         break;
       }
@@ -493,20 +587,28 @@ export async function runBridge(config: BridgeConfig): Promise<void> {
         // Drain = finish current work, don't pick up new tasks
         // Since we're at the top of the loop (no task executing), shut down now
         log(`[bridge] Drain signal received: ${drain.reason}`);
-        audit(config, 'shutdown_received', undefined, { requestId: drain.requestId, reason: drain.reason, type: 'drain' });
+        audit(config, "shutdown_received", undefined, {
+          requestId: drain.requestId,
+          reason: drain.reason,
+          type: "drain",
+        });
 
         // Write drain ack to outbox
         appendOutbox(teamName, workerName, {
-          type: 'shutdown_ack',
+          type: "shutdown_ack",
           requestId: drain.requestId,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
 
         // Clean up drain signal
         deleteDrainSignal(teamName, workerName);
 
         // Use the same handleShutdown for cleanup
-        await handleShutdown(config, { requestId: drain.requestId, reason: `drain: ${drain.reason}` }, null);
+        await handleShutdown(
+          config,
+          { requestId: drain.requestId, reason: `drain: ${drain.reason}` },
+          null,
+        );
         break;
       }
 
@@ -514,21 +616,27 @@ export async function runBridge(config: BridgeConfig): Promise<void> {
       if (consecutiveErrors >= config.maxConsecutiveErrors) {
         if (!quarantineNotified) {
           appendOutbox(teamName, workerName, {
-            type: 'error',
+            type: "error",
             message: `Self-quarantined after ${consecutiveErrors} consecutive errors. Awaiting lead intervention or shutdown.`,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           });
-          audit(config, 'worker_quarantined', undefined, { consecutiveErrors });
+          audit(config, "worker_quarantined", undefined, { consecutiveErrors });
           quarantineNotified = true;
         }
-        writeHeartbeat(workingDirectory, buildHeartbeat(config, 'quarantined', null, consecutiveErrors));
+        writeHeartbeat(
+          workingDirectory,
+          buildHeartbeat(config, "quarantined", null, consecutiveErrors),
+        );
         // Stay alive but stop processing — just check shutdown signals
         await sleep(config.pollIntervalMs * 3);
         continue;
       }
 
       // --- 3. Write heartbeat ---
-      writeHeartbeat(workingDirectory, buildHeartbeat(config, 'polling', null, consecutiveErrors));
+      writeHeartbeat(
+        workingDirectory,
+        buildHeartbeat(config, "polling", null, consecutiveErrors),
+      );
 
       // --- 4. Read inbox ---
       const messages = readNewInboxMessages(teamName, workerName);
@@ -540,16 +648,22 @@ export async function runBridge(config: BridgeConfig): Promise<void> {
         idleNotified = false;
 
         // --- 6. Mark in_progress ---
-        updateTask(teamName, task.id, { status: 'in_progress' });
-        audit(config, 'task_claimed', task.id);
-        audit(config, 'task_started', task.id);
-        writeHeartbeat(workingDirectory, buildHeartbeat(config, 'executing', task.id, consecutiveErrors));
+        updateTask(teamName, task.id, { status: "in_progress" });
+        audit(config, "task_claimed", task.id);
+        audit(config, "task_started", task.id);
+        writeHeartbeat(
+          workingDirectory,
+          buildHeartbeat(config, "executing", task.id, consecutiveErrors),
+        );
 
         // Re-check shutdown before spawning CLI (prevents race #11)
         const shutdownBeforeSpawn = checkShutdownSignal(teamName, workerName);
         if (shutdownBeforeSpawn) {
-          audit(config, 'shutdown_received', task.id, { requestId: shutdownBeforeSpawn.requestId, reason: shutdownBeforeSpawn.reason });
-          updateTask(teamName, task.id, { status: 'pending' }); // Revert
+          audit(config, "shutdown_received", task.id, {
+            requestId: shutdownBeforeSpawn.requestId,
+            reason: shutdownBeforeSpawn.reason,
+          });
+          updateTask(teamName, task.id, { status: "pending" }); // Revert
           await handleShutdown(config, shutdownBeforeSpawn, null);
           return;
         }
@@ -564,17 +678,24 @@ export async function runBridge(config: BridgeConfig): Promise<void> {
         // --- 8. Execute CLI (with permission enforcement) ---
         try {
           // 8a. Capture pre-execution file snapshot (for permission enforcement)
-          const enforcementMode = config.permissionEnforcement || 'off';
+          const enforcementMode = config.permissionEnforcement || "off";
           let preSnapshot: Set<string> | null = null;
-          if (enforcementMode !== 'off') {
+          if (enforcementMode !== "off") {
             preSnapshot = captureFileSnapshot(workingDirectory);
           }
 
           const { child, result } = spawnCliProcess(
-            provider, prompt, config.model, workingDirectory, config.taskTimeoutMs
+            provider,
+            prompt,
+            config.model,
+            workingDirectory,
+            config.taskTimeoutMs,
           );
           activeChild = child;
-          audit(config, 'cli_spawned', task.id, { provider, model: config.model });
+          audit(config, "cli_spawned", task.id, {
+            provider,
+            model: config.model,
+          });
 
           const response = await result;
           activeChild = null;
@@ -584,31 +705,38 @@ export async function runBridge(config: BridgeConfig): Promise<void> {
 
           // 8b. Post-execution permission check
           let violations: PermissionViolation[] = [];
-          if (enforcementMode !== 'off' && preSnapshot) {
+          if (enforcementMode !== "off" && preSnapshot) {
             const postSnapshot = captureFileSnapshot(workingDirectory);
             const changedPaths = diffSnapshots(preSnapshot, postSnapshot);
 
             if (changedPaths.length > 0) {
               const effectivePerms = buildEffectivePermissions(config);
-              violations = findPermissionViolations(changedPaths, effectivePerms, workingDirectory);
+              violations = findPermissionViolations(
+                changedPaths,
+                effectivePerms,
+                workingDirectory,
+              );
             }
           }
 
           // 8c. Handle violations
           if (violations.length > 0) {
             const violationSummary = violations
-              .map(v => `  - ${v.path}: ${v.reason}`)
-              .join('\n');
+              .map((v) => `  - ${v.path}: ${v.reason}`)
+              .join("\n");
 
-            if (enforcementMode === 'enforce') {
+            if (enforcementMode === "enforce") {
               // ENFORCE: fail the task, audit, report error
-              audit(config, 'permission_violation', task.id, {
-                violations: violations.map(v => ({ path: v.path, reason: v.reason })),
-                mode: 'enforce',
+              audit(config, "permission_violation", task.id, {
+                violations: violations.map((v) => ({
+                  path: v.path,
+                  reason: v.reason,
+                })),
+                mode: "enforce",
               });
 
               updateTask(teamName, task.id, {
-                status: 'completed',
+                status: "completed",
                 metadata: {
                   ...(task.metadata || {}),
                   error: `Permission violations detected (enforce mode)`,
@@ -618,52 +746,61 @@ export async function runBridge(config: BridgeConfig): Promise<void> {
               });
 
               appendOutbox(teamName, workerName, {
-                type: 'error',
+                type: "error",
                 taskId: task.id,
                 error: `Permission violation (enforce mode):\n${violationSummary}`,
                 timestamp: new Date().toISOString(),
               });
 
-              log(`[bridge] Task ${task.id} failed: permission violations (enforce mode)`);
+              log(
+                `[bridge] Task ${task.id} failed: permission violations (enforce mode)`,
+              );
               consecutiveErrors = 0; // Not a CLI error, don't count toward quarantine
               // Skip normal completion flow
             } else {
               // AUDIT: log warning but allow task to succeed
-              audit(config, 'permission_audit', task.id, {
-                violations: violations.map(v => ({ path: v.path, reason: v.reason })),
-                mode: 'audit',
+              audit(config, "permission_audit", task.id, {
+                violations: violations.map((v) => ({
+                  path: v.path,
+                  reason: v.reason,
+                })),
+                mode: "audit",
               });
 
-              log(`[bridge] Permission audit warning for task ${task.id}:\n${violationSummary}`);
+              log(
+                `[bridge] Permission audit warning for task ${task.id}:\n${violationSummary}`,
+              );
 
               // Continue with normal completion
-              updateTask(teamName, task.id, { status: 'completed' });
-              audit(config, 'task_completed', task.id);
+              updateTask(teamName, task.id, { status: "completed" });
+              audit(config, "task_completed", task.id);
               consecutiveErrors = 0;
 
               const summary = readOutputSummary(outputFile);
               appendOutbox(teamName, workerName, {
-                type: 'task_complete',
+                type: "task_complete",
                 taskId: task.id,
                 summary: `${summary}\n[AUDIT WARNING: ${violations.length} permission violation(s) detected]`,
                 timestamp: new Date().toISOString(),
               });
 
-              log(`[bridge] Task ${task.id} completed (with ${violations.length} audit warning(s))`);
+              log(
+                `[bridge] Task ${task.id} completed (with ${violations.length} audit warning(s))`,
+              );
             }
           } else {
             // --- 9. Mark complete (no violations) ---
-            updateTask(teamName, task.id, { status: 'completed' });
-            audit(config, 'task_completed', task.id);
+            updateTask(teamName, task.id, { status: "completed" });
+            audit(config, "task_completed", task.id);
             consecutiveErrors = 0;
 
             // --- 10. Report to lead ---
             const summary = readOutputSummary(outputFile);
             appendOutbox(teamName, workerName, {
-              type: 'task_complete',
+              type: "task_complete",
               taskId: task.id,
               summary,
-              timestamp: new Date().toISOString()
+              timestamp: new Date().toISOString(),
             });
 
             log(`[bridge] Task ${task.id} completed`);
@@ -676,10 +813,10 @@ export async function runBridge(config: BridgeConfig): Promise<void> {
           const errorMsg = (err as Error).message;
 
           // Audit timeout vs other errors
-          if (errorMsg.includes('timed out')) {
-            audit(config, 'cli_timeout', task.id, { error: errorMsg });
+          if (errorMsg.includes("timed out")) {
+            audit(config, "cli_timeout", task.id, { error: errorMsg });
           } else {
-            audit(config, 'cli_error', task.id, { error: errorMsg });
+            audit(config, "cli_error", task.id, { error: errorMsg });
           }
 
           writeTaskFailure(teamName, task.id, errorMsg);
@@ -691,7 +828,7 @@ export async function runBridge(config: BridgeConfig): Promise<void> {
           if (isTaskRetryExhausted(teamName, task.id, config.maxRetries)) {
             // Permanently fail: mark completed with error metadata
             updateTask(teamName, task.id, {
-              status: 'completed',
+              status: "completed",
               metadata: {
                 ...(task.metadata || {}),
                 error: errorMsg,
@@ -700,41 +837,48 @@ export async function runBridge(config: BridgeConfig): Promise<void> {
               },
             });
 
-            audit(config, 'task_permanently_failed', task.id, { error: errorMsg, attempts: attempt });
+            audit(config, "task_permanently_failed", task.id, {
+              error: errorMsg,
+              attempts: attempt,
+            });
 
             appendOutbox(teamName, workerName, {
-              type: 'error',
+              type: "error",
               taskId: task.id,
               error: `Task permanently failed after ${attempt} attempts: ${errorMsg}`,
-              timestamp: new Date().toISOString()
+              timestamp: new Date().toISOString(),
             });
 
-            log(`[bridge] Task ${task.id} permanently failed after ${attempt} attempts`);
+            log(
+              `[bridge] Task ${task.id} permanently failed after ${attempt} attempts`,
+            );
           } else {
             // Retry: set back to pending
-            updateTask(teamName, task.id, { status: 'pending' });
+            updateTask(teamName, task.id, { status: "pending" });
 
-            audit(config, 'task_failed', task.id, { error: errorMsg, attempt });
+            audit(config, "task_failed", task.id, { error: errorMsg, attempt });
 
             appendOutbox(teamName, workerName, {
-              type: 'task_failed',
+              type: "task_failed",
               taskId: task.id,
               error: `${errorMsg} (attempt ${attempt})`,
-              timestamp: new Date().toISOString()
+              timestamp: new Date().toISOString(),
             });
 
-            log(`[bridge] Task ${task.id} failed (attempt ${attempt}): ${errorMsg}`);
+            log(
+              `[bridge] Task ${task.id} failed (attempt ${attempt}): ${errorMsg}`,
+            );
           }
         }
       } else {
         // --- No tasks available ---
         if (!idleNotified) {
           appendOutbox(teamName, workerName, {
-            type: 'idle',
-            message: 'All assigned tasks complete. Standing by.',
-            timestamp: new Date().toISOString()
+            type: "idle",
+            message: "All assigned tasks complete. Standing by.",
+            timestamp: new Date().toISOString(),
           });
-          audit(config, 'worker_idle');
+          audit(config, "worker_idle");
           idleNotified = true;
         }
       }

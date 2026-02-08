@@ -7,13 +7,13 @@
  * to provide a single coherent view of all team members.
  */
 
-import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { homedir } from 'node:os';
-import type { WorkerBackend, WorkerCapability } from './types.js';
-import { listMcpWorkers } from './team-registration.js';
-import { readHeartbeat, isWorkerAlive } from './heartbeat.js';
-import { getDefaultCapabilities } from './capabilities.js';
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { homedir } from "node:os";
+import type { WorkerBackend, WorkerCapability } from "./types.js";
+import { listMcpWorkers } from "./team-registration.js";
+import { readHeartbeat, isWorkerAlive } from "./heartbeat.js";
+import { getDefaultCapabilities } from "./capabilities.js";
 
 export interface UnifiedTeamMember {
   name: string;
@@ -22,7 +22,7 @@ export interface UnifiedTeamMember {
   model: string;
   capabilities: WorkerCapability[];
   joinedAt: number;
-  status: 'active' | 'idle' | 'dead' | 'quarantined' | 'unknown';
+  status: "active" | "idle" | "dead" | "quarantined" | "unknown";
   currentTaskId: string | null;
 }
 
@@ -31,54 +31,68 @@ export interface UnifiedTeamMember {
  */
 export function getTeamMembers(
   teamName: string,
-  workingDirectory: string
+  workingDirectory: string,
 ): UnifiedTeamMember[] {
   const members: UnifiedTeamMember[] = [];
 
   // 1. Read Droid native members from config.json
   try {
-    const configPath = join(homedir(), '.factory', 'teams', teamName, 'config.json');
+    const configPath = join(
+      homedir(),
+      ".factory",
+      "teams",
+      teamName,
+      "config.json",
+    );
     if (existsSync(configPath)) {
-      const config = JSON.parse(readFileSync(configPath, 'utf-8'));
+      const config = JSON.parse(readFileSync(configPath, "utf-8"));
       if (Array.isArray(config.members)) {
         for (const member of config.members) {
           // Skip MCP workers (they'll be handled below)
-          if (member.backendType === 'tmux') continue;
+          if (member.backendType === "tmux") continue;
 
           members.push({
-            name: member.name || 'unknown',
-            agentId: member.agentId || '',
-            backend: 'droid-native',
-            model: member.model || 'unknown',
-            capabilities: getDefaultCapabilities('droid-native'),
+            name: member.name || "unknown",
+            agentId: member.agentId || "",
+            backend: "droid-native",
+            model: member.model || "unknown",
+            capabilities: getDefaultCapabilities("droid-native"),
             joinedAt: member.joinedAt || 0,
-            status: 'active', // Droid native members are managed by CC
+            status: "active", // Droid native members are managed by CC
             currentTaskId: null,
           });
         }
       }
     }
-  } catch { /* graceful degradation - config may not exist */ }
+  } catch {
+    /* graceful degradation - config may not exist */
+  }
 
   // 2. Read MCP workers from shadow registry + heartbeat
   try {
     const mcpWorkers = listMcpWorkers(teamName, workingDirectory);
     for (const worker of mcpWorkers) {
       const heartbeat = readHeartbeat(workingDirectory, teamName, worker.name);
-      const alive = isWorkerAlive(workingDirectory, teamName, worker.name, 60000);
+      const alive = isWorkerAlive(
+        workingDirectory,
+        teamName,
+        worker.name,
+        60000,
+      );
 
       // Determine status from heartbeat
-      let status: UnifiedTeamMember['status'] = 'unknown';
+      let status: UnifiedTeamMember["status"] = "unknown";
       if (heartbeat) {
-        if (heartbeat.status === 'quarantined') status = 'quarantined';
-        else if (heartbeat.status === 'executing') status = 'active';
-        else if (heartbeat.status === 'polling') status = 'idle';
-        else status = heartbeat.status as UnifiedTeamMember['status'];
+        if (heartbeat.status === "quarantined") status = "quarantined";
+        else if (heartbeat.status === "executing") status = "active";
+        else if (heartbeat.status === "polling") status = "idle";
+        else status = heartbeat.status as UnifiedTeamMember["status"];
       }
-      if (!alive) status = 'dead';
+      if (!alive) status = "dead";
 
       // Determine backend and default capabilities
-      const backend: WorkerBackend = worker.agentType === 'mcp-gemini' ? 'mcp-gemini' : 'mcp-codex';
+      const backend: WorkerBackend =
+        worker.agentType === "mcp-gemini" ? "mcp-gemini" : "mcp-codex";
       const capabilities = getDefaultCapabilities(backend);
 
       members.push({
@@ -92,7 +106,9 @@ export function getTeamMembers(
         currentTaskId: heartbeat?.currentTaskId ?? null,
       });
     }
-  } catch { /* graceful degradation */ }
+  } catch {
+    /* graceful degradation */
+  }
 
   return members;
 }

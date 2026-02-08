@@ -62,7 +62,7 @@ describe('Multi-Model MCP Integration', () => {
             const mcp = await import('../mcp/index.js');
             expect(mcp.omdToolsServer).toBeDefined();
             expect(mcp.omdToolNames).toBeDefined();
-            expect(mcp.getOmcToolNames).toBeDefined();
+            expect(mcp.getOmdToolNames).toBeDefined();
         });
     });
 });

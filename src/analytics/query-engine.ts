@@ -1,11 +1,11 @@
-import { getTokenTracker } from './token-tracker.js';
-import { getSessionManager } from './session-manager.js';
-import { getMetricsCollector, aggregators } from './metrics-collector.js';
-import { calculateCost } from './cost-estimator.js';
-import { getTokscaleAdapter, TokscaleAdapter } from './tokscale-adapter.js';
-import * as fs from 'fs/promises';
-import * as path from 'path';
-import { homedir } from 'os';
+import { getTokenTracker } from "./token-tracker.js";
+import { getSessionManager } from "./session-manager.js";
+import { getMetricsCollector, aggregators } from "./metrics-collector.js";
+import { calculateCost } from "./cost-estimator.js";
+import { getTokscaleAdapter, TokscaleAdapter } from "./tokscale-adapter.js";
+import * as fs from "fs/promises";
+import * as path from "path";
+import { homedir } from "os";
 
 export interface TimeRange {
   start: string;
@@ -17,7 +17,7 @@ export interface CostReport {
   byAgent: Record<string, number>;
   byModel: Record<string, number>;
   byDay?: Record<string, number>;
-  period: 'daily' | 'weekly' | 'monthly';
+  period: "daily" | "weekly" | "monthly";
   range: TimeRange;
 }
 
@@ -29,7 +29,9 @@ export interface UsagePattern {
 }
 
 export class QueryEngine {
-  async getCostReport(period: 'daily' | 'weekly' | 'monthly'): Promise<CostReport> {
+  async getCostReport(
+    period: "daily" | "weekly" | "monthly",
+  ): Promise<CostReport> {
     const adapter = await getTokscaleAdapter();
 
     if (adapter.isAvailable && adapter.getReport) {
@@ -42,7 +44,7 @@ export class QueryEngine {
 
   private async getCostReportViaTokscale(
     adapter: TokscaleAdapter,
-    period: 'daily' | 'weekly' | 'monthly'
+    period: "daily" | "weekly" | "monthly",
   ): Promise<CostReport> {
     const range = this.calculateTimeRange(period);
 
@@ -63,7 +65,7 @@ export class QueryEngine {
         byModel,
         byDay: {},
         period,
-        range
+        range,
       };
     } catch (error) {
       // If tokscale fails, fall back to legacy
@@ -95,13 +97,23 @@ export class QueryEngine {
   //   return entries;
   // }
 
-  private async getCostReportLegacy(period: 'daily' | 'weekly' | 'monthly'): Promise<CostReport> {
+  private async getCostReportLegacy(
+    period: "daily" | "weekly" | "monthly",
+  ): Promise<CostReport> {
     const range = this.calculateTimeRange(period);
-    const tokenLogPath = path.join(homedir(), '.omd', 'state', 'token-tracking.jsonl');
+    const tokenLogPath = path.join(
+      homedir(),
+      ".omd",
+      "state",
+      "token-tracking.jsonl",
+    );
 
     try {
-      const content = await fs.readFile(tokenLogPath, 'utf-8');
-      const lines = content.trim().split('\n').filter(l => l.length > 0);
+      const content = await fs.readFile(tokenLogPath, "utf-8");
+      const lines = content
+        .trim()
+        .split("\n")
+        .filter((l) => l.length > 0);
 
       let totalCost = 0;
       const byAgent: Record<string, number> = {};
@@ -122,21 +134,23 @@ export class QueryEngine {
           inputTokens: record.inputTokens,
           outputTokens: record.outputTokens,
           cacheCreationTokens: record.cacheCreationTokens,
-          cacheReadTokens: record.cacheReadTokens
+          cacheReadTokens: record.cacheReadTokens,
         });
 
         totalCost += cost.totalCost;
 
         // Aggregate by agent
         if (record.agentName) {
-          byAgent[record.agentName] = (byAgent[record.agentName] || 0) + cost.totalCost;
+          byAgent[record.agentName] =
+            (byAgent[record.agentName] || 0) + cost.totalCost;
         }
 
         // Aggregate by model
-        byModel[record.modelName] = (byModel[record.modelName] || 0) + cost.totalCost;
+        byModel[record.modelName] =
+          (byModel[record.modelName] || 0) + cost.totalCost;
 
         // Aggregate by day
-        const day = record.timestamp.split('T')[0];
+        const day = record.timestamp.split("T")[0];
         byDay[day] = (byDay[day] || 0) + cost.totalCost;
       }
 
@@ -146,7 +160,7 @@ export class QueryEngine {
         byModel,
         byDay,
         period,
-        range
+        range,
       };
     } catch (error) {
       // Return empty report if no data
@@ -156,19 +170,29 @@ export class QueryEngine {
         byModel: {},
         byDay: {},
         period,
-        range
+        range,
       };
     }
   }
 
   // Hybrid data merging: Read agent attribution from local JSONL
-  private async getAgentCostFromLocalLog(range: TimeRange): Promise<Record<string, number>> {
-    const tokenLogPath = path.join(homedir(), '.omd', 'state', 'token-tracking.jsonl');
+  private async getAgentCostFromLocalLog(
+    range: TimeRange,
+  ): Promise<Record<string, number>> {
+    const tokenLogPath = path.join(
+      homedir(),
+      ".omd",
+      "state",
+      "token-tracking.jsonl",
+    );
     const byAgent: Record<string, number> = {};
 
     try {
-      const content = await fs.readFile(tokenLogPath, 'utf-8');
-      const lines = content.trim().split('\n').filter(l => l.length > 0);
+      const content = await fs.readFile(tokenLogPath, "utf-8");
+      const lines = content
+        .trim()
+        .split("\n")
+        .filter((l) => l.length > 0);
 
       for (const line of lines) {
         const record = JSON.parse(line);
@@ -185,9 +209,10 @@ export class QueryEngine {
             inputTokens: record.inputTokens,
             outputTokens: record.outputTokens,
             cacheCreationTokens: record.cacheCreationTokens,
-            cacheReadTokens: record.cacheReadTokens
+            cacheReadTokens: record.cacheReadTokens,
           });
-          byAgent[record.agentName] = (byAgent[record.agentName] || 0) + cost.totalCost;
+          byAgent[record.agentName] =
+            (byAgent[record.agentName] || 0) + cost.totalCost;
         }
       }
     } catch (error) {
@@ -198,13 +223,21 @@ export class QueryEngine {
   }
 
   async getUsagePatterns(): Promise<UsagePattern> {
-    const tokenLogPath = path.join(homedir(), '.omd', 'state', 'token-tracking.jsonl');
+    const tokenLogPath = path.join(
+      homedir(),
+      ".omd",
+      "state",
+      "token-tracking.jsonl",
+    );
     const manager = getSessionManager();
     const history = await manager.getHistory();
 
     try {
-      const content = await fs.readFile(tokenLogPath, 'utf-8');
-      const lines = content.trim().split('\n').filter(l => l.length > 0);
+      const content = await fs.readFile(tokenLogPath, "utf-8");
+      const lines = content
+        .trim()
+        .split("\n")
+        .filter((l) => l.length > 0);
 
       const hourCounts: Record<number, number> = {};
       const operationCosts: Record<string, number> = {};
@@ -223,10 +256,11 @@ export class QueryEngine {
             inputTokens: record.inputTokens,
             outputTokens: record.outputTokens,
             cacheCreationTokens: record.cacheCreationTokens,
-            cacheReadTokens: record.cacheReadTokens
+            cacheReadTokens: record.cacheReadTokens,
           });
 
-          operationCosts[record.agentName] = (operationCosts[record.agentName] || 0) + cost.totalCost;
+          operationCosts[record.agentName] =
+            (operationCosts[record.agentName] || 0) + cost.totalCost;
         }
       }
 
@@ -242,27 +276,30 @@ export class QueryEngine {
         .slice(0, 5)
         .map(([operation, cost]) => ({ operation, cost }));
 
-      const averageCostPerSession = history.totalSessions > 0
-        ? history.totalCost / history.totalSessions
-        : 0;
+      const averageCostPerSession =
+        history.totalSessions > 0
+          ? history.totalCost / history.totalSessions
+          : 0;
 
       return {
         peakHours,
         mostExpensiveOperations,
         averageCostPerSession,
-        totalSessions: history.totalSessions
+        totalSessions: history.totalSessions,
       };
     } catch (error) {
       return {
         peakHours: [],
         mostExpensiveOperations: [],
         averageCostPerSession: 0,
-        totalSessions: 0
+        totalSessions: 0,
       };
     }
   }
 
-  async cleanupOldData(retentionDays: number = 30): Promise<{ removedTokens: number; removedMetrics: number }> {
+  async cleanupOldData(
+    retentionDays: number = 30,
+  ): Promise<{ removedTokens: number; removedMetrics: number }> {
     const tracker = getTokenTracker();
     const removedTokens = await tracker.cleanupOldLogs(retentionDays);
 
@@ -272,21 +309,23 @@ export class QueryEngine {
     return { removedTokens, removedMetrics };
   }
 
-  private calculateTimeRange(period: 'daily' | 'weekly' | 'monthly'): TimeRange {
+  private calculateTimeRange(
+    period: "daily" | "weekly" | "monthly",
+  ): TimeRange {
     const end = new Date();
     const start = new Date();
 
-    if (period === 'daily') {
+    if (period === "daily") {
       start.setDate(start.getDate() - 1);
-    } else if (period === 'weekly') {
+    } else if (period === "weekly") {
       start.setDate(start.getDate() - 7);
-    } else if (period === 'monthly') {
+    } else if (period === "monthly") {
       start.setDate(start.getDate() - 30);
     }
 
     return {
       start: start.toISOString(),
-      end: end.toISOString()
+      end: end.toISOString(),
     };
   }
 }

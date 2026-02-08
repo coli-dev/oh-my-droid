@@ -3,20 +3,20 @@
  * Central module for all platform-specific code.
  */
 
-import * as path from 'path';
+import * as path from "path";
 
 export const PLATFORM = process.platform;
 
 export function isWindows(): boolean {
-  return PLATFORM === 'win32';
+  return PLATFORM === "win32";
 }
 
 export function isMacOS(): boolean {
-  return PLATFORM === 'darwin';
+  return PLATFORM === "darwin";
 }
 
 export function isLinux(): boolean {
-  return PLATFORM === 'linux';
+  return PLATFORM === "linux";
 }
 
 export function isUnix(): boolean {
@@ -33,4 +33,4 @@ export function isPathRoot(filepath: string): boolean {
 }
 
 // Re-exports
-export * from './process-utils.js';
+export * from "./process-utils.js";

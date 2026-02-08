@@ -6,7 +6,7 @@
  * token counting and pricing lookup while maintaining compatibility in all environments.
  */
 
-import { ModelPricing, PRICING } from './types.js';
+import { ModelPricing, PRICING } from "./types.js";
 
 /**
  * Interface for the tokscale adapter - wraps tokscale's native API
@@ -42,7 +42,7 @@ export interface TokscaleReport {
  * Fallback adapter when tokscale is not available
  */
 const FALLBACK_ADAPTER: TokscaleAdapter = {
-  isAvailable: false
+  isAvailable: false,
 };
 
 /** Cached adapter instance */
@@ -75,7 +75,7 @@ export async function getTokscaleAdapter(): Promise<TokscaleAdapter> {
     const originalWarn = console.warn;
     console.warn = (...args: unknown[]) => {
       const msg = args[0];
-      if (typeof msg === 'string' && msg.startsWith('[tokscale]')) {
+      if (typeof msg === "string" && msg.startsWith("[tokscale]")) {
         return; // Suppress tokscale internal warnings
       }
       originalWarn.apply(console, args);
@@ -84,15 +84,20 @@ export async function getTokscaleAdapter(): Promise<TokscaleAdapter> {
     let tokscale: any;
     try {
       // Dynamic import of @tokscale/core
-      tokscale = await import('@tokscale/core') as any;
+      tokscale = (await import("@tokscale/core")) as any;
 
       // Verify native module is functional via health check
       // Note: healthCheck returns a string "tokscale-core is healthy!" when working
-      if (typeof tokscale.healthCheck === 'function') {
+      if (typeof tokscale.healthCheck === "function") {
         const health = tokscale.healthCheck();
         // String response means healthy, non-string or falsy means unhealthy
-        if (!health || (typeof health === 'object' && !health.nativeAvailable)) {
-          console.warn('[tokscale-adapter] Native module not available, using fallback');
+        if (
+          !health ||
+          (typeof health === "object" && !health.nativeAvailable)
+        ) {
+          console.warn(
+            "[tokscale-adapter] Native module not available, using fallback",
+          );
           cachedAdapter = FALLBACK_ADAPTER;
           return cachedAdapter;
         }
@@ -103,17 +108,19 @@ export async function getTokscaleAdapter(): Promise<TokscaleAdapter> {
     }
 
     // Helper to convert tokscale's entries array to our byModel format
-    const convertEntriesToByModel = (entries: any[]): Record<string, { tokens: number; cost: number }> => {
+    const convertEntriesToByModel = (
+      entries: any[],
+    ): Record<string, { tokens: number; cost: number }> => {
       const result: Record<string, { tokens: number; cost: number }> = {};
       if (!entries || !Array.isArray(entries)) {
         return result;
       }
 
       for (const entry of entries) {
-        const modelName = entry.model ?? 'unknown';
+        const modelName = entry.model ?? "unknown";
         result[modelName] = {
           tokens: (entry.input ?? 0) + (entry.output ?? 0),
-          cost: entry.cost ?? 0
+          cost: entry.cost ?? 0,
         };
       }
 
@@ -123,12 +130,15 @@ export async function getTokscaleAdapter(): Promise<TokscaleAdapter> {
     // Build adapter with wrapped functions matching tokscale's actual API
     cachedAdapter = {
       isAvailable: true,
-      version: (typeof tokscale.version === 'function' ? tokscale.version() : tokscale.version) ?? 'unknown',
+      version:
+        (typeof tokscale.version === "function"
+          ? tokscale.version()
+          : tokscale.version) ?? "unknown",
 
       getReport: async () => {
         try {
           // Use getModelReport which is the high-level API that works
-          const report = await tokscale.getModelReport({ sources: ['droid'] });
+          const report = await tokscale.getModelReport({ sources: ["droid"] });
 
           // Convert tokscale ModelReport to our TokscaleReport
           // Field mapping: totalInput -> totalInputTokens, totalOutput -> totalOutputTokens, etc.
@@ -139,10 +149,13 @@ export async function getTokscaleAdapter(): Promise<TokscaleAdapter> {
             totalCacheReadTokens: report.totalCacheRead ?? 0,
             totalCost: report.totalCost ?? 0,
             totalEntries: report.totalMessages ?? 0,
-            byModel: convertEntriesToByModel(report.entries ?? [])
+            byModel: convertEntriesToByModel(report.entries ?? []),
           };
         } catch (error) {
-          console.warn('[tokscale-adapter] getReport failed:', error instanceof Error ? error.message : String(error));
+          console.warn(
+            "[tokscale-adapter] getReport failed:",
+            error instanceof Error ? error.message : String(error),
+          );
           throw error;
         }
       },
@@ -153,32 +166,47 @@ export async function getTokscaleAdapter(): Promise<TokscaleAdapter> {
           if (result && result.pricing) {
             const pricing = result.pricing;
             // Convert per-token costs to per-million costs
-            const inputPerMillion = (pricing.inputCostPerToken ?? 0) * 1_000_000;
-            const outputPerMillion = (pricing.outputCostPerToken ?? 0) * 1_000_000;
+            const inputPerMillion =
+              (pricing.inputCostPerToken ?? 0) * 1_000_000;
+            const outputPerMillion =
+              (pricing.outputCostPerToken ?? 0) * 1_000_000;
 
             // Calculate cache multipliers from absolute costs
             // cacheWriteMarkup: ratio of cache creation cost to input cost
             // cacheReadDiscount: 1 - (cache read cost / input cost)
-            const cacheWriteMarkup = pricing.inputCostPerToken > 0
-              ? (pricing.cacheCreationInputTokenCost ?? pricing.inputCostPerToken * 1.25) / pricing.inputCostPerToken - 1
-              : 0.25;
-            const cacheReadDiscount = pricing.inputCostPerToken > 0
-              ? 1 - (pricing.cacheReadInputTokenCost ?? pricing.inputCostPerToken * 0.1) / pricing.inputCostPerToken
-              : 0.9;
+            const cacheWriteMarkup =
+              pricing.inputCostPerToken > 0
+                ? (pricing.cacheCreationInputTokenCost ??
+                    pricing.inputCostPerToken * 1.25) /
+                    pricing.inputCostPerToken -
+                  1
+                : 0.25;
+            const cacheReadDiscount =
+              pricing.inputCostPerToken > 0
+                ? 1 -
+                  (pricing.cacheReadInputTokenCost ??
+                    pricing.inputCostPerToken * 0.1) /
+                    pricing.inputCostPerToken
+                : 0.9;
 
             return {
               inputPerMillion,
               outputPerMillion,
               cacheWriteMarkup,
-              cacheReadDiscount
+              cacheReadDiscount,
             };
           }
           return null;
         } catch (error) {
-          console.warn('[tokscale-adapter] lookupPricing failed for', modelName, ':', error instanceof Error ? error.message : String(error));
+          console.warn(
+            "[tokscale-adapter] lookupPricing failed for",
+            modelName,
+            ":",
+            error instanceof Error ? error.message : String(error),
+          );
           return null;
         }
-      }
+      },
     } as TokscaleAdapter;
 
     return cachedAdapter!;
@@ -187,7 +215,10 @@ export async function getTokscaleAdapter(): Promise<TokscaleAdapter> {
     const message = error instanceof Error ? error.message : String(error);
 
     // Only log if it's not a simple "module not found" error
-    if (!message.includes('Cannot find module') && !message.includes('MODULE_NOT_FOUND')) {
+    if (
+      !message.includes("Cannot find module") &&
+      !message.includes("MODULE_NOT_FOUND")
+    ) {
       console.warn(`[tokscale-adapter] Failed to load: ${message}`);
     }
 
@@ -205,15 +236,15 @@ export async function getTokscaleAdapter(): Promise<TokscaleAdapter> {
 function normalizeModelName(modelName: string): string {
   const lower = modelName.toLowerCase();
 
-  if (lower.includes('haiku')) return 'claude-haiku-4';
-  if (lower.includes('sonnet')) return 'claude-sonnet-4.5';
-  if (lower.includes('opus')) return 'claude-opus-4.6';
+  if (lower.includes("haiku")) return "claude-haiku-4";
+  if (lower.includes("sonnet")) return "claude-sonnet-4.5";
+  if (lower.includes("opus")) return "claude-opus-4.6";
 
   // Check exact matches
   if (PRICING[modelName]) return modelName;
 
   // Default
-  return 'claude-sonnet-4.5';
+  return "claude-sonnet-4.5";
 }
 
 /**
@@ -224,7 +255,7 @@ function normalizeModelName(modelName: string): string {
  */
 export function getFallbackPricing(modelName: string): ModelPricing {
   const normalized = normalizeModelName(modelName);
-  return PRICING[normalized] ?? PRICING['claude-sonnet-4.5'];
+  return PRICING[normalized] ?? PRICING["claude-sonnet-4.5"];
 }
 
 /**
@@ -237,7 +268,9 @@ export function getFallbackPricing(modelName: string): ModelPricing {
  * @param modelName - Model name to look up pricing for
  * @returns Promise resolving to ModelPricing
  */
-export async function lookupPricingWithFallback(modelName: string): Promise<ModelPricing> {
+export async function lookupPricingWithFallback(
+  modelName: string,
+): Promise<ModelPricing> {
   const adapter = await getTokscaleAdapter();
 
   // Try tokscale lookup first if available

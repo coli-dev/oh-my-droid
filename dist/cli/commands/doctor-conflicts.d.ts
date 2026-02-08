@@ -6,7 +6,7 @@ export interface ConflictReport {
     hookConflicts: {
         event: string;
         command: string;
-        isOmc: boolean;
+        isOmd: boolean;
     }[];
     agentsMdStatus: {
         hasMarkers: boolean;
@@ -14,7 +14,7 @@ export interface ConflictReport {
         path: string;
     } | null;
     envFlags: {
-        disableOmc: boolean;
+        disableOmd: boolean;
         skipHooks: string[];
     };
     configIssues: {

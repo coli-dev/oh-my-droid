@@ -19,7 +19,7 @@ import type { PluginConfig, SessionState } from './shared/types.js';
 export { loadConfig, getAgentDefinitions, omdSystemPrompt };
 export { getDefaultMcpServers, toSdkMcpFormat } from './mcp/servers.js';
 export { lspTools, astTools, allCustomTools } from './tools/index.js';
-export { omdToolsServer, omdToolNames, getOmcToolNames } from './mcp/omd-tools-server.js';
+export { omdToolsServer, omdToolNames, getOmdToolNames } from './mcp/omd-tools-server.js';
 export { createMagicKeywordProcessor, detectMagicKeywords } from './features/magic-keywords.js';
 export { createBackgroundTaskManager, shouldRunInBackground, getBackgroundTaskGuidance, DEFAULT_MAX_BACKGROUND_TASKS, LONG_RUNNING_PATTERNS, BLOCKING_PATTERNS, type BackgroundTaskManager, type TaskExecutionDecision } from './features/background-tasks.js';
 export { type VersionMetadata, type ReleaseInfo, type UpdateCheckResult, type UpdateResult, REPO_OWNER, REPO_NAME, GITHUB_API_URL, DROID_CONFIG_DIR, VERSION_FILE, getInstalledVersion, saveVersionMetadata, checkForUpdates, performUpdate, formatUpdateNotification, shouldCheckForUpdates, backgroundUpdateCheck, compareVersions } from './features/auto-update.js';
@@ -89,7 +89,7 @@ export interface SisyphusSession {
  *
  * @example
  * ```typescript
- * import { createOmcSession } from 'oh-my-droid';
+ * import { createOmdSession } from 'oh-my-droid';
  * import { query } from '@anthropic-ai/claude-agent-sdk';
  *
  * const session = createSisyphusSession();
@@ -111,7 +111,7 @@ export declare function enhancePrompt(prompt: string, config?: PluginConfig): st
 /**
  * Get the system prompt for the orchestrator (for direct use)
  */
-export declare function getOmcSystemPrompt(options?: {
+export declare function getOmdSystemPrompt(options?: {
     includeContinuation?: boolean;
     customAddition?: string;
 }): string;

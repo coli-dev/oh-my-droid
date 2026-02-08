@@ -15,8 +15,8 @@ import type {
   RegistryEvent,
   RegistryEventListener,
   DiscoveryOptions,
-} from './types.js';
-import { discoverAll, type DiscoveryResult } from './discovery.js';
+} from "./types.js";
+import { discoverAll, type DiscoveryResult } from "./discovery.js";
 
 /**
  * Singleton registry instance
@@ -71,9 +71,12 @@ export class ToolRegistry {
     }
 
     this.emit({
-      type: 'plugin-discovered',
+      type: "plugin-discovered",
       timestamp: Date.now(),
-      data: { pluginCount: result.plugins.length, mcpServerCount: result.mcpServers.length },
+      data: {
+        pluginCount: result.plugins.length,
+        mcpServerCount: result.mcpServers.length,
+      },
     });
   }
 
@@ -89,7 +92,7 @@ export class ToolRegistry {
     }
 
     this.emit({
-      type: 'plugin-loaded',
+      type: "plugin-loaded",
       timestamp: Date.now(),
       data: { plugin: plugin.name, toolCount: plugin.tools.length },
     });
@@ -119,7 +122,7 @@ export class ToolRegistry {
     } else {
       this.tools.set(tool.name, tool);
       this.emit({
-        type: 'tool-registered',
+        type: "tool-registered",
         timestamp: Date.now(),
         data: { tool: tool.name, source: tool.source },
       });
@@ -138,7 +141,7 @@ export class ToolRegistry {
       conflict = {
         name: conflictKey,
         tools: [existing],
-        resolution: 'priority',
+        resolution: "priority",
         winner: existing,
       };
       this.conflicts.set(conflictKey, conflict);
@@ -157,7 +160,7 @@ export class ToolRegistry {
     }
 
     this.emit({
-      type: 'tool-conflict',
+      type: "tool-conflict",
       timestamp: Date.now(),
       data: { name: conflictKey, winner: conflict.winner.source },
     });
@@ -174,7 +177,7 @@ export class ToolRegistry {
 
     // Try to find by short name (without namespace)
     for (const [fullName, tool] of this.tools) {
-      const shortName = fullName.split(':').pop();
+      const shortName = fullName.split(":").pop();
       if (shortName === name) {
         return tool;
       }
@@ -187,14 +190,14 @@ export class ToolRegistry {
    * Get all tools from a specific source
    */
   getToolsBySource(source: string): ExternalTool[] {
-    return Array.from(this.tools.values()).filter(t => t.source === source);
+    return Array.from(this.tools.values()).filter((t) => t.source === source);
   }
 
   /**
    * Get all tools of a specific type
    */
-  getToolsByType(type: ExternalTool['type']): ExternalTool[] {
-    return Array.from(this.tools.values()).filter(t => t.type === type);
+  getToolsByType(type: ExternalTool["type"]): ExternalTool[] {
+    return Array.from(this.tools.values()).filter((t) => t.type === type);
   }
 
   /**
@@ -235,9 +238,8 @@ export class ToolRegistry {
     }
 
     // Determine if permission is required based on capabilities
-    const requiresPermission = tool.capabilities?.some(c =>
-      c === 'write' || c === 'execute'
-    ) ?? false;
+    const requiresPermission =
+      tool.capabilities?.some((c) => c === "write" || c === "execute") ?? false;
 
     const route: ToolRoute = {
       tool,
@@ -245,11 +247,11 @@ export class ToolRegistry {
     };
 
     // Add handler info for plugin tools
-    if (tool.type === 'plugin') {
+    if (tool.type === "plugin") {
       const plugin = this.plugins.get(tool.source);
       if (plugin?.manifest.tools) {
         const toolDef = plugin.manifest.tools.find(
-          t => `${plugin.name}:${t.name}` === tool.name
+          (t) => `${plugin.name}:${t.name}` === tool.name,
         );
         if (toolDef) {
           route.handler = toolDef.handler;
@@ -258,7 +260,7 @@ export class ToolRegistry {
     }
 
     // Add MCP server info for MCP tools
-    if (tool.type === 'mcp') {
+    if (tool.type === "mcp") {
       // Extract server name from tool source
       route.mcpServer = tool.source;
     }
@@ -305,7 +307,9 @@ export class ToolRegistry {
    */
   updateMcpServer(
     name: string,
-    updates: Partial<Pick<DiscoveredMcpServer, 'connected' | 'tools' | 'error'>>
+    updates: Partial<
+      Pick<DiscoveredMcpServer, "connected" | "tools" | "error">
+    >,
   ): void {
     const server = this.mcpServers.get(name);
     if (!server) return;
@@ -325,7 +329,7 @@ export class ToolRegistry {
     }
 
     this.emit({
-      type: updates.connected ? 'mcp-connected' : 'mcp-disconnected',
+      type: updates.connected ? "mcp-connected" : "mcp-disconnected",
       timestamp: Date.now(),
       data: { server: name, toolCount: server.tools.length },
     });
@@ -349,8 +353,9 @@ export class ToolRegistry {
    */
   searchTools(query: string): ExternalTool[] {
     const lowerQuery = query.toLowerCase();
-    return Array.from(this.tools.values()).filter(tool => {
-      const searchText = `${tool.name} ${tool.description || ''} ${tool.source}`.toLowerCase();
+    return Array.from(this.tools.values()).filter((tool) => {
+      const searchText =
+        `${tool.name} ${tool.description || ""} ${tool.source}`.toLowerCase();
       return searchText.includes(lowerQuery);
     });
   }
@@ -420,7 +425,9 @@ export function getRegistry(): ToolRegistry {
 /**
  * Initialize the global registry
  */
-export async function initializeRegistry(options?: DiscoveryOptions): Promise<ToolRegistry> {
+export async function initializeRegistry(
+  options?: DiscoveryOptions,
+): Promise<ToolRegistry> {
   const registry = ToolRegistry.getInstance();
   await registry.initialize(options);
   return registry;

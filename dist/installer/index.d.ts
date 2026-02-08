@@ -58,7 +58,7 @@ export interface InstallOptions {
  * @param command - The hook command string
  * @returns true if the command contains 'omd' or 'oh-my-droid'
  */
-export declare function isOmcHook(command: string): boolean;
+export declare function isOmdHook(command: string): boolean;
 /**
  * Check if the current Node.js version meets the minimum requirement
  */

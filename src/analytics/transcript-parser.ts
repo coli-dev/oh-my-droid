@@ -1,6 +1,6 @@
-import * as fs from 'fs';
-import * as readline from 'readline';
-import type { TranscriptEntry } from './types.js';
+import * as fs from "fs";
+import * as readline from "readline";
+import type { TranscriptEntry } from "./types.js";
 
 /**
  * Options for transcript parsing.
@@ -35,7 +35,7 @@ export interface ParseTranscriptOptions {
  */
 export async function* parseTranscript(
   filePath: string,
-  options: ParseTranscriptOptions = {}
+  options: ParseTranscriptOptions = {},
 ): AsyncGenerator<TranscriptEntry> {
   const { signal, onParseError } = options;
 
@@ -44,10 +44,10 @@ export async function* parseTranscript(
     throw new Error(`Transcript file not found: ${filePath}`);
   }
 
-  const fileStream = fs.createReadStream(filePath, { encoding: 'utf8' });
+  const fileStream = fs.createReadStream(filePath, { encoding: "utf8" });
   const rl = readline.createInterface({
     input: fileStream,
-    crlfDelay: Infinity // Treat \r\n as single line break
+    crlfDelay: Infinity, // Treat \r\n as single line break
   });
 
   // Handle abort signal
@@ -57,7 +57,7 @@ export async function* parseTranscript(
   };
 
   if (signal) {
-    signal.addEventListener('abort', abortHandler);
+    signal.addEventListener("abort", abortHandler);
   }
 
   try {
@@ -77,20 +77,23 @@ export async function* parseTranscript(
         yield entry;
       } catch (error) {
         // Handle malformed JSON gracefully
-        const parseError = error instanceof Error ? error : new Error(String(error));
+        const parseError =
+          error instanceof Error ? error : new Error(String(error));
 
         if (onParseError) {
           onParseError(line, parseError);
         } else {
           // Default: log warning and skip line
-          console.warn(`[transcript-parser] Skipping malformed line: ${parseError.message}`);
+          console.warn(
+            `[transcript-parser] Skipping malformed line: ${parseError.message}`,
+          );
         }
       }
     }
   } finally {
     // Clean up
     if (signal) {
-      signal.removeEventListener('abort', abortHandler);
+      signal.removeEventListener("abort", abortHandler);
     }
     rl.close();
     fileStream.destroy();
@@ -108,7 +111,7 @@ export async function* parseTranscript(
  */
 export async function loadTranscript(
   filePath: string,
-  options: ParseTranscriptOptions = {}
+  options: ParseTranscriptOptions = {},
 ): Promise<TranscriptEntry[]> {
   const entries: TranscriptEntry[] = [];
 

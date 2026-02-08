@@ -10,11 +10,11 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync, readdirSync, realpathSync, } from "fs";
 import { join, dirname, basename } from "path";
 import { homedir } from "os";
-import { OmcPaths } from "../../lib/worktree-paths.js";
+import { OmdPaths } from "../../lib/worktree-paths.js";
 // Re-export constants
 export const USER_SKILLS_DIR = join(homedir(), ".factory", "skills", "omd-learned");
 export const GLOBAL_SKILLS_DIR = join(homedir(), ".omd", "skills");
-export const PROJECT_SKILLS_SUBDIR = OmcPaths.SKILLS;
+export const PROJECT_SKILLS_SUBDIR = OmdPaths.SKILLS;
 export const SKILL_EXTENSION = ".md";
 /** Session TTL: 1 hour */
 const SESSION_TTL_MS = 60 * 60 * 1000;
@@ -107,7 +107,7 @@ export function clearLevenshteinCache() {
     levenshteinCache.clear();
 }
 /** State file path */
-const STATE_FILE = `${OmcPaths.STATE}/skill-sessions.json`;
+const STATE_FILE = `${OmdPaths.STATE}/skill-sessions.json`;
 // =============================================================================
 // Session Cache (File-Based)
 // =============================================================================

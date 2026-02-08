@@ -15,7 +15,7 @@
 import { loadConfig, findContextFiles, loadContextFromFiles } from './config/loader.js';
 import { getAgentDefinitions, omdSystemPrompt } from './agents/definitions.js';
 import { getDefaultMcpServers, toSdkMcpFormat } from './mcp/servers.js';
-import { omdToolsServer, getOmcToolNames } from './mcp/omd-tools-server.js';
+import { omdToolsServer, getOmdToolNames } from './mcp/omd-tools-server.js';
 import { codexMcpServer } from './mcp/codex-server.js';
 import { geminiMcpServer } from './mcp/gemini-server.js';
 import { createMagicKeywordProcessor, detectMagicKeywords } from './features/magic-keywords.js';
@@ -24,7 +24,7 @@ import { createBackgroundTaskManager, shouldRunInBackground as shouldRunInBackgr
 export { loadConfig, getAgentDefinitions, omdSystemPrompt };
 export { getDefaultMcpServers, toSdkMcpFormat } from './mcp/servers.js';
 export { lspTools, astTools, allCustomTools } from './tools/index.js';
-export { omdToolsServer, omdToolNames, getOmcToolNames } from './mcp/omd-tools-server.js';
+export { omdToolsServer, omdToolNames, getOmdToolNames } from './mcp/omd-tools-server.js';
 export { createMagicKeywordProcessor, detectMagicKeywords } from './features/magic-keywords.js';
 export { createBackgroundTaskManager, shouldRunInBackground, getBackgroundTaskGuidance, DEFAULT_MAX_BACKGROUND_TASKS, LONG_RUNNING_PATTERNS, BLOCKING_PATTERNS } from './features/background-tasks.js';
 export { 
@@ -59,7 +59,7 @@ export { install, isInstalled, getInstallInfo, isDroidInstalled, DROID_CONFIG_DI
  *
  * @example
  * ```typescript
- * import { createOmcSession } from 'oh-my-droid';
+ * import { createOmdSession } from 'oh-my-droid';
  * import { query } from '@anthropic-ai/claude-agent-sdk';
  *
  * const session = createSisyphusSession();
@@ -128,7 +128,7 @@ export function createSisyphusSession(options) {
         allowedTools.push(`mcp__${serverName}__*`);
     }
     // Add OMD custom tools in MCP format (LSP, AST, python_repl)
-    const omdTools = getOmcToolNames({
+    const omdTools = getOmdToolNames({
         includeLsp: config.features?.lspTools !== false,
         includeAst: config.features?.astTools !== false,
         includePython: true
@@ -180,7 +180,7 @@ export function enhancePrompt(prompt, config) {
 /**
  * Get the system prompt for the orchestrator (for direct use)
  */
-export function getOmcSystemPrompt(options) {
+export function getOmdSystemPrompt(options) {
     let prompt = omdSystemPrompt;
     if (options?.includeContinuation !== false) {
         prompt += continuationSystemPromptAddition;

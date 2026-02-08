@@ -2,7 +2,7 @@
  * Shared types for Oh-My-Droid-Sisyphus
  */
 
-export type ModelType = 'sonnet' | 'opus' | 'haiku' | 'inherit';
+export type ModelType = "sonnet" | "opus" | "haiku" | "inherit";
 
 export interface AgentConfig {
   name: string;
@@ -70,7 +70,7 @@ export interface PluginConfig {
     /** Enable intelligent model routing */
     enabled?: boolean;
     /** Default tier when no rules match */
-    defaultTier?: 'LOW' | 'MEDIUM' | 'HIGH';
+    defaultTier?: "LOW" | "MEDIUM" | "HIGH";
     /** Enable automatic escalation on failure */
     escalationEnabled?: boolean;
     /** Maximum escalation attempts */
@@ -82,10 +82,13 @@ export interface PluginConfig {
       HIGH?: string;
     };
     /** Agent-specific tier overrides */
-    agentOverrides?: Record<string, {
-      tier: 'LOW' | 'MEDIUM' | 'HIGH';
-      reason: string;
-    }>;
+    agentOverrides?: Record<
+      string,
+      {
+        tier: "LOW" | "MEDIUM" | "HIGH";
+        reason: string;
+      }
+    >;
     /** Keywords that force escalation to higher tier */
     escalationKeywords?: string[];
     /** Keywords that suggest lower tier */
@@ -102,7 +105,7 @@ export interface SessionState {
 
 export interface AgentState {
   name: string;
-  status: 'idle' | 'running' | 'completed' | 'error';
+  status: "idle" | "running" | "completed" | "error";
   lastMessage?: string;
   startTime?: number;
 }
@@ -111,7 +114,7 @@ export interface BackgroundTask {
   id: string;
   agentName: string;
   prompt: string;
-  status: 'pending' | 'running' | 'completed' | 'error';
+  status: "pending" | "running" | "completed" | "error";
   result?: string;
   error?: string;
 }
@@ -123,7 +126,13 @@ export interface MagicKeyword {
 }
 
 export interface HookDefinition {
-  event: 'PreToolUse' | 'PostToolUse' | 'Stop' | 'SessionStart' | 'SessionEnd' | 'UserPromptSubmit';
+  event:
+    | "PreToolUse"
+    | "PostToolUse"
+    | "Stop"
+    | "SessionStart"
+    | "SessionEnd"
+    | "UserPromptSubmit";
   matcher?: string;
   command?: string;
   handler?: (context: HookContext) => Promise<HookResult>;

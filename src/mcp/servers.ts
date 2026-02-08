@@ -21,9 +21,9 @@ export interface McpServerConfig {
  */
 export function createExaServer(apiKey?: string): McpServerConfig {
   return {
-    command: 'npx',
-    args: ['-y', 'exa-mcp-server'],
-    env: apiKey ? { EXA_API_KEY: apiKey } : undefined
+    command: "npx",
+    args: ["-y", "exa-mcp-server"],
+    env: apiKey ? { EXA_API_KEY: apiKey } : undefined,
   };
 }
 
@@ -33,8 +33,8 @@ export function createExaServer(apiKey?: string): McpServerConfig {
  */
 export function createContext7Server(): McpServerConfig {
   return {
-    command: 'npx',
-    args: ['-y', '@upstash/context7-mcp']
+    command: "npx",
+    args: ["-y", "@upstash/context7-mcp"],
   };
 }
 
@@ -44,8 +44,8 @@ export function createContext7Server(): McpServerConfig {
  */
 export function createPlaywrightServer(): McpServerConfig {
   return {
-    command: 'npx',
-    args: ['-y', '@playwright/mcp@latest']
+    command: "npx",
+    args: ["-y", "@playwright/mcp@latest"],
   };
 }
 
@@ -53,10 +53,12 @@ export function createPlaywrightServer(): McpServerConfig {
  * Filesystem MCP Server - Extended file operations
  * Provides additional file system capabilities
  */
-export function createFilesystemServer(allowedPaths: string[]): McpServerConfig {
+export function createFilesystemServer(
+  allowedPaths: string[],
+): McpServerConfig {
   return {
-    command: 'npx',
-    args: ['-y', '@modelcontextprotocol/server-filesystem', ...allowedPaths]
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-filesystem", ...allowedPaths],
   };
 }
 
@@ -66,8 +68,8 @@ export function createFilesystemServer(allowedPaths: string[]): McpServerConfig 
  */
 export function createMemoryServer(): McpServerConfig {
   return {
-    command: 'npx',
-    args: ['-y', '@modelcontextprotocol/server-memory']
+    command: "npx",
+    args: ["-y", "@modelcontextprotocol/server-memory"],
   };
 }
 
@@ -112,7 +114,9 @@ export function getDefaultMcpServers(options?: {
 /**
  * Convert MCP servers config to SDK format
  */
-export function toSdkMcpFormat(servers: McpServersConfig): Record<string, McpServerConfig> {
+export function toSdkMcpFormat(
+  servers: McpServersConfig,
+): Record<string, McpServerConfig> {
   const result: Record<string, McpServerConfig> = {};
 
   for (const [name, config] of Object.entries(servers)) {

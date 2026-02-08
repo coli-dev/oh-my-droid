@@ -8,15 +8,15 @@
  * - Delegation-aware routing to avoid conflicts
  */
 
-import safeRegex from 'safe-regex';
+import safeRegex from "safe-regex";
 import type {
   ExternalTool,
   PluginPermission,
   PermissionCheckResult,
   SafeCommandPattern,
   DiscoveredPlugin,
-} from './types.js';
-import { getRegistry } from './registry.js';
+} from "./types.js";
+import { getRegistry } from "./registry.js";
 
 /**
  * Built-in safe patterns for known external tools
@@ -24,60 +24,60 @@ import { getRegistry } from './registry.js';
 const BUILTIN_SAFE_PATTERNS: SafeCommandPattern[] = [
   // Context7 MCP - documentation lookup (read-only)
   {
-    tool: 'mcp__context7__resolve-library-id',
+    tool: "mcp__context7__resolve-library-id",
     pattern: /.*/,
-    description: 'Context7 library resolution (read-only)',
-    source: 'builtin',
+    description: "Context7 library resolution (read-only)",
+    source: "builtin",
   },
   {
-    tool: 'mcp__context7__query-docs',
+    tool: "mcp__context7__query-docs",
     pattern: /.*/,
-    description: 'Context7 documentation query (read-only)',
-    source: 'builtin',
+    description: "Context7 documentation query (read-only)",
+    source: "builtin",
   },
   // Filesystem MCP - read operations only
   {
-    tool: 'mcp__filesystem__read_file',
+    tool: "mcp__filesystem__read_file",
     pattern: /.*/,
-    description: 'Filesystem read (read-only)',
-    source: 'builtin',
+    description: "Filesystem read (read-only)",
+    source: "builtin",
   },
   {
-    tool: 'mcp__filesystem__read_text_file',
+    tool: "mcp__filesystem__read_text_file",
     pattern: /.*/,
-    description: 'Filesystem text read (read-only)',
-    source: 'builtin',
+    description: "Filesystem text read (read-only)",
+    source: "builtin",
   },
   {
-    tool: 'mcp__filesystem__list_directory',
+    tool: "mcp__filesystem__list_directory",
     pattern: /.*/,
-    description: 'Directory listing (read-only)',
-    source: 'builtin',
+    description: "Directory listing (read-only)",
+    source: "builtin",
   },
   {
-    tool: 'mcp__filesystem__search_files',
+    tool: "mcp__filesystem__search_files",
     pattern: /.*/,
-    description: 'File search (read-only)',
-    source: 'builtin',
+    description: "File search (read-only)",
+    source: "builtin",
   },
   {
-    tool: 'mcp__filesystem__get_file_info',
+    tool: "mcp__filesystem__get_file_info",
     pattern: /.*/,
-    description: 'File info (read-only)',
-    source: 'builtin',
+    description: "File info (read-only)",
+    source: "builtin",
   },
   {
-    tool: 'mcp__filesystem__directory_tree',
+    tool: "mcp__filesystem__directory_tree",
     pattern: /.*/,
-    description: 'Directory tree (read-only)',
-    source: 'builtin',
+    description: "Directory tree (read-only)",
+    source: "builtin",
   },
   // Exa MCP - web search (read-only, external)
   {
-    tool: 'mcp__exa__search',
+    tool: "mcp__exa__search",
     pattern: /.*/,
-    description: 'Exa web search (read-only)',
-    source: 'builtin',
+    description: "Exa web search (read-only)",
+    source: "builtin",
   },
 ];
 
@@ -116,7 +116,7 @@ const permissionCache = new Map<string, PermissionCheckResult>();
 export class PermissionSecurityError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = 'PermissionSecurityError';
+    this.name = "PermissionSecurityError";
   }
 }
 
@@ -142,12 +142,12 @@ export function registerPluginSafePatterns(plugin: DiscoveredPlugin): void {
   if (!plugin.manifest.permissions) return;
 
   for (const permission of plugin.manifest.permissions) {
-    if (permission.scope === 'read' && permission.patterns) {
+    if (permission.scope === "read" && permission.patterns) {
       for (const pattern of permission.patterns) {
         // SECURITY: Validate regex pattern before creating RegExp
         if (!isRegexSafe(pattern)) {
           console.warn(
-            `[Security] Skipping unsafe regex pattern from plugin ${plugin.name}: ${pattern}`
+            `[Security] Skipping unsafe regex pattern from plugin ${plugin.name}: ${pattern}`,
           );
           continue;
         }
@@ -168,7 +168,7 @@ export function registerPluginSafePatterns(plugin: DiscoveredPlugin): void {
  */
 export function checkPermission(
   toolName: string,
-  input?: Record<string, unknown>
+  input?: Record<string, unknown>,
 ): PermissionCheckResult {
   // Check cache first
   const cacheKey = `${toolName}:${JSON.stringify(input)}`;
@@ -208,13 +208,14 @@ export function checkPermission(
 
   if (tool) {
     // Read-only and search tools are generally safe
-    const safeCapabilities = ['read', 'search', 'analyze'];
-    const isSafe = tool.capabilities?.every(c => safeCapabilities.includes(c)) ?? false;
+    const safeCapabilities = ["read", "search", "analyze"];
+    const isSafe =
+      tool.capabilities?.every((c) => safeCapabilities.includes(c)) ?? false;
 
     if (isSafe) {
       const result: PermissionCheckResult = {
         allowed: true,
-        reason: `Tool ${toolName} has safe capabilities: ${tool.capabilities?.join(', ')}`,
+        reason: `Tool ${toolName} has safe capabilities: ${tool.capabilities?.join(", ")}`,
       };
       permissionCache.set(cacheKey, result);
       return result;
@@ -223,7 +224,7 @@ export function checkPermission(
     // Has dangerous capabilities
     const result: PermissionCheckResult = {
       allowed: false,
-      reason: `Tool ${toolName} has capabilities requiring permission: ${tool.capabilities?.join(', ')}`,
+      reason: `Tool ${toolName} has capabilities requiring permission: ${tool.capabilities?.join(", ")}`,
       askUser: true,
     };
     permissionCache.set(cacheKey, result);
@@ -241,22 +242,28 @@ export function checkPermission(
 /**
  * Grant permission for a tool (cache the decision)
  */
-export function grantPermission(toolName: string, input?: Record<string, unknown>): void {
+export function grantPermission(
+  toolName: string,
+  input?: Record<string, unknown>,
+): void {
   const cacheKey = `${toolName}:${JSON.stringify(input)}`;
   permissionCache.set(cacheKey, {
     allowed: true,
-    reason: 'User granted permission',
+    reason: "User granted permission",
   });
 }
 
 /**
  * Deny permission for a tool (cache the decision)
  */
-export function denyPermission(toolName: string, input?: Record<string, unknown>): void {
+export function denyPermission(
+  toolName: string,
+  input?: Record<string, unknown>,
+): void {
   const cacheKey = `${toolName}:${JSON.stringify(input)}`;
   permissionCache.set(cacheKey, {
     allowed: false,
-    reason: 'User denied permission',
+    reason: "User denied permission",
   });
 }
 
@@ -285,7 +292,7 @@ export function addSafePattern(pattern: SafeCommandPattern): void {
  * Remove safe patterns from a specific source
  */
 export function removeSafePatternsFromSource(source: string): void {
-  const toRemove = safePatterns.filter(p => p.source === source);
+  const toRemove = safePatterns.filter((p) => p.source === source);
   for (const pattern of toRemove) {
     const index = safePatterns.indexOf(pattern);
     if (index >= 0) {
@@ -306,17 +313,20 @@ export function shouldDelegate(toolName: string): boolean {
   }
 
   // External plugins should handle their own tools
-  if (tool.type === 'plugin') {
+  if (tool.type === "plugin") {
     return true;
   }
 
   // MCP tools are handled by MCP bridge
-  if (tool.type === 'mcp') {
+  if (tool.type === "mcp") {
     return true;
   }
 
   // Skills and agents from external plugins
-  if ((tool.type === 'skill' || tool.type === 'agent') && tool.source !== 'oh-my-droid') {
+  if (
+    (tool.type === "skill" || tool.type === "agent") &&
+    tool.source !== "oh-my-droid"
+  ) {
     return true;
   }
 
@@ -327,7 +337,7 @@ export function shouldDelegate(toolName: string): boolean {
  * Get delegation target for a tool
  */
 export function getDelegationTarget(toolName: string): {
-  type: 'plugin' | 'mcp' | 'internal';
+  type: "plugin" | "mcp" | "internal";
   target: string;
 } | null {
   const registry = getRegistry();
@@ -337,23 +347,27 @@ export function getDelegationTarget(toolName: string): {
     return null;
   }
 
-  if (tool.type === 'plugin' || tool.type === 'skill' || tool.type === 'agent') {
+  if (
+    tool.type === "plugin" ||
+    tool.type === "skill" ||
+    tool.type === "agent"
+  ) {
     return {
-      type: 'plugin',
+      type: "plugin",
       target: tool.source,
     };
   }
 
-  if (tool.type === 'mcp') {
+  if (tool.type === "mcp") {
     return {
-      type: 'mcp',
+      type: "mcp",
       target: tool.source,
     };
   }
 
   return {
-    type: 'internal',
-    target: 'oh-my-droid',
+    type: "internal",
+    target: "oh-my-droid",
   };
 }
 
@@ -372,7 +386,7 @@ export function integrateWithPermissionSystem(): void {
   // Register MCP tools as safe if they're read-only
   for (const server of registry.getAllMcpServers()) {
     for (const tool of server.tools) {
-      if (tool.capabilities?.every(c => c === 'read' || c === 'search')) {
+      if (tool.capabilities?.every((c) => c === "read" || c === "search")) {
         safePatterns.push({
           tool: tool.name,
           pattern: /.*/,
@@ -390,13 +404,13 @@ export function integrateWithPermissionSystem(): void {
  */
 export function processExternalToolPermission(
   toolName: string,
-  toolInput?: Record<string, unknown>
+  toolInput?: Record<string, unknown>,
 ): {
   continue: boolean;
   hookSpecificOutput?: {
     hookEventName: string;
     decision: {
-      behavior: 'allow' | 'deny' | 'ask';
+      behavior: "allow" | "deny" | "ask";
       reason?: string;
     };
   };
@@ -407,9 +421,9 @@ export function processExternalToolPermission(
     return {
       continue: true,
       hookSpecificOutput: {
-        hookEventName: 'PermissionRequest',
+        hookEventName: "PermissionRequest",
         decision: {
-          behavior: 'allow',
+          behavior: "allow",
           reason: result.reason,
         },
       },
@@ -425,9 +439,9 @@ export function processExternalToolPermission(
   return {
     continue: true,
     hookSpecificOutput: {
-      hookEventName: 'PermissionRequest',
+      hookEventName: "PermissionRequest",
       decision: {
-        behavior: 'deny',
+        behavior: "deny",
         reason: result.reason,
       },
     },

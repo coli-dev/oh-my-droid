@@ -124,7 +124,7 @@ function resolveProvider(providerId, modelId) {
     // GitHub Copilot is a proxy - infer actual provider from model name
     if (providerId === 'github-copilot') {
         const modelLower = modelId.toLowerCase();
-        if (modelLower.includes('droid'))
+        if (modelLower.includes('droid') || modelLower.includes('claude'))
             return 'anthropic';
         if (modelLower.includes('gemini'))
             return 'google';

@@ -5,18 +5,19 @@
  * from local (.omd/skills/) and global (~/.omd/skills/) directories.
  */
 
-import { z } from 'zod';
-import { resolve, normalize, sep } from 'path';
-import { homedir } from 'os';
-import { loadAllSkills } from '../hooks/learner/loader.js';
-import { MAX_SKILL_CONTENT_LENGTH } from '../hooks/learner/constants.js';
-import type { LearnedSkill } from '../hooks/learner/types.js';
+import { z } from "zod";
+import { resolve, normalize, sep } from "path";
+import { homedir } from "os";
+import { loadAllSkills } from "../hooks/learner/loader.js";
+import { MAX_SKILL_CONTENT_LENGTH } from "../hooks/learner/constants.js";
+import type { LearnedSkill } from "../hooks/learner/types.js";
 
 /** Allowed boundary directories for projectRoot validation */
 const ALLOWED_BOUNDARIES = [process.cwd(), homedir()];
 
 /** Role boundary tags that could be used for prompt injection */
-const ROLE_BOUNDARY_PATTERN = /^<\s*\/?\s*(system|human|assistant|user|tool_use|tool_result)\b[^>]*>/i;
+const ROLE_BOUNDARY_PATTERN =
+  /^<\s*\/?\s*(system|human|assistant|user|tool_use|tool_result)\b[^>]*>/i;
 
 /**
  * Validate projectRoot is within allowed directories.
@@ -25,17 +26,21 @@ const ROLE_BOUNDARY_PATTERN = /^<\s*\/?\s*(system|human|assistant|user|tool_use|
 function validateProjectRoot(input: string): string {
   const normalized = normalize(resolve(input));
   // Reject path traversal sequences in raw input
-  if (input.includes('..')) {
-    throw new Error('Invalid project root: path traversal not allowed');
+  if (input.includes("..")) {
+    throw new Error("Invalid project root: path traversal not allowed");
   }
   // Positive boundary validation: resolved path must be under cwd or HOME
-  const isWithinAllowed = ALLOWED_BOUNDARIES.some(boundary => {
+  const isWithinAllowed = ALLOWED_BOUNDARIES.some((boundary) => {
     const normalizedBoundary = normalize(boundary);
-    return normalized === normalizedBoundary ||
-           normalized.startsWith(normalizedBoundary + sep);
+    return (
+      normalized === normalizedBoundary ||
+      normalized.startsWith(normalizedBoundary + sep)
+    );
   });
   if (!isWithinAllowed) {
-    throw new Error('Invalid project root: path is outside allowed directories');
+    throw new Error(
+      "Invalid project root: path is outside allowed directories",
+    );
   }
   return normalized;
 }
@@ -45,32 +50,35 @@ function validateProjectRoot(input: string): string {
  */
 function sanitizeSkillContent(content: string): string {
   // Truncate to max length
-  const truncated = content.length > MAX_SKILL_CONTENT_LENGTH
-    ? content.slice(0, MAX_SKILL_CONTENT_LENGTH) + '\n[truncated]'
-    : content;
+  const truncated =
+    content.length > MAX_SKILL_CONTENT_LENGTH
+      ? content.slice(0, MAX_SKILL_CONTENT_LENGTH) + "\n[truncated]"
+      : content;
   // Strip role boundary tags
   return truncated
-    .split('\n')
-    .filter(line => !ROLE_BOUNDARY_PATTERN.test(line.trim()))
-    .join('\n');
+    .split("\n")
+    .filter((line) => !ROLE_BOUNDARY_PATTERN.test(line.trim()))
+    .join("\n");
 }
 
 // Schema definitions
 const loadLocalSchema = {
-  projectRoot: z.string()
+  projectRoot: z
+    .string()
     .max(500)
     .optional()
-    .describe('Project root directory (defaults to cwd)'),
+    .describe("Project root directory (defaults to cwd)"),
 };
 
 // Empty ZodRawShape: SDK expects plain object of z-types; {} means no parameters
 const loadGlobalSchema = {};
 
 const listSkillsSchema = {
-  projectRoot: z.string()
+  projectRoot: z
+    .string()
     .max(500)
     .optional()
-    .describe('Project root directory (defaults to cwd)'),
+    .describe("Project root directory (defaults to cwd)"),
 };
 
 /**
@@ -78,7 +86,7 @@ const listSkillsSchema = {
  */
 function formatSkillOutput(skills: LearnedSkill[]): string {
   if (skills.length === 0) {
-    return 'No skills found in the searched directories.';
+    return "No skills found in the searched directories.";
   }
 
   const lines: string[] = [];
@@ -87,65 +95,76 @@ function formatSkillOutput(skills: LearnedSkill[]): string {
     lines.push(`### ${skill.metadata.id}`);
     lines.push(`- **Name:** ${skill.metadata.name}`);
     lines.push(`- **Description:** ${skill.metadata.description}`);
-    lines.push(`- **Triggers:** ${skill.metadata.triggers.join(', ')}`);
+    lines.push(`- **Triggers:** ${skill.metadata.triggers.join(", ")}`);
     if (skill.metadata.tags?.length) {
-      lines.push(`- **Tags:** ${skill.metadata.tags.join(', ')}`);
+      lines.push(`- **Tags:** ${skill.metadata.tags.join(", ")}`);
     }
     lines.push(`- **Scope:** ${skill.scope}`);
     lines.push(`- **Path:** ${skill.relativePath}`);
-    lines.push('');
+    lines.push("");
   }
 
-  return lines.join('\n');
+  return lines.join("\n");
 }
 
 // Tool 1: load_omd_skills_local
 export const loadLocalTool = {
-  name: 'load_omd_skills_local',
-  description: 'Load and list skills from the project-local .omd/skills/ directory. Returns skill metadata (id, name, description, triggers, tags) for all discovered project-scoped skills.',
+  name: "load_omd_skills_local",
+  description:
+    "Load and list skills from the project-local .omd/skills/ directory. Returns skill metadata (id, name, description, triggers, tags) for all discovered project-scoped skills.",
   schema: loadLocalSchema,
   handler: async (args: { projectRoot?: string }) => {
-    const projectRoot = args.projectRoot ? validateProjectRoot(args.projectRoot) : process.cwd();
+    const projectRoot = args.projectRoot
+      ? validateProjectRoot(args.projectRoot)
+      : process.cwd();
     const allSkills = loadAllSkills(projectRoot);
-    const projectSkills = allSkills.filter(s => s.scope === 'project');
+    const projectSkills = allSkills.filter((s) => s.scope === "project");
 
     return {
-      content: [{
-        type: 'text' as const,
-        text: `## Project Skills (${projectSkills.length})\n\n${formatSkillOutput(projectSkills)}`,
-      }],
+      content: [
+        {
+          type: "text" as const,
+          text: `## Project Skills (${projectSkills.length})\n\n${formatSkillOutput(projectSkills)}`,
+        },
+      ],
     };
   },
 };
 
 // Tool 2: load_omd_skills_global
 export const loadGlobalTool = {
-  name: 'load_omd_skills_global',
-  description: 'Load and list skills from global user directories (~/.omd/skills/ and ~/.factory/skills/omd-learned/). Returns skill metadata for all discovered user-scoped skills.',
+  name: "load_omd_skills_global",
+  description:
+    "Load and list skills from global user directories (~/.omd/skills/ and ~/.factory/skills/omd-learned/). Returns skill metadata for all discovered user-scoped skills.",
   schema: loadGlobalSchema,
   handler: async (_args: Record<string, never>) => {
     const allSkills = loadAllSkills(null);
-    const userSkills = allSkills.filter(s => s.scope === 'user');
+    const userSkills = allSkills.filter((s) => s.scope === "user");
 
     return {
-      content: [{
-        type: 'text' as const,
-        text: `## Global User Skills (${userSkills.length})\n\n${formatSkillOutput(userSkills)}`,
-      }],
+      content: [
+        {
+          type: "text" as const,
+          text: `## Global User Skills (${userSkills.length})\n\n${formatSkillOutput(userSkills)}`,
+        },
+      ],
     };
   },
 };
 
 // Tool 3: list_omd_skills
 export const listSkillsTool = {
-  name: 'list_omd_skills',
-  description: 'List all available skills (both project-local and global user skills). Project skills take priority over user skills with the same ID.',
+  name: "list_omd_skills",
+  description:
+    "List all available skills (both project-local and global user skills). Project skills take priority over user skills with the same ID.",
   schema: listSkillsSchema,
   handler: async (args: { projectRoot?: string }) => {
-    const projectRoot = args.projectRoot ? validateProjectRoot(args.projectRoot) : process.cwd();
+    const projectRoot = args.projectRoot
+      ? validateProjectRoot(args.projectRoot)
+      : process.cwd();
     const skills = loadAllSkills(projectRoot);
-    const projectSkills = skills.filter(s => s.scope === 'project');
-    const userSkills = skills.filter(s => s.scope === 'user');
+    const projectSkills = skills.filter((s) => s.scope === "project");
+    const userSkills = skills.filter((s) => s.scope === "user");
 
     let output = `## All Available Skills (${skills.length} total)\n\n`;
 
@@ -158,14 +177,17 @@ export const listSkillsTool = {
     }
 
     if (skills.length === 0) {
-      output = '## No Skills Found\n\nNo skill files were discovered in any searched directories.\n\nSearched:\n- Project: .omd/skills/\n- Global: ~/.omd/skills/\n- Legacy: ~/.factory/skills/omd-learned/';
+      output =
+        "## No Skills Found\n\nNo skill files were discovered in any searched directories.\n\nSearched:\n- Project: .omd/skills/\n- Global: ~/.omd/skills/\n- Legacy: ~/.factory/skills/omd-learned/";
     }
 
     return {
-      content: [{
-        type: 'text' as const,
-        text: output,
-      }],
+      content: [
+        {
+          type: "text" as const,
+          text: output,
+        },
+      ],
     };
   },
 };

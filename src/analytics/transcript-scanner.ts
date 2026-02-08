@@ -1,7 +1,7 @@
-import { readdir, stat } from 'fs/promises';
-import { existsSync } from 'fs';
-import { join, sep } from 'path';
-import { homedir } from 'os';
+import { readdir, stat } from "fs/promises";
+import { existsSync } from "fs";
+import { join, sep } from "path";
+import { homedir } from "os";
 
 /**
  * Check if the encoded path looks like a Windows path (starts with drive letter)
@@ -17,18 +17,18 @@ function isWindowsEncodedPath(dirName: string): boolean {
 function normalizePathForOS(decodedPath: string): string {
   // On Windows, convert forward slashes to backslashes for consistency
   // But existsSync works with both, so we normalize to forward slashes for cross-platform
-  return decodedPath.replace(/\\/g, '/');
+  return decodedPath.replace(/\\/g, "/");
 }
 
 /**
  * Metadata for a discovered transcript file
  */
 export interface TranscriptFile {
-  projectPath: string;        // Decoded original path (e.g., /home/bellman/Workspace/foo)
-  projectDir: string;         // Encoded directory name (e.g., -home-bellman-Workspace-foo)
-  sessionId: string;          // UUID from filename
-  filePath: string;           // Full path to .jsonl
-  fileSize: number;           // Bytes
+  projectPath: string; // Decoded original path (e.g., /home/bellman/Workspace/foo)
+  projectDir: string; // Encoded directory name (e.g., -home-bellman-Workspace-foo)
+  sessionId: string; // UUID from filename
+  filePath: string; // Full path to .jsonl
+  fileSize: number; // Bytes
   modifiedTime: Date;
 }
 
@@ -45,14 +45,15 @@ export interface ScanResult {
  * Options for scanning transcripts
  */
 export interface ScanOptions {
-  projectFilter?: string;     // Glob pattern for project path
-  minDate?: Date;             // Only files modified after this date
+  projectFilter?: string; // Glob pattern for project path
+  minDate?: Date; // Only files modified after this date
 }
 
 /**
  * UUID regex pattern for session IDs
  */
-const UUID_REGEX = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/;
+const UUID_REGEX =
+  /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/;
 
 /**
  * Decode project directory name back to original path.
@@ -80,7 +81,7 @@ export function decodeProjectPath(dirName: string): string {
   }
 
   // Handle Unix encoded paths (e.g., "-home-user-project")
-  if (dirName.startsWith('-')) {
+  if (dirName.startsWith("-")) {
     return decodeUnixPath(dirName);
   }
 
@@ -94,20 +95,20 @@ export function decodeProjectPath(dirName: string): string {
  */
 function splitPreservingConsecutiveHyphens(str: string): string[] {
   const result: string[] = [];
-  let current = '';
+  let current = "";
   let i = 0;
 
   while (i < str.length) {
-    if (str[i] === '-') {
+    if (str[i] === "-") {
       if (current) {
         result.push(current);
-        current = '';
+        current = "";
       }
       // Check for consecutive hyphens
-      if (i + 1 < str.length && str[i + 1] === '-') {
+      if (i + 1 < str.length && str[i + 1] === "-") {
         // Consecutive hyphens - this means the original had a hyphen
         // Push empty string as marker, will be joined with hyphen later
-        result.push('');
+        result.push("");
         i++; // Skip the second hyphen
       }
       i++;
@@ -132,10 +133,10 @@ function decodeWindowsPath(dirName: string): string {
   const rest = dirName.slice(2); // Skip "X-"
 
   // Simple decode: drive letter + colon + rest with dashes as slashes
-  const simplePath = `${driveLetter}:/${rest.replace(/-/g, '/')}`;
+  const simplePath = `${driveLetter}:/${rest.replace(/-/g, "/")}`;
 
   // Normalize double slashes that might occur from empty segments
-  const normalizedSimple = simplePath.replace(/\/+/g, '/');
+  const normalizedSimple = simplePath.replace(/\/+/g, "/");
 
   // If simple decode exists, we're done
   if (existsSync(normalizedSimple)) {
@@ -152,7 +153,11 @@ function decodeWindowsPath(dirName: string): string {
   const possiblePaths: string[] = [];
 
   // Generate all possible interpretations by trying different hyphen positions
-  function generatePaths(parts: string[], index: number, currentPath: string): void {
+  function generatePaths(
+    parts: string[],
+    index: number,
+    currentPath: string,
+  ): void {
     if (index >= parts.length) {
       possiblePaths.push(currentPath);
       return;
@@ -161,23 +166,23 @@ function decodeWindowsPath(dirName: string): string {
     const part = parts[index];
 
     // Empty string means this was a consecutive hyphen - must join with previous
-    if (part === '' && currentPath) {
-      const pathParts = currentPath.split('/');
-      const lastPart = pathParts.pop() || '';
-      const newPath = pathParts.join('/') + '/' + lastPart + '-';
+    if (part === "" && currentPath) {
+      const pathParts = currentPath.split("/");
+      const lastPart = pathParts.pop() || "";
+      const newPath = pathParts.join("/") + "/" + lastPart + "-";
       generatePaths(parts, index + 1, newPath);
       return;
     }
 
     // Try adding next segment as a new directory
-    const newDir = currentPath + '/' + part;
+    const newDir = currentPath + "/" + part;
     generatePaths(parts, index + 1, newDir);
 
     // Try combining with previous segment using hyphen (if not first segment)
     if (index > 0 && currentPath) {
-      const pathParts = currentPath.split('/');
-      const lastPart = pathParts.pop() || '';
-      const newPath = pathParts.join('/') + '/' + lastPart + '-' + part;
+      const pathParts = currentPath.split("/");
+      const lastPart = pathParts.pop() || "";
+      const newPath = pathParts.join("/") + "/" + lastPart + "-" + part;
       generatePaths(parts, index + 1, newPath);
     }
   }
@@ -200,10 +205,10 @@ function decodeWindowsPath(dirName: string): string {
  */
 function decodeUnixPath(dirName: string): string {
   // Simple decode: replace all dashes with slashes
-  const simplePath = '/' + dirName.slice(1).replace(/-/g, '/');
+  const simplePath = "/" + dirName.slice(1).replace(/-/g, "/");
 
   // Normalize double slashes
-  const normalizedSimple = simplePath.replace(/\/+/g, '/');
+  const normalizedSimple = simplePath.replace(/\/+/g, "/");
 
   // If simple decode exists, we're done
   if (existsSync(normalizedSimple)) {
@@ -216,7 +221,11 @@ function decodeUnixPath(dirName: string): string {
   const possiblePaths: string[] = [];
 
   // Generate all possible interpretations by trying different hyphen positions
-  function generatePaths(parts: string[], index: number, currentPath: string): void {
+  function generatePaths(
+    parts: string[],
+    index: number,
+    currentPath: string,
+  ): void {
     if (index >= parts.length) {
       possiblePaths.push(currentPath);
       return;
@@ -225,27 +234,27 @@ function decodeUnixPath(dirName: string): string {
     const part = parts[index];
 
     // Empty string means this was a consecutive hyphen - must join with previous
-    if (part === '' && currentPath) {
-      const pathParts = currentPath.split('/');
-      const lastPart = pathParts.pop() || '';
-      const newPath = pathParts.join('/') + '/' + lastPart + '-';
+    if (part === "" && currentPath) {
+      const pathParts = currentPath.split("/");
+      const lastPart = pathParts.pop() || "";
+      const newPath = pathParts.join("/") + "/" + lastPart + "-";
       generatePaths(parts, index + 1, newPath);
       return;
     }
 
     // Try adding next segment as a new directory
-    generatePaths(parts, index + 1, currentPath + '/' + part);
+    generatePaths(parts, index + 1, currentPath + "/" + part);
 
     // Try combining with previous segment using hyphen (if not first segment)
     if (index > 0 && currentPath) {
-      const pathParts = currentPath.split('/');
-      const lastPart = pathParts.pop() || '';
-      const newPath = pathParts.join('/') + '/' + lastPart + '-' + part;
+      const pathParts = currentPath.split("/");
+      const lastPart = pathParts.pop() || "";
+      const newPath = pathParts.join("/") + "/" + lastPart + "-" + part;
       generatePaths(parts, index + 1, newPath);
     }
   }
 
-  generatePaths(segments, 0, '');
+  generatePaths(segments, 0, "");
 
   // Find the first path that exists on filesystem
   for (const path of possiblePaths) {
@@ -266,9 +275,9 @@ function matchesPattern(path: string, pattern?: string): boolean {
 
   // Convert glob pattern to regex
   const regexPattern = pattern
-    .replace(/\./g, '\\.')
-    .replace(/\*/g, '.*')
-    .replace(/\?/g, '.');
+    .replace(/\./g, "\\.")
+    .replace(/\*/g, ".*")
+    .replace(/\?/g, ".");
 
   const regex = new RegExp(`^${regexPattern}$`);
   return regex.test(path);
@@ -277,8 +286,10 @@ function matchesPattern(path: string, pattern?: string): boolean {
 /**
  * Scan for all transcript files in ~/.factory/projects/
  */
-export async function scanTranscripts(options: ScanOptions = {}): Promise<ScanResult> {
-  const projectsDir = join(homedir(), '.factory', 'projects');
+export async function scanTranscripts(
+  options: ScanOptions = {},
+): Promise<ScanResult> {
+  const projectsDir = join(homedir(), ".factory", "projects");
   const transcripts: TranscriptFile[] = [];
   const projectDirs = new Set<string>();
 
@@ -304,12 +315,15 @@ export async function scanTranscripts(options: ScanOptions = {}): Promise<ScanRe
 
       for (const fileName of projectFiles) {
         // Skip sessions-index.json and any non-.jsonl files
-        if (fileName === 'sessions-index.json' || !fileName.endsWith('.jsonl')) {
+        if (
+          fileName === "sessions-index.json" ||
+          !fileName.endsWith(".jsonl")
+        ) {
           continue;
         }
 
         // Extract session ID from filename
-        const sessionId = fileName.replace('.jsonl', '');
+        const sessionId = fileName.replace(".jsonl", "");
 
         // Validate session ID format (must be UUID)
         if (!UUID_REGEX.test(sessionId)) {
@@ -330,7 +344,7 @@ export async function scanTranscripts(options: ScanOptions = {}): Promise<ScanRe
           sessionId,
           filePath,
           fileSize: fileStats.size,
-          modifiedTime: fileStats.mtime
+          modifiedTime: fileStats.mtime,
         });
 
         projectDirs.add(projectDir);
@@ -338,11 +352,11 @@ export async function scanTranscripts(options: ScanOptions = {}): Promise<ScanRe
     }
   } catch (error) {
     // If projects directory doesn't exist, return empty result
-    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
       return {
         transcripts: [],
         totalSize: 0,
-        projectCount: 0
+        projectCount: 0,
       };
     }
     throw error;
@@ -353,6 +367,6 @@ export async function scanTranscripts(options: ScanOptions = {}): Promise<ScanRe
   return {
     transcripts,
     totalSize,
-    projectCount: projectDirs.size
+    projectCount: projectDirs.size,
   };
 }

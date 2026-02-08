@@ -3,9 +3,9 @@
  * Provides unified process management across Windows, macOS, and Linux.
  */
 
-import { execSync, execFile } from 'child_process';
-import { promisify } from 'util';
-import * as fsPromises from 'fs/promises';
+import { execSync, execFile } from "child_process";
+import { promisify } from "util";
+import * as fsPromises from "fs/promises";
 
 const execFileAsync = promisify(execFile);
 
@@ -17,27 +17,30 @@ const execFileAsync = promisify(execFile);
  */
 export async function killProcessTree(
   pid: number,
-  signal: NodeJS.Signals = 'SIGTERM'
+  signal: NodeJS.Signals = "SIGTERM",
 ): Promise<boolean> {
   if (!Number.isInteger(pid) || pid <= 0) return false;
 
-  if (process.platform === 'win32') {
-    return killProcessTreeWindows(pid, signal === 'SIGKILL');
+  if (process.platform === "win32") {
+    return killProcessTreeWindows(pid, signal === "SIGKILL");
   } else {
     return killProcessTreeUnix(pid, signal);
   }
 }
 
-async function killProcessTreeWindows(pid: number, force: boolean): Promise<boolean> {
+async function killProcessTreeWindows(
+  pid: number,
+  force: boolean,
+): Promise<boolean> {
   try {
-    const args = ['/T', '/PID', String(pid)];
+    const args = ["/T", "/PID", String(pid)];
     if (force) {
-      args.unshift('/F');
+      args.unshift("/F");
     }
-    execSync(`taskkill ${args.join(' ')}`, {
-      stdio: 'ignore',
+    execSync(`taskkill ${args.join(" ")}`, {
+      stdio: "ignore",
       timeout: 5000,
-      windowsHide: true
+      windowsHide: true,
     });
     return true;
   } catch (err: unknown) {
@@ -80,27 +83,42 @@ export function isProcessAlive(pid: number): boolean {
  * Get process start time for PID reuse detection.
  * Returns milliseconds timestamp on macOS/Windows, jiffies on Linux.
  */
-export async function getProcessStartTime(pid: number): Promise<number | undefined> {
+export async function getProcessStartTime(
+  pid: number,
+): Promise<number | undefined> {
   if (!Number.isInteger(pid) || pid <= 0) return undefined;
 
-  if (process.platform === 'win32') {
+  if (process.platform === "win32") {
     return getProcessStartTimeWindows(pid);
-  } else if (process.platform === 'darwin') {
+  } else if (process.platform === "darwin") {
     return getProcessStartTimeMacOS(pid);
-  } else if (process.platform === 'linux') {
+  } else if (process.platform === "linux") {
     return getProcessStartTimeLinux(pid);
   }
   return undefined;
 }
 
-async function getProcessStartTimeWindows(pid: number): Promise<number | undefined> {
+async function getProcessStartTimeWindows(
+  pid: number,
+): Promise<number | undefined> {
   try {
-    const { stdout } = await execFileAsync('wmic', [
-      'process', 'where', `ProcessId=${pid}`,
-      'get', 'CreationDate', '/format:csv'
-    ], { timeout: 5000, windowsHide: true });
+    const { stdout } = await execFileAsync(
+      "wmic",
+      [
+        "process",
+        "where",
+        `ProcessId=${pid}`,
+        "get",
+        "CreationDate",
+        "/format:csv",
+      ],
+      { timeout: 5000, windowsHide: true },
+    );
 
-    const lines = stdout.trim().split(/\r?\n/).filter(l => l.trim());
+    const lines = stdout
+      .trim()
+      .split(/\r?\n/)
+      .filter((l) => l.trim());
     if (lines.length < 2) return undefined;
 
     const match = lines[1].match(/,(\d{14})/);
@@ -113,7 +131,7 @@ async function getProcessStartTimeWindows(pid: number): Promise<number | undefin
       parseInt(d.slice(6, 8)),
       parseInt(d.slice(8, 10)),
       parseInt(d.slice(10, 12)),
-      parseInt(d.slice(12, 14))
+      parseInt(d.slice(12, 14)),
     );
     return date.getTime();
   } catch {
@@ -121,12 +139,18 @@ async function getProcessStartTimeWindows(pid: number): Promise<number | undefin
   }
 }
 
-async function getProcessStartTimeMacOS(pid: number): Promise<number | undefined> {
+async function getProcessStartTimeMacOS(
+  pid: number,
+): Promise<number | undefined> {
   try {
-    const { stdout } = await execFileAsync('ps', ['-p', String(pid), '-o', 'lstart='], {
-      env: { ...process.env, LC_ALL: 'C' },
-      windowsHide: true
-    });
+    const { stdout } = await execFileAsync(
+      "ps",
+      ["-p", String(pid), "-o", "lstart="],
+      {
+        env: { ...process.env, LC_ALL: "C" },
+        windowsHide: true,
+      },
+    );
     const date = new Date(stdout.trim());
     return isNaN(date.getTime()) ? undefined : date.getTime();
   } catch {
@@ -134,13 +158,15 @@ async function getProcessStartTimeMacOS(pid: number): Promise<number | undefined
   }
 }
 
-async function getProcessStartTimeLinux(pid: number): Promise<number | undefined> {
+async function getProcessStartTimeLinux(
+  pid: number,
+): Promise<number | undefined> {
   try {
-    const stat = await fsPromises.readFile(`/proc/${pid}/stat`, 'utf8');
-    const closeParen = stat.lastIndexOf(')');
+    const stat = await fsPromises.readFile(`/proc/${pid}/stat`, "utf8");
+    const closeParen = stat.lastIndexOf(")");
     if (closeParen === -1) return undefined;
 
-    const fields = stat.substring(closeParen + 2).split(' ');
+    const fields = stat.substring(closeParen + 2).split(" ");
     const startTime = parseInt(fields[19], 10);
     return isNaN(startTime) ? undefined : startTime;
   } catch {
@@ -153,20 +179,20 @@ async function getProcessStartTimeLinux(pid: number): Promise<number | undefined
  */
 export async function gracefulKill(
   pid: number,
-  gracePeriodMs: number = 5000
-): Promise<'graceful' | 'forced' | 'failed'> {
-  if (!isProcessAlive(pid)) return 'graceful';
+  gracePeriodMs: number = 5000,
+): Promise<"graceful" | "forced" | "failed"> {
+  if (!isProcessAlive(pid)) return "graceful";
 
-  await killProcessTree(pid, 'SIGTERM');
+  await killProcessTree(pid, "SIGTERM");
 
   const deadline = Date.now() + gracePeriodMs;
   while (Date.now() < deadline) {
-    if (!isProcessAlive(pid)) return 'graceful';
-    await new Promise(r => setTimeout(r, 100));
+    if (!isProcessAlive(pid)) return "graceful";
+    await new Promise((r) => setTimeout(r, 100));
   }
 
-  await killProcessTree(pid, 'SIGKILL');
+  await killProcessTree(pid, "SIGKILL");
 
-  await new Promise(r => setTimeout(r, 1000));
-  return isProcessAlive(pid) ? 'failed' : 'forced';
+  await new Promise((r) => setTimeout(r, 1000));
+  return isProcessAlive(pid) ? "failed" : "forced";
 }

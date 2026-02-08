@@ -8,8 +8,8 @@
  * a convenient way to retrieve session context and build continuation prompts.
  */
 
-import { getBackgroundManager } from '../features/background-agent/manager.js';
-import type { ResumeContext } from '../features/background-agent/types.js';
+import { getBackgroundManager } from "../features/background-agent/manager.js";
+import type { ResumeContext } from "../features/background-agent/types.js";
 
 /**
  * Input for resuming a session
@@ -108,22 +108,22 @@ function buildContinuationPrompt(context: ResumeContext): string {
   const parts: string[] = [];
 
   // Add session context header
-  parts.push('# Resuming Background Session');
-  parts.push('');
+  parts.push("# Resuming Background Session");
+  parts.push("");
   parts.push(`Session ID: ${context.sessionId}`);
   parts.push(`Started: ${context.startedAt.toISOString()}`);
   parts.push(`Last Activity: ${context.lastActivityAt.toISOString()}`);
-  parts.push('');
+  parts.push("");
 
   // Add original task
-  parts.push('## Original Task');
-  parts.push('');
+  parts.push("## Original Task");
+  parts.push("");
   parts.push(context.previousPrompt);
-  parts.push('');
+  parts.push("");
 
   // Add progress information
-  parts.push('## Progress So Far');
-  parts.push('');
+  parts.push("## Progress So Far");
+  parts.push("");
   parts.push(`Tool calls executed: ${context.toolCallCount}`);
 
   if (context.lastToolUsed) {
@@ -131,20 +131,20 @@ function buildContinuationPrompt(context: ResumeContext): string {
   }
 
   if (context.lastOutputSummary) {
-    parts.push('');
-    parts.push('Last output:');
-    parts.push('```');
+    parts.push("");
+    parts.push("Last output:");
+    parts.push("```");
     parts.push(context.lastOutputSummary);
-    parts.push('```');
+    parts.push("```");
   }
 
-  parts.push('');
+  parts.push("");
 
   // Add continuation instruction
-  parts.push('## Instructions');
-  parts.push('');
-  parts.push('Continue working on the task from where you left off.');
-  parts.push('Review the progress above and complete any remaining work.');
+  parts.push("## Instructions");
+  parts.push("");
+  parts.push("Continue working on the task from where you left off.");
+  parts.push("Review the progress above and complete any remaining work.");
 
-  return parts.join('\n');
+  return parts.join("\n");
 }

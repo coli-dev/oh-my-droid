@@ -1,12 +1,15 @@
-import { EventEmitter } from 'events';
-import * as path from 'path';
-import { scanTranscripts, TranscriptFile } from './transcript-scanner.js';
-import { parseTranscript } from './transcript-parser.js';
-import type { TranscriptEntry, TokenUsage } from './types.js';
-import { BackfillDedup } from './backfill-dedup.js';
-import { TokenTracker, getTokenTracker } from './token-tracker.js';
-import { calculateCost } from './cost-estimator.js';
-import { extractTokenUsage, extractTaskSpawns } from './transcript-token-extractor.js';
+import { EventEmitter } from "events";
+import * as path from "path";
+import { scanTranscripts, TranscriptFile } from "./transcript-scanner.js";
+import { parseTranscript } from "./transcript-parser.js";
+import type { TranscriptEntry, TokenUsage } from "./types.js";
+import { BackfillDedup } from "./backfill-dedup.js";
+import { TokenTracker, getTokenTracker } from "./token-tracker.js";
+import { calculateCost } from "./cost-estimator.js";
+import {
+  extractTokenUsage,
+  extractTaskSpawns,
+} from "./transcript-token-extractor.js";
 
 export interface BackfillOptions {
   projectFilter?: string;
@@ -130,7 +133,7 @@ export class BackfillEngine extends EventEmitter {
     transcript: TranscriptFile,
     options: BackfillOptions,
     result: BackfillResult,
-    totalFiles: number
+    totalFiles: number,
   ): Promise<void> {
     const batch: TokenUsage[] = [];
     const BATCH_SIZE = 100;
@@ -140,7 +143,7 @@ export class BackfillEngine extends EventEmitter {
     const agentLookup = new Map<string, string>();
 
     // Emit progress
-    this.emit('progress', {
+    this.emit("progress", {
       currentFile: path.basename(transcript.filePath),
       filesProcessed: result.filesProcessed,
       totalFiles,
@@ -154,7 +157,9 @@ export class BackfillEngine extends EventEmitter {
       onParseError: (line, error) => {
         result.errorsEncountered++;
         if (options.verbose) {
-          console.warn(`Parse error in ${transcript.filePath}: ${error.message}`);
+          console.warn(
+            `Parse error in ${transcript.filePath}: ${error.message}`,
+          );
         }
       },
     })) {
@@ -170,7 +175,12 @@ export class BackfillEngine extends EventEmitter {
       }
 
       // Extract token usage (passing agentLookup for progress entry attribution)
-      const extracted = extractTokenUsage(entry, transcript.sessionId, transcript.filePath, agentLookup);
+      const extracted = extractTokenUsage(
+        entry,
+        transcript.sessionId,
+        transcript.filePath,
+        agentLookup,
+      );
 
       if (!extracted) {
         continue; // Skip entries without usage data

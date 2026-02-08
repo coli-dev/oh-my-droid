@@ -4,33 +4,39 @@
  * Composes statusline output from render context.
  */
 
-import type { HudRenderContext, HudConfig } from './types.js';
-import { DEFAULT_HUD_CONFIG } from './types.js';
-import { bold, dim } from './colors.js';
-import { renderRalph } from './elements/ralph.js';
-import { renderAgentsByFormat, renderAgentsMultiLine } from './elements/agents.js';
-import { renderTodosWithCurrent } from './elements/todos.js';
-import { renderSkills, renderLastSkill } from './elements/skills.js';
-import { renderContext, renderContextWithBar } from './elements/context.js';
-import { renderBackground } from './elements/background.js';
-import { renderPrd } from './elements/prd.js';
-import { renderRateLimits, renderRateLimitsWithBar } from './elements/limits.js';
-import { renderPermission } from './elements/permission.js';
-import { renderThinking } from './elements/thinking.js';
-import { renderSession } from './elements/session.js';
-import { renderAutopilot } from './elements/autopilot.js';
-import { renderCwd } from './elements/cwd.js';
-import { renderGitRepo, renderGitBranch } from './elements/git.js';
-import { renderModel } from './elements/model.js';
+import type { HudRenderContext, HudConfig } from "./types.js";
+import { DEFAULT_HUD_CONFIG } from "./types.js";
+import { bold, dim } from "./colors.js";
+import { renderRalph } from "./elements/ralph.js";
+import {
+  renderAgentsByFormat,
+  renderAgentsMultiLine,
+} from "./elements/agents.js";
+import { renderTodosWithCurrent } from "./elements/todos.js";
+import { renderSkills, renderLastSkill } from "./elements/skills.js";
+import { renderContext, renderContextWithBar } from "./elements/context.js";
+import { renderBackground } from "./elements/background.js";
+import { renderPrd } from "./elements/prd.js";
+import {
+  renderRateLimits,
+  renderRateLimitsWithBar,
+} from "./elements/limits.js";
+import { renderPermission } from "./elements/permission.js";
+import { renderThinking } from "./elements/thinking.js";
+import { renderSession } from "./elements/session.js";
+import { renderAutopilot } from "./elements/autopilot.js";
+import { renderCwd } from "./elements/cwd.js";
+import { renderGitRepo, renderGitBranch } from "./elements/git.js";
+import { renderModel } from "./elements/model.js";
 import {
   getAnalyticsDisplay,
   renderAnalyticsLineWithConfig,
   getSessionInfo,
   getSessionHealthAnalyticsData,
   renderBudgetWarning,
-  renderCacheEfficiency
-} from './analytics-display.js';
-import type { SessionHealth, HudElementConfig } from './types.js';
+  renderCacheEfficiency,
+} from "./analytics-display.js";
+import type { SessionHealth, HudElementConfig } from "./types.js";
 
 /**
  * Limit output lines to prevent input field shrinkage (Issue #222).
@@ -41,7 +47,10 @@ import type { SessionHealth, HudElementConfig } from './types.js';
  * @returns Trimmed array of lines
  */
 export function limitOutputLines(lines: string[], maxLines?: number): string[] {
-  const limit = Math.max(1, maxLines ?? DEFAULT_HUD_CONFIG.elements.maxOutputLines);
+  const limit = Math.max(
+    1,
+    maxLines ?? DEFAULT_HUD_CONFIG.elements.maxOutputLines,
+  );
   if (lines.length <= limit) {
     return lines;
   }
@@ -55,7 +64,7 @@ export function limitOutputLines(lines: string[], maxLines?: number): string[] {
  */
 function renderSessionHealthAnalyticsWithConfig(
   sessionHealth: SessionHealth,
-  enabledElements: HudElementConfig
+  enabledElements: HudElementConfig,
 ): string {
   const data = getSessionHealthAnalyticsData(sessionHealth);
   const parts: string[] = [];
@@ -93,28 +102,41 @@ function renderSessionHealthAnalyticsWithConfig(
     parts.push(data.costHour);
   }
 
-  return parts.join(' | ');
+  return parts.join(" | ");
 }
 
 /**
  * Render the complete statusline (single or multi-line)
  */
-export async function render(context: HudRenderContext, config: HudConfig): Promise<string> {
+export async function render(
+  context: HudRenderContext,
+  config: HudConfig,
+): Promise<string> {
   const elements: string[] = [];
   const detailLines: string[] = [];
   const { elements: enabledElements } = config;
 
   // Check if analytics preset is active
-  if (config.preset === 'analytics') {
+  if (config.preset === "analytics") {
     const analytics = await getAnalyticsDisplay();
     const sessionInfo = await getSessionInfo();
 
     // Render analytics-focused layout
-    const lines = [sessionInfo, renderAnalyticsLineWithConfig(analytics, enabledElements.showCost, enabledElements.showCache)];
+    const lines = [
+      sessionInfo,
+      renderAnalyticsLineWithConfig(
+        analytics,
+        enabledElements.showCost,
+        enabledElements.showCache,
+      ),
+    ];
 
     // Add SessionHealth analytics if available
     if (context.sessionHealth) {
-      const healthAnalytics = renderSessionHealthAnalyticsWithConfig(context.sessionHealth, enabledElements);
+      const healthAnalytics = renderSessionHealthAnalyticsWithConfig(
+        context.sessionHealth,
+        enabledElements,
+      );
       if (healthAnalytics) lines.push(healthAnalytics);
 
       // Cache efficiency (respects showCache)
@@ -134,7 +156,10 @@ export async function render(context: HudRenderContext, config: HudConfig): Prom
 
     // Add agents if available
     if (context.activeAgents.length > 0) {
-      const agents = renderAgentsByFormat(context.activeAgents, enabledElements.agentsFormat || 'codes');
+      const agents = renderAgentsByFormat(
+        context.activeAgents,
+        enabledElements.agentsFormat || "codes",
+      );
       if (agents) lines.push(agents);
     }
 
@@ -144,7 +169,7 @@ export async function render(context: HudRenderContext, config: HudConfig): Prom
       if (todos) lines.push(todos);
     }
 
-    return limitOutputLines(lines, config.elements.maxOutputLines).join('\n');
+    return limitOutputLines(lines, config.elements.maxOutputLines).join("\n");
   }
 
   // Git info line (separate line above HUD)
@@ -152,7 +177,10 @@ export async function render(context: HudRenderContext, config: HudConfig): Prom
 
   // Working directory
   if (enabledElements.cwd) {
-    const cwdElement = renderCwd(context.cwd, enabledElements.cwdFormat || 'relative');
+    const cwdElement = renderCwd(
+      context.cwd,
+      enabledElements.cwdFormat || "relative",
+    );
     if (cwdElement) gitElements.push(cwdElement);
   }
 
@@ -176,7 +204,7 @@ export async function render(context: HudRenderContext, config: HudConfig): Prom
 
   // [OMD] label
   if (enabledElements.omdLabel) {
-    elements.push(bold('[OMD]'));
+    elements.push(bold("[OMD]"));
   }
 
   // Rate limits (5h and weekly)
@@ -195,7 +223,10 @@ export async function render(context: HudRenderContext, config: HudConfig): Prom
 
   // Extended thinking indicator
   if (enabledElements.thinking && context.thinkingState) {
-    const thinking = renderThinking(context.thinkingState, enabledElements.thinkingFormat || 'text');
+    const thinking = renderThinking(
+      context.thinkingState,
+      enabledElements.thinkingFormat || "text",
+    );
     if (thinking) elements.push(thinking);
   }
 
@@ -210,7 +241,10 @@ export async function render(context: HudRenderContext, config: HudConfig): Prom
     }
 
     // Add analytics inline if available (respects showCache/showCost)
-    const analytics = renderSessionHealthAnalyticsWithConfig(context.sessionHealth, enabledElements);
+    const analytics = renderSessionHealthAnalyticsWithConfig(
+      context.sessionHealth,
+      enabledElements,
+    );
     if (analytics) elements.push(analytics);
 
     // Add budget warning to detail lines
@@ -245,7 +279,7 @@ export async function render(context: HudRenderContext, config: HudConfig): Prom
     const skills = renderSkills(
       context.ultrawork,
       context.ralph,
-      (enabledElements.lastSkill ?? true) ? context.lastSkill : null
+      (enabledElements.lastSkill ?? true) ? context.lastSkill : null,
     );
     if (skills) elements.push(skills);
   }
@@ -266,9 +300,9 @@ export async function render(context: HudRenderContext, config: HudConfig): Prom
 
   // Active agents - handle multi-line format specially
   if (enabledElements.agents) {
-    const format = enabledElements.agentsFormat || 'codes';
+    const format = enabledElements.agentsFormat || "codes";
 
-    if (format === 'multiline') {
+    if (format === "multiline") {
       // Multi-line mode: get header part and detail lines
       const maxLines = enabledElements.agentsMaxLines || 5;
       const result = renderAgentsMultiLine(context.activeAgents, maxLines);
@@ -292,11 +326,11 @@ export async function render(context: HudRenderContext, config: HudConfig): Prom
 
   // Git info line (separate line above HUD header)
   if (gitElements.length > 0) {
-    outputLines.push(gitElements.join(dim(' | ')));
+    outputLines.push(gitElements.join(dim(" | ")));
   }
 
   // HUD header line
-  const headerLine = elements.join(dim(' | '));
+  const headerLine = elements.join(dim(" | "));
   outputLines.push(headerLine);
 
   // Todos on next line (if available)
@@ -306,13 +340,22 @@ export async function render(context: HudRenderContext, config: HudConfig): Prom
   }
 
   // Optionally add analytics line for full/dense presets
-  if (config.preset === 'full' || config.preset === 'dense') {
+  if (config.preset === "full" || config.preset === "dense") {
     try {
       const analytics = await getAnalyticsDisplay();
-      detailLines.push(renderAnalyticsLineWithConfig(analytics, enabledElements.showCost, enabledElements.showCache));
+      detailLines.push(
+        renderAnalyticsLineWithConfig(
+          analytics,
+          enabledElements.showCost,
+          enabledElements.showCache,
+        ),
+      );
 
       // Also add cache efficiency if SessionHealth available (respects showCache)
-      if (enabledElements.showCache && context.sessionHealth?.cacheHitRate !== undefined) {
+      if (
+        enabledElements.showCache &&
+        context.sessionHealth?.cacheHitRate !== undefined
+      ) {
         const cacheEfficiency = renderCacheEfficiency(context.sessionHealth);
         if (cacheEfficiency) detailLines.push(cacheEfficiency);
       }
@@ -321,5 +364,8 @@ export async function render(context: HudRenderContext, config: HudConfig): Prom
     }
   }
 
-  return limitOutputLines([...outputLines, ...detailLines], config.elements.maxOutputLines).join('\n');
+  return limitOutputLines(
+    [...outputLines, ...detailLines],
+    config.elements.maxOutputLines,
+  ).join("\n");
 }

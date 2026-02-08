@@ -6,19 +6,19 @@
  */
 
 // ANSI escape codes
-export const RESET = '\x1b[0m';
-const DIM = '\x1b[2m';
-const BOLD = '\x1b[1m';
-const RED = '\x1b[31m';
-const GREEN = '\x1b[32m';
-const YELLOW = '\x1b[33m';
-const BLUE = '\x1b[34m';
-const MAGENTA = '\x1b[35m';
-const CYAN = '\x1b[36m';
-const WHITE = '\x1b[37m';
-const BRIGHT_BLUE = '\x1b[94m';
-const BRIGHT_MAGENTA = '\x1b[95m';
-const BRIGHT_CYAN = '\x1b[96m';
+export const RESET = "\x1b[0m";
+const DIM = "\x1b[2m";
+const BOLD = "\x1b[1m";
+const RED = "\x1b[31m";
+const GREEN = "\x1b[32m";
+const YELLOW = "\x1b[33m";
+const BLUE = "\x1b[34m";
+const MAGENTA = "\x1b[35m";
+const CYAN = "\x1b[36m";
+const WHITE = "\x1b[37m";
+const BRIGHT_BLUE = "\x1b[94m";
+const BRIGHT_MAGENTA = "\x1b[95m";
+const BRIGHT_CYAN = "\x1b[96m";
 
 // ============================================================================
 // Color Functions
@@ -88,7 +88,10 @@ export function getContextColor(percent: number): string {
 /**
  * Get color code based on ralph iteration.
  */
-export function getRalphColor(iteration: number, maxIterations: number): string {
+export function getRalphColor(
+  iteration: number,
+  maxIterations: number,
+): string {
   const warningThreshold = Math.floor(maxIterations * 0.7);
   const criticalThreshold = Math.floor(maxIterations * 0.9);
 
@@ -121,9 +124,9 @@ export function getTodoColor(completed: number, total: number): string {
 export function getModelTierColor(model: string | undefined): string {
   if (!model) return CYAN; // Default/unknown
   const tier = model.toLowerCase();
-  if (tier.includes('opus')) return MAGENTA;
-  if (tier.includes('sonnet')) return YELLOW;
-  if (tier.includes('haiku')) return GREEN;
+  if (tier.includes("opus")) return MAGENTA;
+  if (tier.includes("sonnet")) return YELLOW;
+  if (tier.includes("haiku")) return GREEN;
   return CYAN; // Unknown model
 }
 
@@ -157,7 +160,7 @@ export function coloredBar(percent: number, width: number = 10): string {
   const empty = safeWidth - filled;
 
   const color = getContextColor(safePercent);
-  return `${color}${'█'.repeat(filled)}${DIM}${'░'.repeat(empty)}${RESET}`;
+  return `${color}${"█".repeat(filled)}${DIM}${"░".repeat(empty)}${RESET}`;
 }
 
 /**
@@ -166,7 +169,7 @@ export function coloredBar(percent: number, width: number = 10): string {
 export function coloredValue(
   value: number,
   total: number,
-  getColor: (value: number, total: number) => string
+  getColor: (value: number, total: number) => string,
 ): string {
   const color = getColor(value, total);
   return `${color}${value}/${total}${RESET}`;

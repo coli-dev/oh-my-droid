@@ -19,7 +19,7 @@ hasPrd, getPrdCompletionStatus, getRalphContext, setCurrentStory, enablePrdMode,
 // ============================================================================
 export { 
 // File operations
-readPrd, writePrd, findPrdPath, getPrdPath, getOmcPrdPath, 
+readPrd, writePrd, findPrdPath, getPrdPath, getOmdPrdPath, 
 // PRD status & operations
 getPrdStatus, markStoryComplete, markStoryIncomplete, getStory, getNextStory, 
 // PRD creation
@@ -33,7 +33,7 @@ PRD_FILENAME, PRD_EXAMPLE_FILENAME } from './prd.js';
 // ============================================================================
 export { 
 // File operations
-readProgress, readProgressRaw, parseProgress, findProgressPath, getProgressPath, getOmcProgressPath, 
+readProgress, readProgressRaw, parseProgress, findProgressPath, getProgressPath, getOmdProgressPath, 
 // Progress operations
 initProgress, appendProgress, addPattern, 
 // Context getters

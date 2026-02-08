@@ -5,8 +5,8 @@
  * Called from bridge.ts pre-tool-use and post-tool-use handlers.
  */
 
-import { readHudState, writeHudState, createEmptyHudState } from './state.js';
-import type { BackgroundTask, OmcHudState } from './types.js';
+import { readHudState, writeHudState, createEmptyHudState } from "./state.js";
+import type { BackgroundTask, OmdHudState } from "./types.js";
 
 const MAX_TASK_HISTORY = 20;
 const TASK_EXPIRY_MS = 30 * 60 * 1000; // 30 minutes
@@ -19,7 +19,7 @@ export function addBackgroundTask(
   id: string,
   description: string,
   agentType?: string,
-  directory?: string
+  directory?: string,
 ): boolean {
   try {
     let state = readHudState(directory) || createEmptyHudState();
@@ -33,7 +33,7 @@ export function addBackgroundTask(
       description,
       agentType,
       startedAt: new Date().toISOString(),
-      status: 'running',
+      status: "running",
     };
 
     state.backgroundTasks.push(task);
@@ -52,7 +52,7 @@ export function addBackgroundTask(
 export function completeBackgroundTask(
   id: string,
   directory?: string,
-  failed: boolean = false
+  failed: boolean = false,
 ): boolean {
   try {
     const state = readHudState(directory);
@@ -65,7 +65,7 @@ export function completeBackgroundTask(
       return false;
     }
 
-    task.status = failed ? 'failed' : 'completed';
+    task.status = failed ? "failed" : "completed";
     task.completedAt = new Date().toISOString();
     state.timestamp = new Date().toISOString();
 
@@ -78,18 +78,18 @@ export function completeBackgroundTask(
 /**
  * Clean up old and expired tasks from state.
  */
-function cleanupTasks(state: OmcHudState): OmcHudState {
+function cleanupTasks(state: OmdHudState): OmdHudState {
   const now = Date.now();
 
   // Filter out expired completed/failed tasks
   state.backgroundTasks = state.backgroundTasks.filter((task) => {
     // Keep running tasks
-    if (task.status === 'running') {
+    if (task.status === "running") {
       // But check if they're stale (started more than expiry time ago)
       const startedAt = new Date(task.startedAt).getTime();
       if (now - startedAt > TASK_EXPIRY_MS) {
         // Mark as failed and keep for history
-        task.status = 'failed';
+        task.status = "failed";
         task.completedAt = new Date().toISOString();
       }
       return true;
@@ -107,9 +107,9 @@ function cleanupTasks(state: OmcHudState): OmcHudState {
   // Limit total history
   if (state.backgroundTasks.length > MAX_TASK_HISTORY) {
     // Keep running tasks and most recent completed
-    const running = state.backgroundTasks.filter((t) => t.status === 'running');
+    const running = state.backgroundTasks.filter((t) => t.status === "running");
     const completed = state.backgroundTasks
-      .filter((t) => t.status !== 'running')
+      .filter((t) => t.status !== "running")
       .slice(-Math.max(0, MAX_TASK_HISTORY - running.length));
 
     state.backgroundTasks = [...running, ...completed];
@@ -125,7 +125,7 @@ export function getRunningTaskCount(directory?: string): number {
   const state = readHudState(directory);
   if (!state) return 0;
 
-  return state.backgroundTasks.filter((t) => t.status === 'running').length;
+  return state.backgroundTasks.filter((t) => t.status === "running").length;
 }
 
 /**

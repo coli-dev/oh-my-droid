@@ -6,7 +6,7 @@
  */
 import { z } from 'zod';
 import { existsSync, readFileSync, unlinkSync } from 'fs';
-import { resolveStatePath, ensureOmcDir, validateWorkingDirectory, resolveSessionStatePath, ensureSessionStateDir, listSessionIds, validateSessionId, getProcessSessionId, } from '../lib/worktree-paths.js';
+import { resolveStatePath, ensureOmdDir, validateWorkingDirectory, resolveSessionStatePath, ensureSessionStateDir, listSessionIds, validateSessionId, getProcessSessionId, } from '../lib/worktree-paths.js';
 import { atomicWriteJsonSync } from '../lib/atomic-write.js';
 import { isModeActive, getActiveModes, getAllModeStatuses, clearModeState, getStateFilePath, MODE_CONFIGS, getActiveSessionsForMode } from '../hooks/mode-registry/index.js';
 // ExecutionMode from mode-registry (8 modes - NO ralplan)
@@ -202,7 +202,7 @@ export const stateWriteTool = {
                     : resolveSessionStatePath(mode, sessionId, root);
             }
             else {
-                ensureOmcDir('state', root);
+                ensureOmdDir('state', root);
                 statePath = getStatePath(mode, root);
             }
             // Build state from explicit params + custom state

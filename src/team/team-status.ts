@@ -7,14 +7,19 @@
  * heartbeat data, task progress, and outbox messages.
  */
 
-import { readFileSync, existsSync } from 'fs';
-import { join } from 'path';
-import { homedir } from 'os';
-import { listMcpWorkers } from './team-registration.js';
-import { readHeartbeat, isWorkerAlive } from './heartbeat.js';
-import { listTaskIds, readTask } from './task-file-ops.js';
-import { sanitizeName } from './tmux-session.js';
-import type { HeartbeatData, TaskFile, OutboxMessage, McpWorkerMember } from './types.js';
+import { readFileSync, existsSync } from "fs";
+import { join } from "path";
+import { homedir } from "os";
+import { listMcpWorkers } from "./team-registration.js";
+import { readHeartbeat, isWorkerAlive } from "./heartbeat.js";
+import { listTaskIds, readTask } from "./task-file-ops.js";
+import { sanitizeName } from "./tmux-session.js";
+import type {
+  HeartbeatData,
+  TaskFile,
+  OutboxMessage,
+  McpWorkerMember,
+} from "./types.js";
 
 /**
  * Read the last N messages from a worker's outbox file without advancing any cursor.
@@ -23,23 +28,32 @@ import type { HeartbeatData, TaskFile, OutboxMessage, McpWorkerMember } from './
 function peekRecentOutboxMessages(
   teamName: string,
   workerName: string,
-  maxMessages: number = 10
+  maxMessages: number = 10,
 ): OutboxMessage[] {
   const safeName = sanitizeName(teamName);
   const safeWorker = sanitizeName(workerName);
-  const outboxPath = join(homedir(), '.factory', 'teams', safeName, 'outbox', `${safeWorker}.jsonl`);
+  const outboxPath = join(
+    homedir(),
+    ".factory",
+    "teams",
+    safeName,
+    "outbox",
+    `${safeWorker}.jsonl`,
+  );
 
   if (!existsSync(outboxPath)) return [];
 
   try {
-    const content = readFileSync(outboxPath, 'utf-8');
-    const lines = content.split('\n').filter(l => l.trim());
+    const content = readFileSync(outboxPath, "utf-8");
+    const lines = content.split("\n").filter((l) => l.trim());
     const recentLines = lines.slice(-maxMessages);
     const messages: OutboxMessage[] = [];
     for (const line of recentLines) {
       try {
         messages.push(JSON.parse(line));
-      } catch { /* skip malformed lines */ }
+      } catch {
+        /* skip malformed lines */
+      }
     }
     return messages;
   } catch {
@@ -49,7 +63,7 @@ function peekRecentOutboxMessages(
 
 export interface WorkerStatus {
   workerName: string;
-  provider: 'codex' | 'gemini';
+  provider: "codex" | "gemini";
   heartbeat: HeartbeatData | null;
   isAlive: boolean;
   currentTask: TaskFile | null;
@@ -78,7 +92,7 @@ export interface TeamStatus {
 export function getTeamStatus(
   teamName: string,
   workingDirectory: string,
-  heartbeatMaxAgeMs: number = 30000
+  heartbeatMaxAgeMs: number = 30000,
 ): TeamStatus {
   // Get all workers
   const mcpWorkers = listMcpWorkers(teamName, workingDirectory);
@@ -92,23 +106,32 @@ export function getTeamStatus(
   }
 
   // Build per-worker status
-  const workers: WorkerStatus[] = mcpWorkers.map(w => {
+  const workers: WorkerStatus[] = mcpWorkers.map((w) => {
     const heartbeat = readHeartbeat(workingDirectory, teamName, w.name);
-    const alive = isWorkerAlive(workingDirectory, teamName, w.name, heartbeatMaxAgeMs);
+    const alive = isWorkerAlive(
+      workingDirectory,
+      teamName,
+      w.name,
+      heartbeatMaxAgeMs,
+    );
     const recentMessages = peekRecentOutboxMessages(teamName, w.name);
 
     // Compute per-worker task stats
-    const workerTasks = tasks.filter(t => t.owner === w.name);
-    const failed = workerTasks.filter(t => t.status === 'completed' && t.metadata?.permanentlyFailed === true).length;
+    const workerTasks = tasks.filter((t) => t.owner === w.name);
+    const failed = workerTasks.filter(
+      (t) => t.status === "completed" && t.metadata?.permanentlyFailed === true,
+    ).length;
     const taskStats = {
-      completed: workerTasks.filter(t => t.status === 'completed').length - failed,
+      completed:
+        workerTasks.filter((t) => t.status === "completed").length - failed,
       failed,
-      pending: workerTasks.filter(t => t.status === 'pending').length,
-      inProgress: workerTasks.filter(t => t.status === 'in_progress').length,
+      pending: workerTasks.filter((t) => t.status === "pending").length,
+      inProgress: workerTasks.filter((t) => t.status === "in_progress").length,
     };
 
-    const currentTask = workerTasks.find(t => t.status === 'in_progress') || null;
-    const provider = w.agentType.replace('mcp-', '') as 'codex' | 'gemini';
+    const currentTask =
+      workerTasks.find((t) => t.status === "in_progress") || null;
+    const provider = w.agentType.replace("mcp-", "") as "codex" | "gemini";
 
     return {
       workerName: w.name,
@@ -122,13 +145,16 @@ export function getTeamStatus(
   });
 
   // Build team summary
-  const totalFailed = tasks.filter(t => t.status === 'completed' && t.metadata?.permanentlyFailed === true).length;
+  const totalFailed = tasks.filter(
+    (t) => t.status === "completed" && t.metadata?.permanentlyFailed === true,
+  ).length;
   const taskSummary = {
     total: tasks.length,
-    completed: tasks.filter(t => t.status === 'completed').length - totalFailed,
+    completed:
+      tasks.filter((t) => t.status === "completed").length - totalFailed,
     failed: totalFailed,
-    pending: tasks.filter(t => t.status === 'pending').length,
-    inProgress: tasks.filter(t => t.status === 'in_progress').length,
+    pending: tasks.filter((t) => t.status === "pending").length,
+    inProgress: tasks.filter((t) => t.status === "in_progress").length,
   };
 
   return {

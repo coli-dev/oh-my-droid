@@ -8,11 +8,15 @@
  * Branch naming: omd-team/{teamName}/{workerName}
  */
 
-import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { execFileSync } from 'node:child_process';
-import { atomicWriteJson, ensureDirWithMode, validateResolvedPath } from './fs-utils.js';
-import { sanitizeName } from './tmux-session.js';
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { execFileSync } from "node:child_process";
+import {
+  atomicWriteJson,
+  ensureDirWithMode,
+  validateResolvedPath,
+} from "./fs-utils.js";
+import { sanitizeName } from "./tmux-session.js";
 
 export interface WorktreeInfo {
   path: string;
@@ -23,8 +27,18 @@ export interface WorktreeInfo {
 }
 
 /** Get worktree path for a worker */
-function getWorktreePath(repoRoot: string, teamName: string, workerName: string): string {
-  return join(repoRoot, '.omd', 'worktrees', sanitizeName(teamName), sanitizeName(workerName));
+function getWorktreePath(
+  repoRoot: string,
+  teamName: string,
+  workerName: string,
+): string {
+  return join(
+    repoRoot,
+    ".omd",
+    "worktrees",
+    sanitizeName(teamName),
+    sanitizeName(workerName),
+  );
 }
 
 /** Get branch name for a worker */
@@ -34,7 +48,14 @@ function getBranchName(teamName: string, workerName: string): string {
 
 /** Get worktree metadata path */
 function getMetadataPath(repoRoot: string, teamName: string): string {
-  return join(repoRoot, '.omd', 'state', 'team-bridge', sanitizeName(teamName), 'worktrees.json');
+  return join(
+    repoRoot,
+    ".omd",
+    "state",
+    "team-bridge",
+    sanitizeName(teamName),
+    "worktrees.json",
+  );
 }
 
 /** Read worktree metadata */
@@ -42,17 +63,27 @@ function readMetadata(repoRoot: string, teamName: string): WorktreeInfo[] {
   const metaPath = getMetadataPath(repoRoot, teamName);
   if (!existsSync(metaPath)) return [];
   try {
-    return JSON.parse(readFileSync(metaPath, 'utf-8'));
+    return JSON.parse(readFileSync(metaPath, "utf-8"));
   } catch {
     return [];
   }
 }
 
 /** Write worktree metadata */
-function writeMetadata(repoRoot: string, teamName: string, entries: WorktreeInfo[]): void {
+function writeMetadata(
+  repoRoot: string,
+  teamName: string,
+  entries: WorktreeInfo[],
+): void {
   const metaPath = getMetadataPath(repoRoot, teamName);
   validateResolvedPath(metaPath, repoRoot);
-  const dir = join(repoRoot, '.omd', 'state', 'team-bridge', sanitizeName(teamName));
+  const dir = join(
+    repoRoot,
+    ".omd",
+    "state",
+    "team-bridge",
+    sanitizeName(teamName),
+  );
   ensureDirWithMode(dir);
   atomicWriteJson(metaPath, entries);
 }
@@ -66,7 +97,7 @@ export function createWorkerWorktree(
   teamName: string,
   workerName: string,
   repoRoot: string,
-  baseBranch?: string
+  baseBranch?: string,
 ): WorktreeInfo {
   const wtPath = getWorktreePath(repoRoot, teamName, workerName);
   const branch = getBranchName(teamName, workerName);
@@ -75,29 +106,44 @@ export function createWorkerWorktree(
 
   // Prune stale worktrees first
   try {
-    execFileSync('git', ['worktree', 'prune'], { cwd: repoRoot, stdio: 'pipe' });
-  } catch { /* ignore */ }
+    execFileSync("git", ["worktree", "prune"], {
+      cwd: repoRoot,
+      stdio: "pipe",
+    });
+  } catch {
+    /* ignore */
+  }
 
   // Remove stale worktree if it exists
   if (existsSync(wtPath)) {
     try {
-      execFileSync('git', ['worktree', 'remove', '--force', wtPath], { cwd: repoRoot, stdio: 'pipe' });
-    } catch { /* ignore */ }
+      execFileSync("git", ["worktree", "remove", "--force", wtPath], {
+        cwd: repoRoot,
+        stdio: "pipe",
+      });
+    } catch {
+      /* ignore */
+    }
   }
 
   // Delete stale branch if it exists
   try {
-    execFileSync('git', ['branch', '-D', branch], { cwd: repoRoot, stdio: 'pipe' });
-  } catch { /* branch doesn't exist, fine */ }
+    execFileSync("git", ["branch", "-D", branch], {
+      cwd: repoRoot,
+      stdio: "pipe",
+    });
+  } catch {
+    /* branch doesn't exist, fine */
+  }
 
   // Create worktree directory
-  const wtDir = join(repoRoot, '.omd', 'worktrees', sanitizeName(teamName));
+  const wtDir = join(repoRoot, ".omd", "worktrees", sanitizeName(teamName));
   ensureDirWithMode(wtDir);
 
   // Create worktree with new branch
-  const args = ['worktree', 'add', '-b', branch, wtPath];
+  const args = ["worktree", "add", "-b", branch, wtPath];
   if (baseBranch) args.push(baseBranch);
-  execFileSync('git', args, { cwd: repoRoot, stdio: 'pipe' });
+  execFileSync("git", args, { cwd: repoRoot, stdio: "pipe" });
 
   const info: WorktreeInfo = {
     path: wtPath,
@@ -109,7 +155,7 @@ export function createWorkerWorktree(
 
   // Update metadata
   const existing = readMetadata(repoRoot, teamName);
-  const updated = existing.filter(e => e.workerName !== workerName);
+  const updated = existing.filter((e) => e.workerName !== workerName);
   updated.push(info);
   writeMetadata(repoRoot, teamName, updated);
 
@@ -122,29 +168,44 @@ export function createWorkerWorktree(
 export function removeWorkerWorktree(
   teamName: string,
   workerName: string,
-  repoRoot: string
+  repoRoot: string,
 ): void {
   const wtPath = getWorktreePath(repoRoot, teamName, workerName);
   const branch = getBranchName(teamName, workerName);
 
   // Remove worktree
   try {
-    execFileSync('git', ['worktree', 'remove', '--force', wtPath], { cwd: repoRoot, stdio: 'pipe' });
-  } catch { /* may not exist */ }
+    execFileSync("git", ["worktree", "remove", "--force", wtPath], {
+      cwd: repoRoot,
+      stdio: "pipe",
+    });
+  } catch {
+    /* may not exist */
+  }
 
   // Prune to clean up
   try {
-    execFileSync('git', ['worktree', 'prune'], { cwd: repoRoot, stdio: 'pipe' });
-  } catch { /* ignore */ }
+    execFileSync("git", ["worktree", "prune"], {
+      cwd: repoRoot,
+      stdio: "pipe",
+    });
+  } catch {
+    /* ignore */
+  }
 
   // Delete branch
   try {
-    execFileSync('git', ['branch', '-D', branch], { cwd: repoRoot, stdio: 'pipe' });
-  } catch { /* branch may not exist */ }
+    execFileSync("git", ["branch", "-D", branch], {
+      cwd: repoRoot,
+      stdio: "pipe",
+    });
+  } catch {
+    /* branch may not exist */
+  }
 
   // Update metadata
   const existing = readMetadata(repoRoot, teamName);
-  const updated = existing.filter(e => e.workerName !== workerName);
+  const updated = existing.filter((e) => e.workerName !== workerName);
   writeMetadata(repoRoot, teamName, updated);
 }
 
@@ -153,7 +214,7 @@ export function removeWorkerWorktree(
  */
 export function listTeamWorktrees(
   teamName: string,
-  repoRoot: string
+  repoRoot: string,
 ): WorktreeInfo[] {
   return readMetadata(repoRoot, teamName);
 }
@@ -161,14 +222,13 @@ export function listTeamWorktrees(
 /**
  * Remove all worktrees for a team (cleanup on shutdown).
  */
-export function cleanupTeamWorktrees(
-  teamName: string,
-  repoRoot: string
-): void {
+export function cleanupTeamWorktrees(teamName: string, repoRoot: string): void {
   const entries = readMetadata(repoRoot, teamName);
   for (const entry of entries) {
     try {
       removeWorkerWorktree(teamName, entry.workerName, repoRoot);
-    } catch { /* best effort */ }
+    } catch {
+      /* best effort */
+    }
   }
 }

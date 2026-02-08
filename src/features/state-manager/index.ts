@@ -16,7 +16,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as os from "os";
 import { atomicWriteJsonSync } from "../../lib/atomic-write.js";
-import { OmcPaths } from "../../lib/worktree-paths.js";
+import { OmdPaths } from "../../lib/worktree-paths.js";
 import {
   StateLocation,
   StateConfig,
@@ -33,7 +33,7 @@ import {
 } from "./types.js";
 
 // Standard state directories
-const LOCAL_STATE_DIR = OmcPaths.STATE;
+const LOCAL_STATE_DIR = OmdPaths.STATE;
 /**
  * @deprecated for mode state. Global state directory is only used for analytics and daemon state.
  * Mode state should use LOCAL_STATE_DIR exclusively.

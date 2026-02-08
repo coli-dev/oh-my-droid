@@ -1,5 +1,5 @@
-import * as fs from 'fs/promises';
-import * as path from 'path';
+import * as fs from "fs/promises";
+import * as path from "path";
 
 export interface MetricEvent {
   timestamp: string;
@@ -17,15 +17,19 @@ export interface MetricQuery {
   offset?: number;
 }
 
-const METRICS_LOG_FILE = '.omd/logs/metrics.jsonl';
+const METRICS_LOG_FILE = ".omd/logs/metrics.jsonl";
 
 export class MetricsCollector {
-  async recordEvent(type: string, data: Record<string, any>, sessionId?: string): Promise<void> {
+  async recordEvent(
+    type: string,
+    data: Record<string, any>,
+    sessionId?: string,
+  ): Promise<void> {
     const event: MetricEvent = {
       timestamp: new Date().toISOString(),
       type,
       data,
-      sessionId
+      sessionId,
     };
 
     await this.appendToLog(event);
@@ -35,26 +39,29 @@ export class MetricsCollector {
     const logPath = path.resolve(process.cwd(), METRICS_LOG_FILE);
 
     try {
-      const content = await fs.readFile(logPath, 'utf-8');
-      const lines = content.trim().split('\n').filter(l => l.length > 0);
+      const content = await fs.readFile(logPath, "utf-8");
+      const lines = content
+        .trim()
+        .split("\n")
+        .filter((l) => l.length > 0);
 
-      let events: MetricEvent[] = lines.map(line => JSON.parse(line));
+      let events: MetricEvent[] = lines.map((line) => JSON.parse(line));
 
       // Apply filters
       if (query.type) {
-        events = events.filter(e => e.type === query.type);
+        events = events.filter((e) => e.type === query.type);
       }
 
       if (query.sessionId) {
-        events = events.filter(e => e.sessionId === query.sessionId);
+        events = events.filter((e) => e.sessionId === query.sessionId);
       }
 
       if (query.startDate) {
-        events = events.filter(e => e.timestamp >= query.startDate!);
+        events = events.filter((e) => e.timestamp >= query.startDate!);
       }
 
       if (query.endDate) {
-        events = events.filter(e => e.timestamp <= query.endDate!);
+        events = events.filter((e) => e.timestamp <= query.endDate!);
       }
 
       // Apply pagination
@@ -69,7 +76,7 @@ export class MetricsCollector {
 
   async aggregate(
     query: MetricQuery,
-    aggregator: (events: MetricEvent[]) => any
+    aggregator: (events: MetricEvent[]) => any,
   ): Promise<any> {
     const events = await this.query(query);
     return aggregator(events);
@@ -80,7 +87,7 @@ export class MetricsCollector {
     const logDir = path.dirname(logPath);
 
     await fs.mkdir(logDir, { recursive: true });
-    await fs.appendFile(logPath, JSON.stringify(event) + '\n', 'utf-8');
+    await fs.appendFile(logPath, JSON.stringify(event) + "\n", "utf-8");
   }
 }
 
@@ -103,7 +110,7 @@ export const aggregators = {
   groupBy: (field: string) => (events: MetricEvent[]) => {
     const groups: Record<string, MetricEvent[]> = {};
     for (const event of events) {
-      const key = event.data[field]?.toString() || 'unknown';
+      const key = event.data[field]?.toString() || "unknown";
       if (!groups[key]) groups[key] = [];
       groups[key].push(event);
     }
@@ -112,13 +119,13 @@ export const aggregators = {
 
   max: (field: string) => (events: MetricEvent[]) => {
     if (events.length === 0) return 0;
-    return Math.max(...events.map(e => e.data[field] || 0));
+    return Math.max(...events.map((e) => e.data[field] || 0));
   },
 
   min: (field: string) => (events: MetricEvent[]) => {
     if (events.length === 0) return 0;
-    return Math.min(...events.map(e => e.data[field] || 0));
-  }
+    return Math.min(...events.map((e) => e.data[field] || 0));
+  },
 };
 
 // Singleton instance

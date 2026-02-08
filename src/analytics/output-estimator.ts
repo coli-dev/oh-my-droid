@@ -7,15 +7,15 @@
  * - Opus: 50% (detailed reasoning)
  */
 
-import * as crypto from 'crypto';
+import * as crypto from "crypto";
 
 const MODEL_OUTPUT_RATIOS: Record<string, number> = {
-  'haiku': 0.30,
-  'sonnet': 0.40,
-  'opus': 0.50
+  haiku: 0.3,
+  sonnet: 0.4,
+  opus: 0.5,
 };
 
-const DEFAULT_RATIO = 0.40; // Sonnet baseline
+const DEFAULT_RATIO = 0.4; // Sonnet baseline
 
 /**
  * Estimate output tokens from input tokens using model-specific ratios.
@@ -24,7 +24,10 @@ const DEFAULT_RATIO = 0.40; // Sonnet baseline
  * @param modelName - Model name (e.g., "claude-sonnet-4.5")
  * @returns Estimated output tokens (rounded to nearest integer)
  */
-export function estimateOutputTokens(inputTokens: number, modelName: string): number {
+export function estimateOutputTokens(
+  inputTokens: number,
+  modelName: string,
+): number {
   if (inputTokens === 0) return 0;
 
   const ratio = detectModelRatio(modelName);
@@ -42,7 +45,11 @@ export function estimateOutputTokens(inputTokens: number, modelName: string): nu
 export function extractSessionId(transcriptPath: string): string {
   // Guard against null/undefined/empty
   if (!transcriptPath) {
-    return crypto.createHash('md5').update('unknown').digest('hex').slice(0, 16);
+    return crypto
+      .createHash("md5")
+      .update("unknown")
+      .digest("hex")
+      .slice(0, 16);
   }
 
   // Try to extract from path pattern
@@ -53,9 +60,10 @@ export function extractSessionId(transcriptPath: string): string {
   }
 
   // Fallback: hash the path
-  return crypto.createHash('md5')
+  return crypto
+    .createHash("md5")
     .update(transcriptPath)
-    .digest('hex')
+    .digest("hex")
     .slice(0, 16);
 }
 

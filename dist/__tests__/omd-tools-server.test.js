@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { omdToolsServer, omdToolNames, getOmcToolNames } from '../mcp/omd-tools-server.js';
+import { omdToolsServer, omdToolNames, getOmdToolNames } from '../mcp/omd-tools-server.js';
 describe('omd-tools-server', () => {
     describe('omdToolNames', () => {
         it('should export 35 tools total', () => {
@@ -22,28 +22,28 @@ describe('omd-tools-server', () => {
             });
         });
     });
-    describe('getOmcToolNames', () => {
+    describe('getOmdToolNames', () => {
         it('should return all tools by default', () => {
-            const tools = getOmcToolNames();
+            const tools = getOmdToolNames();
             expect(tools).toHaveLength(35);
         });
         it('should filter out LSP tools when includeLsp is false', () => {
-            const tools = getOmcToolNames({ includeLsp: false });
+            const tools = getOmdToolNames({ includeLsp: false });
             expect(tools.some(t => t.includes('lsp_'))).toBe(false);
             expect(tools).toHaveLength(23); // 2 AST + 1 python + 3 skills + 5 state + 6 notepad + 4 memory + 2 trace
         });
         it('should filter out AST tools when includeAst is false', () => {
-            const tools = getOmcToolNames({ includeAst: false });
+            const tools = getOmdToolNames({ includeAst: false });
             expect(tools.some(t => t.includes('ast_'))).toBe(false);
             expect(tools).toHaveLength(33); // 12 LSP + 1 python + 3 skills + 5 state + 6 notepad + 4 memory + 2 trace
         });
         it('should filter out python_repl when includePython is false', () => {
-            const tools = getOmcToolNames({ includePython: false });
+            const tools = getOmdToolNames({ includePython: false });
             expect(tools.some(t => t.includes('python_repl'))).toBe(false);
             expect(tools).toHaveLength(34); // 12 LSP + 2 AST + 3 skills + 5 state + 6 notepad + 4 memory + 2 trace
         });
         it('should filter out skills tools', () => {
-            const names = getOmcToolNames({ includeSkills: false });
+            const names = getOmdToolNames({ includeSkills: false });
             expect(names).toHaveLength(32);
             expect(names.every(n => !n.includes('load_omd_skills') && !n.includes('list_omd_skills'))).toBe(true);
         });

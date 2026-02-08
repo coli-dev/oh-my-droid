@@ -10,14 +10,18 @@
  * Storage: append-only JSONL at .omd/logs/team-usage-{team}.jsonl
  */
 
-import { existsSync, readFileSync, statSync } from 'node:fs';
-import { join } from 'node:path';
-import { appendFileWithMode, ensureDirWithMode, validateResolvedPath } from './fs-utils.js';
+import { existsSync, readFileSync, statSync } from "node:fs";
+import { join } from "node:path";
+import {
+  appendFileWithMode,
+  ensureDirWithMode,
+  validateResolvedPath,
+} from "./fs-utils.js";
 
 export interface TaskUsageRecord {
   taskId: string;
   workerName: string;
-  provider: 'codex' | 'gemini';
+  provider: "codex" | "gemini";
   model: string;
   startedAt: string;
   completedAt: string;
@@ -28,7 +32,7 @@ export interface TaskUsageRecord {
 
 export interface WorkerUsageSummary {
   workerName: string;
-  provider: 'codex' | 'gemini';
+  provider: "codex" | "gemini";
   model: string;
   taskCount: number;
   totalWallClockMs: number;
@@ -44,7 +48,7 @@ export interface TeamUsageReport {
 }
 
 function getUsageLogPath(workingDirectory: string, teamName: string): string {
-  return join(workingDirectory, '.omd', 'logs', `team-usage-${teamName}.jsonl`);
+  return join(workingDirectory, ".omd", "logs", `team-usage-${teamName}.jsonl`);
 }
 
 /**
@@ -53,13 +57,13 @@ function getUsageLogPath(workingDirectory: string, teamName: string): string {
 export function recordTaskUsage(
   workingDirectory: string,
   teamName: string,
-  record: TaskUsageRecord
+  record: TaskUsageRecord,
 ): void {
   const logPath = getUsageLogPath(workingDirectory, teamName);
-  const dir = join(workingDirectory, '.omd', 'logs');
+  const dir = join(workingDirectory, ".omd", "logs");
   validateResolvedPath(logPath, workingDirectory);
   ensureDirWithMode(dir);
-  appendFileWithMode(logPath, JSON.stringify(record) + '\n');
+  appendFileWithMode(logPath, JSON.stringify(record) + "\n");
 }
 
 /**
@@ -68,7 +72,7 @@ export function recordTaskUsage(
  */
 export function measureCharCounts(
   promptFilePath: string,
-  outputFilePath: string
+  outputFilePath: string,
 ): { promptChars: number; responseChars: number } {
   let promptChars = 0;
   let responseChars = 0;
@@ -77,13 +81,17 @@ export function measureCharCounts(
     if (existsSync(promptFilePath)) {
       promptChars = statSync(promptFilePath).size;
     }
-  } catch { /* missing file */ }
+  } catch {
+    /* missing file */
+  }
 
   try {
     if (existsSync(outputFilePath)) {
       responseChars = statSync(outputFilePath).size;
     }
-  } catch { /* missing file */ }
+  } catch {
+    /* missing file */
+  }
 
   return { promptChars, responseChars };
 }
@@ -91,18 +99,23 @@ export function measureCharCounts(
 /**
  * Read all usage records from the JSONL log.
  */
-function readUsageRecords(workingDirectory: string, teamName: string): TaskUsageRecord[] {
+function readUsageRecords(
+  workingDirectory: string,
+  teamName: string,
+): TaskUsageRecord[] {
   const logPath = getUsageLogPath(workingDirectory, teamName);
   if (!existsSync(logPath)) return [];
 
-  const content = readFileSync(logPath, 'utf-8');
-  const lines = content.split('\n').filter(l => l.trim());
+  const content = readFileSync(logPath, "utf-8");
+  const lines = content.split("\n").filter((l) => l.trim());
 
   const records: TaskUsageRecord[] = [];
   for (const line of lines) {
     try {
       records.push(JSON.parse(line));
-    } catch { /* skip malformed */ }
+    } catch {
+      /* skip malformed */
+    }
   }
 
   return records;
@@ -114,7 +127,7 @@ function readUsageRecords(workingDirectory: string, teamName: string): TaskUsage
  */
 export function generateUsageReport(
   workingDirectory: string,
-  teamName: string
+  teamName: string,
 ): TeamUsageReport {
   const records = readUsageRecords(workingDirectory, teamName);
 

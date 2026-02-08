@@ -17,7 +17,7 @@ export declare const omdToolNames: string[];
 /**
  * Get tool names filtered by category
  */
-export declare function getOmcToolNames(options?: {
+export declare function getOmdToolNames(options?: {
     includeLsp?: boolean;
     includeAst?: boolean;
     includePython?: boolean;

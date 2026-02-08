@@ -60,7 +60,7 @@ export declare function getPrdPath(directory: string): string;
 /**
  * Get the path to the prd.json in .omd subdirectory
  */
-export declare function getOmcPrdPath(directory: string): string;
+export declare function getOmdPrdPath(directory: string): string;
 /**
  * Find prd.json in a directory (checks both root and .omd)
  */

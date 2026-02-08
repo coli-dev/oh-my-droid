@@ -44,7 +44,7 @@ export const omdToolNames = allTools.map(t => `mcp__t__${t.name}`);
 /**
  * Get tool names filtered by category
  */
-export function getOmcToolNames(options) {
+export function getOmdToolNames(options) {
     const { includeLsp = true, includeAst = true, includePython = true, includeSkills = true, includeState = true, includeNotepad = true, includeMemory = true, includeTrace = true } = options || {};
     return omdToolNames.filter(name => {
         if (!includeLsp && name.includes('lsp_'))

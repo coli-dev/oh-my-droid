@@ -132,7 +132,7 @@ export function stripAnsi(str: string): string {
   return str.replace(
     // eslint-disable-next-line no-control-regex
     /\x1b\[[0-9;]*[a-zA-Z]|\x1b\][^\x07]*\x07/g,
-    ""
+    "",
   );
 }
 
@@ -148,7 +148,7 @@ export function stripAnsi(str: string): string {
 export function truncateToWidth(
   str: string,
   maxWidth: number,
-  suffix: string = "..."
+  suffix: string = "...",
 ): string {
   if (!str || maxWidth <= 0) return "";
 
@@ -196,7 +196,7 @@ function truncateToWidthNoSuffix(str: string, maxWidth: number): string {
 export function padToWidth(
   str: string,
   minWidth: number,
-  padChar: string = " "
+  padChar: string = " ",
 ): string {
   const currentWidth = stringWidth(str);
   if (currentWidth >= minWidth) return str;
@@ -217,7 +217,7 @@ export function padToWidth(
 export function sliceByWidth(
   str: string,
   startWidth: number,
-  endWidth?: number
+  endWidth?: number,
 ): string {
   if (!str) return "";
 

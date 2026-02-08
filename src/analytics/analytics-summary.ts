@@ -7,10 +7,10 @@
 export interface AnalyticsSummary {
   sessionId: string;
   lastUpdated: string;
-  lastLogOffset: number;  // For incremental JSONL reads
+  lastLogOffset: number; // For incremental JSONL reads
   totals: {
     inputTokens: number;
-    outputTokens: number;  // Estimated
+    outputTokens: number; // Estimated
     cacheCreationTokens: number;
     cacheReadTokens: number;
     estimatedCost: number;
@@ -19,14 +19,19 @@ export interface AnalyticsSummary {
   cacheHitRate: number;
 }
 
-import { homedir } from 'os';
-import { join } from 'path';
+import { homedir } from "os";
+import { join } from "path";
 
 /**
  * Get summary file path for session ID.
  */
 export function getSummaryPath(sessionId: string): string {
-  return join(homedir(), '.omd', 'state', `analytics-summary-${sessionId}.json`);
+  return join(
+    homedir(),
+    ".omd",
+    "state",
+    `analytics-summary-${sessionId}.json`,
+  );
 }
 
 /**
@@ -42,16 +47,16 @@ export function createEmptySummary(sessionId: string): AnalyticsSummary {
       outputTokens: 0,
       cacheCreationTokens: 0,
       cacheReadTokens: 0,
-      estimatedCost: 0
+      estimatedCost: 0,
     },
     topAgents: [],
-    cacheHitRate: 0
+    cacheHitRate: 0,
   };
 }
 
-import * as fs from 'fs/promises';
-import { calculateCost } from './cost-estimator.js';
-import { TokenUsage } from './types.js';
+import * as fs from "fs/promises";
+import { calculateCost } from "./cost-estimator.js";
+import { TokenUsage } from "./types.js";
 
 /**
  * Get file modification time
@@ -72,9 +77,9 @@ function updateTopAgents(
   summary: AnalyticsSummary,
   agentName: string,
   cost: number,
-  tokens: number
+  tokens: number,
 ): void {
-  let agent = summary.topAgents.find(a => a.agent === agentName);
+  let agent = summary.topAgents.find((a) => a.agent === agentName);
 
   if (!agent) {
     agent = { agent: agentName, cost: 0, tokens: 0 };
@@ -92,8 +97,9 @@ function updateTopAgents(
 /**
  * Calculate cache hit rate percentage
  */
-function calculateCacheHitRate(totals: AnalyticsSummary['totals']): number {
-  const total = totals.inputTokens + totals.cacheCreationTokens + totals.cacheReadTokens;
+function calculateCacheHitRate(totals: AnalyticsSummary["totals"]): number {
+  const total =
+    totals.inputTokens + totals.cacheCreationTokens + totals.cacheReadTokens;
   if (total === 0) return 0;
   return (totals.cacheReadTokens / total) * 100;
 }
@@ -106,14 +112,14 @@ function calculateCacheHitRate(totals: AnalyticsSummary['totals']): number {
 async function rebuildSummaryIncremental(
   sessionId: string,
   summaryPath: string,
-  logPath: string
+  logPath: string,
 ): Promise<AnalyticsSummary> {
   let summary: AnalyticsSummary;
   let startOffset = 0;
 
   try {
     // Try to load existing summary
-    const content = await fs.readFile(summaryPath, 'utf-8');
+    const content = await fs.readFile(summaryPath, "utf-8");
     summary = JSON.parse(content);
     startOffset = summary.lastLogOffset;
   } catch {
@@ -122,8 +128,8 @@ async function rebuildSummaryIncremental(
   }
 
   // Read JSONL from lastLogOffset
-  const logContent = await fs.readFile(logPath, 'utf-8');
-  const lines = logContent.split('\n').slice(startOffset);
+  const logContent = await fs.readFile(logPath, "utf-8");
+  const lines = logContent.split("\n").slice(startOffset);
 
   for (const line of lines) {
     if (!line.trim()) continue;
@@ -143,17 +149,17 @@ async function rebuildSummaryIncremental(
       inputTokens: record.inputTokens,
       outputTokens: record.outputTokens,
       cacheCreationTokens: record.cacheCreationTokens,
-      cacheReadTokens: record.cacheReadTokens
+      cacheReadTokens: record.cacheReadTokens,
     });
     summary.totals.estimatedCost += cost.totalCost;
 
     // Update top agents (use "(main session)" for entries without agentName)
-    const agentKey = record.agentName || '(main session)';
+    const agentKey = record.agentName || "(main session)";
     updateTopAgents(
       summary,
       agentKey,
       cost.totalCost,
-      record.inputTokens + record.outputTokens
+      record.inputTokens + record.outputTokens,
     );
   }
 
@@ -163,7 +169,7 @@ async function rebuildSummaryIncremental(
   summary.cacheHitRate = calculateCacheHitRate(summary.totals);
 
   // Save updated summary
-  const summaryDir = join(homedir(), '.omd', 'state');
+  const summaryDir = join(homedir(), ".omd", "state");
   await fs.mkdir(summaryDir, { recursive: true });
   await fs.writeFile(summaryPath, JSON.stringify(summary, null, 2));
 
@@ -180,9 +186,11 @@ async function rebuildSummaryIncremental(
  * 2. If fresh → return cached summary
  * 3. If stale → rebuild incrementally from lastLogOffset
  */
-export async function loadAnalyticsFast(sessionId: string): Promise<AnalyticsSummary | null> {
+export async function loadAnalyticsFast(
+  sessionId: string,
+): Promise<AnalyticsSummary | null> {
   const summaryPath = getSummaryPath(sessionId);
-  const logPath = join(homedir(), '.omd', 'state', 'token-tracking.jsonl');
+  const logPath = join(homedir(), ".omd", "state", "token-tracking.jsonl");
 
   try {
     // Check if summary exists and is fresh
@@ -191,7 +199,7 @@ export async function loadAnalyticsFast(sessionId: string): Promise<AnalyticsSum
 
     if (summaryMtime && logMtime && summaryMtime >= logMtime) {
       // Summary is up-to-date, use cached version
-      const content = await fs.readFile(summaryPath, 'utf-8');
+      const content = await fs.readFile(summaryPath, "utf-8");
       return JSON.parse(content);
     }
 
@@ -206,9 +214,11 @@ export async function loadAnalyticsFast(sessionId: string): Promise<AnalyticsSum
 /**
  * Force rebuild summary from scratch (ignore cache)
  */
-export async function rebuildAnalyticsSummary(sessionId: string): Promise<AnalyticsSummary> {
+export async function rebuildAnalyticsSummary(
+  sessionId: string,
+): Promise<AnalyticsSummary> {
   const summaryPath = getSummaryPath(sessionId);
-  const logPath = join(homedir(), '.omd', 'state', 'token-tracking.jsonl');
+  const logPath = join(homedir(), ".omd", "state", "token-tracking.jsonl");
 
   // Delete existing summary to force full rebuild
   try {

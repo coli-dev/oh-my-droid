@@ -1,28 +1,77 @@
-import { readState, writeState, StateLocation } from '../features/state-manager/index.js';
-import { SessionMetadata, SessionAnalytics, SessionHistory, SessionSummary, SessionTag } from './session-types.js';
-import { getTokenTracker } from './token-tracker.js';
-import { getGitDiffStats } from '../hooks/omd-orchestrator/index.js';
-import * as fs from 'fs/promises';
-import * as path from 'path';
+import {
+  readState,
+  writeState,
+  StateLocation,
+} from "../features/state-manager/index.js";
+import {
+  SessionMetadata,
+  SessionAnalytics,
+  SessionHistory,
+  SessionSummary,
+  SessionTag,
+} from "./session-types.js";
+import { getTokenTracker } from "./token-tracker.js";
+import { getGitDiffStats } from "../hooks/omd-orchestrator/index.js";
+import * as fs from "fs/promises";
+import * as path from "path";
 
-const SESSION_HISTORY_FILE = 'session-history';
+const SESSION_HISTORY_FILE = "session-history";
 
 /**
  * Source file extensions to track for filesModified
  */
 const SOURCE_FILE_EXTENSIONS = new Set([
-  '.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs',
-  '.py', '.rb', '.go', '.rs', '.java', '.kt', '.scala',
-  '.c', '.cpp', '.cc', '.h', '.hpp',
-  '.cs', '.fs', '.vb',
-  '.swift', '.m', '.mm',
-  '.php', '.lua', '.pl', '.pm',
-  '.sh', '.bash', '.zsh', '.fish',
-  '.sql', '.graphql', '.gql',
-  '.html', '.css', '.scss', '.sass', '.less',
-  '.json', '.yaml', '.yml', '.toml', '.xml',
-  '.md', '.mdx', '.txt',
-  '.vue', '.svelte', '.astro',
+  ".ts",
+  ".tsx",
+  ".js",
+  ".jsx",
+  ".mjs",
+  ".cjs",
+  ".py",
+  ".rb",
+  ".go",
+  ".rs",
+  ".java",
+  ".kt",
+  ".scala",
+  ".c",
+  ".cpp",
+  ".cc",
+  ".h",
+  ".hpp",
+  ".cs",
+  ".fs",
+  ".vb",
+  ".swift",
+  ".m",
+  ".mm",
+  ".php",
+  ".lua",
+  ".pl",
+  ".pm",
+  ".sh",
+  ".bash",
+  ".zsh",
+  ".fish",
+  ".sql",
+  ".graphql",
+  ".gql",
+  ".html",
+  ".css",
+  ".scss",
+  ".sass",
+  ".less",
+  ".json",
+  ".yaml",
+  ".yml",
+  ".toml",
+  ".xml",
+  ".md",
+  ".mdx",
+  ".txt",
+  ".vue",
+  ".svelte",
+  ".astro",
 ]);
 
 /**
@@ -42,7 +91,10 @@ const sessionActivity = new Map<string, SessionActivity>();
  * Record a completed task for a session
  */
 export function recordTaskCompleted(sessionId: string): void {
-  const activity = sessionActivity.get(sessionId) || { tasksCompleted: 0, errorCount: 0 };
+  const activity = sessionActivity.get(sessionId) || {
+    tasksCompleted: 0,
+    errorCount: 0,
+  };
   activity.tasksCompleted++;
   sessionActivity.set(sessionId, activity);
 }
@@ -51,7 +103,10 @@ export function recordTaskCompleted(sessionId: string): void {
  * Record an error for a session
  */
 export function recordError(sessionId: string): void {
-  const activity = sessionActivity.get(sessionId) || { tasksCompleted: 0, errorCount: 0 };
+  const activity = sessionActivity.get(sessionId) || {
+    tasksCompleted: 0,
+    errorCount: 0,
+  };
   activity.errorCount++;
   sessionActivity.set(sessionId, activity);
 }
@@ -77,8 +132,8 @@ function getModifiedSourceFiles(projectPath: string): string[] {
   try {
     const gitStats = getGitDiffStats(projectPath);
     return gitStats
-      .map(stat => stat.path)
-      .filter(filePath => {
+      .map((stat) => stat.path)
+      .filter((filePath) => {
         const ext = path.extname(filePath).toLowerCase();
         return SOURCE_FILE_EXTENSIONS.has(ext);
       });
@@ -91,7 +146,10 @@ function getModifiedSourceFiles(projectPath: string): string[] {
 /**
  * Calculate success rate from tasks and errors
  */
-function calculateSuccessRate(tasksCompleted: number, errorCount: number): number {
+function calculateSuccessRate(
+  tasksCompleted: number,
+  errorCount: number,
+): number {
   const total = tasksCompleted + errorCount;
   if (total === 0) {
     return 1.0; // Default to 100% when no tasks tracked
@@ -103,16 +161,20 @@ export class SessionManager {
   private currentSession: SessionMetadata | null = null;
   private history: SessionHistory | null = null;
 
-  async startSession(goals: string[], tags: SessionTag[] = ['other'], notes: string = ''): Promise<SessionMetadata> {
+  async startSession(
+    goals: string[],
+    tags: SessionTag[] = ["other"],
+    notes: string = "",
+  ): Promise<SessionMetadata> {
     const session: SessionMetadata = {
       id: this.generateSessionId(),
       projectPath: process.cwd(),
       goals,
       tags,
       startTime: new Date().toISOString(),
-      status: 'active',
+      status: "active",
       outcomes: [],
-      notes
+      notes,
     };
 
     this.currentSession = session;
@@ -121,9 +183,12 @@ export class SessionManager {
     return session;
   }
 
-  async endSession(outcomes: string[], status: 'completed' | 'abandoned' = 'completed'): Promise<SessionMetadata> {
+  async endSession(
+    outcomes: string[],
+    status: "completed" | "abandoned" = "completed",
+  ): Promise<SessionMetadata> {
     if (!this.currentSession) {
-      throw new Error('No active session to end');
+      throw new Error("No active session to end");
     }
 
     const endTime = new Date().toISOString();
@@ -147,8 +212,11 @@ export class SessionManager {
   async getCurrentSession(): Promise<SessionMetadata | null> {
     if (!this.currentSession) {
       // Try to load from state
-      const result = readState<SessionMetadata>('current-session', StateLocation.LOCAL);
-      if (result.exists && result.data && result.data.status === 'active') {
+      const result = readState<SessionMetadata>(
+        "current-session",
+        StateLocation.LOCAL,
+      );
+      if (result.exists && result.data && result.data.status === "active") {
         this.currentSession = result.data;
       }
     }
@@ -157,15 +225,15 @@ export class SessionManager {
 
   async resumeSession(sessionId: string): Promise<SessionMetadata> {
     const history = await this.loadHistory();
-    const session = history.sessions.find(s => s.id === sessionId);
+    const session = history.sessions.find((s) => s.id === sessionId);
 
     if (!session) {
       throw new Error(`Session ${sessionId} not found in history`);
     }
 
-    if (session.status !== 'active') {
+    if (session.status !== "active") {
       // Reactivate session
-      session.status = 'active';
+      session.status = "active";
       delete session.endTime;
       delete session.duration;
     }
@@ -185,14 +253,20 @@ export class SessionManager {
 
     // Get session metadata to find project path
     const history = await this.loadHistory();
-    const sessionMeta = history.sessions.find(s => s.id === sessionId);
-    const projectPath = sessionMeta?.projectPath || this.currentSession?.projectPath || process.cwd();
+    const sessionMeta = history.sessions.find((s) => s.id === sessionId);
+    const projectPath =
+      sessionMeta?.projectPath ||
+      this.currentSession?.projectPath ||
+      process.cwd();
 
     // Get modified files from git
     const filesModified = getModifiedSourceFiles(projectPath);
 
     // Calculate success rate
-    const successRate = calculateSuccessRate(activity.tasksCompleted, activity.errorCount);
+    const successRate = calculateSuccessRate(
+      activity.tasksCompleted,
+      activity.errorCount,
+    );
 
     if (!stats) {
       // Return analytics with activity tracking but no token stats
@@ -205,20 +279,26 @@ export class SessionManager {
         filesModified,
         tasksCompleted: activity.tasksCompleted,
         errorCount: activity.errorCount,
-        successRate
+        successRate,
       };
     }
 
     // Aggregate agent usage
     const agentUsage: Record<string, number> = {};
     for (const [agent, usages] of Object.entries(stats.byAgent)) {
-      agentUsage[agent] = usages.reduce((sum, u) => sum + u.inputTokens + u.outputTokens, 0);
+      agentUsage[agent] = usages.reduce(
+        (sum, u) => sum + u.inputTokens + u.outputTokens,
+        0,
+      );
     }
 
     // Aggregate model usage
     const modelUsage: Record<string, number> = {};
     for (const [model, usages] of Object.entries(stats.byModel)) {
-      modelUsage[model] = usages.reduce((sum, u) => sum + u.inputTokens + u.outputTokens, 0);
+      modelUsage[model] = usages.reduce(
+        (sum, u) => sum + u.inputTokens + u.outputTokens,
+        0,
+      );
     }
 
     const totalTokens = stats.totalInputTokens + stats.totalOutputTokens;
@@ -232,13 +312,13 @@ export class SessionManager {
       filesModified,
       tasksCompleted: activity.tasksCompleted,
       errorCount: activity.errorCount,
-      successRate
+      successRate,
     };
   }
 
   async getSessionSummary(sessionId: string): Promise<SessionSummary> {
     const history = await this.loadHistory();
-    const metadata = history.sessions.find(s => s.id === sessionId);
+    const metadata = history.sessions.find((s) => s.id === sessionId);
 
     if (!metadata) {
       throw new Error(`Session ${sessionId} not found`);
@@ -257,13 +337,13 @@ export class SessionManager {
     tags?: SessionTag[];
     startDate?: string;
     endDate?: string;
-    status?: SessionMetadata['status'];
+    status?: SessionMetadata["status"];
     projectPath?: string;
   }): Promise<SessionMetadata[]> {
     const history = await this.loadHistory();
 
-    return history.sessions.filter(session => {
-      if (query.tags && !query.tags.some(tag => session.tags.includes(tag))) {
+    return history.sessions.filter((session) => {
+      if (query.tags && !query.tags.some((tag) => session.tags.includes(tag))) {
         return false;
       }
 
@@ -289,7 +369,7 @@ export class SessionManager {
 
   private async saveCurrentSession(): Promise<void> {
     if (this.currentSession) {
-      writeState('current-session', this.currentSession, StateLocation.LOCAL);
+      writeState("current-session", this.currentSession, StateLocation.LOCAL);
     }
   }
 
@@ -298,7 +378,10 @@ export class SessionManager {
       return this.history;
     }
 
-    const result = readState<SessionHistory>(SESSION_HISTORY_FILE, StateLocation.LOCAL);
+    const result = readState<SessionHistory>(
+      SESSION_HISTORY_FILE,
+      StateLocation.LOCAL,
+    );
 
     if (result.exists && result.data) {
       this.history = result.data;
@@ -312,7 +395,7 @@ export class SessionManager {
       totalCost: 0,
       averageDuration: 0,
       successRate: 0,
-      lastUpdated: new Date().toISOString()
+      lastUpdated: new Date().toISOString(),
     };
 
     return this.history;
@@ -326,10 +409,15 @@ export class SessionManager {
     history.lastUpdated = new Date().toISOString();
 
     // Recalculate aggregates
-    const completedSessions = history.sessions.filter(s => s.status === 'completed');
+    const completedSessions = history.sessions.filter(
+      (s) => s.status === "completed",
+    );
 
     if (completedSessions.length > 0) {
-      const totalDuration = completedSessions.reduce((sum, s) => sum + (s.duration || 0), 0);
+      const totalDuration = completedSessions.reduce(
+        (sum, s) => sum + (s.duration || 0),
+        0,
+      );
       history.averageDuration = totalDuration / completedSessions.length;
       history.successRate = completedSessions.length / history.totalSessions;
     }

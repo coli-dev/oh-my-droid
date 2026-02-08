@@ -5,7 +5,7 @@
  * (Priority Context, Working Memory, MANUAL).
  */
 import { z } from 'zod';
-import { getWorktreeNotepadPath, ensureOmcDir, validateWorkingDirectory, } from '../lib/worktree-paths.js';
+import { getWorktreeNotepadPath, ensureOmdDir, validateWorkingDirectory, } from '../lib/worktree-paths.js';
 import { getPriorityContext, getWorkingMemory, getManualSection, setPriorityContext, addWorkingMemoryEntry, addManualEntry, pruneOldEntries, getNotepadStats, formatFullNotepad, DEFAULT_CONFIG, } from '../hooks/notepad/index.js';
 const SECTION_NAMES = ['all', 'priority', 'working', 'manual'];
 // ============================================================================
@@ -95,7 +95,7 @@ export const notepadWritePriorityTool = {
         try {
             const root = validateWorkingDirectory(workingDirectory);
             // Ensure .omd directory exists
-            ensureOmcDir('', root);
+            ensureOmdDir('', root);
             const result = setPriorityContext(root, content);
             if (!result.success) {
                 return {
@@ -141,7 +141,7 @@ export const notepadWriteWorkingTool = {
         try {
             const root = validateWorkingDirectory(workingDirectory);
             // Ensure .omd directory exists
-            ensureOmcDir('', root);
+            ensureOmdDir('', root);
             const success = addWorkingMemoryEntry(root, content);
             if (!success) {
                 return {
@@ -183,7 +183,7 @@ export const notepadWriteManualTool = {
         try {
             const root = validateWorkingDirectory(workingDirectory);
             // Ensure .omd directory exists
-            ensureOmcDir('', root);
+            ensureOmdDir('', root);
             const success = addManualEntry(root, content);
             if (!success) {
                 return {

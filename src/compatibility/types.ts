@@ -8,20 +8,20 @@
 /**
  * Type of external tool source
  */
-export type ExternalToolType = 'plugin' | 'mcp' | 'skill' | 'agent';
+export type ExternalToolType = "plugin" | "mcp" | "skill" | "agent";
 
 /**
  * Tool capability categories
  */
 export type ToolCapability =
-  | 'read'       // Can read files/resources
-  | 'write'      // Can write/modify files
-  | 'execute'    // Can execute commands
-  | 'network'    // Can make network requests
-  | 'search'     // Can search/query
-  | 'analyze'    // Can analyze data
-  | 'generate'   // Can generate content
-  | 'unknown';   // Capability not determined
+  | "read" // Can read files/resources
+  | "write" // Can write/modify files
+  | "execute" // Can execute commands
+  | "network" // Can make network requests
+  | "search" // Can search/query
+  | "analyze" // Can analyze data
+  | "generate" // Can generate content
+  | "unknown"; // Capability not determined
 
 /**
  * External tool definition
@@ -98,7 +98,7 @@ export interface PluginPermission {
   /** Tool name that requires permission */
   tool: string;
   /** Permission scope */
-  scope: 'read' | 'write' | 'execute' | 'all';
+  scope: "read" | "write" | "execute" | "all";
   /** Patterns for allowed paths/commands */
   patterns?: string[];
   /** Reason for requiring this permission */
@@ -182,7 +182,7 @@ export interface ToolConflict {
   /** All tools with this name */
   tools: ExternalTool[];
   /** Resolution method used */
-  resolution: 'priority' | 'namespace' | 'manual';
+  resolution: "priority" | "namespace" | "manual";
   /** The winning tool */
   winner: ExternalTool;
 }
@@ -249,9 +249,16 @@ export interface McpToolResult {
  * Event emitted by the registry
  */
 export interface RegistryEvent {
-  type: 'plugin-discovered' | 'plugin-loaded' | 'plugin-error' |
-        'mcp-connected' | 'mcp-disconnected' | 'mcp-error' |
-        'tool-registered' | 'tool-conflict' | 'tool-invoked';
+  type:
+    | "plugin-discovered"
+    | "plugin-loaded"
+    | "plugin-error"
+    | "mcp-connected"
+    | "mcp-disconnected"
+    | "mcp-error"
+    | "tool-registered"
+    | "tool-conflict"
+    | "tool-invoked";
   timestamp: number;
   data: unknown;
 }

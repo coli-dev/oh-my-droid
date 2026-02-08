@@ -7,33 +7,37 @@
  * Sessions are named "omd-team-{teamName}-{workerName}".
  */
 
-import { execSync, execFileSync } from 'child_process';
+import { execSync, execFileSync } from "child_process";
 
-const TMUX_SESSION_PREFIX = 'omd-team';
+const TMUX_SESSION_PREFIX = "omd-team";
 
 /** Validate tmux is available. Throws with install instructions if not. */
 export function validateTmux(): void {
   try {
-    execSync('tmux -V', { encoding: 'utf-8', timeout: 5000, stdio: 'pipe' });
+    execSync("tmux -V", { encoding: "utf-8", timeout: 5000, stdio: "pipe" });
   } catch {
     throw new Error(
-      'tmux is not available. Install it:\n' +
-      '  macOS: brew install tmux\n' +
-      '  Ubuntu/Debian: sudo apt-get install tmux\n' +
-      '  Fedora: sudo dnf install tmux\n' +
-      '  Arch: sudo pacman -S tmux'
+      "tmux is not available. Install it:\n" +
+        "  macOS: brew install tmux\n" +
+        "  Ubuntu/Debian: sudo apt-get install tmux\n" +
+        "  Fedora: sudo dnf install tmux\n" +
+        "  Arch: sudo pacman -S tmux",
     );
   }
 }
 
 /** Sanitize name to prevent tmux command injection (alphanum + hyphen only) */
 export function sanitizeName(name: string): string {
-  const sanitized = name.replace(/[^a-zA-Z0-9-]/g, '');
+  const sanitized = name.replace(/[^a-zA-Z0-9-]/g, "");
   if (sanitized.length === 0) {
-    throw new Error(`Invalid name: "${name}" contains no valid characters (alphanumeric or hyphen)`);
+    throw new Error(
+      `Invalid name: "${name}" contains no valid characters (alphanumeric or hyphen)`,
+    );
   }
   if (sanitized.length < 2) {
-    throw new Error(`Invalid name: "${name}" too short after sanitization (minimum 2 characters)`);
+    throw new Error(
+      `Invalid name: "${name}" too short after sanitization (minimum 2 characters)`,
+    );
   }
   // Truncate to safe length for tmux session names
   return sanitized.slice(0, 50);
@@ -45,20 +49,29 @@ export function sessionName(teamName: string, workerName: string): string {
 }
 
 /** Create a detached tmux session. Kills stale session with same name first. */
-export function createSession(teamName: string, workerName: string, workingDirectory?: string): string {
+export function createSession(
+  teamName: string,
+  workerName: string,
+  workingDirectory?: string,
+): string {
   const name = sessionName(teamName, workerName);
 
   // Kill existing session if present (stale from previous run)
   try {
-    execFileSync('tmux', ['kill-session', '-t', name], { stdio: 'pipe', timeout: 5000 });
-  } catch { /* ignore — session may not exist */ }
+    execFileSync("tmux", ["kill-session", "-t", name], {
+      stdio: "pipe",
+      timeout: 5000,
+    });
+  } catch {
+    /* ignore — session may not exist */
+  }
 
   // Create detached session with reasonable terminal size
-  const args = ['new-session', '-d', '-s', name, '-x', '200', '-y', '50'];
+  const args = ["new-session", "-d", "-s", name, "-x", "200", "-y", "50"];
   if (workingDirectory) {
-    args.push('-c', workingDirectory);
+    args.push("-c", workingDirectory);
   }
-  execFileSync('tmux', args, { stdio: 'pipe', timeout: 5000 });
+  execFileSync("tmux", args, { stdio: "pipe", timeout: 5000 });
 
   return name;
 }
@@ -67,15 +80,23 @@ export function createSession(teamName: string, workerName: string, workingDirec
 export function killSession(teamName: string, workerName: string): void {
   const name = sessionName(teamName, workerName);
   try {
-    execFileSync('tmux', ['kill-session', '-t', name], { stdio: 'pipe', timeout: 5000 });
-  } catch { /* ignore — session may not exist */ }
+    execFileSync("tmux", ["kill-session", "-t", name], {
+      stdio: "pipe",
+      timeout: 5000,
+    });
+  } catch {
+    /* ignore — session may not exist */
+  }
 }
 
 /** Check if a session exists */
 export function isSessionAlive(teamName: string, workerName: string): boolean {
   const name = sessionName(teamName, workerName);
   try {
-    execFileSync('tmux', ['has-session', '-t', name], { stdio: 'pipe', timeout: 5000 });
+    execFileSync("tmux", ["has-session", "-t", name], {
+      stdio: "pipe",
+      timeout: 5000,
+    });
     return true;
   } catch {
     return false;
@@ -87,12 +108,15 @@ export function listActiveSessions(teamName: string): string[] {
   const prefix = `${TMUX_SESSION_PREFIX}-${sanitizeName(teamName)}-`;
   try {
     const output = execFileSync(
-      'tmux', ['list-sessions', '-F', '#{session_name}'],
-      { encoding: 'utf-8', timeout: 5000, stdio: ['pipe', 'pipe', 'pipe'] }
+      "tmux",
+      ["list-sessions", "-F", "#{session_name}"],
+      { encoding: "utf-8", timeout: 5000, stdio: ["pipe", "pipe", "pipe"] },
     );
-    return output.trim().split('\n')
-      .filter(s => s.startsWith(prefix))
-      .map(s => s.slice(prefix.length));
+    return output
+      .trim()
+      .split("\n")
+      .filter((s) => s.startsWith(prefix))
+      .map((s) => s.slice(prefix.length));
   } catch {
     return [];
   }
@@ -108,8 +132,11 @@ export function listActiveSessions(teamName: string): string[] {
 export function spawnBridgeInSession(
   tmuxSession: string,
   bridgeScriptPath: string,
-  configFilePath: string
+  configFilePath: string,
 ): void {
   const cmd = `node "${bridgeScriptPath}" --config "${configFilePath}"`;
-  execFileSync('tmux', ['send-keys', '-t', tmuxSession, cmd, 'Enter'], { stdio: 'pipe', timeout: 5000 });
+  execFileSync("tmux", ["send-keys", "-t", tmuxSession, cmd, "Enter"], {
+    stdio: "pipe",
+    timeout: 5000,
+  });
 }

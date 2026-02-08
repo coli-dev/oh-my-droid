@@ -5,25 +5,25 @@
  * Ported from oh-my-opencode's agent type system.
  */
 
-export type ModelType = 'sonnet' | 'opus' | 'haiku' | 'inherit';
+export type ModelType = "sonnet" | "opus" | "haiku" | "inherit";
 
 /**
  * Cost tier for agent usage
  * Used to guide when to invoke expensive vs cheap agents
  */
-export type AgentCost = 'FREE' | 'CHEAP' | 'EXPENSIVE';
+export type AgentCost = "FREE" | "CHEAP" | "EXPENSIVE";
 
 /**
  * Agent category for routing and grouping
  */
 export type AgentCategory =
-  | 'exploration'    // Code search and discovery
-  | 'specialist'     // Domain-specific implementation
-  | 'advisor'        // Strategic consultation (read-only)
-  | 'utility'        // General purpose helpers
-  | 'orchestration'  // Multi-agent coordination
-  | 'planner'        // Strategic planning
-  | 'reviewer';      // Plan/work review
+  | "exploration" // Code search and discovery
+  | "specialist" // Domain-specific implementation
+  | "advisor" // Strategic consultation (read-only)
+  | "utility" // General purpose helpers
+  | "orchestration" // Multi-agent coordination
+  | "planner" // Strategic planning
+  | "reviewer"; // Plan/work review
 
 /**
  * Trigger condition for delegation
@@ -90,7 +90,7 @@ export interface FullAgentConfig extends AgentConfig {
   maxTokens?: number;
   /** Thinking configuration (for Droid models) */
   thinking?: {
-    type: 'enabled' | 'disabled';
+    type: "enabled" | "disabled";
     budgetTokens?: number;
   };
   /** Tool restrictions */
@@ -134,14 +134,14 @@ export interface AvailableAgent {
  * Check if a model ID is a GPT model
  */
 export function isGptModel(modelId: string): boolean {
-  return modelId.toLowerCase().includes('gpt');
+  return modelId.toLowerCase().includes("gpt");
 }
 
 /**
  * Check if a model ID is a Droid model
  */
 export function isDroidModel(modelId: string): boolean {
-  return modelId.toLowerCase().includes('droid');
+  return modelId.toLowerCase().includes("droid");
 }
 
 /**
@@ -149,17 +149,17 @@ export function isDroidModel(modelId: string): boolean {
  */
 export function getDefaultModelForCategory(category: AgentCategory): ModelType {
   switch (category) {
-    case 'exploration':
-      return 'haiku'; // Fast, cheap
-    case 'specialist':
-      return 'sonnet'; // Balanced
-    case 'advisor':
-      return 'opus'; // High quality reasoning
-    case 'utility':
-      return 'haiku'; // Fast, cheap
-    case 'orchestration':
-      return 'sonnet'; // Balanced
+    case "exploration":
+      return "haiku"; // Fast, cheap
+    case "specialist":
+      return "sonnet"; // Balanced
+    case "advisor":
+      return "opus"; // High quality reasoning
+    case "utility":
+      return "haiku"; // Fast, cheap
+    case "orchestration":
+      return "sonnet"; // Balanced
     default:
-      return 'sonnet';
+      return "sonnet";
   }
 }

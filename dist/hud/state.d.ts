@@ -4,27 +4,27 @@
  * Manages HUD state file for background task tracking.
  * Follows patterns from ultrawork-state.
  */
-import type { OmcHudState, BackgroundTask, HudConfig } from './types.js';
+import type { OmdHudState, BackgroundTask, HudConfig } from './types.js';
 /**
  * Read HUD state from disk (checks new local and legacy local only)
  */
-export declare function readHudState(directory?: string): OmcHudState | null;
+export declare function readHudState(directory?: string): OmdHudState | null;
 /**
  * Write HUD state to disk (local only)
  */
-export declare function writeHudState(state: OmcHudState, directory?: string): boolean;
+export declare function writeHudState(state: OmdHudState, directory?: string): boolean;
 /**
  * Create a new empty HUD state
  */
-export declare function createEmptyHudState(): OmcHudState;
+export declare function createEmptyHudState(): OmdHudState;
 /**
  * Get running background tasks from state
  */
-export declare function getRunningTasks(state: OmcHudState | null): BackgroundTask[];
+export declare function getRunningTasks(state: OmdHudState | null): BackgroundTask[];
 /**
  * Get background task count string (e.g., "3/5")
  */
-export declare function getBackgroundTaskCount(state: OmcHudState | null): {
+export declare function getBackgroundTaskCount(state: OmdHudState | null): {
     running: number;
     max: number;
 };

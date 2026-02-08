@@ -273,7 +273,9 @@ export function getJob(
     const stmt = db.prepare(
       "SELECT * FROM jobs WHERE provider = ? AND job_id = ?",
     );
-    const row = stmt.get(provider, jobId) as Record<string, unknown> | undefined;
+    const row = stmt.get(provider, jobId) as
+      | Record<string, unknown>
+      | undefined;
 
     if (!row) return null;
     return rowToJobStatus(row);
@@ -325,9 +327,7 @@ export function getJobsByStatus(
  * @param provider - Filter by provider, or undefined for all providers
  * @returns Array of active JobStatus objects, empty array on failure
  */
-export function getActiveJobs(
-  provider?: "codex" | "gemini",
-): JobStatus[] {
+export function getActiveJobs(provider?: "codex" | "gemini"): JobStatus[] {
   if (!db) return [];
 
   try {
@@ -502,9 +502,10 @@ export function deleteJob(
  * @param promptsDir - Path to the .omd/prompts/ directory
  * @returns Object with imported and error counts
  */
-export function migrateFromJsonFiles(
-  promptsDir: string,
-): { imported: number; errors: number } {
+export function migrateFromJsonFiles(promptsDir: string): {
+  imported: number;
+  errors: number;
+} {
   const result = { imported: 0, errors: 0 };
 
   if (!db) return result;
@@ -542,10 +543,7 @@ export function migrateFromJsonFiles(
 
     importAll();
   } catch (error) {
-    console.error(
-      "[job-state-db] Failed to migrate from JSON files:",
-      error,
-    );
+    console.error("[job-state-db] Failed to migrate from JSON files:", error);
   }
 
   return result;
@@ -658,7 +656,10 @@ export function getJobSummaryForPreCompact(): string {
     // Recent completed/failed jobs (last hour) - brief summary
     const recentJobs = getRecentJobs(undefined, 60 * 60 * 1000);
     const terminalJobs = recentJobs.filter(
-      (j) => j.status === "completed" || j.status === "failed" || j.status === "timeout",
+      (j) =>
+        j.status === "completed" ||
+        j.status === "failed" ||
+        j.status === "timeout",
     );
 
     if (terminalJobs.length > 0) {
@@ -669,7 +670,9 @@ export function getJobSummaryForPreCompact(): string {
         const fallback = job.usedFallback
           ? ` (fallback: ${job.fallbackModel})`
           : "";
-        const errorNote = job.error ? ` - error: ${job.error.slice(0, 80)}` : "";
+        const errorNote = job.error
+          ? ` - error: ${job.error.slice(0, 80)}`
+          : "";
         lines.push(
           `- **${job.provider}** \`${job.jobId}\` (${job.agentRole}): ${icon}${fallback}${errorNote}`,
         );

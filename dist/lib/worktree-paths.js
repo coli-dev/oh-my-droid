@@ -8,7 +8,7 @@ import { execSync } from 'child_process';
 import { existsSync, mkdirSync, realpathSync, readdirSync } from 'fs';
 import { resolve, normalize, relative, sep, join, isAbsolute } from 'path';
 /** Standard .omd subdirectories */
-export const OmcPaths = {
+export const OmdPaths = {
     ROOT: '.omd',
     STATE: '.omd/state',
     SESSIONS: '.omd/state/sessions',
@@ -76,10 +76,10 @@ export function validatePath(inputPath) {
  * @returns Absolute path
  * @throws Error if path would escape worktree
  */
-export function resolveOmcPath(relativePath, worktreeRoot) {
+export function resolveOmdPath(relativePath, worktreeRoot) {
     validatePath(relativePath);
     const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-    const omdDir = join(root, OmcPaths.ROOT);
+    const omdDir = join(root, OmdPaths.ROOT);
     const fullPath = normalize(resolve(omdDir, relativePath));
     // Verify resolved path is still under worktree
     const relativeToRoot = relative(root, fullPath);
@@ -108,7 +108,7 @@ export function resolveStatePath(stateName, worktreeRoot) {
     }
     // Normalize: ensure -state suffix is present, then add .json
     const normalizedName = stateName.endsWith('-state') ? stateName : `${stateName}-state`;
-    return resolveOmcPath(`state/${normalizedName}.json`, worktreeRoot);
+    return resolveOmdPath(`state/${normalizedName}.json`, worktreeRoot);
 }
 /**
  * Ensure a directory exists under .omd/.
@@ -118,8 +118,8 @@ export function resolveStatePath(stateName, worktreeRoot) {
  * @param worktreeRoot - Optional worktree root
  * @returns Absolute path to the created directory
  */
-export function ensureOmcDir(relativePath, worktreeRoot) {
-    const fullPath = resolveOmcPath(relativePath, worktreeRoot);
+export function ensureOmdDir(relativePath, worktreeRoot) {
+    const fullPath = resolveOmdPath(relativePath, worktreeRoot);
     if (!existsSync(fullPath)) {
         mkdirSync(fullPath, { recursive: true });
     }
@@ -132,21 +132,21 @@ export function ensureOmcDir(relativePath, worktreeRoot) {
  */
 export function getWorktreeNotepadPath(worktreeRoot) {
     const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-    return join(root, OmcPaths.NOTEPAD);
+    return join(root, OmdPaths.NOTEPAD);
 }
 /**
  * Get the absolute path to the project memory file.
  */
 export function getWorktreeProjectMemoryPath(worktreeRoot) {
     const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-    return join(root, OmcPaths.PROJECT_MEMORY);
+    return join(root, OmdPaths.PROJECT_MEMORY);
 }
 /**
  * Get the .omd root directory path.
  */
-export function getOmcRoot(worktreeRoot) {
+export function getOmdRoot(worktreeRoot) {
     const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-    return join(root, OmcPaths.ROOT);
+    return join(root, OmdPaths.ROOT);
 }
 /**
  * Resolve a plan file path.
@@ -155,7 +155,7 @@ export function getOmcRoot(worktreeRoot) {
 export function resolvePlanPath(planName, worktreeRoot) {
     validatePath(planName);
     const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-    return join(root, OmcPaths.PLANS, `${planName}.md`);
+    return join(root, OmdPaths.PLANS, `${planName}.md`);
 }
 /**
  * Resolve a research directory path.
@@ -164,14 +164,14 @@ export function resolvePlanPath(planName, worktreeRoot) {
 export function resolveResearchPath(name, worktreeRoot) {
     validatePath(name);
     const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-    return join(root, OmcPaths.RESEARCH, name);
+    return join(root, OmdPaths.RESEARCH, name);
 }
 /**
  * Resolve the logs directory path.
  */
 export function resolveLogsPath(worktreeRoot) {
     const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-    return join(root, OmcPaths.LOGS);
+    return join(root, OmdPaths.LOGS);
 }
 /**
  * Resolve a wisdom/plan-scoped notepad directory path.
@@ -180,32 +180,32 @@ export function resolveLogsPath(worktreeRoot) {
 export function resolveWisdomPath(planName, worktreeRoot) {
     validatePath(planName);
     const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-    return join(root, OmcPaths.NOTEPADS, planName);
+    return join(root, OmdPaths.NOTEPADS, planName);
 }
 /**
  * Check if an absolute path is under the .omd directory.
  * @param absolutePath - Absolute path to check
  */
-export function isPathUnderOmc(absolutePath, worktreeRoot) {
+export function isPathUnderOmd(absolutePath, worktreeRoot) {
     const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-    const omdRoot = join(root, OmcPaths.ROOT);
+    const omdRoot = join(root, OmdPaths.ROOT);
     const normalizedPath = normalize(absolutePath);
-    const normalizedOmc = normalize(omdRoot);
-    return normalizedPath.startsWith(normalizedOmc + sep) || normalizedPath === normalizedOmc;
+    const normalizedOmd = normalize(omdRoot);
+    return normalizedPath.startsWith(normalizedOmd + sep) || normalizedPath === normalizedOmd;
 }
 /**
  * Ensure all standard .omd subdirectories exist.
  */
-export function ensureAllOmcDirs(worktreeRoot) {
+export function ensureAllOmdDirs(worktreeRoot) {
     const root = worktreeRoot || getWorktreeRoot() || process.cwd();
     const dirs = [
-        OmcPaths.ROOT,
-        OmcPaths.STATE,
-        OmcPaths.PLANS,
-        OmcPaths.RESEARCH,
-        OmcPaths.LOGS,
-        OmcPaths.NOTEPADS,
-        OmcPaths.DRAFTS,
+        OmdPaths.ROOT,
+        OmdPaths.STATE,
+        OmdPaths.PLANS,
+        OmdPaths.RESEARCH,
+        OmdPaths.LOGS,
+        OmdPaths.NOTEPADS,
+        OmdPaths.DRAFTS,
     ];
     for (const dir of dirs) {
         const fullPath = join(root, dir);
@@ -296,7 +296,7 @@ export function resolveSessionStatePath(stateName, sessionId, worktreeRoot) {
         throw new Error('Swarm uses SQLite (swarm.db), not session-scoped JSON state.');
     }
     const normalizedName = stateName.endsWith('-state') ? stateName : `${stateName}-state`;
-    return resolveOmcPath(`state/sessions/${sessionId}/${normalizedName}.json`, worktreeRoot);
+    return resolveOmdPath(`state/sessions/${sessionId}/${normalizedName}.json`, worktreeRoot);
 }
 /**
  * Get the session state directory path.
@@ -309,7 +309,7 @@ export function resolveSessionStatePath(stateName, sessionId, worktreeRoot) {
 export function getSessionStateDir(sessionId, worktreeRoot) {
     validateSessionId(sessionId);
     const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-    return join(root, OmcPaths.SESSIONS, sessionId);
+    return join(root, OmdPaths.SESSIONS, sessionId);
 }
 /**
  * List all session IDs that have state directories.
@@ -319,7 +319,7 @@ export function getSessionStateDir(sessionId, worktreeRoot) {
  */
 export function listSessionIds(worktreeRoot) {
     const root = worktreeRoot || getWorktreeRoot() || process.cwd();
-    const sessionsDir = join(root, OmcPaths.SESSIONS);
+    const sessionsDir = join(root, OmdPaths.SESSIONS);
     if (!existsSync(sessionsDir)) {
         return [];
     }

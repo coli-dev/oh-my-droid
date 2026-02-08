@@ -2,16 +2,16 @@
  * Tests for delegation enforcer middleware
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import {
   enforceModel,
   isAgentCall,
   processPreToolUse,
   getModelForAgent,
-  type AgentInput
-} from '../features/delegation-enforcer.js';
+  type AgentInput,
+} from "../features/delegation-enforcer.js";
 
-describe('delegation-enforcer', () => {
+describe("delegation-enforcer", () => {
   let originalDebugEnv: string | undefined;
 
   beforeEach(() => {
@@ -26,64 +26,64 @@ describe('delegation-enforcer', () => {
     }
   });
 
-  describe('enforceModel', () => {
-    it('preserves explicitly specified model', () => {
+  describe("enforceModel", () => {
+    it("preserves explicitly specified model", () => {
       const input: AgentInput = {
-        description: 'Test task',
-        prompt: 'Do something',
-        subagent_type: 'oh-my-droid:executor',
-        model: 'haiku'
+        description: "Test task",
+        prompt: "Do something",
+        subagent_type: "oh-my-droid:executor",
+        model: "haiku",
       };
 
       const result = enforceModel(input);
 
       expect(result.injected).toBe(false);
-      expect(result.modifiedInput.model).toBe('haiku');
+      expect(result.modifiedInput.model).toBe("haiku");
       expect(result.modifiedInput).toEqual(input);
     });
 
-    it('injects model from agent definition when not specified', () => {
+    it("injects model from agent definition when not specified", () => {
       const input: AgentInput = {
-        description: 'Test task',
-        prompt: 'Do something',
-        subagent_type: 'oh-my-droid:executor'
+        description: "Test task",
+        prompt: "Do something",
+        subagent_type: "oh-my-droid:executor",
       };
 
       const result = enforceModel(input);
 
       expect(result.injected).toBe(true);
-      expect(result.modifiedInput.model).toBe('sonnet'); // executor defaults to sonnet
+      expect(result.modifiedInput.model).toBe("sonnet"); // executor defaults to sonnet
       expect(result.originalInput.model).toBeUndefined();
     });
 
-    it('handles agent type without prefix', () => {
+    it("handles agent type without prefix", () => {
       const input: AgentInput = {
-        description: 'Test task',
-        prompt: 'Do something',
-        subagent_type: 'debugger'
+        description: "Test task",
+        prompt: "Do something",
+        subagent_type: "debugger",
       };
 
       const result = enforceModel(input);
 
       expect(result.injected).toBe(true);
-      expect(result.modifiedInput.model).toBe('sonnet'); // debugger defaults to sonnet
+      expect(result.modifiedInput.model).toBe("sonnet"); // debugger defaults to sonnet
     });
 
-    it('throws error for unknown agent type', () => {
+    it("throws error for unknown agent type", () => {
       const input: AgentInput = {
-        description: 'Test task',
-        prompt: 'Do something',
-        subagent_type: 'unknown-agent'
+        description: "Test task",
+        prompt: "Do something",
+        subagent_type: "unknown-agent",
       };
 
-      expect(() => enforceModel(input)).toThrow('Unknown agent type');
+      expect(() => enforceModel(input)).toThrow("Unknown agent type");
     });
 
-    it('logs warning only when OMD_DEBUG=true', () => {
+    it("logs warning only when OMD_DEBUG=true", () => {
       const input: AgentInput = {
-        description: 'Test task',
-        prompt: 'Do something',
-        subagent_type: 'executor'
+        description: "Test task",
+        prompt: "Do something",
+        subagent_type: "executor",
       };
 
       // Without debug flag
@@ -92,47 +92,47 @@ describe('delegation-enforcer', () => {
       expect(resultWithoutDebug.warning).toBeUndefined();
 
       // With debug flag
-      process.env.OMD_DEBUG = 'true';
+      process.env.OMD_DEBUG = "true";
       const resultWithDebug = enforceModel(input);
       expect(resultWithDebug.warning).toBeDefined();
-      expect(resultWithDebug.warning).toContain('Auto-injecting model');
-      expect(resultWithDebug.warning).toContain('sonnet');
-      expect(resultWithDebug.warning).toContain('executor');
+      expect(resultWithDebug.warning).toContain("Auto-injecting model");
+      expect(resultWithDebug.warning).toContain("sonnet");
+      expect(resultWithDebug.warning).toContain("executor");
     });
 
-    it('does not log warning when OMD_DEBUG is false', () => {
+    it("does not log warning when OMD_DEBUG is false", () => {
       const input: AgentInput = {
-        description: 'Test task',
-        prompt: 'Do something',
-        subagent_type: 'executor'
+        description: "Test task",
+        prompt: "Do something",
+        subagent_type: "executor",
       };
 
-      process.env.OMD_DEBUG = 'false';
+      process.env.OMD_DEBUG = "false";
       const result = enforceModel(input);
       expect(result.warning).toBeUndefined();
     });
 
-    it('works with all agents', () => {
+    it("works with all agents", () => {
       const testCases = [
-        { agent: 'architect', expectedModel: 'opus' },
-        { agent: 'executor', expectedModel: 'sonnet' },
-        { agent: 'explore', expectedModel: 'haiku' },
-        { agent: 'designer', expectedModel: 'sonnet' },
-        { agent: 'debugger', expectedModel: 'sonnet' },
-        { agent: 'verifier', expectedModel: 'sonnet' },
-        { agent: 'style-reviewer', expectedModel: 'haiku' },
-        { agent: 'quality-reviewer', expectedModel: 'sonnet' },
-        { agent: 'api-reviewer', expectedModel: 'sonnet' },
-        { agent: 'performance-reviewer', expectedModel: 'sonnet' },
-        { agent: 'dependency-expert', expectedModel: 'sonnet' },
-        { agent: 'test-engineer', expectedModel: 'sonnet' }
+        { agent: "architect", expectedModel: "opus" },
+        { agent: "executor", expectedModel: "sonnet" },
+        { agent: "explore", expectedModel: "haiku" },
+        { agent: "designer", expectedModel: "sonnet" },
+        { agent: "debugger", expectedModel: "sonnet" },
+        { agent: "verifier", expectedModel: "sonnet" },
+        { agent: "style-reviewer", expectedModel: "haiku" },
+        { agent: "quality-reviewer", expectedModel: "sonnet" },
+        { agent: "api-reviewer", expectedModel: "sonnet" },
+        { agent: "performance-reviewer", expectedModel: "sonnet" },
+        { agent: "dependency-expert", expectedModel: "sonnet" },
+        { agent: "test-engineer", expectedModel: "sonnet" },
       ];
 
       for (const testCase of testCases) {
         const input: AgentInput = {
-          description: 'Test',
-          prompt: 'Test',
-          subagent_type: testCase.agent
+          description: "Test",
+          prompt: "Test",
+          subagent_type: testCase.agent,
         };
 
         const result = enforceModel(input);
@@ -142,116 +142,116 @@ describe('delegation-enforcer', () => {
     });
   });
 
-  describe('isAgentCall', () => {
-    it('returns true for Agent tool with valid input', () => {
+  describe("isAgentCall", () => {
+    it("returns true for Agent tool with valid input", () => {
       const toolInput = {
-        description: 'Test',
-        prompt: 'Test',
-        subagent_type: 'executor'
+        description: "Test",
+        prompt: "Test",
+        subagent_type: "executor",
       };
 
-      expect(isAgentCall('Agent', toolInput)).toBe(true);
+      expect(isAgentCall("Agent", toolInput)).toBe(true);
     });
 
-    it('returns true for Task tool with valid input', () => {
+    it("returns true for Task tool with valid input", () => {
       const toolInput = {
-        description: 'Test',
-        prompt: 'Test',
-        subagent_type: 'executor'
+        description: "Test",
+        prompt: "Test",
+        subagent_type: "executor",
       };
 
-      expect(isAgentCall('Task', toolInput)).toBe(true);
+      expect(isAgentCall("Task", toolInput)).toBe(true);
     });
 
-    it('returns false for non-agent tools', () => {
+    it("returns false for non-agent tools", () => {
       const toolInput = {
-        description: 'Test',
-        prompt: 'Test',
-        subagent_type: 'executor'
+        description: "Test",
+        prompt: "Test",
+        subagent_type: "executor",
       };
 
-      expect(isAgentCall('Bash', toolInput)).toBe(false);
-      expect(isAgentCall('Read', toolInput)).toBe(false);
+      expect(isAgentCall("Bash", toolInput)).toBe(false);
+      expect(isAgentCall("Read", toolInput)).toBe(false);
     });
 
-    it('returns false for invalid input structure', () => {
-      expect(isAgentCall('Agent', null)).toBe(false);
-      expect(isAgentCall('Agent', undefined)).toBe(false);
-      expect(isAgentCall('Agent', 'string')).toBe(false);
-      expect(isAgentCall('Agent', { description: 'test' })).toBe(false); // missing prompt
-      expect(isAgentCall('Agent', { prompt: 'test' })).toBe(false); // missing description
+    it("returns false for invalid input structure", () => {
+      expect(isAgentCall("Agent", null)).toBe(false);
+      expect(isAgentCall("Agent", undefined)).toBe(false);
+      expect(isAgentCall("Agent", "string")).toBe(false);
+      expect(isAgentCall("Agent", { description: "test" })).toBe(false); // missing prompt
+      expect(isAgentCall("Agent", { prompt: "test" })).toBe(false); // missing description
     });
   });
 
-  describe('processPreToolUse', () => {
-    it('returns original input for non-agent tools', () => {
-      const toolInput = { command: 'ls -la' };
-      const result = processPreToolUse('Bash', toolInput);
+  describe("processPreToolUse", () => {
+    it("returns original input for non-agent tools", () => {
+      const toolInput = { command: "ls -la" };
+      const result = processPreToolUse("Bash", toolInput);
 
       expect(result.modifiedInput).toEqual(toolInput);
       expect(result.warning).toBeUndefined();
     });
 
-    it('enforces model for agent calls', () => {
+    it("enforces model for agent calls", () => {
       const toolInput: AgentInput = {
-        description: 'Test',
-        prompt: 'Test',
-        subagent_type: 'executor'
+        description: "Test",
+        prompt: "Test",
+        subagent_type: "executor",
       };
 
-      const result = processPreToolUse('Agent', toolInput);
+      const result = processPreToolUse("Agent", toolInput);
 
-      expect(result.modifiedInput).toHaveProperty('model', 'sonnet');
+      expect(result.modifiedInput).toHaveProperty("model", "sonnet");
     });
 
-    it('does not modify input when model already specified', () => {
+    it("does not modify input when model already specified", () => {
       const toolInput: AgentInput = {
-        description: 'Test',
-        prompt: 'Test',
-        subagent_type: 'executor',
-        model: 'haiku'
+        description: "Test",
+        prompt: "Test",
+        subagent_type: "executor",
+        model: "haiku",
       };
 
-      const result = processPreToolUse('Agent', toolInput);
+      const result = processPreToolUse("Agent", toolInput);
 
       expect(result.modifiedInput).toEqual(toolInput);
       expect(result.warning).toBeUndefined();
     });
 
-    it('logs warning only when OMD_DEBUG=true and model injected', () => {
+    it("logs warning only when OMD_DEBUG=true and model injected", () => {
       const toolInput: AgentInput = {
-        description: 'Test',
-        prompt: 'Test',
-        subagent_type: 'executor'
+        description: "Test",
+        prompt: "Test",
+        subagent_type: "executor",
       };
 
       // Without debug
       delete process.env.OMD_DEBUG;
-      const resultWithoutDebug = processPreToolUse('Agent', toolInput);
+      const resultWithoutDebug = processPreToolUse("Agent", toolInput);
       expect(resultWithoutDebug.warning).toBeUndefined();
 
       // With debug
-      process.env.OMD_DEBUG = 'true';
-      const resultWithDebug = processPreToolUse('Agent', toolInput);
+      process.env.OMD_DEBUG = "true";
+      const resultWithDebug = processPreToolUse("Agent", toolInput);
       expect(resultWithDebug.warning).toBeDefined();
     });
   });
 
-  describe('getModelForAgent', () => {
-    it('returns correct model for agent with prefix', () => {
-      expect(getModelForAgent('oh-my-droid:executor')).toBe('sonnet');
-      expect(getModelForAgent('oh-my-droid:debugger')).toBe('sonnet');
-      expect(getModelForAgent('oh-my-droid:architect')).toBe('opus');
+  describe("getModelForAgent", () => {
+    it("returns correct model for agent with prefix", () => {
+      expect(getModelForAgent("oh-my-droid:executor")).toBe("sonnet");
+      expect(getModelForAgent("oh-my-droid:debugger")).toBe("sonnet");
+      expect(getModelForAgent("oh-my-droid:architect")).toBe("opus");
     });
 
-    it('returns correct model for agent without prefix', () => {
-      expect(getModelForAgent('executor')).toBe('sonnet');
-      expect(getModelForAgent('debugger')).toBe('sonnet');
-      expect(getModelForAgent('architect')).toBe('opus');
+    it("returns correct model for agent without prefix", () => {
+      expect(getModelForAgent("executor")).toBe("sonnet");
+      expect(getModelForAgent("debugger")).toBe("sonnet");
+      expect(getModelForAgent("architect")).toBe("opus");
     });
 
-    it('throws error for unknown agent', () => {
-      expect(() => getModelForAgent('unknown')).toThrow('Unknown agent type');
+    it("throws error for unknown agent", () => {
+      expect(() => getModelForAgent("unknown")).toThrow("Unknown agent type");
     });
   });
 });

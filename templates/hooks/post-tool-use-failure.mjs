@@ -27,7 +27,7 @@ function isPathContained(targetPath, basePath) {
 }
 
 // Initialize .omd directory if needed
-function initOmcDir(directory) {
+function initOmdDir(directory) {
   const cwd = process.cwd();
   // Validate directory is contained within cwd
   if (!isPathContained(directory, cwd)) {
@@ -141,7 +141,7 @@ async function main() {
     }
 
     // Initialize .omd/state directory
-    const stateDir = initOmcDir(directory);
+    const stateDir = initOmdDir(directory);
     const statePath = join(stateDir, 'last-tool-error.json');
 
     // Read existing state and calculate retry count

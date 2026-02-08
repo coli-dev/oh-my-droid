@@ -2,7 +2,7 @@ export function isNonInteractive() {
     if (process.env.CI === "true" || process.env.CI === "1") {
         return true;
     }
-    if (process.env.DROID_CODE_RUN === "true" || process.env.DROID_CODE_NON_INTERACTIVE === "true") {
+    if (process.env.factory_CODE_RUN === "true" || process.env.factory_CODE_NON_INTERACTIVE === "true") {
         return true;
     }
     if (process.env.GITHUB_ACTIONS === "true") {

@@ -6,6 +6,8 @@
 - Reset project version baseline to `0.0.1` for the new Droid line.
 - Standardized author identity to `coli.dev` and contact email to `hi@coli.dev`.
 - Removed non-English root README variants to keep English-only root docs.
+- Fixed think-mode provider resolution for GitHub Copilot + Claude models so thinking config is applied correctly.
+- Fixed tokscale launcher option check (`droid`) to restore successful TypeScript build.
 
 # oh-my-droid v0.0.1: Team Model Inheritance
 

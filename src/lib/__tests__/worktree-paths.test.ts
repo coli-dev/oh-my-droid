@@ -3,18 +3,18 @@ import { mkdirSync, rmSync, writeFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import {
   validatePath,
-  resolveOmcPath,
+  resolveOmdPath,
   resolveStatePath,
-  ensureOmcDir,
+  ensureOmdDir,
   getWorktreeNotepadPath,
   getWorktreeProjectMemoryPath,
-  getOmcRoot,
+  getOmdRoot,
   resolvePlanPath,
   resolveResearchPath,
   resolveLogsPath,
   resolveWisdomPath,
-  isPathUnderOmc,
-  ensureAllOmcDirs,
+  isPathUnderOmd,
+  ensureAllOmdDirs,
   clearWorktreeCache,
   getProcessSessionId,
   resetProcessSessionId,
@@ -52,14 +52,14 @@ describe('worktree-paths', () => {
     });
   });
 
-  describe('resolveOmcPath', () => {
+  describe('resolveOmdPath', () => {
     it('should resolve paths under .omd directory', () => {
-      const result = resolveOmcPath('state/ralph.json', TEST_DIR);
+      const result = resolveOmdPath('state/ralph.json', TEST_DIR);
       expect(result).toBe(join(TEST_DIR, '.omd', 'state', 'ralph.json'));
     });
 
     it('should reject paths that escape .omd boundary', () => {
-      expect(() => resolveOmcPath('../secret.txt', TEST_DIR)).toThrow('path traversal');
+      expect(() => resolveOmdPath('../secret.txt', TEST_DIR)).toThrow('path traversal');
     });
   });
 
@@ -80,9 +80,9 @@ describe('worktree-paths', () => {
     });
   });
 
-  describe('ensureOmcDir', () => {
+  describe('ensureOmdDir', () => {
     it('should create directories under .omd', () => {
-      const result = ensureOmcDir('state', TEST_DIR);
+      const result = ensureOmdDir('state', TEST_DIR);
       expect(result).toBe(join(TEST_DIR, '.omd', 'state'));
       expect(existsSync(result)).toBe(true);
     });
@@ -99,8 +99,8 @@ describe('worktree-paths', () => {
       expect(result).toBe(join(TEST_DIR, '.omd', 'project-memory.json'));
     });
 
-    it('getOmcRoot returns correct path', () => {
-      const result = getOmcRoot(TEST_DIR);
+    it('getOmdRoot returns correct path', () => {
+      const result = getOmdRoot(TEST_DIR);
       expect(result).toBe(join(TEST_DIR, '.omd'));
     });
 
@@ -125,21 +125,21 @@ describe('worktree-paths', () => {
     });
   });
 
-  describe('isPathUnderOmc', () => {
+  describe('isPathUnderOmd', () => {
     it('should return true for paths under .omd', () => {
-      expect(isPathUnderOmc(join(TEST_DIR, '.omd', 'state', 'ralph.json'), TEST_DIR)).toBe(true);
-      expect(isPathUnderOmc(join(TEST_DIR, '.omd'), TEST_DIR)).toBe(true);
+      expect(isPathUnderOmd(join(TEST_DIR, '.omd', 'state', 'ralph.json'), TEST_DIR)).toBe(true);
+      expect(isPathUnderOmd(join(TEST_DIR, '.omd'), TEST_DIR)).toBe(true);
     });
 
     it('should return false for paths outside .omd', () => {
-      expect(isPathUnderOmc(join(TEST_DIR, 'src', 'file.ts'), TEST_DIR)).toBe(false);
-      expect(isPathUnderOmc('/etc/passwd', TEST_DIR)).toBe(false);
+      expect(isPathUnderOmd(join(TEST_DIR, 'src', 'file.ts'), TEST_DIR)).toBe(false);
+      expect(isPathUnderOmd('/etc/passwd', TEST_DIR)).toBe(false);
     });
   });
 
-  describe('ensureAllOmcDirs', () => {
+  describe('ensureAllOmdDirs', () => {
     it('should create all standard .omd subdirectories', () => {
-      ensureAllOmcDirs(TEST_DIR);
+      ensureAllOmdDirs(TEST_DIR);
 
       expect(existsSync(join(TEST_DIR, '.omd'))).toBe(true);
       expect(existsSync(join(TEST_DIR, '.omd', 'state'))).toBe(true);

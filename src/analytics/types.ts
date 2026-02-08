@@ -109,7 +109,7 @@ export interface TokscalePricingResult {
   cacheWritePerMillion?: number;
   cacheWriteMarkup: number;
   cacheReadDiscount: number;
-  source: 'tokscale' | 'fallback';
+  source: "tokscale" | "fallback";
 }
 
 /**
@@ -118,22 +118,22 @@ export interface TokscalePricingResult {
  * @deprecated Use tokscale-adapter.ts lookupPricingWithFallback() instead
  */
 export const PRICING: Record<string, ModelPricing> = {
-  'claude-haiku-4': {
-    inputPerMillion: 0.80,
-    outputPerMillion: 4.00,
+  "claude-haiku-4": {
+    inputPerMillion: 0.8,
+    outputPerMillion: 4.0,
     cacheWriteMarkup: 0.25,
-    cacheReadDiscount: 0.90
+    cacheReadDiscount: 0.9,
   },
-  'claude-sonnet-4.5': {
-    inputPerMillion: 3.00,
-    outputPerMillion: 15.00,
+  "claude-sonnet-4.5": {
+    inputPerMillion: 3.0,
+    outputPerMillion: 15.0,
     cacheWriteMarkup: 0.25,
-    cacheReadDiscount: 0.90
+    cacheReadDiscount: 0.9,
   },
-  'claude-opus-4.6': {
-    inputPerMillion: 15.00,
-    outputPerMillion: 75.00,
+  "claude-opus-4.6": {
+    inputPerMillion: 15.0,
+    outputPerMillion: 75.0,
     cacheWriteMarkup: 0.25,
-    cacheReadDiscount: 0.90
-  }
+    cacheReadDiscount: 0.9,
+  },
 };

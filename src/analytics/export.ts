@@ -1,33 +1,45 @@
-import { CostReport, UsagePattern } from './query-engine.js';
-import { SessionHistory } from './session-types.js';
-import * as fs from 'fs/promises';
+import { CostReport, UsagePattern } from "./query-engine.js";
+import { SessionHistory } from "./session-types.js";
+import * as fs from "fs/promises";
 
-export type ExportFormat = 'json' | 'csv';
+export type ExportFormat = "json" | "csv";
 
-export async function exportCostReport(report: CostReport, format: ExportFormat, outputPath: string): Promise<void> {
-  if (format === 'json') {
-    await fs.writeFile(outputPath, JSON.stringify(report, null, 2), 'utf-8');
+export async function exportCostReport(
+  report: CostReport,
+  format: ExportFormat,
+  outputPath: string,
+): Promise<void> {
+  if (format === "json") {
+    await fs.writeFile(outputPath, JSON.stringify(report, null, 2), "utf-8");
   } else {
     const csv = costReportToCSV(report);
-    await fs.writeFile(outputPath, csv, 'utf-8');
+    await fs.writeFile(outputPath, csv, "utf-8");
   }
 }
 
-export async function exportSessionHistory(history: SessionHistory, format: ExportFormat, outputPath: string): Promise<void> {
-  if (format === 'json') {
-    await fs.writeFile(outputPath, JSON.stringify(history, null, 2), 'utf-8');
+export async function exportSessionHistory(
+  history: SessionHistory,
+  format: ExportFormat,
+  outputPath: string,
+): Promise<void> {
+  if (format === "json") {
+    await fs.writeFile(outputPath, JSON.stringify(history, null, 2), "utf-8");
   } else {
     const csv = sessionHistoryToCSV(history);
-    await fs.writeFile(outputPath, csv, 'utf-8');
+    await fs.writeFile(outputPath, csv, "utf-8");
   }
 }
 
-export async function exportUsagePatterns(patterns: UsagePattern, format: ExportFormat, outputPath: string): Promise<void> {
-  if (format === 'json') {
-    await fs.writeFile(outputPath, JSON.stringify(patterns, null, 2), 'utf-8');
+export async function exportUsagePatterns(
+  patterns: UsagePattern,
+  format: ExportFormat,
+  outputPath: string,
+): Promise<void> {
+  if (format === "json") {
+    await fs.writeFile(outputPath, JSON.stringify(patterns, null, 2), "utf-8");
   } else {
     const csv = usagePatternsToCSV(patterns);
-    await fs.writeFile(outputPath, csv, 'utf-8');
+    await fs.writeFile(outputPath, csv, "utf-8");
   }
 }
 
@@ -35,7 +47,7 @@ function costReportToCSV(report: CostReport): string {
   const lines: string[] = [];
 
   // Header
-  lines.push('Type,Name,Cost');
+  lines.push("Type,Name,Cost");
 
   // By agent
   for (const [agent, cost] of Object.entries(report.byAgent)) {
@@ -57,14 +69,16 @@ function costReportToCSV(report: CostReport): string {
   // Total
   lines.push(`Total,,${report.totalCost.toFixed(4)}`);
 
-  return lines.join('\n');
+  return lines.join("\n");
 }
 
 function sessionHistoryToCSV(history: SessionHistory): string {
   const lines: string[] = [];
 
   // Header
-  lines.push('SessionID,ProjectPath,StartTime,EndTime,Duration,Status,Tags,Goals,Outcomes');
+  lines.push(
+    "SessionID,ProjectPath,StartTime,EndTime,Duration,Status,Tags,Goals,Outcomes",
+  );
 
   // Sessions
   for (const session of history.sessions) {
@@ -72,28 +86,28 @@ function sessionHistoryToCSV(history: SessionHistory): string {
       session.id,
       session.projectPath,
       session.startTime,
-      session.endTime || '',
-      session.duration?.toString() || '',
+      session.endTime || "",
+      session.duration?.toString() || "",
       session.status,
-      session.tags.join(';'),
-      session.goals.join(';'),
-      session.outcomes.join(';')
+      session.tags.join(";"),
+      session.goals.join(";"),
+      session.outcomes.join(";"),
     ];
 
-    lines.push(row.map(escapeCSV).join(','));
+    lines.push(row.map(escapeCSV).join(","));
   }
 
-  return lines.join('\n');
+  return lines.join("\n");
 }
 
 function usagePatternsToCSV(patterns: UsagePattern): string {
   const lines: string[] = [];
 
   // Header
-  lines.push('Type,Value,Cost');
+  lines.push("Type,Value,Cost");
 
   // Peak hours
-  lines.push(`PeakHours,${patterns.peakHours.join(';')},`);
+  lines.push(`PeakHours,${patterns.peakHours.join(";")},`);
 
   // Most expensive operations
   for (const op of patterns.mostExpensiveOperations) {
@@ -101,14 +115,16 @@ function usagePatternsToCSV(patterns: UsagePattern): string {
   }
 
   // Summary stats
-  lines.push(`AverageCostPerSession,,${patterns.averageCostPerSession.toFixed(4)}`);
+  lines.push(
+    `AverageCostPerSession,,${patterns.averageCostPerSession.toFixed(4)}`,
+  );
   lines.push(`TotalSessions,${patterns.totalSessions},`);
 
-  return lines.join('\n');
+  return lines.join("\n");
 }
 
 function escapeCSV(value: string): string {
-  if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+  if (value.includes(",") || value.includes('"') || value.includes("\n")) {
     return `"${value.replace(/"/g, '""')}"`;
   }
   return value;

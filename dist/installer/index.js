@@ -70,7 +70,7 @@ function findLineAnchoredMarker(content, marker, fromEnd = false) {
  * @param command - The hook command string
  * @returns true if the command contains 'omd' or 'oh-my-droid'
  */
-export function isOmcHook(command) {
+export function isOmdHook(command) {
     const lowerCommand = command.toLowerCase();
     // Match on path segments or word boundaries, not substrings
     // Matches: /omd/, /omd-, omd/, -omd, _omd, omd_
@@ -118,7 +118,7 @@ export function isDroidInstalled() {
 export function isRunningAsPlugin() {
     // Check for DROID_PLUGIN_ROOT env var (set by plugin system)
     // This is the most reliable indicator that we're running as a plugin
-    return !!process.env.DROID_PLUGIN_ROOT;
+    return !!process.env.factory_PLUGIN_ROOT;
 }
 /**
  * Check if we're running as a project-scoped plugin (not global)
@@ -132,7 +132,7 @@ export function isRunningAsPlugin() {
  * @returns true if running as a project-scoped plugin, false otherwise
  */
 export function isProjectScopedPlugin() {
-    const pluginRoot = process.env.DROID_PLUGIN_ROOT;
+    const pluginRoot = process.env.factory_PLUGIN_ROOT;
     if (!pluginRoot) {
         return false;
     }
@@ -211,21 +211,21 @@ export function mergeDroidMd(existingContent, omdContent, version) {
     const USER_CUSTOMIZATIONS = '<!-- User customizations -->';
     // Idempotency guard: strip markers from omdContent if already present
     // This handles the case where docs/AGENTS.md ships with markers
-    let cleanOmcContent = omdContent;
+    let cleanOmdContent = omdContent;
     const omdStartIdx = findLineAnchoredMarker(omdContent, START_MARKER);
     const omdEndIdx = findLineAnchoredMarker(omdContent, END_MARKER, true);
     if (omdStartIdx !== -1 && omdEndIdx !== -1 && omdStartIdx < omdEndIdx) {
         // Extract content between markers, trimming any surrounding whitespace
-        cleanOmcContent = omdContent
+        cleanOmdContent = omdContent
             .substring(omdStartIdx + START_MARKER.length, omdEndIdx)
             .trim();
     }
     // Strip any existing version marker from content and inject current version
-    cleanOmcContent = cleanOmcContent.replace(/<!-- OMD:VERSION:[^\s]*? -->\n?/, '');
+    cleanOmdContent = cleanOmdContent.replace(/<!-- OMD:VERSION:[^\s]*? -->\n?/, '');
     const versionMarker = version ? `<!-- OMD:VERSION:${version} -->\n` : '';
     // Case 1: No existing content - wrap omdContent in markers
     if (!existingContent) {
-        return `${START_MARKER}\n${versionMarker}${cleanOmcContent}\n${END_MARKER}\n`;
+        return `${START_MARKER}\n${versionMarker}${cleanOmdContent}\n${END_MARKER}\n`;
     }
     // Case 2: Existing content has both markers - replace content between markers
     // Use line-anchored search to avoid matching markers inside code blocks
@@ -235,15 +235,15 @@ export function mergeDroidMd(existingContent, omdContent, version) {
         // Extract content before START_MARKER and after END_MARKER
         const beforeMarker = existingContent.substring(0, startIndex);
         const afterMarker = existingContent.substring(endIndex + END_MARKER.length);
-        return `${beforeMarker}${START_MARKER}\n${versionMarker}${cleanOmcContent}\n${END_MARKER}${afterMarker}`;
+        return `${beforeMarker}${START_MARKER}\n${versionMarker}${cleanOmdContent}\n${END_MARKER}${afterMarker}`;
     }
     // Case 3: Corrupted markers (START without END or vice versa)
     if (startIndex !== -1 || endIndex !== -1) {
         // Handle corrupted state - backup will be created by caller
-        return `${START_MARKER}\n${versionMarker}${cleanOmcContent}\n${END_MARKER}\n\n<!-- User customizations (recovered from corrupted markers) -->\n${existingContent}`;
+        return `${START_MARKER}\n${versionMarker}${cleanOmdContent}\n${END_MARKER}\n\n<!-- User customizations (recovered from corrupted markers) -->\n${existingContent}`;
     }
     // Case 4: No markers - wrap omdContent in markers, preserve existing after user customizations header
-    return `${START_MARKER}\n${versionMarker}${cleanOmcContent}\n${END_MARKER}\n\n${USER_CUSTOMIZATIONS}\n${existingContent}`;
+    return `${START_MARKER}\n${versionMarker}${cleanOmdContent}\n${END_MARKER}\n\n${USER_CUSTOMIZATIONS}\n${existingContent}`;
 }
 /**
  * Install OMD agents, commands, skills, and hooks
@@ -566,23 +566,23 @@ export function install(options = {}) {
                         else {
                             // Check if existing hook is owned by another plugin
                             const existingEventHooks = existingHooks[eventType];
-                            let hasNonOmcHook = false;
-                            let nonOmcCommand = '';
+                            let hasNonOmdHook = false;
+                            let nonOmdCommand = '';
                             for (const hookGroup of existingEventHooks) {
                                 for (const hook of hookGroup.hooks) {
-                                    if (hook.type === 'command' && !isOmcHook(hook.command)) {
-                                        hasNonOmcHook = true;
-                                        nonOmcCommand = hook.command;
+                                    if (hook.type === 'command' && !isOmdHook(hook.command)) {
+                                        hasNonOmdHook = true;
+                                        nonOmdCommand = hook.command;
                                         break;
                                     }
                                 }
-                                if (hasNonOmcHook)
+                                if (hasNonOmdHook)
                                     break;
                             }
-                            if (hasNonOmcHook && !options.forceHooks) {
+                            if (hasNonOmdHook && !options.forceHooks) {
                                 // Conflict detected - don't overwrite
                                 log(`  [OMD] Warning: ${eventType} hook owned by another plugin. Skipping. Use --force-hooks to override.`);
-                                result.hookConflicts.push({ eventType, existingCommand: nonOmcCommand });
+                                result.hookConflicts.push({ eventType, existingCommand: nonOmdCommand });
                             }
                             else if (options.force || options.forceHooks) {
                                 existingHooks[eventType] = eventHooks;

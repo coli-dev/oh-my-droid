@@ -5,9 +5,9 @@
  * command templates and expanding them with arguments.
  */
 
-import { readFileSync, existsSync, readdirSync } from 'fs';
-import { join } from 'path';
-import { homedir } from 'os';
+import { readFileSync, existsSync, readdirSync } from "fs";
+import { join } from "path";
+import { homedir } from "os";
 
 export interface CommandInfo {
   name: string;
@@ -26,17 +26,20 @@ export interface ExpandedCommand {
  * Get the commands directory path
  */
 export function getCommandsDir(): string {
-  return join(homedir(), '.factory', 'commands');
+  return join(homedir(), ".factory", "commands");
 }
 
 /**
  * Parse command frontmatter and content
  */
-function parseCommandFile(content: string): { description: string; template: string } {
+function parseCommandFile(content: string): {
+  description: string;
+  template: string;
+} {
   const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
 
   if (!frontmatterMatch) {
-    return { description: '', template: content };
+    return { description: "", template: content };
   }
 
   const frontmatter = frontmatterMatch[1];
@@ -44,7 +47,7 @@ function parseCommandFile(content: string): { description: string; template: str
 
   // Extract description from frontmatter
   const descMatch = frontmatter.match(/description:\s*(.+)/);
-  const description = descMatch ? descMatch[1].trim() : '';
+  const description = descMatch ? descMatch[1].trim() : "";
 
   return { description, template };
 }
@@ -61,14 +64,14 @@ export function getCommand(name: string): CommandInfo | null {
   }
 
   try {
-    const content = readFileSync(filePath, 'utf-8');
+    const content = readFileSync(filePath, "utf-8");
     const { description, template } = parseCommandFile(content);
 
     return {
       name,
       description,
       template,
-      filePath
+      filePath,
     };
   } catch (error) {
     console.error(`Error reading command ${name}:`, error);
@@ -87,11 +90,11 @@ export function getAllCommands(): CommandInfo[] {
   }
 
   try {
-    const files = readdirSync(commandsDir).filter(f => f.endsWith('.md'));
+    const files = readdirSync(commandsDir).filter((f) => f.endsWith(".md"));
     const commands: CommandInfo[] = [];
 
     for (const file of files) {
-      const name = file.replace('.md', '');
+      const name = file.replace(".md", "");
       const command = getCommand(name);
       if (command) {
         commands.push(command);
@@ -100,7 +103,7 @@ export function getAllCommands(): CommandInfo[] {
 
     return commands;
   } catch (error) {
-    console.error('Error listing commands:', error);
+    console.error("Error listing commands:", error);
     return [];
   }
 }
@@ -109,7 +112,7 @@ export function getAllCommands(): CommandInfo[] {
  * List available command names
  */
 export function listCommands(): string[] {
-  return getAllCommands().map(c => c.name);
+  return getAllCommands().map((c) => c.name);
 }
 
 /**
@@ -127,7 +130,10 @@ export function listCommands(): string[] {
  * // Returns the full ralph template with "Build a REST API" substituted
  * ```
  */
-export function expandCommand(name: string, args: string = ''): ExpandedCommand | null {
+export function expandCommand(
+  name: string,
+  args: string = "",
+): ExpandedCommand | null {
   const command = getCommand(name);
 
   if (!command) {
@@ -140,7 +146,7 @@ export function expandCommand(name: string, args: string = ''): ExpandedCommand 
   return {
     name,
     prompt: prompt.trim(),
-    description: command.description
+    description: command.description,
   };
 }
 
@@ -160,7 +166,10 @@ export function expandCommand(name: string, args: string = ''): ExpandedCommand 
  * }
  * ```
  */
-export function expandCommandPrompt(name: string, args: string = ''): string | null {
+export function expandCommandPrompt(
+  name: string,
+  args: string = "",
+): string | null {
   const expanded = expandCommand(name, args);
   return expanded ? expanded.prompt : null;
 }
@@ -175,7 +184,9 @@ export function commandExists(name: string): boolean {
 /**
  * Batch expand multiple commands
  */
-export function expandCommands(commands: Array<{ name: string; args?: string }>): ExpandedCommand[] {
+export function expandCommands(
+  commands: Array<{ name: string; args?: string }>,
+): ExpandedCommand[] {
   return commands
     .map(({ name, args }) => expandCommand(name, args))
     .filter((c): c is ExpandedCommand => c !== null);

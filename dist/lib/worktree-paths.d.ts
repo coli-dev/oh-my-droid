@@ -5,7 +5,7 @@
  * ensuring all operations stay within the worktree boundary.
  */
 /** Standard .omd subdirectories */
-export declare const OmcPaths: {
+export declare const OmdPaths: {
     readonly ROOT: ".omd";
     readonly STATE: ".omd/state";
     readonly SESSIONS: ".omd/state/sessions";
@@ -40,7 +40,7 @@ export declare function validatePath(inputPath: string): void;
  * @returns Absolute path
  * @throws Error if path would escape worktree
  */
-export declare function resolveOmcPath(relativePath: string, worktreeRoot?: string): string;
+export declare function resolveOmdPath(relativePath: string, worktreeRoot?: string): string;
 /**
  * Resolve a state file path.
  *
@@ -63,7 +63,7 @@ export declare function resolveStatePath(stateName: string, worktreeRoot?: strin
  * @param worktreeRoot - Optional worktree root
  * @returns Absolute path to the created directory
  */
-export declare function ensureOmcDir(relativePath: string, worktreeRoot?: string): string;
+export declare function ensureOmdDir(relativePath: string, worktreeRoot?: string): string;
 /**
  * Get the absolute path to the notepad file.
  * NOTE: Named differently from hooks/notepad/getNotepadPath which takes `directory` (required).
@@ -77,7 +77,7 @@ export declare function getWorktreeProjectMemoryPath(worktreeRoot?: string): str
 /**
  * Get the .omd root directory path.
  */
-export declare function getOmcRoot(worktreeRoot?: string): string;
+export declare function getOmdRoot(worktreeRoot?: string): string;
 /**
  * Resolve a plan file path.
  * @param planName - Plan name (without .md extension)
@@ -101,11 +101,11 @@ export declare function resolveWisdomPath(planName: string, worktreeRoot?: strin
  * Check if an absolute path is under the .omd directory.
  * @param absolutePath - Absolute path to check
  */
-export declare function isPathUnderOmc(absolutePath: string, worktreeRoot?: string): boolean;
+export declare function isPathUnderOmd(absolutePath: string, worktreeRoot?: string): boolean;
 /**
  * Ensure all standard .omd subdirectories exist.
  */
-export declare function ensureAllOmcDirs(worktreeRoot?: string): void;
+export declare function ensureAllOmdDirs(worktreeRoot?: string): void;
 /**
  * Clear the worktree cache (useful for testing).
  */

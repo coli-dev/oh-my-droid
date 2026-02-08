@@ -1,4 +1,4 @@
-declare module 'safe-regex' {
+declare module "safe-regex" {
   /**
    * Check if a regex pattern is safe from ReDoS attacks
    * @param pattern - The regex pattern to check (string or RegExp)
@@ -7,7 +7,7 @@ declare module 'safe-regex' {
    */
   function safeRegex(
     pattern: string | RegExp,
-    options?: { limit?: number }
+    options?: { limit?: number },
   ): boolean;
 
   export = safeRegex;

@@ -22,7 +22,7 @@ export type {
   TaskFailureSidecar,
   WorkerBackend,
   WorkerCapability,
-} from './types.js';
+} from "./types.js";
 
 export {
   readTask,
@@ -32,7 +32,7 @@ export {
   writeTaskFailure,
   readTaskFailure,
   listTaskIds,
-} from './task-file-ops.js';
+} from "./task-file-ops.js";
 
 export {
   validateTmux,
@@ -43,7 +43,7 @@ export {
   isSessionAlive,
   listActiveSessions,
   spawnBridgeInSession,
-} from './tmux-session.js';
+} from "./tmux-session.js";
 
 export {
   appendOutbox,
@@ -59,7 +59,7 @@ export {
   checkDrainSignal,
   deleteDrainSignal,
   cleanupWorkerFiles,
-} from './inbox-outbox.js';
+} from "./inbox-outbox.js";
 
 export {
   registerMcpWorker,
@@ -69,7 +69,7 @@ export {
   getRegistrationStrategy,
   readProbeResult,
   writeProbeResult,
-} from './team-registration.js';
+} from "./team-registration.js";
 
 export {
   writeHeartbeat,
@@ -78,32 +78,29 @@ export {
   isWorkerAlive,
   deleteHeartbeat,
   cleanupTeamHeartbeats,
-} from './heartbeat.js';
+} from "./heartbeat.js";
 
 export {
   readNewOutboxMessages,
   readAllTeamOutboxMessages,
   resetOutboxCursor,
-} from './outbox-reader.js';
+} from "./outbox-reader.js";
 
-export type { OutboxCursor } from './outbox-reader.js';
+export type { OutboxCursor } from "./outbox-reader.js";
 
-export { getTeamStatus } from './team-status.js';
-export type { WorkerStatus, TeamStatus } from './team-status.js';
+export { getTeamStatus } from "./team-status.js";
+export type { WorkerStatus, TeamStatus } from "./team-status.js";
 
-export { runBridge, sanitizePromptContent } from './mcp-team-bridge.js';
+export { runBridge, sanitizePromptContent } from "./mcp-team-bridge.js";
 
-export { validateConfigPath } from './bridge-entry.js';
+export { validateConfigPath } from "./bridge-entry.js";
 
-export { logAuditEvent, readAuditLog, rotateAuditLog } from './audit-log.js';
-export type { AuditEventType, AuditEvent } from './audit-log.js';
+export { logAuditEvent, readAuditLog, rotateAuditLog } from "./audit-log.js";
+export type { AuditEventType, AuditEvent } from "./audit-log.js";
 
-export {
-  getWorkerHealthReports,
-  checkWorkerHealth,
-} from './worker-health.js';
+export { getWorkerHealthReports, checkWorkerHealth } from "./worker-health.js";
 
-export type { WorkerHealthReport } from './worker-health.js';
+export type { WorkerHealthReport } from "./worker-health.js";
 
 export {
   shouldRestart,
@@ -111,60 +108,64 @@ export {
   readRestartState,
   clearRestartState,
   synthesizeBridgeConfig,
-} from './worker-restart.js';
+} from "./worker-restart.js";
 
-export type { RestartPolicy, RestartState } from './worker-restart.js';
+export type { RestartPolicy, RestartState } from "./worker-restart.js";
 
-export { getTeamMembers } from './unified-team.js';
-export type { UnifiedTeamMember } from './unified-team.js';
+export { getTeamMembers } from "./unified-team.js";
+export type { UnifiedTeamMember } from "./unified-team.js";
 
-export { routeMessage, broadcastToTeam } from './message-router.js';
-export type { RouteResult, BroadcastResult } from './message-router.js';
+export { routeMessage, broadcastToTeam } from "./message-router.js";
+export type { RouteResult, BroadcastResult } from "./message-router.js";
 
 export {
   getDefaultCapabilities,
   scoreWorkerFitness,
   rankWorkersForTask,
-} from './capabilities.js';
+} from "./capabilities.js";
 
-export { routeTasks } from './task-router.js';
-export type { TaskRoutingDecision } from './task-router.js';
+export { routeTasks } from "./task-router.js";
+export type { TaskRoutingDecision } from "./task-router.js";
 
 export {
   createWorkerWorktree,
   removeWorkerWorktree,
   listTeamWorktrees,
   cleanupTeamWorktrees,
-} from './git-worktree.js';
+} from "./git-worktree.js";
 
-export type { WorktreeInfo } from './git-worktree.js';
+export type { WorktreeInfo } from "./git-worktree.js";
 
-export { getActivityLog, formatActivityTimeline } from './activity-log.js';
-export type { ActivityEntry } from './activity-log.js';
+export { getActivityLog, formatActivityTimeline } from "./activity-log.js";
+export type { ActivityEntry } from "./activity-log.js";
 
 export {
   recordTaskUsage,
   measureCharCounts,
   generateUsageReport,
-} from './usage-tracker.js';
+} from "./usage-tracker.js";
 
-export type { TaskUsageRecord, WorkerUsageSummary, TeamUsageReport } from './usage-tracker.js';
+export type {
+  TaskUsageRecord,
+  WorkerUsageSummary,
+  TeamUsageReport,
+} from "./usage-tracker.js";
 
 export {
   checkMergeConflicts,
   mergeWorkerBranch,
   mergeAllWorkerBranches,
-} from './merge-coordinator.js';
+} from "./merge-coordinator.js";
 
-export type { MergeResult } from './merge-coordinator.js';
+export type { MergeResult } from "./merge-coordinator.js";
 
-export { generateTeamReport, saveTeamReport } from './summary-report.js';
+export { generateTeamReport, saveTeamReport } from "./summary-report.js";
 
 export {
   isPathAllowed,
   isCommandAllowed,
   formatPermissionInstructions,
   getDefaultPermissions,
-} from './permissions.js';
+} from "./permissions.js";
 
-export type { WorkerPermissions } from './permissions.js';
+export type { WorkerPermissions } from "./permissions.js";
