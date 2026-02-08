@@ -9,11 +9,11 @@
 ## Worker Preamble Protocol
 
 When orchestrators delegate to this agent, they should wrap task descriptions with the Worker Preamble to ensure:
-- Agent executes tasks directly without spawning sub-agents
+- Agent executes tasks directly without spawning sub-droids
 - Agent uses tools directly (Read, Write, Edit, Bash, etc.)
 - Agent reports results with absolute file paths
 
-See `src/agents/preamble.ts` for the `wrapWithPreamble()` utility.
+See `src/droids/preamble.ts` for the `wrapWithPreamble()` utility.
 
 ## Common Protocol
 

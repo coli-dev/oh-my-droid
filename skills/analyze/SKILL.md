@@ -16,7 +16,7 @@ Analyze performs deep investigation of architecture, bugs, performance issues, a
 </Use_When>
 
 <Do_Not_Use_When>
-- User wants code changes made -- use executor agents or `ralph` instead
+- User wants code changes made -- use executor droids or `ralph` instead
 - User wants a full plan with acceptance criteria -- use `plan` skill instead
 - User wants a quick file lookup or symbol search -- use `explore` agent instead
 - User asks a simple factual question that can be answered from one file -- just read and answer directly

@@ -28,12 +28,12 @@ describe('Aggressive Swarm Integration', () => {
         const stats = getSwarmStats();
         expect(stats?.totalTasks).toBe(25);
         expect(stats?.pendingTasks).toBe(25);
-        // Simulate wave 1: 5 agents each claim a task
+        // Simulate wave 1: 5 droids each claim a task
         const maxConcurrent = 5;
-        const agents = [];
+        const droids = [];
         for (let i = 0; i < maxConcurrent; i++) {
             const agentId = `agent-${i + 1}`;
-            agents.push(agentId);
+            droids.push(agentId);
             const claim = claimTask(agentId);
             expect(claim.success).toBe(true);
         }
@@ -41,9 +41,9 @@ describe('Aggressive Swarm Integration', () => {
         expect(getAvailableSlots(maxConcurrent)).toBe(0);
         expect(getSwarmStats()?.claimedTasks).toBe(5);
         expect(getSwarmStats()?.pendingTasks).toBe(20);
-        // Wave 1 completes: agents finish their tasks
+        // Wave 1 completes: droids finish their tasks
         const allTasks = getAllTasks();
-        for (const agent of agents) {
+        for (const agent of droids) {
             const agentTasks = allTasks.filter(t => t.claimedBy === agent && t.status === 'claimed');
             for (const task of agentTasks) {
                 completeTask(agent, task.id, `Fixed ${task.id}`);
@@ -119,7 +119,7 @@ describe('Aggressive Swarm Integration', () => {
             cwd: testDir
         });
         const processedTaskIds = new Set();
-        // Multiple agents claim and complete tasks
+        // Multiple droids claim and complete tasks
         while (hasPendingWork()) {
             for (let agentNum = 1; agentNum <= 5; agentNum++) {
                 const claim = claimTask(`agent-${agentNum}`);
@@ -162,7 +162,7 @@ describe('Aggressive Swarm Integration', () => {
         expect(stats?.failedTasks).toBeGreaterThan(0);
         expect(isSwarmComplete()).toBe(true);
     });
-    it('should handle rapid claiming by multiple agents', async () => {
+    it('should handle rapid claiming by multiple droids', async () => {
         const tasks = Array.from({ length: 50 }, (_, i) => `Rapid task ${i + 1}`);
         await startSwarm({
             agentCount: 10,
@@ -170,7 +170,7 @@ describe('Aggressive Swarm Integration', () => {
             cwd: testDir
         });
         const claimedByAgent = new Map();
-        // Simulate 10 agents rapidly claiming tasks
+        // Simulate 10 droids rapidly claiming tasks
         while (hasPendingWork()) {
             Array.from({ length: 10 }, (_, i) => {
                 const agentId = `rapid-agent-${i}`;

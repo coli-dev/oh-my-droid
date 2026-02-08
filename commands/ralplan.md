@@ -27,7 +27,7 @@ The ralplan workflow:
 1. Planner creates initial plan
 2. Architect reviews for technical feasibility
 3. Critic evaluates for completeness and quality
-4. Iterate until all three agents reach consensus
+4. Iterate until all three droids reach consensus
 
 ## See Also
 

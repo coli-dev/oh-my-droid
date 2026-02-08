@@ -356,7 +356,7 @@ In Droid, just say "setup omd", "omd setup", or any natural language equivalent.
 
 This:
 - Downloads latest AGENTS.md
-- Configures 32 agents
+- Configures 32 droids
 - Enables auto-behavior detection
 - Activates continuation enforcement
 - Sets up skill composition
@@ -394,7 +394,7 @@ After:  "I'm in a hurry, go fast!"
 
 #### 2. Delegate Always (Automatic)
 
-Complex work auto-routes to specialist agents:
+Complex work auto-routes to specialist droids:
 
 ```
 Your request              Droid's action
@@ -430,7 +430,7 @@ Storage:
 See what Droid is doing in the status bar:
 
 ```
-[OMD] ralph:3/10 | US-002 | ultrawork skill:planner | ctx:67% | agents:2 | todos:2/5
+[OMD] ralph:3/10 | US-002 | ultrawork skill:planner | ctx:67% | droids:2 | todos:2/5
 ```
 
 Run `/oh-my-droid:hud setup` to install. Presets: minimal, focused, full.
@@ -544,7 +544,7 @@ Project-level type checking via `lsp_diagnostics_directory` tool.
 
 #### 4. Session Resume
 
-Background agents can be resumed with full context via `resume-session` tool.
+Background droids can be resumed with full context via `resume-session` tool.
 
 ### Migration Steps
 
@@ -558,7 +558,7 @@ All existing configurations, plans, and workflows continue working unchanged.
 
 ### New Tools Available
 
-Once upgraded, agents automatically gain access to:
+Once upgraded, droids automatically gain access to:
 - Notepad wisdom APIs (read/write wisdom during execution)
 - Delegation categories (automatic categorization)
 - Directory diagnostics (project-level type checking)
@@ -592,7 +592,7 @@ Execute complex tasks with up to 5 concurrent workers for 3-5x speedup:
 
 #### 2. Swarm: Coordinated Agent Teams
 
-N coordinated agents with atomic task claiming:
+N coordinated droids with atomic task claiming:
 
 ```bash
 /oh-my-droid:swarm 5:executor "fix all TypeScript errors"
@@ -606,7 +606,7 @@ N coordinated agents with atomic task claiming:
 
 #### 3. Pipeline: Sequential Agent Chaining
 
-Chain agents with data passing between stages:
+Chain droids with data passing between stages:
 
 ```bash
 /oh-my-droid:pipeline explore:haiku -> architect:opus -> executor:sonnet

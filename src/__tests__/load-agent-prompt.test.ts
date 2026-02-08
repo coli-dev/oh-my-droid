@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { loadAgentPrompt } from "../agents/utils.js";
+import { loadAgentPrompt } from "../droids/utils.js";
 
 describe("loadAgentPrompt", () => {
   describe("valid agent names", () => {
@@ -13,7 +13,7 @@ describe("loadAgentPrompt", () => {
       expect(prompt).toMatch(/architect|Oracle|debugging/i);
     });
 
-    test("loads different agents correctly", () => {
+    test("loads different droids correctly", () => {
       const executor = loadAgentPrompt("executor");
       const explore = loadAgentPrompt("explore");
 
@@ -79,7 +79,7 @@ describe("loadAgentPrompt", () => {
     test("fallback does not leak internal paths", () => {
       const result = loadAgentPrompt("nonexistent-agent-xyz");
       expect(result).not.toContain("/home");
-      expect(result).not.toContain("agents/");
+      expect(result).not.toContain("droids/");
       expect(result).not.toContain(".md");
     });
   });

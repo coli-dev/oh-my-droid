@@ -16,7 +16,7 @@
 | Ultrapilot | `ultrapilot` | Parallel autopilot (3-5x) | `ultrapilot: build dashboard` |
 | Ultrawork | `ulw` | Parallel task fixing | `ulw fix all errors` |
 | Ecomode | `eco` | Budget-friendly parallel | `eco: implement feature` |
-| Swarm | `swarm` | N coordinated agents | `/swarm 5:executor "fix errors"` |
+| Swarm | `swarm` | N coordinated droids | `/swarm 5:executor "fix errors"` |
 | Pipeline | `pipeline` | Sequential chaining | `/pipeline review` |
 | Ralph | `ralph` | Persistence until done | `ralph: refactor auth` |
 | Plan | `plan` | Planning interview | `plan the API design` |
@@ -125,7 +125,7 @@ Before claiming completion:
 - **Conflict resolution:** Both `ulw` and `eco` → `eco` wins (more restrictive)
 - **Generic "fast"/"parallel"** → Uses config `defaultExecutionMode` (default: `ultrawork`)
 - **State cleanup:** `/cancel --all` clears all states
-- **Resume background:** Use `resume-session` tool for interrupted agents
+- **Resume background:** Use `resume-session` tool for interrupted droids
 - **LSP diagnostics:** Full project type checking with `lsp_diagnostics_directory`
 
 ## Resources

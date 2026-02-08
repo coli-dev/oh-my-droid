@@ -6,14 +6,14 @@
  *
  * Main features:
  * - Sisyphus: Primary orchestrator that delegates to specialized subagents
- * - Parallel execution: Background agents run concurrently
- * - LSP/AST tools: IDE-like capabilities for agents
+ * - Parallel execution: Background droids run concurrently
+ * - LSP/AST tools: IDE-like capabilities for droids
  * - Context management: Auto-injection from AGENTS.md/AGENTS.md
  * - Continuation enforcement: Ensures tasks complete before stopping
  * - Magic keywords: Special triggers for enhanced behaviors
  */
 import { loadConfig, findContextFiles, loadContextFromFiles } from './config/loader.js';
-import { getAgentDefinitions, omdSystemPrompt } from './agents/definitions.js';
+import { getAgentDefinitions, omdSystemPrompt } from './droids/definitions.js';
 import { getDefaultMcpServers, toSdkMcpFormat } from './mcp/servers.js';
 import { omdToolsServer, getOmdToolNames } from './mcp/omd-tools-server.js';
 import { codexMcpServer } from './mcp/codex-server.js';
@@ -43,10 +43,10 @@ ContextCollector, contextCollector, injectPendingContext, injectContextIntoText,
 export { isGptModel, isDroidModel, getDefaultModelForCategory, 
 // Utilities
 createAgentToolRestrictions, mergeAgentConfig, buildDelegationTable, buildUseAvoidSection, createEnvContext, getAvailableAgents, buildKeyTriggersSection, validateAgentConfig, deepMerge, loadAgentPrompt, 
-// Individual agents with metadata (rebranded intuitive names)
+// Individual droids with metadata (rebranded intuitive names)
 architectAgent, ARCHITECT_PROMPT_METADATA, exploreAgent, EXPLORE_PROMPT_METADATA, researcherAgent, RESEARCHER_PROMPT_METADATA, executorAgent, SISYPHUS_JUNIOR_PROMPT_METADATA, designerAgent, FRONTEND_ENGINEER_PROMPT_METADATA, writerAgent, DOCUMENT_WRITER_PROMPT_METADATA, visionAgent, MULTIMODAL_LOOKER_PROMPT_METADATA, criticAgent, CRITIC_PROMPT_METADATA, analystAgent, ANALYST_PROMPT_METADATA, plannerAgent, PLANNER_PROMPT_METADATA, 
 // Deprecated (backward compat - will be removed in v4.0.0)
-coordinatorAgent, ORCHESTRATOR_SISYPHUS_PROMPT_METADATA } from './agents/index.js';
+coordinatorAgent, ORCHESTRATOR_SISYPHUS_PROMPT_METADATA } from './droids/index.js';
 // Command expansion utilities for SDK integration
 export { expandCommand, expandCommandPrompt, getCommand, getAllCommands, listCommands, commandExists, expandCommands, getCommandsDir } from './commands/index.js';
 // Installer exports
@@ -103,7 +103,7 @@ export function createSisyphusSession(options) {
         systemPrompt += contextAddition;
     }
     // Get agent definitions
-    const agents = getAgentDefinitions();
+    const droids = getAgentDefinitions();
     // Build MCP servers configuration
     const externalMcpServers = getDefaultMcpServers({
         exaApiKey: config.mcpServers?.exa?.apiKey,
@@ -151,7 +151,7 @@ export function createSisyphusSession(options) {
         queryOptions: {
             options: {
                 systemPrompt,
-                agents,
+                droids,
                 mcpServers: {
                     ...toSdkMcpFormat(externalMcpServers),
                     't': omdToolsServer,

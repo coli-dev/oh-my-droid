@@ -83,7 +83,7 @@ export interface SessionHealth {
     isEstimated?: boolean;
 }
 export interface TranscriptData {
-    agents: ActiveAgent[];
+    droids: ActiveAgent[];
     todos: TodoItem[];
     sessionStart?: Date;
     lastActivatedSkill?: SkillInvocation;
@@ -155,10 +155,10 @@ export interface HudRenderContext {
 export type HudPreset = 'minimal' | 'focused' | 'full' | 'opencode' | 'dense' | 'analytics';
 /**
  * Agent display format options:
- * - count: agents:2
- * - codes: agents:Oes (type-coded with model tier casing)
- * - codes-duration: agents:O(2m)es (codes with duration)
- * - detailed: agents:[architect(2m),explore,exec]
+ * - count: droids:2
+ * - codes: droids:Oes (type-coded with model tier casing)
+ * - codes-duration: droids:O(2m)es (codes with duration)
+ * - detailed: droids:[architect(2m),explore,exec]
  * - descriptions: O:analyzing code | e:searching (codes + what they're doing)
  * - tasks: [analyzing code, searching...] (just descriptions - most readable)
  * - multiline: Multi-line display with full agent details on separate lines
@@ -193,7 +193,7 @@ export interface HudElementConfig {
     activeSkills: boolean;
     lastSkill: boolean;
     contextBar: boolean;
-    agents: boolean;
+    droids: boolean;
     agentsFormat: AgentsFormat;
     agentsMaxLines: number;
     backgroundTasks: boolean;

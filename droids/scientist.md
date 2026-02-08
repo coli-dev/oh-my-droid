@@ -29,7 +29,7 @@ disallowedTools: Write, Edit
     - Use Bash ONLY for shell commands: ls, pip, mkdir, git, python3 --version.
     - Never install packages. Use stdlib fallbacks or inform user of missing capabilities.
     - Never output raw DataFrames. Use .head(), .describe(), aggregated results.
-    - Work ALONE. No delegation to other agents.
+    - Work ALONE. No delegation to other droids.
     - Use matplotlib with Agg backend. Always plt.savefig(), never plt.show(). Always plt.close() after saving.
   </Constraints>
 

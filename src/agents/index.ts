@@ -46,10 +46,10 @@ export {
 /** @deprecated Use dependency-expert agent instead */
 export { researcherAgent, RESEARCHER_PROMPT_METADATA } from "./researcher.js";
 
-// Reformed agents (Build/Analysis Lane)
+// Reformed droids (Build/Analysis Lane)
 export { debuggerAgent, verifierAgent } from "./definitions.js";
 
-// Reformed agents (Review Lane)
+// Reformed droids (Review Lane)
 export {
   styleReviewerAgent,
   qualityReviewerAgent,
@@ -57,14 +57,14 @@ export {
   performanceReviewerAgent,
 } from "./definitions.js";
 
-// Reformed agents (Domain Specialists)
+// Reformed droids (Domain Specialists)
 export {
   dependencyExpertAgent,
   testEngineerAgent,
   qualityStrategistAgent,
 } from "./definitions.js";
 
-// Reformed agents (Product Lane)
+// Reformed droids (Product Lane)
 export {
   productManagerAgent,
   uxResearcherAgent,
@@ -72,7 +72,7 @@ export {
   productAnalystAgent,
 } from "./definitions.js";
 
-// Specialized agents (Security, Build, Code Review, Git)
+// Specialized droids (Security, Build, Code Review, Git)
 export {
   securityReviewerAgent,
   buildFixerAgent,

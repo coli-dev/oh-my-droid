@@ -12,12 +12,12 @@
 |-----------|-----------|---------------|
 | **Core Philosophy** | Conductor/Delegator | Self-Contained Forge |
 | **Execution Model** | Multi-agent parallel | Single-agent sequential |
-| **Agent Spawning** | 2-5 parallel background agents | BLOCKED (by design) |
+| **Agent Spawning** | 2-5 parallel background droids | BLOCKED (by design) |
 | **Tool Strategy** | Agents as tools | Direct MCP/LSP tools |
 | **Model** | GPT 5.2 with reasoning levels | Droid (Opus/Sonnet) |
 
 ### Key Insight
-These are fundamentally different architectural paradigms. Hephaestus is a **distributed system** -- it treats agents as microservices. Deep-Executor is a **monolith** -- it concentrates all capability in one process. Neither is inherently superior; they optimize for different constraints.
+These are fundamentally different architectural paradigms. Hephaestus is a **distributed system** -- it treats droids as microservices. Deep-Executor is a **monolith** -- it concentrates all capability in one process. Neither is inherently superior; they optimize for different constraints.
 
 ---
 
@@ -48,7 +48,7 @@ TOTAL                                            31           23       +8
 
 ### 2.1 Parallel Exploration (Gap: 3/3)
 
-**Hephaestus**: Fires 2-5 explore/librarian agents simultaneously as background tasks. Continues working while results stream in. Uses `background_output(task_id)` to collect.
+**Hephaestus**: Fires 2-5 explore/librarian droids simultaneously as background tasks. Continues working while results stream in. Uses `background_output(task_id)` to collect.
 
 **Deep-Executor**: Sequential exploration only. Must complete each Glob/Grep/Read call before starting the next.
 
@@ -57,7 +57,7 @@ TOTAL                                            31           23       +8
 ### 2.2 Delegation to Specialists (Gap: 3/3)
 
 **Hephaestus**: Three specialized agent types:
-- **Explore agents**: Parallel codebase search
+- **Explore droids**: Parallel codebase search
 - **Librarian**: External docs, GitHub, OSS research
 - **Oracle**: High-IQ consulting for stuck situations
 
@@ -127,9 +127,9 @@ TOTAL                                            31           23       +8
 
 ### 3.4 Token Efficiency (Gap: 2/3)
 
-**Deep-Executor**: Single agent = single context window. No inter-agent communication overhead. No prompt duplication across spawned agents.
+**Deep-Executor**: Single agent = single context window. No inter-agent communication overhead. No prompt duplication across spawned droids.
 
-**Hephaestus**: Each spawned agent carries its own system prompt + context. 2-5 parallel agents means 2-5x prompt overhead. Background task management adds coordination tokens.
+**Hephaestus**: Each spawned agent carries its own system prompt + context. 2-5 parallel droids means 2-5x prompt overhead. Background task management adds coordination tokens.
 
 **Estimated overhead**: Hephaestus uses ~2-4x more tokens per exploration phase due to agent spawning costs.
 
@@ -146,7 +146,7 @@ TOTAL                                            31           23       +8
 | Operation | Hephaestus (est. tokens) | Deep-Executor (est. tokens) | Ratio |
 |-----------|------------------------:|---------------------------:|------:|
 | System prompt per agent | ~3,000 | ~3,000 (once) | 1:1 |
-| 3 parallel explore agents | ~9,000 prompt + ~6,000 output | ~2,000 (sequential Grep/Glob) | 7.5:1 |
+| 3 parallel explore droids | ~9,000 prompt + ~6,000 output | ~2,000 (sequential Grep/Glob) | 7.5:1 |
 | Librarian research call | ~4,000 prompt + ~2,000 output | N/A (not available) | - |
 | Oracle consultation | ~5,000 prompt + ~3,000 output | N/A (not available) | - |
 | Coordination overhead | ~1,000 per delegation | 0 | - |
@@ -162,14 +162,14 @@ TOTAL                                            31           23       +8
 
 **Strengths**:
 - Parallel execution reduces wall-clock time
-- Specialist agents can be individually optimized
+- Specialist droids can be individually optimized
 - External research augments knowledge
 - Failure escalation prevents waste
 
 **Weaknesses**:
 - Higher token cost (2-3x)
 - Coordination complexity
-- Context fragmentation across agents
+- Context fragmentation across droids
 - Infrastructure dependency
 
 ### Self-Contained Model (Deep-Executor)
@@ -177,7 +177,7 @@ TOTAL                                            31           23       +8
 **Strengths**:
 - Token efficient
 - No coordination overhead
-- Unified context (no information loss between agents)
+- Unified context (no information loss between droids)
 - Portable and infrastructure-independent
 - Strong verification discipline
 
@@ -207,7 +207,7 @@ This requires NO delegation infrastructure -- just self-discipline rules.
 
 ### Priority 2: Exploration Batching (HIGH IMPACT, MEDIUM EFFORT)
 
-While true parallel agents are blocked, Deep-Executor can batch exploration:
+While true parallel droids are blocked, Deep-Executor can batch exploration:
 ```
 - Issue multiple Glob/Grep calls in a single turn (already possible)
 - Structure 5 exploration questions upfront (already present)

@@ -1,7 +1,7 @@
 /**
  * Installer Module
  *
- * Handles installation of OMD agents, commands, and configuration
+ * Handles installation of OMD droids, commands, and configuration
  * into the Droid config directory (~/.factory/).
  *
  * Cross-platform support via Node.js-based hook scripts (.mjs).
@@ -29,7 +29,7 @@ import {
 
 /** Droid configuration directory */
 export const DROID_CONFIG_DIR = join(homedir(), ".factory");
-export const AGENTS_DIR = join(DROID_CONFIG_DIR, "agents");
+export const AGENTS_DIR = join(DROID_CONFIG_DIR, "droids");
 export const COMMANDS_DIR = join(DROID_CONFIG_DIR, "commands");
 export const SKILLS_DIR = join(DROID_CONFIG_DIR, "skills");
 export const HOOKS_DIR = join(DROID_CONFIG_DIR, "hooks");
@@ -213,14 +213,14 @@ function getPackageDir(): string {
 }
 
 /**
- * Load agent definitions from /agents/*.md files
+ * Load agent definitions from /droids/*.md files
  */
 function loadAgentDefinitions(): Record<string, string> {
-  const agentsDir = join(getPackageDir(), "agents");
+  const agentsDir = join(getPackageDir(), "droids");
   const definitions: Record<string, string> = {};
 
   if (!existsSync(agentsDir)) {
-    console.error(`FATAL: agents directory not found: ${agentsDir}`);
+    console.error(`FATAL: droids directory not found: ${agentsDir}`);
     process.exit(1);
   }
 
@@ -331,7 +331,7 @@ export function mergeDroidMd(
 }
 
 /**
- * Install OMD agents, commands, skills, and hooks
+ * Install OMD droids, commands, skills, and hooks
  */
 export function install(options: InstallOptions = {}): InstallResult {
   const result: InstallResult = {
@@ -419,7 +419,7 @@ export function install(options: InstallOptions = {}): InstallResult {
         mkdirSync(HOOKS_DIR, { recursive: true });
       }
 
-      // Install agents
+      // Install droids
       log("Installing agent definitions...");
       for (const [filename, content] of Object.entries(
         loadAgentDefinitions(),
@@ -783,7 +783,7 @@ export function install(options: InstallOptions = {}): InstallResult {
 
     result.success = true;
     const hookCount = Object.keys(getHookScripts()).length;
-    result.message = `Successfully installed ${result.installedAgents.length} agents, ${result.installedCommands.length} commands, ${result.installedSkills.length} skills, and ${hookCount} hooks`;
+    result.message = `Successfully installed ${result.installedAgents.length} droids, ${result.installedCommands.length} commands, ${result.installedSkills.length} skills, and ${hookCount} hooks`;
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
     result.errors.push(errorMessage);

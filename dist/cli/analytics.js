@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import { statsCommand } from './commands/stats.js';
 import { costCommand } from './commands/cost.js';
 import { sessionsCommand } from './commands/sessions.js';
-import { agentsCommand } from './commands/agents.js';
+import { agentsCommand } from './commands/droids.js';
 import { exportCommand } from './commands/export.js';
 import { cleanupCommand } from './commands/cleanup.js';
 import { launchTokscaleTUI, isTokscaleCLIAvailable, getInstallInstructions } from './utils/tokscale-launcher.js';
@@ -41,10 +41,10 @@ program
 });
 // Agents command
 program
-    .command('agents')
+    .command('droids')
     .description('Show agent usage breakdown')
     .option('--json', 'Output as JSON')
-    .option('--limit <number>', 'Limit number of agents', '10')
+    .option('--limit <number>', 'Limit number of droids', '10')
     .action(options => {
     agentsCommand({ ...options, limit: parseInt(options.limit) });
 });

@@ -17,7 +17,7 @@ describe("subagent-tracker", () => {
         it("should record tool usage for a running agent", () => {
             // Setup: create a running agent
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "test-agent-123",
                         agent_type: "oh-my-droid:executor",
@@ -37,7 +37,7 @@ describe("subagent-tracker", () => {
             flushPendingWrites();
             // Verify
             const updatedState = readTrackingState(testDir);
-            const agent = updatedState.agents.find((a) => a.agent_id === "test-agent-123");
+            const agent = updatedState.droids.find((a) => a.agent_id === "test-agent-123");
             expect(agent).toBeDefined();
             expect(agent?.tool_usage).toHaveLength(1);
             expect(agent?.tool_usage?.[0].tool_name).toBe("proxy_Read");
@@ -47,7 +47,7 @@ describe("subagent-tracker", () => {
         it("should not record for non-existent agent", () => {
             // Setup: empty state
             const state = {
-                agents: [],
+                droids: [],
                 total_spawned: 0,
                 total_completed: 0,
                 total_failed: 0,
@@ -59,7 +59,7 @@ describe("subagent-tracker", () => {
             flushPendingWrites();
             // Verify state unchanged
             const updatedState = readTrackingState(testDir);
-            expect(updatedState.agents).toHaveLength(0);
+            expect(updatedState.droids).toHaveLength(0);
         });
         it("should cap tool usage at 50 entries", () => {
             // Setup: create agent with 50 tool usages
@@ -69,7 +69,7 @@ describe("subagent-tracker", () => {
                 success: true,
             }));
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "test-agent-123",
                         agent_type: "oh-my-droid:executor",
@@ -90,7 +90,7 @@ describe("subagent-tracker", () => {
             flushPendingWrites();
             // Verify capped at 50
             const updatedState = readTrackingState(testDir);
-            const agent = updatedState.agents.find((a) => a.agent_id === "test-agent-123");
+            const agent = updatedState.droids.find((a) => a.agent_id === "test-agent-123");
             expect(agent?.tool_usage).toHaveLength(50);
             expect(agent?.tool_usage?.[0].tool_name).toBe("tool-1"); // First one removed
             expect(agent?.tool_usage?.[49].tool_name).toBe("new-tool"); // New one added
@@ -98,7 +98,7 @@ describe("subagent-tracker", () => {
         it("should include timestamp and success flag", () => {
             // Setup: create a running agent
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "test-agent-123",
                         agent_type: "oh-my-droid:executor",
@@ -120,7 +120,7 @@ describe("subagent-tracker", () => {
             const afterTime = Date.now();
             // Verify timestamp and success
             const updatedState = readTrackingState(testDir);
-            const agent = updatedState.agents.find((a) => a.agent_id === "test-agent-123");
+            const agent = updatedState.droids.find((a) => a.agent_id === "test-agent-123");
             expect(agent?.tool_usage).toHaveLength(1);
             const toolEntry = agent?.tool_usage?.[0];
             expect(toolEntry?.tool_name).toBe("proxy_Bash");
@@ -131,9 +131,9 @@ describe("subagent-tracker", () => {
         });
     });
     describe("getAgentDashboard", () => {
-        it("should return empty string when no running agents", () => {
+        it("should return empty string when no running droids", () => {
             const state = {
-                agents: [],
+                droids: [],
                 total_spawned: 0,
                 total_completed: 0,
                 total_failed: 0,
@@ -146,7 +146,7 @@ describe("subagent-tracker", () => {
         });
         it("should format single running agent correctly", () => {
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "abcd1234567890",
                         agent_type: "oh-my-droid:executor",
@@ -183,8 +183,8 @@ describe("subagent-tracker", () => {
             expect(dashboard).toContain("last:proxy_Edit");
             expect(dashboard).toContain("Fix the auth bug");
         });
-        it("should format multiple (5) parallel agents", () => {
-            const agents = Array.from({ length: 5 }, (_, i) => ({
+        it("should format multiple (5) parallel droids", () => {
+            const droids = Array.from({ length: 5 }, (_, i) => ({
                 agent_id: `agent-${i}-123456`,
                 agent_type: "oh-my-droid:executor",
                 started_at: new Date(Date.now() - i * 1000).toISOString(),
@@ -200,7 +200,7 @@ describe("subagent-tracker", () => {
                 ],
             }));
             const state = {
-                agents,
+                droids,
                 total_spawned: 5,
                 total_completed: 0,
                 total_failed: 0,
@@ -217,7 +217,7 @@ describe("subagent-tracker", () => {
         });
         it("should show tool count and last tool", () => {
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "test-123",
                         agent_type: "oh-my-droid:architect",
@@ -254,10 +254,10 @@ describe("subagent-tracker", () => {
             expect(dashboard).toContain("tools:3");
             expect(dashboard).toContain("last:proxy_Bash");
         });
-        it("should detect and show stale agents warning", () => {
+        it("should detect and show stale droids warning", () => {
             const sixMinutesAgo = new Date(Date.now() - 6 * 60 * 1000).toISOString();
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "stale-agent",
                         agent_type: "oh-my-droid:executor",
@@ -285,7 +285,7 @@ describe("subagent-tracker", () => {
         });
         it("should truncate agent_id to 7 chars", () => {
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "very-long-agent-id-1234567890",
                         agent_type: "oh-my-droid:executor",
@@ -307,7 +307,7 @@ describe("subagent-tracker", () => {
         });
         it("should strip oh-my-droid: prefix from agent type", () => {
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "test-123",
                         agent_type: "oh-my-droid:architect-high",
@@ -329,9 +329,9 @@ describe("subagent-tracker", () => {
         });
     });
     describe("getStaleAgents", () => {
-        it("should return empty array for fresh agents", () => {
+        it("should return empty array for fresh droids", () => {
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "fresh-1",
                         agent_type: "oh-my-droid:executor",
@@ -355,12 +355,12 @@ describe("subagent-tracker", () => {
             const stale = getStaleAgents(state);
             expect(stale).toHaveLength(0);
         });
-        it("should detect agents older than 5 minutes", () => {
+        it("should detect droids older than 5 minutes", () => {
             const sixMinutesAgo = new Date(Date.now() - 6 * 60 * 1000).toISOString();
             const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString();
             const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000).toISOString();
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "stale-1",
                         agent_type: "oh-my-droid:executor",
@@ -394,10 +394,10 @@ describe("subagent-tracker", () => {
             expect(stale.map((a) => a.agent_id)).toContain("stale-2");
             expect(stale.map((a) => a.agent_id)).not.toContain("fresh");
         });
-        it("should not flag completed agents as stale", () => {
+        it("should not flag completed droids as stale", () => {
             const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000).toISOString();
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "completed",
                         agent_type: "oh-my-droid:executor",
@@ -435,7 +435,7 @@ describe("subagent-tracker", () => {
     describe("getTrackingStats", () => {
         it("should return correct counts for mixed agent states", () => {
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "running-1",
                         agent_type: "oh-my-droid:executor",
@@ -482,7 +482,7 @@ describe("subagent-tracker", () => {
         });
         it("should handle empty state", () => {
             const state = {
-                agents: [],
+                droids: [],
                 total_spawned: 0,
                 total_completed: 0,
                 total_failed: 0,
@@ -501,7 +501,7 @@ describe("subagent-tracker", () => {
         it("should record tool usage with timing data", () => {
             // Setup: create a running agent
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "timing-test",
                         agent_type: "oh-my-droid:executor",
@@ -523,14 +523,14 @@ describe("subagent-tracker", () => {
             recordToolUsageWithTiming(testDir, "timing-test", "Read", 200, true);
             flushPendingWrites();
             const updated = readTrackingState(testDir);
-            const agent = updated.agents[0];
+            const agent = updated.droids[0];
             expect(agent.tool_usage).toHaveLength(3);
             expect(agent.tool_usage[0].duration_ms).toBe(150);
             expect(agent.tool_usage[1].duration_ms).toBe(500);
         });
         it("should calculate agent performance with bottleneck detection", () => {
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "perf-test",
                         agent_type: "oh-my-droid:executor",
@@ -583,7 +583,7 @@ describe("subagent-tracker", () => {
     describe("Token Usage (Phase 1.2)", () => {
         it("should update token usage for an agent", () => {
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "token-test",
                         agent_type: "oh-my-droid:executor",
@@ -611,7 +611,7 @@ describe("subagent-tracker", () => {
             });
             flushPendingWrites();
             const updated = readTrackingState(testDir);
-            const agent = updated.agents[0];
+            const agent = updated.droids[0];
             expect(agent.token_usage).toBeDefined();
             expect(agent.token_usage.input_tokens).toBe(3000);
             expect(agent.token_usage.output_tokens).toBe(1500);
@@ -621,7 +621,7 @@ describe("subagent-tracker", () => {
     describe("File Ownership (Phase 1.3)", () => {
         it("should record file ownership for an agent", () => {
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "file-test",
                         agent_type: "oh-my-droid:executor",
@@ -641,14 +641,14 @@ describe("subagent-tracker", () => {
             recordFileOwnership(testDir, "file-test", join(testDir, "src/hooks/index.ts"));
             flushPendingWrites();
             const updated = readTrackingState(testDir);
-            const agent = updated.agents[0];
+            const agent = updated.droids[0];
             expect(agent.file_ownership).toHaveLength(2);
             const normalized = (agent.file_ownership ?? []).map((p) => String(p).replace(/\\/g, "/").replace(/^\/+/, ""));
             expect(normalized).toContain("src/hooks/bridge.ts");
         });
-        it("should detect file conflicts between agents", () => {
+        it("should detect file conflicts between droids", () => {
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "agent-1",
                         agent_type: "oh-my-droid:executor",
@@ -676,15 +676,15 @@ describe("subagent-tracker", () => {
             const conflicts = detectFileConflicts(testDir);
             expect(conflicts).toHaveLength(1);
             expect(conflicts[0].file).toBe("src/hooks/bridge.ts");
-            expect(conflicts[0].agents).toContain("executor");
-            expect(conflicts[0].agents).toContain("designer");
+            expect(conflicts[0].droids).toContain("executor");
+            expect(conflicts[0].droids).toContain("designer");
         });
     });
     describe("Intervention (Phase 2)", () => {
-        it("should suggest interventions for stale agents", () => {
+        it("should suggest interventions for stale droids", () => {
             const sixMinutesAgo = new Date(Date.now() - 6 * 60 * 1000).toISOString();
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "stale-agent",
                         agent_type: "oh-my-droid:executor",
@@ -707,7 +707,7 @@ describe("subagent-tracker", () => {
         });
         it("should suggest intervention for excessive cost", () => {
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "costly-agent",
                         agent_type: "oh-my-droid:executor",
@@ -734,7 +734,7 @@ describe("subagent-tracker", () => {
         });
         it("should calculate parallel efficiency correctly", () => {
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "1",
                         agent_type: "executor",
@@ -774,7 +774,7 @@ describe("subagent-tracker", () => {
     describe("Agent Observatory", () => {
         it("should generate observatory view with all metrics", () => {
             const state = {
-                agents: [
+                droids: [
                     {
                         agent_id: "obs-agent",
                         agent_type: "oh-my-droid:executor",

@@ -4,13 +4,13 @@ description: Parallel execution engine for high-throughput task completion
 ---
 
 <Purpose>
-Ultrawork is a parallel execution engine that runs multiple agents simultaneously for independent tasks. It is a component, not a standalone persistence mode -- it provides parallelism and smart model routing but not persistence, verification loops, or state management.
+Ultrawork is a parallel execution engine that runs multiple droids simultaneously for independent tasks. It is a component, not a standalone persistence mode -- it provides parallelism and smart model routing but not persistence, verification loops, or state management.
 </Purpose>
 
 <Use_When>
 - Multiple independent tasks can run simultaneously
 - User says "ulw", "ultrawork", or wants parallel execution
-- You need to delegate work to multiple agents at once
+- You need to delegate work to multiple droids at once
 - Task benefits from concurrent execution but the user will manage completion themselves
 </Use_When>
 
@@ -22,7 +22,7 @@ Ultrawork is a parallel execution engine that runs multiple agents simultaneousl
 </Do_Not_Use_When>
 
 <Why_This_Exists>
-Sequential task execution wastes time when tasks are independent. Ultrawork enables firing multiple agents simultaneously and routing each to the right model tier, reducing total execution time while controlling token costs. It is designed as a composable component that ralph and autopilot layer on top of.
+Sequential task execution wastes time when tasks are independent. Ultrawork enables firing multiple droids simultaneously and routing each to the right model tier, reducing total execution time while controlling token costs. It is designed as a composable component that ralph and autopilot layer on top of.
 </Why_This_Exists>
 
 <Execution_Policy>

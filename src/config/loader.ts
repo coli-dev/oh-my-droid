@@ -18,7 +18,7 @@ import { getConfigDir } from "../utils/paths.js";
  * Default configuration
  */
 export const DEFAULT_CONFIG: PluginConfig = {
-  agents: {
+  droids: {
     omd: { model: "claude-opus-4-6-20260205" },
     architect: { model: "claude-opus-4-6-20260205", enabled: true },
     researcher: { model: "claude-sonnet-4-5-20250929" },
@@ -26,7 +26,7 @@ export const DEFAULT_CONFIG: PluginConfig = {
     frontendEngineer: { model: "claude-sonnet-4-5-20250929", enabled: true },
     documentWriter: { model: "claude-haiku-4-5-20251001", enabled: true },
     multimodalLooker: { model: "claude-sonnet-4-5-20250929", enabled: true },
-    // New agents from oh-my-opencode
+    // New droids from oh-my-opencode
     critic: { model: "claude-opus-4-6-20260205", enabled: true },
     analyst: { model: "claude-opus-4-6-20260205", enabled: true },
     orchestratorSisyphus: {
@@ -345,7 +345,7 @@ export function generateConfigSchema(): object {
     title: "Oh-My-Droid-Sisyphus Configuration",
     type: "object",
     properties: {
-      agents: {
+      droids: {
         type: "object",
         description: "Agent model and feature configuration",
         properties: {

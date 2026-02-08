@@ -276,7 +276,7 @@ export function shouldDelegate(toolName) {
     if (tool.type === 'mcp') {
         return true;
     }
-    // Skills and agents from external plugins
+    // Skills and droids from external plugins
     if ((tool.type === 'skill' || tool.type === 'agent') && tool.source !== 'oh-my-droid') {
         return true;
     }

@@ -13,7 +13,7 @@
  * - Decision heuristics for when to use background execution
  * - Task lifecycle management
  * - Concurrency limit enforcement
- * - System prompt guidance for agents
+ * - System prompt guidance for droids
  */
 /**
  * Default maximum concurrent background tasks
@@ -208,7 +208,7 @@ export function createBackgroundTaskManager(state, config) {
 /**
  * System prompt guidance for background task execution
  *
- * This text should be appended to the system prompt to guide agents
+ * This text should be appended to the system prompt to guide droids
  * on when and how to use background execution.
  */
 export function getBackgroundTaskGuidance(maxBackgroundTasks = DEFAULT_MAX_BACKGROUND_TASKS) {

@@ -20,12 +20,12 @@ You coordinate specialized subagents to accomplish complex software engineering 
 /**
  * Build the agent registry section with descriptions
  */
-export function buildAgentRegistry(agents) {
+export function buildAgentRegistry(droids) {
     const lines = ['## Available Subagents', ''];
-    // Group agents by tier (base vs variants)
-    const baseAgents = agents.filter(a => !a.name.includes('-'));
-    const tieredAgents = agents.filter(a => a.name.includes('-'));
-    // Base agents
+    // Group droids by tier (base vs variants)
+    const baseAgents = droids.filter(a => !a.name.includes('-'));
+    const tieredAgents = droids.filter(a => a.name.includes('-'));
+    // Base droids
     if (baseAgents.length > 0) {
         lines.push('### Primary Agents');
         for (const agent of baseAgents) {
@@ -53,10 +53,10 @@ export function buildAgentRegistry(agents) {
 /**
  * Build the trigger table showing when to use each agent
  */
-export function buildTriggerTable(agents) {
+export function buildTriggerTable(droids) {
     const lines = ['## Key Triggers', ''];
-    // Filter agents with metadata triggers
-    const agentsWithTriggers = agents.filter(a => a.metadata?.triggers && a.metadata.triggers.length > 0);
+    // Filter droids with metadata triggers
+    const agentsWithTriggers = droids.filter(a => a.metadata?.triggers && a.metadata.triggers.length > 0);
     if (agentsWithTriggers.length === 0) {
         return '';
     }
@@ -76,11 +76,11 @@ export function buildTriggerTable(agents) {
 /**
  * Build tool selection guidance section
  */
-export function buildToolSelectionSection(agents) {
+export function buildToolSelectionSection(droids) {
     const lines = ['## Tool Selection Guidance', ''];
     // Group by category
     const categorizedAgents = new Map();
-    for (const agent of agents) {
+    for (const agent of droids) {
         const category = agent.metadata?.category || 'utility';
         if (!categorizedAgents.has(category)) {
             categorizedAgents.set(category, []);
@@ -108,11 +108,11 @@ export function buildToolSelectionSection(agents) {
 /**
  * Build delegation matrix/guide table
  */
-export function buildDelegationMatrix(agents) {
+export function buildDelegationMatrix(droids) {
     const lines = ['## Delegation Guide', ''];
     // Group by category
     const categorizedAgents = new Map();
-    for (const agent of agents) {
+    for (const agent of droids) {
         const category = agent.metadata?.category || 'utility';
         if (!categorizedAgents.has(category)) {
             categorizedAgents.set(category, []);

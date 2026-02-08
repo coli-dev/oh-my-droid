@@ -135,7 +135,7 @@ type FilterType =
   | "all"
   | "hooks"
   | "skills"
-  | "agents"
+  | "droids"
   | "keywords"
   | "tools"
   | "modes";
@@ -153,7 +153,7 @@ function filterEvents(
     all: [],
     hooks: ["hook_fire", "hook_result"],
     skills: ["skill_activated", "skill_invoked"],
-    agents: ["agent_start", "agent_stop"],
+    droids: ["agent_start", "agent_stop"],
     keywords: ["keyword_detected"],
     tools: ["tool_start", "tool_end"],
     modes: ["mode_change"],
@@ -229,7 +229,7 @@ export const traceTimelineTool: ToolDefinition<{
   sessionId: z.ZodOptional<z.ZodString>;
   filter: z.ZodOptional<
     z.ZodEnum<
-      ["all", "hooks", "skills", "agents", "keywords", "tools", "modes"]
+      ["all", "hooks", "skills", "droids", "keywords", "tools", "modes"]
     >
   >;
   last: z.ZodOptional<z.ZodNumber>;
@@ -237,14 +237,14 @@ export const traceTimelineTool: ToolDefinition<{
 }> = {
   name: "trace_timeline",
   description:
-    "Show chronological agent flow trace timeline. Displays hooks, keywords, skills, agents, and tools in time order. Use filter to show specific event types.",
+    "Show chronological agent flow trace timeline. Displays hooks, keywords, skills, droids, and tools in time order. Use filter to show specific event types.",
   schema: {
     sessionId: z
       .string()
       .optional()
       .describe("Session ID (auto-detects latest if omitted)"),
     filter: z
-      .enum(["all", "hooks", "skills", "agents", "keywords", "tools", "modes"])
+      .enum(["all", "hooks", "skills", "droids", "keywords", "tools", "modes"])
       .optional()
       .describe("Filter to show specific event types (default: all)"),
     last: z.number().optional().describe("Limit to last N events"),

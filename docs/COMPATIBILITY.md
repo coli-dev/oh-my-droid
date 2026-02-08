@@ -50,7 +50,7 @@ Scans for external plugins and MCP servers from:
 - Plugin manifests (`plugin.json`) for embedded MCP servers
 
 **Discovers:**
-- Plugin skills and agents (from SKILL.md and agent .md files)
+- Plugin skills and droids (from SKILL.md and agent .md files)
 - MCP server configurations
 - Tool definitions from plugin manifests
 
@@ -112,7 +112,7 @@ Plugins are discovered from `~/.factory/plugins/` and `~/.factory/installed-plug
 │   │   │   └── SKILL.md
 │   │   └── skill-2/
 │   │       └── SKILL.md
-│   ├── agents/              (optional)
+│   ├── droids/              (optional)
 │   │   ├── agent-1.md
 │   │   └── agent-2.md
 │   └── commands/            (optional)
@@ -131,7 +131,7 @@ The `plugin.json` defines the plugin's metadata and tools:
   "description": "My awesome plugin",
   "namespace": "my-plugin",
   "skills": "./skills/",
-  "agents": "./agents/",
+  "droids": "./droids/",
   "commands": "./commands/",
   "mcpServers": {
     "server-name": {
@@ -180,7 +180,7 @@ tags: tag1, tag2
 Skill documentation here...
 ```
 
-**Agents** are discovered from `.md` files in the agents directory with similar frontmatter structure.
+**Agents** are discovered from `.md` files in the droids directory with similar frontmatter structure.
 
 ## MCP Server Discovery
 
@@ -250,7 +250,7 @@ Plugins can define MCP servers in their manifest:
 | `description` | string | No | Human-readable description |
 | `namespace` | string | No | Prefix for tool names (defaults to plugin name) |
 | `skills` | string\|string[] | No | Path(s) to skills directory |
-| `agents` | string\|string[] | No | Path(s) to agents directory |
+| `droids` | string\|string[] | No | Path(s) to droids directory |
 | `commands` | string\|string[] | No | Path(s) to commands directory |
 | `mcpServers` | object | No | MCP server configurations (name → McpServerEntry) |
 | `permissions` | PluginPermission[] | No | Permissions needed for plugin tools |
@@ -291,7 +291,7 @@ Plugins can define MCP servers in their manifest:
 Tools are registered in this order:
 
 1. **Plugin discovery** - Plugins found in configured paths
-2. **Tool extraction** - Skills, agents, and tool definitions extracted from plugins
+2. **Tool extraction** - Skills, droids, and tool definitions extracted from plugins
 3. **MCP server discovery** - MCP servers found from config files
 4. **Tool conversion** - MCP tools converted to ExternalTool format
 5. **Conflict resolution** - Tools with same name resolved by priority

@@ -20,7 +20,7 @@ Overrides default model selection to prefer cheaper tiers:
 ## What Ecomode Does NOT Do
 
 - **Persistence**: Use `ralph` for "don't stop until done"
-- **Parallel Execution**: Use `ultrawork` for parallel agents
+- **Parallel Execution**: Use `ultrawork` for parallel droids
 - **Delegation Enforcement**: Always active via core orchestration
 
 ## Combining Ecomode with Other Modes
@@ -29,8 +29,8 @@ Ecomode is a modifier that combines with execution modes:
 
 | Combination | Effect |
 |-------------|--------|
-| `eco ralph` | Ralph loop with cheaper agents |
-| `eco ultrawork` | Parallel execution with cheaper agents |
+| `eco ralph` | Ralph loop with cheaper droids |
+| `eco ultrawork` | Parallel execution with cheaper droids |
 | `eco autopilot` | Full autonomous with cost optimization |
 
 ## Ecomode Routing Rules
@@ -87,7 +87,7 @@ Long-running commands (install, build, test) run in background. Maximum 5 concur
 2. **Use explore (haiku)** for file discovery, not architect
 3. **Prefer executor-low** for simple changes - only upgrade if it fails
 4. **Use writer (haiku)** for all documentation tasks
-5. **Avoid opus agents** unless the task genuinely requires deep reasoning
+5. **Avoid opus droids** unless the task genuinely requires deep reasoning
 
 ## Disabling Ecomode
 

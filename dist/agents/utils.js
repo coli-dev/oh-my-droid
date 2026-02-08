@@ -13,16 +13,16 @@ import { fileURLToPath } from 'url';
 // DYNAMIC PROMPT LOADING
 // ============================================================
 /**
- * Get the package root directory (where agents/ folder lives)
+ * Get the package root directory (where droids/ folder lives)
  */
 function getPackageDir() {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = dirname(__filename);
-    // From src/agents/ go up to package root
+    // From src/droids/ go up to package root
     return join(__dirname, '..', '..');
 }
 /**
- * Load an agent prompt from /agents/{agentName}.md
+ * Load an agent prompt from /droids/{agentName}.md
  * Strips YAML frontmatter and returns the content
  *
  * Security: Validates agent name to prevent path traversal attacks
@@ -34,9 +34,9 @@ export function loadAgentPrompt(agentName) {
         throw new Error(`Invalid agent name: contains disallowed characters`);
     }
     try {
-        const agentsDir = join(getPackageDir(), 'agents');
+        const agentsDir = join(getPackageDir(), 'droids');
         const agentPath = join(agentsDir, `${agentName}.md`);
-        // Security: Verify resolved path is within the agents directory
+        // Security: Verify resolved path is within the droids directory
         const resolvedPath = resolve(agentPath);
         const resolvedAgentsDir = resolve(agentsDir);
         const rel = relative(resolvedAgentsDir, resolvedPath);
@@ -123,7 +123,7 @@ ${metadata.avoidWhen.map(a => `- ${a}`).join('\n')}`);
     return sections.join('\n\n');
 }
 /**
- * Create environment context for agents
+ * Create environment context for droids
  */
 export function createEnvContext() {
     const now = new Date();
@@ -143,10 +143,10 @@ export function createEnvContext() {
 </env-context>`;
 }
 /**
- * Get all available agents as AvailableAgent descriptors
+ * Get all available droids as AvailableAgent descriptors
  */
-export function getAvailableAgents(agents) {
-    return Object.entries(agents)
+export function getAvailableAgents(droids) {
+    return Object.entries(droids)
         .filter(([_, config]) => config.metadata)
         .map(([name, config]) => ({
         name,
@@ -185,7 +185,7 @@ export function validateAgentConfig(config) {
     if (!config.prompt) {
         errors.push('Agent prompt is required');
     }
-    // Note: tools is now optional - agents get all tools by default if omitted
+    // Note: tools is now optional - droids get all tools by default if omitted
     return errors;
 }
 /**
@@ -197,9 +197,9 @@ export function parseDisallowedTools(agentName) {
         return undefined;
     }
     try {
-        const agentsDir = join(getPackageDir(), 'agents');
+        const agentsDir = join(getPackageDir(), 'droids');
         const agentPath = join(agentsDir, `${agentName}.md`);
-        // Security: Verify resolved path is within the agents directory
+        // Security: Verify resolved path is within the droids directory
         const resolvedPath = resolve(agentPath);
         const resolvedAgentsDir = resolve(agentsDir);
         const rel = relative(resolvedAgentsDir, resolvedPath);

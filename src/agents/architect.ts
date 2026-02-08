@@ -42,7 +42,7 @@ export const ARCHITECT_PROMPT_METADATA: AgentPromptMetadata = {
   ],
 };
 
-// Prompt loaded dynamically from agents/architect.md (authoritative source)
+// Prompt loaded dynamically from droids/architect.md (authoritative source)
 
 export const architectAgent: AgentConfig = {
   name: "architect",

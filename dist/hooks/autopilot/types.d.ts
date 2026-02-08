@@ -101,7 +101,7 @@ export interface AutopilotQA {
  * State tracking for the validation phase
  */
 export interface AutopilotValidation {
-    /** Number of architect agents spawned for validation */
+    /** Number of architect droids spawned for validation */
     architects_spawned: number;
     /** List of validation verdicts received */
     verdicts: ValidationResult[];
@@ -197,7 +197,7 @@ export interface AutopilotSummary {
     testsStatus: string;
     /** Total duration in milliseconds */
     duration: number;
-    /** Total number of agents spawned */
+    /** Total number of droids spawned */
     agentsSpawned: number;
     /** Phases that were completed */
     phasesCompleted: AutopilotPhase[];

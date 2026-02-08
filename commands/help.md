@@ -10,7 +10,7 @@ description: Guide on using oh-my-droid plugin
 
 | When You... | I Automatically... |
 |-------------|-------------------|
-| Give me a complex task | Parallelize and delegate to specialist agents |
+| Give me a complex task | Parallelize and delegate to specialist droids |
 | Ask me to plan something | Start a planning interview |
 | Need something done completely | Persist until verified complete |
 | Work on UI/frontend | Activate design sensibility |

@@ -247,7 +247,7 @@ Tests cover:
 
 This system integrates with:
 - **Model Routing** (`src/features/model-routing/`): Categories resolve to ComplexityTier
-- **Task Delegation**: Categories can be specified when delegating to agents
+- **Task Delegation**: Categories can be specified when delegating to droids
 - **Orchestration**: Orchestrator can use categories for semantic routing
 
 ## Design Decisions

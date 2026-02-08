@@ -141,28 +141,28 @@ echo ""
 echo -e "${BLUE}=== Agent Registration ===${NC}"
 
 # Check qa-tester in definitions.ts
-if grep -q "'qa-tester': qaTesterAgent" src/agents/definitions.ts; then
+if grep -q "'qa-tester': qaTesterAgent" src/droids/definitions.ts; then
     log_pass "qa-tester registered in definitions.ts"
 else
     log_fail "qa-tester NOT registered in definitions.ts"
 fi
 
 # Check export in index.ts
-if grep -q "qa-tester" src/agents/index.ts; then
+if grep -q "qa-tester" src/droids/index.ts; then
     log_pass "qa-tester exported in index.ts"
 else
     log_fail "qa-tester NOT exported in index.ts"
 fi
 
 # Check compiled output
-if grep -q "qa-tester" dist/agents/definitions.js 2>/dev/null; then
+if grep -q "qa-tester" dist/droids/definitions.js 2>/dev/null; then
     log_pass "qa-tester in compiled definitions.js"
 else
     log_fail "qa-tester NOT in compiled definitions.js"
 fi
 
 # Check Oracle handoff section
-if grep -q "QA_Tester_Handoff\|QA-Tester" src/agents/oracle.ts; then
+if grep -q "QA_Tester_Handoff\|QA-Tester" src/droids/oracle.ts; then
     log_pass "QA-Tester handoff section in oracle.ts"
 else
     log_fail "QA-Tester handoff section missing from oracle.ts"
@@ -188,23 +188,23 @@ if node dist/cli/index.js postinstall &> /tmp/pr25-postinstall.log; then
     log_pass "Installer postinstall succeeded"
 
     # Verify file exists
-    if [ -f "$HOME/.factory/agents/qa-tester.md" ]; then
-        log_pass "qa-tester.md installed to ~/.factory/agents/"
+    if [ -f "$HOME/.factory/droids/qa-tester.md" ]; then
+        log_pass "qa-tester.md installed to ~/.factory/droids/"
 
         # Verify content
-        if grep -q "tmux" "$HOME/.factory/agents/qa-tester.md"; then
+        if grep -q "tmux" "$HOME/.factory/droids/qa-tester.md"; then
             log_pass "qa-tester.md contains tmux content"
         else
             log_fail "qa-tester.md missing tmux content"
         fi
 
-        if grep -q "Oracle" "$HOME/.factory/agents/qa-tester.md"; then
+        if grep -q "Oracle" "$HOME/.factory/droids/qa-tester.md"; then
             log_pass "qa-tester.md contains Oracle collaboration section"
         else
             log_fail "qa-tester.md missing Oracle collaboration section"
         fi
     else
-        log_fail "qa-tester.md NOT installed to ~/.factory/agents/"
+        log_fail "qa-tester.md NOT installed to ~/.factory/droids/"
     fi
 else
     log_fail "Installer postinstall failed"
@@ -494,11 +494,11 @@ else
     log_fail "qa-tester NOT in commands/ultrawork.md"
 fi
 
-# Check agents/qa-tester.md exists
-if [ -f "agents/qa-tester.md" ]; then
-    log_pass "agents/qa-tester.md reference doc exists"
+# Check droids/qa-tester.md exists
+if [ -f "droids/qa-tester.md" ]; then
+    log_pass "droids/qa-tester.md reference doc exists"
 else
-    log_fail "agents/qa-tester.md reference doc missing"
+    log_fail "droids/qa-tester.md reference doc missing"
 fi
 
 echo ""

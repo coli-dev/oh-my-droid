@@ -6,7 +6,7 @@
 import { DEFAULT_HUD_CONFIG } from './types.js';
 import { bold, dim } from './colors.js';
 import { renderRalph } from './elements/ralph.js';
-import { renderAgentsByFormat, renderAgentsMultiLine } from './elements/agents.js';
+import { renderAgentsByFormat, renderAgentsMultiLine } from './elements/droids.js';
 import { renderTodosWithCurrent } from './elements/todos.js';
 import { renderSkills, renderLastSkill } from './elements/skills.js';
 import { renderContext, renderContextWithBar } from './elements/context.js';
@@ -109,11 +109,11 @@ export async function render(context, config) {
                     lines.push(budgetWarning);
             }
         }
-        // Add agents if available
+        // Add droids if available
         if (context.activeAgents.length > 0) {
-            const agents = renderAgentsByFormat(context.activeAgents, enabledElements.agentsFormat || 'codes');
-            if (agents)
-                lines.push(agents);
+            const droids = renderAgentsByFormat(context.activeAgents, enabledElements.agentsFormat || 'codes');
+            if (droids)
+                lines.push(droids);
         }
         // Add todos if available
         if (enabledElements.todos) {
@@ -234,8 +234,8 @@ export async function render(context, config) {
         if (ctx)
             elements.push(ctx);
     }
-    // Active agents - handle multi-line format specially
-    if (enabledElements.agents) {
+    // Active droids - handle multi-line format specially
+    if (enabledElements.droids) {
         const format = enabledElements.agentsFormat || 'codes';
         if (format === 'multiline') {
             // Multi-line mode: get header part and detail lines
@@ -247,9 +247,9 @@ export async function render(context, config) {
         }
         else {
             // Single-line mode: standard format
-            const agents = renderAgentsByFormat(context.activeAgents, format);
-            if (agents)
-                elements.push(agents);
+            const droids = renderAgentsByFormat(context.activeAgents, format);
+            if (droids)
+                elements.push(droids);
         }
     }
     // Background tasks

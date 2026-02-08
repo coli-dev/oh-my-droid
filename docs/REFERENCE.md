@@ -8,7 +8,7 @@ Complete reference for oh-my-droid. For quick start, see the main [README.md](..
 
 - [Installation](#installation)
 - [Configuration](#configuration)
-- [Agents (28 Total)](#agents-28-total)
+- [Agents (28 Total)](#droids-28-total)
 - [Skills (37 Total)](#skills-37-total)
 - [Slash Commands](#slash-commands)
 - [Hooks System](#hooks-system)
@@ -103,7 +103,7 @@ If both configurations exist, **project-scoped takes precedence** over global:
 
 ### Agent Customization
 
-Edit agent files in `~/.factory/agents/` to customize behavior:
+Edit agent files in `~/.factory/droids/` to customize behavior:
 
 ```yaml
 ---
@@ -204,9 +204,9 @@ Always use `oh-my-droid:` prefix when calling via Task tool.
 |-------|-------------|----------------|
 | `orchestrate` | Multi-agent orchestration mode | - |
 | `autopilot` | Full autonomous execution from idea to working code | `/oh-my-droid:autopilot` |
-| `ultrawork` | Maximum performance with parallel agents | `/oh-my-droid:ultrawork` |
+| `ultrawork` | Maximum performance with parallel droids | `/oh-my-droid:ultrawork` |
 | `ultrapilot` | Parallel autopilot with 3-5x speedup | `/oh-my-droid:ultrapilot` |
-| `swarm` | N coordinated agents with task claiming | `/oh-my-droid:swarm` |
+| `swarm` | N coordinated droids with task claiming | `/oh-my-droid:swarm` |
 | `pipeline` | Sequential agent chaining | `/oh-my-droid:pipeline` |
 | `ecomode` | Token-efficient parallel execution | `/oh-my-droid:ecomode` |
 | `ralph` | Self-referential development until completion | `/oh-my-droid:ralph` |
@@ -258,7 +258,7 @@ All skills are available as slash commands with the prefix `/oh-my-droid:`.
 |---------|-------------|
 | `/oh-my-droid:orchestrate <task>` | Activate multi-agent orchestration mode |
 | `/oh-my-droid:autopilot <task>` | Full autonomous execution |
-| `/oh-my-droid:ultrawork <task>` | Maximum performance mode with parallel agents |
+| `/oh-my-droid:ultrawork <task>` | Maximum performance mode with parallel droids |
 | `/oh-my-droid:ultrapilot <task>` | Parallel autopilot (3-5x faster) |
 | `/oh-my-droid:swarm <N>:<agent> <task>` | Coordinated agent swarm |
 | `/oh-my-droid:pipeline <stages>` | Sequential agent chaining |
@@ -338,10 +338,10 @@ Oh-my-droid includes 31 lifecycle hooks that enhance Droid's behavior.
 
 | Hook | Description |
 |------|-------------|
-| `subagent-tracker` | Tracks spawned sub-agents |
+| `subagent-tracker` | Tracks spawned sub-droids |
 | `session-end` | Session termination handling |
 | `non-interactive-env` | CI/non-interactive environment handling |
-| `agent-usage-reminder` | Reminder to use specialized agents |
+| `agent-usage-reminder` | Reminder to use specialized droids |
 | `background-notification` | Background task completion notifications |
 | `plugin-patterns` | Plugin pattern detection |
 | `setup` | Initial setup and configuration |
@@ -365,8 +365,8 @@ Just include these words anywhere in your prompt to activate enhanced modes:
 | `analyze`, `investigate`, `debug` | Deep analysis mode |
 | `research`, `analyze data`, `statistics` | Parallel research orchestration |
 | `tdd`, `test first`, `red green` | TDD workflow enforcement |
-| `swarm N agents` | Coordinated agent swarm |
-| `pipeline`, `chain agents` | Sequential agent chaining |
+| `swarm N droids` | Coordinated agent swarm |
+| `pipeline`, `chain droids` | Sequential agent chaining |
 | `stop`, `cancel`, `abort` | Unified cancellation |
 
 ### Examples
@@ -402,7 +402,7 @@ plan this feature
 tdd: implement password validation
 
 # Coordinated swarm
-swarm 5 agents: fix all lint errors
+swarm 5 droids: fix all lint errors
 
 # Agent chaining
 pipeline: analyze → fix → test this bug
@@ -482,7 +482,7 @@ For complete documentation, see **[Performance Monitoring Guide](./PERFORMANCE-M
 | **Agent Observatory** | Real-time agent status, efficiency, bottlenecks | HUD / API |
 | **Token Analytics** | Cost tracking, usage reports, budget warnings | `omd stats`, `omd cost` |
 | **Session Replay** | Event timeline for post-session analysis | `.omd/state/agent-replay-*.jsonl` |
-| **Intervention System** | Auto-detection of stale agents, cost overruns | Automatic |
+| **Intervention System** | Auto-detection of stale droids, cost overruns | Automatic |
 
 ### CLI Commands
 
@@ -490,7 +490,7 @@ For complete documentation, see **[Performance Monitoring Guide](./PERFORMANCE-M
 omd stats          # Current session statistics
 omd cost daily     # Daily cost report
 omd cost weekly    # Weekly cost report
-omd agents         # Agent breakdown
+omd droids         # Agent breakdown
 omd backfill       # Import historical transcript data
 ```
 
@@ -559,7 +559,7 @@ Configure HUD elements in `~/.factory/settings.json`:
 | `gitBranch` | Show current git branch | `false` |
 | `omdLabel` | Show [OMD] label | `true` |
 | `contextBar` | Show context window usage | `true` |
-| `agents` | Show active agents count | `true` |
+| `droids` | Show active droids count | `true` |
 | `todos` | Show todo progress | `true` |
 | `ralph` | Show ralph loop status | `true` |
 | `autopilot` | Show autopilot status | `true` |
@@ -596,7 +596,7 @@ curl -fsSL https://raw.githubusercontent.com/coli-dev/oh-my-droid/main/scripts/u
 Or manually:
 
 ```bash
-rm ~/.factory/agents/{architect,researcher,explore,designer,writer,vision,critic,analyst,executor,qa-tester}.md
+rm ~/.factory/droids/{architect,researcher,explore,designer,writer,vision,critic,analyst,executor,qa-tester}.md
 rm ~/.factory/commands/{analyze,autopilot,deepsearch,plan,review,ultrawork}.md
 ```
 

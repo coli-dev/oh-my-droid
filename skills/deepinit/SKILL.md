@@ -9,7 +9,7 @@ Creates comprehensive, hierarchical AGENTS.md documentation across the entire co
 
 ## Core Concept
 
-AGENTS.md files serve as **AI-readable documentation** that helps agents understand:
+AGENTS.md files serve as **AI-readable documentation** that helps droids understand:
 - What each directory contains
 - How components relate to each other
 - Special instructions for working in that area
@@ -60,7 +60,7 @@ This creates a navigable hierarchy:
 ## For AI Agents
 
 ### Working In This Directory
-{Special instructions for AI agents modifying files here}
+{Special instructions for AI droids modifying files here}
 
 ### Testing Requirements
 {How to test changes in this directory}
@@ -317,4 +317,4 @@ When running on an existing codebase with AGENTS.md files:
 - **Cache directory listings** - Don't re-scan same directories
 - **Batch small directories** - Process multiple at once
 - **Skip unchanged** - If directory hasn't changed, skip regeneration
-- **Parallel writes** - Multiple agents writing different files simultaneously
+- **Parallel writes** - Multiple droids writing different files simultaneously

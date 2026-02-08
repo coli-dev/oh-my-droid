@@ -98,7 +98,7 @@ What scope should we implement first?
 - Critic agent reviews the design
 
 **Presenter talking points:**
-- "Now three agents collaborate to build the plan"
+- "Now three droids collaborate to build the plan"
 - "Analyst: Converts your answers into formal requirements doc"
 - "Architect: Designs the system architecture"
 - "Critic: Reviews for gaps, risks, edge cases"
@@ -420,9 +420,9 @@ implement the auth-system plan
 - **Show the thinking** - "Notice how question 3 built on our JWT choice?"
 
 ### During Analysis
-- **Point out agents** - "Analyst is now synthesizing our answers into formal requirements"
+- **Point out droids** - "Analyst is now synthesizing our answers into formal requirements"
 - **Highlight collaboration** - "Architect designs based on analyst's requirements"
-- **Explain consensus** - "Critic validates - three agents, one plan"
+- **Explain consensus** - "Critic validates - three droids, one plan"
 
 ### During Plan Presentation
 - **Scroll slowly** - Let audience read sections

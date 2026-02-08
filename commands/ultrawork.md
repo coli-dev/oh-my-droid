@@ -11,11 +11,11 @@ Activates maximum performance mode with parallel agent orchestration.
 
 This skill enhances Droid's capabilities by:
 
-1. **Parallel Execution**: Running multiple agents simultaneously for independent tasks
-2. **Aggressive Delegation**: Routing tasks to specialist agents immediately
+1. **Parallel Execution**: Running multiple droids simultaneously for independent tasks
+2. **Aggressive Delegation**: Routing tasks to specialist droids immediately
 3. **Background Operations**: Using `run_in_background: true` for long operations
 4. **Persistence Enforcement**: Never stopping until all tasks are verified complete
-5. **Smart Model Routing**: Using tiered agents to save tokens
+5. **Smart Model Routing**: Using tiered droids to save tokens
 
 ## DELEGATION ENFORCEMENT (CRITICAL)
 
@@ -25,7 +25,7 @@ This skill enhances Droid's capabilities by:
 |--------|--------|----------|
 | Read files for context | ✓ | |
 | Track progress (TODO) | ✓ | |
-| Spawn parallel agents | ✓ | |
+| Spawn parallel droids | ✓ | |
 | **ANY code change** | ✗ NEVER | executor-low/executor/executor-high |
 | **UI work** | ✗ NEVER | designer/designer-high |
 | **Docs** | ✗ NEVER | writer |

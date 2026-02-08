@@ -15,7 +15,7 @@
 export type ContextSourceType =
   | 'keyword-detector'
   | 'rules-injector'
-  | 'directory-agents'
+  | 'directory-droids'
   | 'directory-readme'
   | 'boulder-state'
   | 'session-context'

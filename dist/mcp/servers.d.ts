@@ -25,7 +25,7 @@ export declare function createExaServer(apiKey?: string): McpServerConfig;
 export declare function createContext7Server(): McpServerConfig;
 /**
  * Playwright MCP Server - Browser automation
- * Enables agents to interact with web pages
+ * Enables droids to interact with web pages
  */
 export declare function createPlaywrightServer(): McpServerConfig;
 /**
@@ -35,7 +35,7 @@ export declare function createPlaywrightServer(): McpServerConfig;
 export declare function createFilesystemServer(allowedPaths: string[]): McpServerConfig;
 /**
  * Memory MCP Server - Persistent memory
- * Allows agents to store and retrieve information across sessions
+ * Allows droids to store and retrieve information across sessions
  */
 export declare function createMemoryServer(): McpServerConfig;
 /**

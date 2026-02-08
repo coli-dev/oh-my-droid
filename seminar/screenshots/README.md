@@ -9,11 +9,11 @@ This guide documents all screenshots needed for the seminar presentation, with d
 | `autopilot-phases.png` | 10 | HIGH | Live capture |
 | `before-after.png` | 6 | HIGH | Split terminal |
 | `hud-statusline.png` | 35 | HIGH | Live capture |
-| `parallel-agents.png` | 30 | HIGH | Live capture |
+| `parallel-droids.png` | 30 | HIGH | Live capture |
 | `ralph-persistence.png` | 33 | MEDIUM | Live capture |
 | `pipeline-flow.png` | 19 | MEDIUM | Terminal + logs |
 | `planning-interview.png` | 32 | MEDIUM | Live capture |
-| `swarm-agents.png` | 16 | MEDIUM | Live capture |
+| `swarm-droids.png` | 16 | MEDIUM | Live capture |
 | `agent-tiers.png` | 25 | LOW | Create diagram |
 | `ecomode-savings.png` | 22 | LOW | Mock data viz |
 
@@ -249,16 +249,16 @@ Create as a slide graphic using:
 
 ### 3. `hud-statusline.png` (Slide 35)
 
-**Description:** HUD statusline showing active agents, todo progress, token usage, and context window status in real-time.
+**Description:** HUD statusline showing active droids, todo progress, token usage, and context window status in real-time.
 
 **Capture Instructions:**
 1. Ensure HUD is installed: `droid` then `/oh-my-droid:hud setup`
-2. Start a task with multiple agents:
+2. Start a task with multiple droids:
    ```
    ultrawork: refactor the authentication system
    ```
-3. While agents are running, capture the statusline at the top
-4. Best captured mid-execution when multiple agents are active
+3. While droids are running, capture the statusline at the top
+4. Best captured mid-execution when multiple droids are active
 
 **ASCII Mockup:**
 ```
@@ -302,12 +302,12 @@ Cost This Session: $1.23
 
 ---
 
-### 4. `parallel-agents.png` (Slide 30)
+### 4. `parallel-droids.png` (Slide 30)
 
-**Description:** Terminal showing ultrawork with multiple agents executing tasks simultaneously, with clear visual indication of parallel execution.
+**Description:** Terminal showing ultrawork with multiple droids executing tasks simultaneously, with clear visual indication of parallel execution.
 
 **Capture Instructions:**
-1. Start ultrawork with a task that spawns multiple agents:
+1. Start ultrawork with a task that spawns multiple droids:
    ```
    ultrawork: fix all TypeScript errors in the src/ directory
    ```
@@ -324,10 +324,10 @@ Cost This Session: $1.23
 │ [explore:haiku] Scanning for TypeScript errors...                          │
 │ ✓ Found 23 errors across 8 files                                           │
 │                                                                             │
-│ Spawning parallel workers: 5 agents                                        │
+│ Spawning parallel workers: 5 droids                                        │
 │                                                                             │
 │ ┌───────────────────────────────────────────────────────────────────────┐  │
-│ │ Parallel Execution: 5 concurrent agents                               │  │
+│ │ Parallel Execution: 5 concurrent droids                               │  │
 │ ├───────────────────────────────────────────────────────────────────────┤  │
 │ │                                                                       │  │
 │ │ [executor:sonnet]     ⚙ src/auth/login.ts (7 errors)                 │  │
@@ -752,16 +752,16 @@ Time →
 
 ---
 
-### 8. `swarm-agents.png` (Slide 16)
+### 8. `swarm-droids.png` (Slide 16)
 
-**Description:** Multiple swarm agents claiming tasks from shared pool with atomic operations.
+**Description:** Multiple swarm droids claiming tasks from shared pool with atomic operations.
 
 **Capture Instructions:**
 1. Start swarm mode:
    ```
    /oh-my-droid:swarm 5:executor "implement all CRUD operations"
    ```
-2. Capture when agents are actively claiming tasks
+2. Capture when droids are actively claiming tasks
 3. Check `.omd/state/swarm-tasks.json` for task status
 
 **ASCII Mockup:**
@@ -769,7 +769,7 @@ Time →
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │ > /swarm 5:executor "implement all CRUD operations"                        │
 │                                                                             │
-│ Activating swarm mode: 5 executor agents                                   │
+│ Activating swarm mode: 5 executor droids                                   │
 │                                                                             │
 │ [architect:opus] Breaking down into tasks...                                │
 │ ✓ Created 12 parallelizable tasks                                          │
@@ -942,7 +942,7 @@ Selection Algorithm:
 
 STANDARD ULTRAWORK (No Smart Routing)
 ┌────────────────────────────────────────────────────────────────────────┐
-│ 20 agents × Sonnet × 45K avg tokens = 900K tokens                     │
+│ 20 droids × Sonnet × 45K avg tokens = 900K tokens                     │
 │                                                                        │
 │ Agent 1  ████████████████████████████████████████████  45K            │
 │ Agent 2  ████████████████████████████████████████████  45K            │

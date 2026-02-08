@@ -26,7 +26,7 @@ async function main() {
   });
 
   console.log('Session created with:');
-  console.log(`- ${Object.keys(session.queryOptions.options.agents).length} subagents`);
+  console.log(`- ${Object.keys(session.queryOptions.options.droids).length} subagents`);
   console.log(`- ${Object.keys(session.queryOptions.options.mcpServers).length} MCP servers`);
   console.log(`- ${session.queryOptions.options.allowedTools.length} allowed tools\n`);
 

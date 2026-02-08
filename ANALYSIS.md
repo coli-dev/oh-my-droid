@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-**Hephaestus** (oh-my-opencode) and **Deep-Executor** (oh-my-droid) are both autonomous deep worker agents designed for complex, goal-oriented software engineering tasks. Deep-Executor is explicitly ported from Hephaestus (PR #1287) but has been adapted to fit the oh-my-droid framework.
+**Hephaestus** (oh-my-opencode) and **Deep-Executor** (oh-my-droid) are both autonomous deep worker droids designed for complex, goal-oriented software engineering tasks. Deep-Executor is explicitly ported from Hephaestus (PR #1287) but has been adapted to fit the oh-my-droid framework.
 
 **Key Finding:** Deep-Executor successfully captures Hephaestus's core philosophy but differs significantly in delegation architecture, tool ecosystem, and verification protocols.
 
@@ -36,9 +36,9 @@
 ## 2. Delegation & Agent Orchestration
 
 ### Hephaestus (OMO)
-- **CAN delegate** to specialized agents (explore, librarian)
+- **CAN delegate** to specialized droids (explore, librarian)
 - **Delegation template**: 6-section mandatory structure (TASK, EXPECTED OUTCOME, REQUIRED TOOLS, MUST DO, MUST NOT DO, CONTEXT)
-- **Parallel exploration**: Fires 2-5 background exploration agents before executing
+- **Parallel exploration**: Fires 2-5 background exploration droids before executing
 - **Session continuity**: Reuses session IDs across multi-turn delegations
 - **Tool restrictions**: Cannot use `task` or `delegate_task` tools
 - **Permission**: Questions allowed; OMO agent calls denied
@@ -51,9 +51,9 @@
 ```
 
 ### Deep-Executor (OMD)
-- **CANNOT delegate** - completely blocked from spawning agents
+- **CANNOT delegate** - completely blocked from spawning droids
 - **Self-execution only**: Uses own tools extensively
-- **No background agents**: All exploration done synchronously with own tools
+- **No background droids**: All exploration done synchronously with own tools
 - **Blocked tools**: Task tool BLOCKED, agent spawning BLOCKED
 
 **Execution Philosophy:**
@@ -66,9 +66,9 @@
 | Capability | Hephaestus | Deep-Executor |
 |------------|------------|---------------|
 | **Delegation** | Yes (via 6-section template) | No (hard blocked) |
-| **Parallel agents** | 2-5 background explore/librarian | None |
+| **Parallel droids** | 2-5 background explore/librarian | None |
 | **Session continuity** | Yes (session ID reuse) | N/A (no delegation) |
-| **Tool ecosystem** | Can invoke specialized agents | Uses only own tools |
+| **Tool ecosystem** | Can invoke specialized droids | Uses only own tools |
 
 **Critical Difference:** This is the **BIGGEST** architectural divergence. Hephaestus orchestrates background exploration, while Deep-Executor is a self-contained worker.
 
@@ -120,7 +120,7 @@
 ### Hephaestus (OMO)
 **EXPLORE → PLAN → DECIDE → EXECUTE**
 
-1. **EXPLORE**: Fire 2-5 parallel background agents (explore/librarian)
+1. **EXPLORE**: Fire 2-5 parallel background droids (explore/librarian)
 2. **PLAN**: Create explicit work plan identifying all files/dependencies
 3. **DECIDE**: Determine direct execution vs delegation
 4. **EXECUTE**: Implement or delegate with verification
@@ -148,7 +148,7 @@
 ### Comparison
 | Stage | Hephaestus | Deep-Executor |
 |-------|------------|---------------|
-| **Explore** | Parallel background agents | Sequential own tools |
+| **Explore** | Parallel background droids | Sequential own tools |
 | **Plan** | Explicit plan document | Mental model + todos |
 | **Decide** | Execution strategy choice | N/A (always self-execute) |
 | **Execute** | Direct or delegate | Direct only |
@@ -164,7 +164,7 @@
 **Exploration Agents:**
 - **Explore agent** (gpt-5-nano): Fast grep for internal codebase
 - **Librarian agent** (big-pickle): External docs, GitHub, OSS research
-- **Execution**: Background parallel (2-5 agents)
+- **Execution**: Background parallel (2-5 droids)
 - **Framing**: "Grep, not consultants"
 
 **Tool Strategy:**
@@ -200,8 +200,8 @@
 ### Comparison
 | Capability | Hephaestus | Deep-Executor |
 |------------|------------|---------------|
-| **Exploration method** | Delegate to specialized agents | Use own tools directly |
-| **Parallelism** | 2-5 background agents | Sequential tool calls |
+| **Exploration method** | Delegate to specialized droids | Use own tools directly |
+| **Parallelism** | 2-5 background droids | Sequential tool calls |
 | **Model efficiency** | Cheaper models for exploration | Same expensive model |
 | **External research** | Librarian for docs/OSS | No external research capability |
 | **Tool framing** | "Grep not consultants" | Structured exploration questions |
@@ -482,8 +482,8 @@ When blocked:
 **Agency:**
 ```
 "Judicious Initiative: Makes implementation decisions independently"
-"May only ask questions after exhausting: direct tools, exploration agents,
-librarian agents, context inference, technical problem-solving"
+"May only ask questions after exhausting: direct tools, exploration droids,
+librarian droids, context inference, technical problem-solving"
 ```
 
 **Role:**
@@ -580,7 +580,7 @@ stopping after partial implementation"
 |--------|------------|---------------|
 | **Session management** | Delegation session IDs | N/A (no delegation) |
 | **Memory mechanism** | Not defined | `<remember>` tags |
-| **Context preservation** | Across delegated agents | Across conversation turns |
+| **Context preservation** | Across delegated droids | Across conversation turns |
 
 **Analysis:** Different memory needs due to different architectures. Hephaestus needs session continuity for **delegation**, while Deep-Executor needs memory for **long-running solo work**.
 
@@ -593,12 +593,12 @@ stopping after partial implementation"
 **Ecosystem:**
 - Part of multi-agent orchestration system
 - Sisyphus/Atlas as primary orchestrators
-- Specialized agents: Oracle, Librarian, Explore, Prometheus, Metis, Momus
+- Specialized droids: Oracle, Librarian, Explore, Prometheus, Metis, Momus
 - Can be invoked by orchestrators for deep work
 
 **Integration:**
 - Receives delegated tasks from Sisyphus/Atlas
-- Works alongside other specialized agents
+- Works alongside other specialized droids
 - Part of larger workflow orchestration
 
 ### Deep-Executor (OMD - oh-my-droid)
@@ -610,7 +610,7 @@ stopping after partial implementation"
 
 **Integration:**
 - Can be invoked directly OR by orchestrator
-- Works in isolation (no delegation to other agents)
+- Works in isolation (no delegation to other droids)
 - Part of tiered agent selection strategy
 
 ### Comparison
@@ -750,7 +750,7 @@ stopping after partial implementation"
    BEFORE invoking deep-executor, verify it's truly needed.
    ```
 
-   **Why:** Optimizes cost by routing simpler work to cheaper agents
+   **Why:** Optimizes cost by routing simpler work to cheaper droids
 
 6. **Expand Verification Checklist**
    ```
@@ -870,7 +870,7 @@ export const deepExecutorHybridAgent: AgentConfig = {
   model: 'opus',
   metadata: {
     ...DEEP_EXECUTOR_PROMPT_METADATA,
-    promptDescription: 'Deep executor that can delegate exploration to cheaper agents for token efficiency'
+    promptDescription: 'Deep executor that can delegate exploration to cheaper droids for token efficiency'
   }
 };
 ```
@@ -929,7 +929,7 @@ Standardize Hephaestus completion output with markdown templates:
 
 ### Hephaestus (OMO)
 **Exploration Phase:**
-- Fires 2-5 parallel agents (gpt-5-nano for explore, big-pickle for librarian)
+- Fires 2-5 parallel droids (gpt-5-nano for explore, big-pickle for librarian)
 - Main agent (GPT 5.2 Codex Medium) waits or continues planning
 - **Cost**: Low (cheap models for exploration)
 
@@ -958,7 +958,7 @@ Standardize Hephaestus completion output with markdown templates:
 
 | Phase | Hephaestus | Deep-Executor |
 |-------|------------|---------------|
-| **Explore files** | 2 explore agents (nano) | Opus Glob + Grep + Read |
+| **Explore files** | 2 explore droids (nano) | Opus Glob + Grep + Read |
 | **Research patterns** | 1 librarian (big-pickle) | N/A (no external research) |
 | **Plan** | Codex Medium | Opus |
 | **Implement** | Codex Medium | Opus |
@@ -1055,7 +1055,7 @@ Standardize Hephaestus completion output with markdown templates:
 | **Architecture** | Orchestrator-executor hybrid | Pure executor |
 | **Complexity** | Higher (delegation logic) | Lower (self-contained) |
 | **Token Efficiency** | Better (model routing) | Worse (always Opus) |
-| **Parallelism** | Yes (2-5 background agents) | No (sequential tools) |
+| **Parallelism** | Yes (2-5 background droids) | No (sequential tools) |
 | **User Visibility** | Lower (no TODOs) | Higher (TODO tracking) |
 | **Scalability** | Better (delegation) | Limited (solo work) |
 | **Simplicity** | Lower | Higher |
@@ -1112,7 +1112,7 @@ BEST OF BOTH WORLDS:
 
 - [ ] Update AGENTS.md with usage guidance
 - [ ] Add examples of ideal use cases
-- [ ] Document cost comparison with other agents
+- [ ] Document cost comparison with other droids
 - [ ] Create migration guide for Hephaestus users
 
 ---
@@ -1126,7 +1126,7 @@ BEST OF BOTH WORLDS:
 | **Identity** | Senior Staff Engineer, craftsman | Self-contained deep worker, the forge |
 | **Constraints** | No task/delegate_task tools | Task/agent spawning BLOCKED |
 | **Intent Gate** | 5 categories (Phase 0) | 3 categories (Intent Gate) |
-| **Exploration** | 2-5 parallel background agents | Sequential own tools |
+| **Exploration** | 2-5 parallel background droids | Sequential own tools |
 | **Planning** | Explicit work plan document | Mental model + TodoWrite |
 | **Execution** | Direct or delegate decision | Direct only |
 | **Verification** | 7-criteria checklist | 4-criteria + per-change |
@@ -1188,9 +1188,9 @@ BEST OF BOTH WORLDS:
 ### Hephaestus Research Sources
 
 1. **Primary Source**: oh-my-opencode GitHub repository (dev branch)
-   - URL: https://github.com/code-yeongyu/oh-my-opencode/blob/dev/src/agents/hephaestus.ts
-   - File: `src/agents/hephaestus.ts` (19,375 bytes)
-   - Documentation: `src/agents/AGENTS.md`
+   - URL: https://github.com/code-yeongyu/oh-my-opencode/blob/dev/src/droids/hephaestus.ts
+   - File: `src/droids/hephaestus.ts` (19,375 bytes)
+   - Documentation: `src/droids/AGENTS.md`
 
 2. **Supporting Documentation**:
    - README.md - Project overview and philosophy
@@ -1206,8 +1206,8 @@ BEST OF BOTH WORLDS:
 ### Deep-Executor Research Sources
 
 1. **Primary Source**: oh-my-droid local codebase
-   - File: `/home/bellman/Workspace/omd-omo-deepexec-comparsion/agents/deep-executor.md`
-   - File: `/home/bellman/Workspace/omd-omo-deepexec-comparsion/src/agents/deep-executor.ts`
+   - File: `/home/bellman/Workspace/omd-omo-deepexec-comparsion/droids/deep-executor.md`
+   - File: `/home/bellman/Workspace/omd-omo-deepexec-comparsion/src/droids/deep-executor.ts`
 
 2. **Supporting Context**:
    - Agent utilities and types

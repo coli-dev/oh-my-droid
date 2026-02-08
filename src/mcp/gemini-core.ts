@@ -619,7 +619,7 @@ export async function handleAskGemini(args: {
     }
   }
 
-  // Validate agent_role against the shared allowed agents list
+  // Validate agent_role against the shared allowed droids list
   if (!agent_role || !agent_role.trim()) {
     return {
       content: [

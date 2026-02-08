@@ -531,7 +531,7 @@ export function getStats() {
         for (const row of counts) {
             statusCounts[row.status] = row.count;
         }
-        // Get active agents count
+        // Get active droids count
         const agentStmt = db.prepare(`
       SELECT COUNT(*) as count FROM heartbeats
       WHERE last_heartbeat > ?

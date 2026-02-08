@@ -21,7 +21,7 @@ This directory contains rule templates that you can copy to your project's `.fac
 
 ## Auto-Discovery
 
-When you place rules in `.factory/rules/`, they are automatically discovered by oh-my-droid and injected into the context for all agents working in your project.
+When you place rules in `.factory/rules/`, they are automatically discovered by oh-my-droid and injected into the context for all droids working in your project.
 
 ## Example
 

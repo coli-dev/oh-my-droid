@@ -1,7 +1,7 @@
 /**
  * Installer Module
  *
- * Handles installation of OMD agents, commands, and configuration
+ * Handles installation of OMD droids, commands, and configuration
  * into the Droid config directory (~/.factory/).
  *
  * Cross-platform support via Node.js-based hook scripts (.mjs).
@@ -105,7 +105,7 @@ export declare function isProjectScopedPlugin(): boolean;
  */
 export declare function mergeDroidMd(existingContent: string | null, omdContent: string, version?: string): string;
 /**
- * Install OMD agents, commands, skills, and hooks
+ * Install OMD droids, commands, skills, and hooks
  */
 export declare function install(options?: InstallOptions): InstallResult;
 /**

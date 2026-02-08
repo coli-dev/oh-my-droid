@@ -2,7 +2,7 @@
  * Swarm Coordination Types
  *
  * Type definitions for the SQLite-based swarm coordination system.
- * Swarm enables multiple agents to claim and work on tasks atomically
+ * Swarm enables multiple droids to claim and work on tasks atomically
  * with lease-based ownership and heartbeat monitoring.
  */
 /**
@@ -42,7 +42,7 @@ export interface SwarmState {
     active: boolean;
     /** Unique session identifier */
     sessionId: string;
-    /** Number of agents participating in the swarm */
+    /** Number of droids participating in the swarm */
     agentCount: number;
     /** All tasks in the swarm */
     tasks: SwarmTask[];
@@ -68,7 +68,7 @@ export interface ClaimResult {
  * Configuration for swarm initialization
  */
 export interface SwarmConfig {
-    /** Number of agents to spawn */
+    /** Number of droids to spawn */
     agentCount: number;
     /** Task descriptions to add to the pool */
     tasks: string[];
@@ -83,10 +83,10 @@ export interface SwarmConfig {
 }
 /**
  * Extended configuration for aggressive swarm mode
- * Enables wave-based spawning with many more tasks than concurrent agents
+ * Enables wave-based spawning with many more tasks than concurrent droids
  */
 export interface AggressiveSwarmConfig extends SwarmConfig {
-    /** Maximum concurrent agents (respects OMD configurable limit, default 5) */
+    /** Maximum concurrent droids (respects OMD configurable limit, default 5) */
     maxConcurrent?: number;
     /** Total tasks to process (can exceed maxConcurrent) */
     totalTasks?: number;
@@ -120,7 +120,7 @@ export interface SwarmStats {
     doneTasks: number;
     /** Number of failed tasks */
     failedTasks: number;
-    /** Number of active agents */
+    /** Number of active droids */
     activeAgents: number;
     /** Elapsed time in milliseconds */
     elapsedTime: number;

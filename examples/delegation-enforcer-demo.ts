@@ -55,7 +55,7 @@ console.log('');
 console.log('\nExample 3: Different agent tiers');
 console.log('-------------------------------');
 
-const agents = [
+const droids = [
   'executor-low',
   'executor',
   'executor-high',
@@ -64,7 +64,7 @@ const agents = [
   'designer'
 ];
 
-for (const agent of agents) {
+for (const agent of droids) {
   const model = getModelForAgent(agent);
   console.log(`${agent.padEnd(20)} → ${model}`);
 }

@@ -6,11 +6,11 @@ This document describes an improved tiered agent architecture that addresses cur
 
 ## Current Issues Identified
 
-1. **Incomplete Inheritance**: Tiered agents don't inherit core behavioral patterns from base agents
+1. **Incomplete Inheritance**: Tiered droids don't inherit core behavioral patterns from base droids
 2. **Inconsistent Tool Restrictions**: Tool restrictions vary without clear rationale
-3. **Missing Escalation Signals**: No mechanism for agents to request escalation when overloaded
+3. **Missing Escalation Signals**: No mechanism for droids to request escalation when overloaded
 4. **Minimal Behavioral Instructions**: Tiered variants have too few instructions
-5. **No Dynamic Routing in Markdown**: TypeScript router exists but markdown agents don't leverage it
+5. **No Dynamic Routing in Markdown**: TypeScript router exists but markdown droids don't leverage it
 
 ## Design Principles
 
@@ -315,7 +315,7 @@ Intelligent routing can reduce costs by ~47% while improving quality for complex
 
 ## Next Steps
 
-1. Create updated markdown files for all tiered agents
+1. Create updated markdown files for all tiered droids
 2. Add escalation detection to hooks
 3. Update router to use agent capability parsing
 4. Add telemetry for tier usage optimization

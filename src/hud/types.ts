@@ -112,7 +112,7 @@ export interface SessionHealth {
 }
 
 export interface TranscriptData {
-  agents: ActiveAgent[];
+  droids: ActiveAgent[];
   todos: TodoItem[];
   sessionStart?: Date;
   lastActivatedSkill?: SkillInvocation;
@@ -224,10 +224,10 @@ export type HudPreset =
 
 /**
  * Agent display format options:
- * - count: agents:2
- * - codes: agents:Oes (type-coded with model tier casing)
- * - codes-duration: agents:O(2m)es (codes with duration)
- * - detailed: agents:[architect(2m),explore,exec]
+ * - count: droids:2
+ * - codes: droids:Oes (type-coded with model tier casing)
+ * - codes-duration: droids:O(2m)es (codes with duration)
+ * - detailed: droids:[architect(2m),explore,exec]
  * - descriptions: O:analyzing code | e:searching (codes + what they're doing)
  * - tasks: [analyzing code, searching...] (just descriptions - most readable)
  * - multiline: Multi-line display with full agent details on separate lines
@@ -272,7 +272,7 @@ export interface HudElementConfig {
   activeSkills: boolean;
   lastSkill: boolean;
   contextBar: boolean;
-  agents: boolean;
+  droids: boolean;
   agentsFormat: AgentsFormat;
   agentsMaxLines: number; // Max agent detail lines for multiline format (default: 5)
   backgroundTasks: boolean;
@@ -326,7 +326,7 @@ export const DEFAULT_HUD_CONFIG: HudConfig = {
     prdStory: true,
     activeSkills: true,
     contextBar: true,
-    agents: true,
+    droids: true,
     agentsFormat: "multiline", // Multi-line for rich agent visualization
     agentsMaxLines: 5, // Show up to 5 agent detail lines
     backgroundTasks: true,
@@ -367,7 +367,7 @@ export const PRESET_CONFIGS: Record<HudPreset, Partial<HudElementConfig>> = {
     activeSkills: true,
     lastSkill: true,
     contextBar: false,
-    agents: true,
+    droids: true,
     agentsFormat: "count",
     agentsMaxLines: 0,
     backgroundTasks: false,
@@ -396,7 +396,7 @@ export const PRESET_CONFIGS: Record<HudPreset, Partial<HudElementConfig>> = {
     activeSkills: false,
     lastSkill: false,
     contextBar: false,
-    agents: true,
+    droids: true,
     agentsFormat: "codes",
     agentsMaxLines: 0,
     backgroundTasks: false,
@@ -425,7 +425,7 @@ export const PRESET_CONFIGS: Record<HudPreset, Partial<HudElementConfig>> = {
     activeSkills: true,
     lastSkill: true,
     contextBar: true,
-    agents: true,
+    droids: true,
     agentsFormat: "multiline",
     agentsMaxLines: 3,
     backgroundTasks: true,
@@ -454,7 +454,7 @@ export const PRESET_CONFIGS: Record<HudPreset, Partial<HudElementConfig>> = {
     activeSkills: true,
     lastSkill: true,
     contextBar: true,
-    agents: true,
+    droids: true,
     agentsFormat: "multiline",
     agentsMaxLines: 10,
     backgroundTasks: true,
@@ -483,7 +483,7 @@ export const PRESET_CONFIGS: Record<HudPreset, Partial<HudElementConfig>> = {
     activeSkills: true,
     lastSkill: true,
     contextBar: true,
-    agents: true,
+    droids: true,
     agentsFormat: "codes",
     agentsMaxLines: 0,
     backgroundTasks: false,
@@ -512,7 +512,7 @@ export const PRESET_CONFIGS: Record<HudPreset, Partial<HudElementConfig>> = {
     activeSkills: true,
     lastSkill: true,
     contextBar: true,
-    agents: true,
+    droids: true,
     agentsFormat: "multiline",
     agentsMaxLines: 5,
     backgroundTasks: true,

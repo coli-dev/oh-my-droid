@@ -31,7 +31,7 @@ Hooks intercept Droid events to enable:
 | `ultrawork/` | Maximum parallel execution | "ulw", "ultrawork" |
 | `ralph/` | Persistence until verified | "ralph", "don't stop" |
 | `ultrapilot/` | Parallel autopilot with file ownership | "ultrapilot" |
-| `swarm/` | N coordinated agents with task claiming | "swarm N agents" |
+| `swarm/` | N coordinated droids with task claiming | "swarm N droids" |
 | `ultraqa/` | QA cycling until goal met | test failures |
 | `mode-registry/` | Tracks active execution mode (incl. ecomode) | internal |
 | `persistent-mode/` | Maintains mode state across sessions | internal |
@@ -79,7 +79,7 @@ Hooks intercept Droid events to enable:
 |-----------|---------|
 | `todo-continuation/` | Enforces task completion |
 | `omd-orchestrator/` | Orchestrator behavior |
-| `subagent-tracker/` | Tracks spawned sub-agents |
+| `subagent-tracker/` | Tracks spawned sub-droids |
 | `session-end/` | Session termination handling |
 | `background-notification/` | Background task notifications |
 
@@ -198,7 +198,7 @@ writeState('autopilot-state', state);
 ### Internal
 - `features/state-manager/` for state persistence
 - `features/verification/` for verification protocol
-- `agents/` for spawning sub-agents
+- `droids/` for spawning sub-droids
 
 ### External
 | Package | Purpose |
@@ -238,7 +238,7 @@ return {
 1. Ralph (explicit persistence loop)
 2. Autopilot (full orchestration)
 3. Ultrapilot (parallel workers)
-4. Swarm (coordinated agents)
+4. Swarm (coordinated droids)
 5. Pipeline (sequential stages)
 6. UltraQA (test cycling)
 7. Ultrawork (parallel execution)

@@ -108,7 +108,7 @@ Combine with other skills for comprehensive fixing:
 ```
 /ultrawork fix all build errors
 ```
-Spawns multiple build-fixer agents in parallel for different files.
+Spawns multiple build-fixer droids in parallel for different files.
 
 **With Ralph:**
 ```

@@ -60,7 +60,7 @@ export interface PluginManifest {
   /** Skills directory or array of skill paths */
   skills?: string | string[];
   /** Agents directory or array of agent paths */
-  agents?: string | string[];
+  droids?: string | string[];
   /** Commands directory or array of command paths */
   commands?: string | string[];
   /** Hook configurations */

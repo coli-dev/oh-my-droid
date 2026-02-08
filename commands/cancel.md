@@ -17,7 +17,7 @@ The skill checks state files to determine what's active and cancels in order of 
 3. **Ultrawork** - Stops parallel execution (standalone)
 4. **Ecomode** - Stops token-efficient execution (standalone)
 5. **UltraQA** - Stops QA cycling workflow
-6. **Swarm** - Stops coordinated agents, releases claimed tasks
+6. **Swarm** - Stops coordinated droids, releases claimed tasks
 7. **Ultrapilot** - Stops parallel autopilot workers
 8. **Pipeline** - Stops sequential agent chain
 

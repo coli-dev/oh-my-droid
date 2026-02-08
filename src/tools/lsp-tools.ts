@@ -1,7 +1,7 @@
 /**
  * LSP (Language Server Protocol) Tools
  *
- * Provides IDE-like capabilities to agents via real LSP server integration:
+ * Provides IDE-like capabilities to droids via real LSP server integration:
  * - Hover information
  * - Go to definition
  * - Find references

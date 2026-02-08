@@ -32,7 +32,7 @@ export async function getAnalyticsDisplay() {
                 totalCost += cost.totalCost;
             }
         }
-        // Get top agents
+        // Get top droids
         const topAgents = await tracker.getTopAgents(3);
         const topAgentsStr = topAgents.length > 0
             ? topAgents.map(a => `${a.agent}:${formatCost(a.cost)}`).join(' ')

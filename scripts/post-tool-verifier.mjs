@@ -200,8 +200,8 @@ function getAgentCompletionSummary(directory) {
   try {
     if (existsSync(trackingFile)) {
       const data = JSON.parse(readFileSync(trackingFile, 'utf-8'));
-      const agents = data.agents || [];
-      const running = agents.filter(a => a.status === 'running');
+      const droids = data.droids || [];
+      const running = droids.filter(a => a.status === 'running');
       const completed = data.total_completed || 0;
       const failed = data.total_failed || 0;
 

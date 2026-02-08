@@ -75,10 +75,10 @@ function loadMetadata(): Metadata {
   };
 }
 
-// Get count of agents from agents directory
+// Get count of droids from droids directory
 function getAgentCount(): number {
   const projectRoot = resolve(__dirname, '..');
-  const agentsDir = join(projectRoot, 'agents');
+  const agentsDir = join(projectRoot, 'droids');
 
   if (!existsSync(agentsDir)) {
     return 0;
@@ -154,8 +154,8 @@ function getFileSyncConfigs(): FileSync[] {
       path: '.github/AGENTS.md',
       replacements: [
         {
-          pattern: /\*\*\d+ specialized agents\*\*/g,
-          replacement: () => `**${agentCount} specialized agents**`,
+          pattern: /\*\*\d+ specialized droids\*\*/g,
+          replacement: () => `**${agentCount} specialized droids**`,
           description: 'Agent count',
         },
         {

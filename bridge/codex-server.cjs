@@ -13767,7 +13767,7 @@ function getWorktreeRoot(cwd) {
   }
 }
 
-// src/agents/utils.ts
+// src/droids/utils.ts
 var import_fs2 = require("fs");
 var import_path2 = require("path");
 var import_url = require("url");
@@ -13782,7 +13782,7 @@ function loadAgentPrompt(agentName) {
     throw new Error(`Invalid agent name: contains disallowed characters`);
   }
   try {
-    const agentsDir = (0, import_path2.join)(getPackageDir(), "agents");
+    const agentsDir = (0, import_path2.join)(getPackageDir(), "droids");
     const agentPath = (0, import_path2.join)(agentsDir, `${agentName}.md`);
     const resolvedPath = (0, import_path2.resolve)(agentPath);
     const resolvedAgentsDir = (0, import_path2.resolve)(agentsDir);

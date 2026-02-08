@@ -71,11 +71,11 @@ ls ~/.factory/plugins/cache/omd/oh-my-droid/ 2>/dev/null | wc -l
 
 ### Step 6: Check for Legacy Curl-Installed Content
 
-Check for legacy agents, commands, and skills installed via curl (before plugin system):
+Check for legacy droids, commands, and skills installed via curl (before plugin system):
 
 ```bash
-# Check for legacy agents directory
-ls -la ~/.factory/agents/ 2>/dev/null
+# Check for legacy droids directory
+ls -la ~/.factory/droids/ 2>/dev/null
 
 # Check for legacy commands directory
 ls -la ~/.factory/commands/ 2>/dev/null
@@ -85,12 +85,12 @@ ls -la ~/.factory/skills/ 2>/dev/null
 ```
 
 **Diagnosis**:
-- If `~/.factory/agents/` exists with oh-my-droid-related files: WARN - legacy agents (now provided by plugin)
+- If `~/.factory/droids/` exists with oh-my-droid-related files: WARN - legacy droids (now provided by plugin)
 - If `~/.factory/commands/` exists with oh-my-droid-related files: WARN - legacy commands (now provided by plugin)
 - If `~/.factory/skills/` exists with oh-my-droid-related files: WARN - legacy skills (now provided by plugin)
 
 Look for files like:
-- `architect.md`, `researcher.md`, `explore.md`, `executor.md`, etc. in agents/
+- `architect.md`, `researcher.md`, `explore.md`, `executor.md`, etc. in droids/
 - `ultrawork.md`, `deepsearch.md`, etc. in commands/
 - Any oh-my-droid-related `.md` files in skills/
 
@@ -115,7 +115,7 @@ After running all checks, output a report:
 | Legacy Scripts (~/.factory/hooks/) | OK/WARN | ... |
 | AGENTS.md | OK/WARN/CRITICAL | ... |
 | Plugin Cache | OK/WARN | ... |
-| Legacy Agents (~/.factory/agents/) | OK/WARN | ... |
+| Legacy Agents (~/.factory/droids/) | OK/WARN | ... |
 | Legacy Commands (~/.factory/commands/) | OK/WARN | ... |
 | Legacy Skills (~/.factory/skills/) | OK/WARN | ... |
 
@@ -167,21 +167,21 @@ WebFetch(url: "https://raw.githubusercontent.com/coli-dev/oh-my-droid/main/docs/
 
 ### Fix: Legacy Curl-Installed Content
 
-Remove legacy agents, commands, and skills directories (now provided by plugin):
+Remove legacy droids, commands, and skills directories (now provided by plugin):
 
 ```bash
 # Backup first (optional - ask user)
-# mv ~/.factory/agents ~/.factory/agents.bak
+# mv ~/.factory/droids ~/.factory/droids.bak
 # mv ~/.factory/commands ~/.factory/commands.bak
 # mv ~/.factory/skills ~/.factory/skills.bak
 
 # Or remove directly
-rm -rf ~/.factory/agents
+rm -rf ~/.factory/droids
 rm -rf ~/.factory/commands
 rm -rf ~/.factory/skills
 ```
 
-**Note**: Only remove if these contain oh-my-droid-related files. If user has custom agents/commands/skills, warn them and ask before removing.
+**Note**: Only remove if these contain oh-my-droid-related files. If user has custom droids/commands/skills, warn them and ask before removing.
 
 ---
 

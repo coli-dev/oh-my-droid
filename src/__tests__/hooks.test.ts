@@ -266,17 +266,17 @@ describe("Keyword Detector", () => {
     });
 
     it("should detect swarm keyword", () => {
-      const detected = detectKeywordsWithType("swarm 5 agents to fix this");
+      const detected = detectKeywordsWithType("swarm 5 droids to fix this");
       expect(detected).toHaveLength(1);
       expect(detected[0].type).toBe("swarm");
-      expect(detected[0].keyword).toBe("swarm 5 agents");
+      expect(detected[0].keyword).toBe("swarm 5 droids");
     });
 
-    it("should detect coordinated agents pattern", () => {
-      const detected = detectKeywordsWithType("use coordinated agents");
+    it("should detect coordinated droids pattern", () => {
+      const detected = detectKeywordsWithType("use coordinated droids");
       expect(detected).toHaveLength(1);
       expect(detected[0].type).toBe("swarm");
-      expect(detected[0].keyword).toBe("coordinated agents");
+      expect(detected[0].keyword).toBe("coordinated droids");
     });
 
     it("should detect pipeline keyword", () => {
@@ -286,11 +286,11 @@ describe("Keyword Detector", () => {
       expect(detected[0].keyword).toBe("pipeline");
     });
 
-    it("should detect chain agents pattern", () => {
-      const detected = detectKeywordsWithType("chain agents together");
+    it("should detect chain droids pattern", () => {
+      const detected = detectKeywordsWithType("chain droids together");
       expect(detected).toHaveLength(1);
       expect(detected[0].type).toBe("pipeline");
-      expect(detected[0].keyword).toBe("chain agents");
+      expect(detected[0].keyword).toBe("chain droids");
     });
 
     it("should detect ralplan keyword", () => {
@@ -526,7 +526,7 @@ describe("Keyword Detector", () => {
     });
 
     it("should prioritize swarm correctly", () => {
-      const primary = getPrimaryKeyword("swarm 5 agents for this");
+      const primary = getPrimaryKeyword("swarm 5 droids for this");
       expect(primary).not.toBeNull();
       expect(primary!.type).toBe("swarm");
     });

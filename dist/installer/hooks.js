@@ -84,22 +84,22 @@ YOU MUST LEVERAGE ALL AVAILABLE AGENTS TO THEIR FULLEST POTENTIAL.
 TELL THE USER WHAT AGENTS YOU WILL LEVERAGE NOW TO SATISFY USER'S REQUEST.
 
 ## AGENT UTILIZATION PRINCIPLES (by capability, not by name)
-- **Codebase Exploration**: Spawn exploration agents using BACKGROUND TASKS for file patterns, internal implementations, project structure
-- **Documentation & References**: Use researcher-type agents via BACKGROUND TASKS for API references, examples, external library docs
+- **Codebase Exploration**: Spawn exploration droids using BACKGROUND TASKS for file patterns, internal implementations, project structure
+- **Documentation & References**: Use researcher-type droids via BACKGROUND TASKS for API references, examples, external library docs
 - **Planning & Strategy**: NEVER plan yourself - ALWAYS spawn a dedicated planning agent for work breakdown
-- **High-IQ Reasoning**: Leverage specialized agents for architecture decisions, code review, strategic planning
-- **Frontend/UI Tasks**: Delegate to UI-specialized agents for design and implementation
+- **High-IQ Reasoning**: Leverage specialized droids for architecture decisions, code review, strategic planning
+- **Frontend/UI Tasks**: Delegate to UI-specialized droids for design and implementation
 
 ## EXECUTION RULES
 - **TODO**: Track EVERY step. Mark complete IMMEDIATELY after each.
 - **PARALLEL**: Fire independent agent calls simultaneously via Task(run_in_background=true) - NEVER wait sequentially.
-- **BACKGROUND FIRST**: Use Task tool for exploration/research agents (10+ concurrent if needed).
+- **BACKGROUND FIRST**: Use Task tool for exploration/research droids (10+ concurrent if needed).
 - **VERIFY**: Re-read request after completion. Check ALL requirements met before reporting done.
-- **DELEGATE**: Don't do everything yourself - orchestrate specialized agents for their strengths.
+- **DELEGATE**: Don't do everything yourself - orchestrate specialized droids for their strengths.
 
 ## WORKFLOW
 1. Analyze the request and identify required capabilities
-2. Spawn exploration/researcher agents via Task(run_in_background=true) in PARALLEL (10+ if needed)
+2. Spawn exploration/researcher droids via Task(run_in_background=true) in PARALLEL (10+ if needed)
 3. Always Use Plan agent with gathered context to create detailed work breakdown
 4. Execute with continuous verification against original requirements
 
@@ -192,9 +192,9 @@ Use your extended thinking capabilities to provide the most thorough and well-re
  * Ported from oh-my-opencode's keyword-detector
  */
 export const SEARCH_MESSAGE = `<search-mode>
-MAXIMIZE SEARCH EFFORT. Launch multiple background agents IN PARALLEL:
-- explore agents (codebase patterns, file structures)
-- researcher agents (remote repos, official docs, GitHub examples)
+MAXIMIZE SEARCH EFFORT. Launch multiple background droids IN PARALLEL:
+- explore droids (codebase patterns, file structures)
+- researcher droids (remote repos, official docs, GitHub examples)
 Plus direct tools: Grep, Glob
 NEVER stop at first result - be exhaustive.
 </search-mode>
@@ -210,8 +210,8 @@ export const ANALYZE_MESSAGE = `<analyze-mode>
 ANALYSIS MODE. Gather context before diving deep:
 
 CONTEXT GATHERING (parallel):
-- 1-2 explore agents (codebase patterns, implementations)
-- 1-2 researcher agents (if external library involved)
+- 1-2 explore droids (codebase patterns, implementations)
+- 1-2 researcher droids (if external library involved)
 - Direct tools: Grep, Glob, LSP for targeted searches
 
 IF COMPLEX (architecture, multi-system, debugging after 2+ failures):
@@ -245,7 +245,7 @@ Ralph mode auto-activates Ultrawork for maximum parallel execution. Follow these
 ### Parallel Execution
 - **PARALLEL**: Fire independent calls simultaneously - NEVER wait sequentially
 - **BACKGROUND FIRST**: Use Task(run_in_background=true) for long operations
-- **DELEGATE**: Route tasks to specialist agents immediately
+- **DELEGATE**: Route tasks to specialist droids immediately
 
 ### Completion Requirements
 - Verify ALL requirements from the original task are met

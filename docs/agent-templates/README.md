@@ -26,7 +26,7 @@ The template uses the following placeholders:
 
 1. **Copy the base template**:
    ```bash
-   cp agents/templates/base-agent.md agents/my-new-agent.md
+   cp droids/templates/base-agent.md droids/my-new-agent.md
    ```
 
 2. **Replace placeholders**:
@@ -38,7 +38,7 @@ The template uses the following placeholders:
 
 3. **Review common protocol**:
    - The base template includes shared verification and tool usage protocols
-   - These apply to ALL agents and don't need modification
+   - These apply to ALL droids and don't need modification
    - Only extend if your agent needs additional protocols
 
 ### Example: Creating executor-low
@@ -79,10 +79,10 @@ You execute simple, well-defined code changes quickly and efficiently. Handle si
 
 ## Benefits
 
-1. **Consistency**: All agents follow the same verification protocol
+1. **Consistency**: All droids follow the same verification protocol
 2. **Maintainability**: Update common protocols in one place
 3. **Clarity**: Clear separation of tier vs. role-specific instructions
-4. **Scalability**: Easy to add new agents or tiers
+4. **Scalability**: Easy to add new droids or tiers
 
 ## Best Practices
 
@@ -105,6 +105,6 @@ You execute simple, well-defined code changes quickly and efficiently. Handle si
 Potential additions to the template system:
 
 - Domain-specific templates (frontend, backend, data, etc.)
-- Composition templates for specialized agents
+- Composition templates for specialized droids
 - Automated template validation
 - Template generation CLI tool

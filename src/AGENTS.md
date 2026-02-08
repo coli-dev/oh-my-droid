@@ -9,7 +9,7 @@ TypeScript source code for oh-my-droid - the core library that powers multi-agen
 
 This directory contains all TypeScript source code organized into modules:
 
-- **agents/** - 32 specialized AI agent definitions with tiered variants
+- **droids/** - 32 specialized AI agent definitions with tiered variants
 - **tools/** - 15 LSP/AST/REPL tools for IDE-like capabilities
 - **hooks/** - 31 event-driven behaviors for execution modes
 - **features/** - Core features (model routing, state management, verification)
@@ -28,7 +28,7 @@ This directory contains all TypeScript source code organized into modules:
 
 | Directory | Purpose |
 |-----------|---------|
-| `agents/` | 32 agent definitions with prompts and tools (see `agents/AGENTS.md`) |
+| `droids/` | 32 agent definitions with prompts and tools (see `droids/AGENTS.md`) |
 | `tools/` | 15 LSP, AST, and Python REPL tools (see `tools/AGENTS.md`) |
 | `hooks/` | 31 hooks for execution modes (see `hooks/AGENTS.md`) |
 | `features/` | Core features like model routing, state (see `features/AGENTS.md`) |
@@ -55,7 +55,7 @@ This directory contains all TypeScript source code organized into modules:
    // Main export in index.ts
    export { createSisyphusSession } from './session';
    export { lspTools, astTools, allCustomTools } from './tools';
-   export { getAgentDefinitions, omdSystemPrompt } from './agents/definitions';
+   export { getAgentDefinitions, omdSystemPrompt } from './droids/definitions';
    ```
 
 3. **Tool Registration**: Custom tools are registered in `tools/index.ts`:
@@ -68,13 +68,13 @@ This directory contains all TypeScript source code organized into modules:
    ];
    ```
 
-4. **Agent Registration**: Agents defined in `agents/definitions.ts`:
+4. **Agent Registration**: Agents defined in `droids/definitions.ts`:
    ```typescript
    export function getAgentDefinitions(): Record<string, AgentConfig> {
      return {
        architect: architectAgent,
        executor: executorAgent,
-       // ... all 32 agents
+       // ... all 32 droids
      };
    }
    ```
@@ -90,10 +90,10 @@ This directory contains all TypeScript source code organized into modules:
 
 #### Creating a New Agent
 
-1. Add agent file in `agents/` (e.g., `new-agent.ts`)
-2. Export from `agents/index.ts`
-3. Add to `getAgentDefinitions()` in `agents/definitions.ts`
-4. Create prompt template in `/agents/new-agent.md`
+1. Add agent file in `droids/` (e.g., `new-agent.ts`)
+2. Export from `droids/index.ts`
+3. Add to `getAgentDefinitions()` in `droids/definitions.ts`
+4. Create prompt template in `/droids/new-agent.md`
 5. Update `docs/REFERENCE.md` (Agents section) with new agent
 
 #### Adding a New Hook
@@ -128,7 +128,7 @@ This directory contains all TypeScript source code organized into modules:
 
 ### Internal
 - Uses types from `shared/types.ts`
-- Imports agent prompts from `/agents/*.md`
+- Imports agent prompts from `/droids/*.md`
 - Loads skills from `/skills/*.md`
 
 ### External
@@ -139,7 +139,7 @@ Key packages by module: `zod` (tools, features), `@ast-grep/napi` (tools/ast), `
 
 ```
 index.ts
-├── agents/definitions.ts → agents/*.ts → /agents/*.md (prompts)
+├── droids/definitions.ts → droids/*.ts → /droids/*.md (prompts)
 ├── tools/index.ts
 │   ├── lsp-tools.ts → lsp/*.ts
 │   ├── ast-tools.ts

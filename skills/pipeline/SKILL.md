@@ -1,13 +1,13 @@
 ---
 name: pipeline
-description: Chain agents together in sequential or branching workflows with data passing
+description: Chain droids together in sequential or branching workflows with data passing
 ---
 
 # Pipeline Skill
 
 ## Overview
 
-The pipeline skill enables chaining multiple agents together in defined workflows where the output of one agent becomes the input to the next. This creates powerful agent pipelines similar to Unix pipes but designed for AI agent orchestration.
+The pipeline skill enables chaining multiple droids together in defined workflows where the output of one agent becomes the input to the next. This creates powerful agent pipelines similar to Unix pipes but designed for AI agent orchestration.
 
 ## Core Concepts
 
@@ -26,7 +26,7 @@ explore -> architect -> executor
 
 ### 2. Branching Pipelines
 
-Route to different agents based on output conditions.
+Route to different droids based on output conditions.
 
 ```
 explore -> {
@@ -38,7 +38,7 @@ explore -> {
 
 ### 3. Parallel-Then-Merge Pipelines
 
-Run multiple agents in parallel, merge their outputs.
+Run multiple droids in parallel, merge their outputs.
 
 ```
 parallel(explore, researcher) -> architect -> executor
@@ -309,7 +309,7 @@ repeat_until(tests_pass) {
 
 ### Merge Strategies
 
-When parallel agents complete:
+When parallel droids complete:
 
 - **concat**: Concatenate all outputs
 - **summarize**: Use architect to summarize findings
@@ -390,10 +390,10 @@ The pipeline orchestrator:
 
 1. **Parses pipeline definition** - Validates syntax and agent names
 2. **Initializes state** - Creates pipeline-state.json
-3. **Executes stages sequentially** - Spawns agents with Task tool
+3. **Executes stages sequentially** - Spawns droids with Task tool
 4. **Passes context between stages** - Structures output for next agent
 5. **Handles branching logic** - Evaluates conditions and routes
-6. **Manages parallel execution** - Spawns concurrent agents and merges
+6. **Manages parallel execution** - Spawns concurrent droids and merges
 7. **Persists state** - Updates state file after each stage
 8. **Enforces verification** - Runs checks before completion
 
@@ -415,7 +415,7 @@ This ensures clean state for future sessions. Stale state files with `active: fa
 This skill activates when:
 
 - User types `/pipeline` command
-- User mentions "agent chain", "workflow", "pipe agents"
+- User mentions "agent chain", "workflow", "pipe droids"
 - Pattern detected: "X then Y then Z" with agent names
 
 **Explicit invocation:**

@@ -132,7 +132,7 @@ describe('Swarm Claiming', () => {
                 { id: 'task-2', description: 'Second task' },
                 { id: 'task-3', description: 'Third task' }
             ]);
-            // All agents claim tasks
+            // All droids claim tasks
             claimTask('agent-1');
             claimTask('agent-2');
             claimTask('agent-3');

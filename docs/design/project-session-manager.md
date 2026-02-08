@@ -737,7 +737,7 @@ def cleanup(options):
 | OMD Skill | PSM Integration |
 |-----------|-----------------|
 | `autopilot` | Can spawn PSM session for isolated work |
-| `ultrawork` | Parallel agents across PSM sessions |
+| `ultrawork` | Parallel droids across PSM sessions |
 | `ralph` | Persistence tracking per PSM session |
 | `git-master` | Aware of worktree context |
 | `deepsearch` | Scoped to session worktree |

@@ -384,7 +384,7 @@ async function main() {
       }
     }
 
-    // Priority 4: Swarm (coordinated agents with SQLite)
+    // Priority 4: Swarm (coordinated droids with SQLite)
     if (swarmMarker && swarmSummary?.active && !isStaleState(swarmSummary)) {
       const pending =
         (swarmSummary.tasks_pending || 0) + (swarmSummary.tasks_claimed || 0);

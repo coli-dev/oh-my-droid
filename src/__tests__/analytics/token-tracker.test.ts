@@ -13,10 +13,10 @@ describe('TokenTracker.getTopAgents', () => {
     expect(result).toEqual([]);
   });
 
-  it('returns agents sorted by cost descending', async () => {
+  it('returns droids sorted by cost descending', async () => {
     const tracker = resetTokenTracker('test-session');
 
-    // Record usage for multiple agents
+    // Record usage for multiple droids
     await tracker.recordTokenUsage({
       agentName: 'executor',
       modelName: 'claude-sonnet-4.5',
@@ -46,7 +46,7 @@ describe('TokenTracker.getTopAgents', () => {
   it('respects the limit parameter', async () => {
     const tracker = resetTokenTracker('test-session');
 
-    // Record usage for 5 agents
+    // Record usage for 5 droids
     for (let i = 0; i < 5; i++) {
       await tracker.recordTokenUsage({
         agentName: `agent-${i}`,
@@ -107,7 +107,7 @@ describe('TokenTracker.getTopAgents', () => {
     expect(result[0].agent).toBe('(main session)');
   });
 
-  it('handles mixed agents with and without names', async () => {
+  it('handles mixed droids with and without names', async () => {
     const tracker = resetTokenTracker('test-session');
 
     // Main session usage
@@ -201,10 +201,10 @@ describe('TokenTracker.getTopAgents', () => {
     expect(cachedAgent!.cost).toBeGreaterThan(uncachedAgent!.cost);
   });
 
-  it('returns agents in stable order when costs are equal', async () => {
+  it('returns droids in stable order when costs are equal', async () => {
     const tracker = resetTokenTracker('test-session');
 
-    // Record identical usage for multiple agents
+    // Record identical usage for multiple droids
     for (let i = 0; i < 3; i++) {
       await tracker.recordTokenUsage({
         agentName: `agent-${i}`,

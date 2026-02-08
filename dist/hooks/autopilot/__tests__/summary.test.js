@@ -209,7 +209,7 @@ describe('AutopilotSummary', () => {
             state.execution.files_created = ['a.ts'];
             state.execution.files_modified = ['b.ts'];
             const compact = formatCompactSummary(state);
-            expect(compact).toBe('[AUTOPILOT ✓] Complete | 2 files | 10 agents');
+            expect(compact).toBe('[AUTOPILOT ✓] Complete | 2 files | 10 droids');
         });
         it('should show X for failed phase', () => {
             const state = initAutopilot(testDir, 'Test');

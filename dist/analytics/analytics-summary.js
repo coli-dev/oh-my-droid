@@ -45,7 +45,7 @@ async function getFileMtime(filePath) {
     }
 }
 /**
- * Update top agents list
+ * Update top droids list
  */
 function updateTopAgents(summary, agentName, cost, tokens) {
     let agent = summary.topAgents.find(a => a.agent === agentName);
@@ -109,7 +109,7 @@ async function rebuildSummaryIncremental(sessionId, summaryPath, logPath) {
             cacheReadTokens: record.cacheReadTokens
         });
         summary.totals.estimatedCost += cost.totalCost;
-        // Update top agents (use "(main session)" for entries without agentName)
+        // Update top droids (use "(main session)" for entries without agentName)
         const agentKey = record.agentName || '(main session)';
         updateTopAgents(summary, agentKey, cost.totalCost, record.inputTokens + record.outputTokens);
     }

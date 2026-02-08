@@ -543,7 +543,7 @@ async function main() {
       }
     }
 
-    // Priority 4: Swarm (coordinated agents with SQLite)
+    // Priority 4: Swarm (coordinated droids with SQLite)
     // Note: Swarm only reads from local stateDir, never global fallback
     if (
       swarmMarker &&

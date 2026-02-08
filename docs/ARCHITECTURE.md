@@ -4,7 +4,7 @@
 
 ## Overview
 
-oh-my-droid enables Droid to orchestrate specialized agents through a skill-based routing system.
+oh-my-droid enables Droid to orchestrate specialized droids through a skill-based routing system.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
@@ -25,7 +25,7 @@ oh-my-droid enables Droid to orchestrate specialized agents through a skill-base
                              │  - Multi-file    │           │                 │
                              │  - Parallel OK   │           │ ┌─────────────┐ │
                              │                  │           │ │ Parallel    │ │
-                             │ Skills:          │           │ │ agents      │ │
+                             │ Skills:          │           │ │ droids      │ │
                              │  - ultrawork ✓   │           │ │ launched    │ │
                              │  - default ✓     │           │ └─────────────┘ │
                              │  - git-master ✓  │           │                 │
@@ -40,7 +40,7 @@ oh-my-droid enables Droid to orchestrate specialized agents through a skill-base
 
 ### Skills
 
-Skills are **behavior injections** that modify how the orchestrator operates. Instead of swapping agents, we inject capabilities through composable skills:
+Skills are **behavior injections** that modify how the orchestrator operates. Instead of swapping droids, we inject capabilities through composable skills:
 
 - **Execution Skills**: Primary task handlers (`default`, `planner`, `orchestrate`)
 - **Enhancement Skills**: Additional capabilities (`ultrawork`, `git-master`, `frontend-ui-ux`)
@@ -54,7 +54,7 @@ Skills: ultrawork + default + git-master
 
 ### Agents
 
-32 specialized agents organized by complexity tier:
+32 specialized droids organized by complexity tier:
 
 | Tier | Model | Use For |
 |------|-------|---------|

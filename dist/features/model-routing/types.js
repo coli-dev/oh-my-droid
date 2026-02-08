@@ -24,7 +24,7 @@ export const TIER_TO_MODEL_TYPE = {
 /**
  * Default routing configuration
  *
- * ALL agents are adaptive based on task complexity.
+ * ALL droids are adaptive based on task complexity.
  */
 export const DEFAULT_ROUTING_CONFIG = {
     enabled: true,

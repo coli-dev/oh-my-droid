@@ -1,11 +1,11 @@
 /**
  * Agent Usage Reminder Hook
  *
- * Reminds users to use specialized agents when they make direct tool calls
- * for searching or fetching content instead of delegating to agents.
+ * Reminds users to use specialized droids when they make direct tool calls
+ * for searching or fetching content instead of delegating to droids.
  *
  * This hook tracks tool usage and appends reminder messages to tool outputs
- * when users haven't been using agents effectively.
+ * when users haven't been using droids effectively.
  *
  * Ported from oh-my-opencode's agent-usage-reminder hook.
  * Adapted for Droid's shell-based hook system.

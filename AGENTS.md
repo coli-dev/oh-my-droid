@@ -5,14 +5,14 @@
 Multi-agent orchestration system for Droid CLI, providing intelligent delegation, parallel execution, and IDE-like capabilities through LSP/AST integration.
 
 **Version:** 4.0.0
-**Purpose:** Transform Droid into a conductor of specialized AI agents
+**Purpose:** Transform Droid into a conductor of specialized AI droids
 **Inspired by:** oh-my-zsh / oh-my-opencode
 
 ## Purpose
 
 oh-my-droid enhances Droid with:
 
-- **28 specialized agents** across multiple domains with 3-tier model routing (Haiku/Sonnet/Opus)
+- **28 specialized droids** across multiple domains with 3-tier model routing (Haiku/Sonnet/Opus)
 - **37 skills** for workflow automation and specialized behaviors
 - **31 hooks** for event-driven execution modes and enhancements
 - **15 custom tools** including 12 LSP, 2 AST, and Python REPL
@@ -36,7 +36,7 @@ oh-my-droid enhances Droid with:
 | Directory | Purpose | Related AGENTS.md |
 |-----------|---------|-------------------|
 | `src/` | TypeScript source code - core library | `src/AGENTS.md` |
-| `agents/` | Markdown prompt templates for 28 agents (see `agents/templates/` for guidelines) | - |
+| `droids/` | Markdown prompt templates for 28 droids (see `droids/templates/` for guidelines) | - |
 | `skills/` | 37 skill definitions for workflows | `skills/AGENTS.md` |
 | `commands/` | 31 slash command definitions (mirrors skills) | - |
 | `scripts/` | Build scripts, utilities, and automation | - |
@@ -90,7 +90,7 @@ oh-my-droid enhances Droid with:
 
 | If you modify... | Also check/update... |
 |------------------|---------------------|
-| `agents/*.md` | `src/agents/definitions.ts`, `src/agents/index.ts`, `docs/REFERENCE.md` |
+| `droids/*.md` | `src/droids/definitions.ts`, `src/droids/index.ts`, `docs/REFERENCE.md` |
 | `skills/*/SKILL.md` | `commands/*.md` (mirror), `scripts/build-skill-bridge.mjs` |
 | `commands/*.md` | `skills/*/SKILL.md` (mirror) |
 | `src/hooks/*` | `src/hooks/index.ts`, `src/hooks/bridge.ts`, related skill/command |
@@ -131,14 +131,14 @@ When you modify files in these locations, update the corresponding AGENTS.md:
 |------------------|----------------------|
 | Root project structure, new features | `/AGENTS.md` (this file) |
 | `src/**/*.ts` structure or new modules | `src/AGENTS.md` |
-| `agents/*.md` files | `src/agents/AGENTS.md` (implementation details) |
+| `droids/*.md` files | `src/droids/AGENTS.md` (implementation details) |
 | `skills/*/` directories | `skills/AGENTS.md` |
 | `src/hooks/*/` directories | `src/hooks/AGENTS.md` |
 | `src/tools/**/*.ts` | `src/tools/AGENTS.md` |
 | `src/features/*/` modules | `src/features/AGENTS.md` |
 | `src/tools/lsp/` | `src/tools/lsp/AGENTS.md` |
 | `src/tools/diagnostics/` | `src/tools/diagnostics/AGENTS.md` |
-| `src/agents/*.ts` | `src/agents/AGENTS.md` |
+| `src/droids/*.ts` | `src/droids/AGENTS.md` |
 
 #### What to Update
 
@@ -164,8 +164,8 @@ import { createSisyphusSession } from 'oh-my-droid';
 const session = createSisyphusSession();
 
 // Agent registration
-import { getAgentDefinitions } from './agents/definitions';
-const agents = getAgentDefinitions();
+import { getAgentDefinitions } from './droids/definitions';
+const droids = getAgentDefinitions();
 
 // Tool access
 import { allCustomTools, lspTools, astTools } from './tools';
@@ -180,7 +180,7 @@ import { allCustomTools, lspTools, astTools } from './tools';
 │                  oh-my-droid (OMD)                     │
 │  ┌─────────────┬─────────────┬─────────────┬─────────────┐  │
 │  │   Skills    │   Agents    │    Tools    │   Hooks     │  │
-│  │ (37 skills) │ (28 agents) │(LSP/AST/REPL)│ (31 hooks)  │  │
+│  │ (37 skills) │ (28 droids) │(LSP/AST/REPL)│ (31 hooks)  │  │
 │  └─────────────┴─────────────┴─────────────┴─────────────┘  │
 │  ┌─────────────────────────────────────────────────────────┐│
 │  │              Features Layer                             ││
@@ -234,7 +234,7 @@ import { allCustomTools, lspTools, astTools } from './tools';
 | ultrawork | "ulw", "ultrawork" | Maximum parallel agent execution |
 | ralph | "ralph", "don't stop until" | Persistence with architect verification |
 | ultrapilot | "ultrapilot", "parallel build" | Parallel autopilot with file ownership |
-| swarm | "swarm N agents" | N coordinated agents with SQLite task claiming |
+| swarm | "swarm N droids" | N coordinated droids with SQLite task claiming |
 | pipeline | "pipeline" | Sequential agent chaining with data passing |
 | ecomode | "eco", "efficient", "budget" | Token-efficient parallel execution |
 

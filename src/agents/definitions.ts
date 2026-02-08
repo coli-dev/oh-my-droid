@@ -2,8 +2,8 @@
  * Agent Definitions for Oh-My-Droid-Sisyphus
  *
  * This module provides:
- * 1. Re-exports of base agents from individual files
- * 2. Tiered agent variants with dynamically loaded prompts from /agents/*.md
+ * 1. Re-exports of base droids from individual files
+ * 2. Tiered agent variants with dynamically loaded prompts from /droids/*.md
  * 3. getAgentDefinitions() for agent registry
  * 4. omdSystemPrompt for the main orchestrator
  */
@@ -11,7 +11,7 @@
 import type { AgentConfig, ModelType } from "../shared/types.js";
 import { loadAgentPrompt, parseDisallowedTools } from "./utils.js";
 
-// Re-export base agents from individual files (rebranded names)
+// Re-export base droids from individual files (rebranded names)
 export { architectAgent } from "./architect.js";
 export { designerAgent } from "./designer.js";
 export { writerAgent } from "./writer.js";
@@ -29,7 +29,7 @@ export { exploreAgent } from "./explore.js";
 /** @deprecated Use dependency-expert agent instead */
 export { researcherAgent } from "./researcher.js";
 
-// Import base agents for use in getAgentDefinitions
+// Import base droids for use in getAgentDefinitions
 import { architectAgent } from "./architect.js";
 import { designerAgent } from "./designer.js";
 import { writerAgent } from "./writer.js";
@@ -287,7 +287,7 @@ export const tddGuideAgentAlias = testEngineerAgent;
 /**
  * Agent Role Disambiguation
  *
- * HIGH-tier review/planning agents have distinct, non-overlapping roles:
+ * HIGH-tier review/planning droids have distinct, non-overlapping roles:
  *
  * | Agent | Role | What They Do | What They Don't Do |
  * |-------|------|--------------|-------------------|
@@ -315,7 +315,7 @@ export function getAgentDefinitions(
     defaultModel?: ModelType;
   }
 > {
-  const agents = {
+  const droids = {
     // ============================================================
     // BUILD/ANALYSIS LANE
     // ============================================================
@@ -384,7 +384,7 @@ export function getAgentDefinitions(
     }
   > = {};
 
-  for (const [name, config] of Object.entries(agents)) {
+  for (const [name, config] of Object.entries(droids)) {
     const override = overrides?.[name];
     const disallowedTools =
       config.disallowedTools ?? parseDisallowedTools(name);

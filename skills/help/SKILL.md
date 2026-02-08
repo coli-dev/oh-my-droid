@@ -11,7 +11,7 @@ description: Guide on using oh-my-droid plugin
 
 | When You... | I Automatically... |
 |-------------|-------------------|
-| Give me a complex task | Parallelize and delegate to specialist agents |
+| Give me a complex task | Parallelize and delegate to specialist droids |
 | Ask me to plan something | Start a planning interview |
 | Need something done completely | Persist until verified complete |
 | Work on UI/frontend | Activate design sensibility |
@@ -140,7 +140,7 @@ Based on patterns found, output recommendations:
 
 Format a summary with:
 - Token summary (total, by model)
-- Top agents used
+- Top droids used
 - Underutilized features
 - Personalized recommendations
 

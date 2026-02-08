@@ -12,19 +12,19 @@ export declare function buildHeader(): string;
 /**
  * Build the agent registry section with descriptions
  */
-export declare function buildAgentRegistry(agents: AgentConfig[]): string;
+export declare function buildAgentRegistry(droids: AgentConfig[]): string;
 /**
  * Build the trigger table showing when to use each agent
  */
-export declare function buildTriggerTable(agents: AgentConfig[]): string;
+export declare function buildTriggerTable(droids: AgentConfig[]): string;
 /**
  * Build tool selection guidance section
  */
-export declare function buildToolSelectionSection(agents: AgentConfig[]): string;
+export declare function buildToolSelectionSection(droids: AgentConfig[]): string;
 /**
  * Build delegation matrix/guide table
  */
-export declare function buildDelegationMatrix(agents: AgentConfig[]): string;
+export declare function buildDelegationMatrix(droids: AgentConfig[]): string;
 /**
  * Build orchestration principles section
  */

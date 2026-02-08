@@ -9,7 +9,7 @@ export type ModelType = "sonnet" | "opus" | "haiku" | "inherit";
 
 /**
  * Cost tier for agent usage
- * Used to guide when to invoke expensive vs cheap agents
+ * Used to guide when to invoke expensive vs cheap droids
  */
 export type AgentCost = "FREE" | "CHEAP" | "EXPENSIVE";
 
@@ -117,7 +117,7 @@ export interface AgentOverrideConfig {
 export type AgentOverrides = Partial<Record<string, AgentOverrideConfig>>;
 
 /**
- * Factory function signature for creating agents
+ * Factory function signature for creating droids
  */
 export type AgentFactory = (model?: string) => AgentConfig;
 

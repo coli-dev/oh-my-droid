@@ -9,7 +9,7 @@
 | Persistence until verified done | `ralph` | "ralph", "don't stop" |
 | Parallel execution, manual oversight | `ultrawork` | "ulw", "ultrawork" |
 | Cost-efficient execution | `ecomode` (modifier) | "eco", "budget" |
-| Many similar independent tasks | `swarm` | "swarm N agents" |
+| Many similar independent tasks | `swarm` | "swarm N droids" |
 
 ## If You're Confused
 
@@ -28,10 +28,10 @@ Want autonomous execution?
     │   └── NO: ultrawork alone
     └── NO: Want persistence until verified done?
         ├── YES: ralph (persistence + ultrawork + verification)
-        └── NO: Standard orchestration (delegate to agents directly)
+        └── NO: Standard orchestration (delegate to droids directly)
 
 Have many similar independent tasks (e.g., "fix 47 errors")?
-└── YES: swarm (N agents claiming from task pool)
+└── YES: swarm (N droids claiming from task pool)
 ```
 
 ## Examples
@@ -70,8 +70,8 @@ These modify how other modes work:
 
 | Combination | Effect |
 |-------------|--------|
-| `eco ralph` | Ralph persistence with cheaper agents |
-| `eco ultrawork` | Parallel execution with cheaper agents |
+| `eco ralph` | Ralph persistence with cheaper droids |
+| `eco ultrawork` | Parallel execution with cheaper droids |
 | `eco autopilot` | Autonomous execution with cost savings |
 
 ## Invalid Combinations

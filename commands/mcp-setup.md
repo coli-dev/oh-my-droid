@@ -8,7 +8,7 @@ Configure Model Context Protocol (MCP) servers to extend Droid's capabilities wi
 
 ## Overview
 
-MCP servers provide additional tools that Droid agents can use. This skill helps you configure popular MCP servers in your `~/.factory/settings.json`.
+MCP servers provide additional tools that Droid droids can use. This skill helps you configure popular MCP servers in your `~/.factory/settings.json`.
 
 ## Step 1: Show Available MCP Servers
 
@@ -151,7 +151,7 @@ CONFIGURED SERVERS:
 
 NEXT STEPS:
 1. Restart Droid for changes to take effect
-2. The configured MCP tools will be available to all agents
+2. The configured MCP tools will be available to all droids
 
 USAGE TIPS:
 - Context7: Ask about library documentation (e.g., "How do I use React hooks?")

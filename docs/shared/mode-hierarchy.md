@@ -59,10 +59,10 @@ Want autonomous execution?
     │   └── NO: ultrawork alone
     └── NO: Want persistence until verified done?
         ├── YES: ralph (persistence + ultrawork + verification)
-        └── NO: Standard orchestration (delegate to agents directly)
+        └── NO: Standard orchestration (delegate to droids directly)
 
 Have many similar independent tasks (e.g., "fix 47 errors")?
-└── YES: swarm (N agents claiming from task pool)
+└── YES: swarm (N droids claiming from task pool)
 ```
 
 ## Mode Differentiation Matrix
@@ -88,8 +88,8 @@ Have many similar independent tasks (e.g., "fix 47 errors")?
 ## Combining Modes
 
 Valid combinations:
-- `eco ralph` = Ralph loop with cheaper agents
-- `eco ultrawork` = Parallel execution with cheaper agents
+- `eco ralph` = Ralph loop with cheaper droids
+- `eco ultrawork` = Parallel execution with cheaper droids
 - `eco autopilot` = Full autonomous with cost optimization
 
 Invalid combinations:

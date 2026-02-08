@@ -2,8 +2,8 @@
  * Agent Definitions for Oh-My-Droid-Sisyphus
  *
  * This module provides:
- * 1. Re-exports of base agents from individual files
- * 2. Tiered agent variants with dynamically loaded prompts from /agents/*.md
+ * 1. Re-exports of base droids from individual files
+ * 2. Tiered agent variants with dynamically loaded prompts from /droids/*.md
  * 3. getAgentDefinitions() for agent registry
  * 4. omdSystemPrompt for the main orchestrator
  */
@@ -105,7 +105,7 @@ export declare const tddGuideAgentAlias: AgentConfig;
 /**
  * Agent Role Disambiguation
  *
- * HIGH-tier review/planning agents have distinct, non-overlapping roles:
+ * HIGH-tier review/planning droids have distinct, non-overlapping roles:
  *
  * | Agent | Role | What They Do | What They Don't Do |
  * |-------|------|--------------|-------------------|

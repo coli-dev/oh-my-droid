@@ -243,7 +243,7 @@ To use categories in production:
 
 3. **Integrate with orchestrator:**
    - Add category detection
-   - Map categories to agents
+   - Map categories to droids
    - Use temperature and thinking budget
 
 4. **Monitor usage:**

@@ -64,7 +64,7 @@ Project-level type checking via `lsp_diagnostics_directory` tool.
 
 ## Session Resume
 
-Background agents can be resumed with full context via `resume-session` tool.
+Background droids can be resumed with full context via `resume-session` tool.
 
 ## Ultrapilot (v3.4)
 
@@ -86,7 +86,7 @@ Parallel autopilot with up to 5 concurrent workers for 3-5x faster execution.
 
 ## Swarm (v3.4)
 
-N coordinated agents with atomic task claiming from shared pool.
+N coordinated droids with atomic task claiming from shared pool.
 
 **Usage:** `/swarm 5:executor "fix all TypeScript errors"`
 

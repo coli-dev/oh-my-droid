@@ -40,11 +40,11 @@ oh-my-droid provides comprehensive monitoring capabilities for tracking agent pe
 
 ### Agent Observatory
 
-The Agent Observatory provides real-time visibility into all running agents, their performance metrics, and potential issues.
+The Agent Observatory provides real-time visibility into all running droids, their performance metrics, and potential issues.
 
 #### Accessing the Observatory
 
-The observatory is automatically displayed in the HUD when agents are running. You can also query it programmatically:
+The observatory is automatically displayed in the HUD when droids are running. You can also query it programmatically:
 
 ```typescript
 import { getAgentObservatory } from 'oh-my-droid/hooks/subagent-tracker';
@@ -102,7 +102,7 @@ omd cost monthly
 omd sessions
 
 # View agent breakdown
-omd agents
+omd droids
 
 # Export data
 omd export cost csv ./costs.csv
@@ -199,7 +199,7 @@ The replay system automatically identifies bottlenecks:
 | Preset | Focus | Elements |
 |--------|-------|----------|
 | `minimal` | Clean status | Context bar only |
-| `focused` | Task progress | Todos, agents, modes |
+| `focused` | Task progress | Todos, droids, modes |
 | `full` | Everything | All elements enabled |
 | `analytics` | Cost tracking | Tokens, costs, efficiency |
 | `dense` | Compact all | Compressed format |
@@ -213,7 +213,7 @@ Edit `~/.factory/settings.json`:
   "omdHud": {
     "preset": "focused",
     "elements": {
-      "agents": true,
+      "droids": true,
       "todos": true,
       "contextBar": true,
       "analytics": true
@@ -226,7 +226,7 @@ Edit `~/.factory/settings.json`:
 
 | Element | Description |
 |---------|-------------|
-| `agents` | Active agent count and status |
+| `droids` | Active agent count and status |
 | `todos` | Todo progress (completed/total) |
 | `ralph` | Ralph loop iteration count |
 | `autopilot` | Autopilot phase indicator |
@@ -239,7 +239,7 @@ Edit `~/.factory/settings.json`:
 
 ### Identifying Slow Agents
 
-1. **Check the Observatory** for agents running >2 minutes
+1. **Check the Observatory** for droids running >2 minutes
 2. **Look for bottleneck indicators** (tool averaging >1s)
 3. **Review tool_usage** in agent state
 
@@ -253,26 +253,26 @@ console.log('Bottleneck:', perf.bottleneck);
 
 ### Detecting File Conflicts
 
-When multiple agents modify the same file:
+When multiple droids modify the same file:
 
 ```typescript
 import { detectFileConflicts } from 'oh-my-droid/hooks/subagent-tracker';
 
 const conflicts = detectFileConflicts(process.cwd());
 conflicts.forEach(c => {
-  console.log(`File ${c.file} touched by: ${c.agents.join(', ')}`);
+  console.log(`File ${c.file} touched by: ${c.droids.join(', ')}`);
 });
 ```
 
 ### Intervention System
 
-OMD automatically detects problematic agents:
+OMD automatically detects problematic droids:
 
 | Intervention | Trigger | Action |
 |--------------|---------|--------|
 | `timeout` | Agent running >5 min | Kill suggested |
 | `excessive_cost` | Cost >$1.00 | Warning |
-| `file_conflict` | Multiple agents on file | Warning |
+| `file_conflict` | Multiple droids on file | Warning |
 
 ```typescript
 import { suggestInterventions } from 'oh-my-droid/hooks/subagent-tracker';
@@ -285,7 +285,7 @@ interventions.forEach(i => {
 
 ### Parallel Efficiency Score
 
-Track how well your parallel agents are performing:
+Track how well your parallel droids are performing:
 
 ```typescript
 import { calculateParallelEfficiency } from 'oh-my-droid/hooks/subagent-tracker';
@@ -295,19 +295,19 @@ console.log(`Efficiency: ${eff.score}%`);
 console.log(`Active: ${eff.active}, Stale: ${eff.stale}, Total: ${eff.total}`);
 ```
 
-- **100%**: All agents actively working
-- **<80%**: Some agents stale or waiting
+- **100%**: All droids actively working
+- **<80%**: Some droids stale or waiting
 - **<50%**: Significant parallelization issues
 
 ### Stale Agent Cleanup
 
-Clean up agents that exceed the timeout threshold:
+Clean up droids that exceed the timeout threshold:
 
 ```typescript
 import { cleanupStaleAgents } from 'oh-my-droid/hooks/subagent-tracker';
 
 const cleaned = cleanupStaleAgents(process.cwd());
-console.log(`Cleaned ${cleaned} stale agents`);
+console.log(`Cleaned ${cleaned} stale droids`);
 ```
 
 ---
@@ -419,7 +419,7 @@ cleanupReplayFiles(process.cwd()); // Keeps last 10 sessions
 **Solutions**:
 1. Use `eco` mode for token-efficient execution: `eco fix all errors`
 2. Check for unnecessary file reads in agent prompts
-3. Review `omd agents` for agent-level breakdown
+3. Review `omd droids` for agent-level breakdown
 4. Enable cache - check cache efficiency in analytics
 
 ### Slow Agent Execution
@@ -429,7 +429,7 @@ cleanupReplayFiles(process.cwd()); // Keeps last 10 sessions
 **Solutions**:
 1. Check Observatory for bottleneck indicators
 2. Review tool_usage for slow operations
-3. Consider splitting large tasks into smaller agents
+3. Consider splitting large tasks into smaller droids
 4. Use `architect-low` instead of `architect` for simple verifications
 
 ### File Conflicts
@@ -454,7 +454,7 @@ cleanupReplayFiles(process.cwd()); // Keeps last 10 sessions
 
 ### Stale Agent State
 
-**Symptoms**: Observatory showing agents that aren't running
+**Symptoms**: Observatory showing droids that aren't running
 
 **Solutions**:
 1. Run `cleanupStaleAgents(cwd)` programmatically
@@ -492,7 +492,7 @@ calculateParallelEfficiency(directory: string): { score, active, stale, total }
 
 // File ownership
 recordFileOwnership(directory: string, agentId: string, filePath: string): void
-detectFileConflicts(directory: string): Array<{ file, agents }>
+detectFileConflicts(directory: string): Array<{ file, droids }>
 getFileOwnershipMap(directory: string): Map<string, string>
 
 // Interventions

@@ -8,7 +8,7 @@
  */
 import type { AgentConfig, AgentPromptMetadata, AvailableAgent, AgentOverrideConfig } from './types.js';
 /**
- * Load an agent prompt from /agents/{agentName}.md
+ * Load an agent prompt from /droids/{agentName}.md
  * Strips YAML frontmatter and returns the content
  *
  * Security: Validates agent name to prevent path traversal attacks
@@ -34,13 +34,13 @@ export declare function buildDelegationTable(availableAgents: AvailableAgent[]):
  */
 export declare function buildUseAvoidSection(metadata: AgentPromptMetadata): string;
 /**
- * Create environment context for agents
+ * Create environment context for droids
  */
 export declare function createEnvContext(): string;
 /**
- * Get all available agents as AvailableAgent descriptors
+ * Get all available droids as AvailableAgent descriptors
  */
-export declare function getAvailableAgents(agents: Record<string, AgentConfig>): AvailableAgent[];
+export declare function getAvailableAgents(droids: Record<string, AgentConfig>): AvailableAgent[];
 /**
  * Build key triggers section for Sisyphus prompt
  */

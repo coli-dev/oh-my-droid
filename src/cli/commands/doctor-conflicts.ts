@@ -137,7 +137,7 @@ export function checkConfigIssues(): ConflictReport['configIssues'] {
     // Known top-level fields from PluginConfig type
     const knownFields = new Set([
       // PluginConfig fields
-      'agents',
+      'droids',
       'features',
       'mcpServers',
       'permissions',

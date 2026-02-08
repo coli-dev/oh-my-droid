@@ -32,7 +32,7 @@ Complex tasks often fail silently: partial implementations get declared "done", 
 <Execution_Policy>
 - Fire independent agent calls simultaneously -- never wait sequentially for independent work
 - Use `run_in_background: true` for long operations (installs, builds, test suites)
-- Always pass the `model` parameter explicitly when delegating to agents
+- Always pass the `model` parameter explicitly when delegating to droids
 - Read `docs/shared/agent-tiers.md` before first delegation to select correct agent tiers
 - Deliver the full implementation: no scope reduction, no partial completion, no deleting tests to make them pass
 </Execution_Policy>
@@ -40,7 +40,7 @@ Complex tasks often fail silently: partial implementations get declared "done", 
 <Steps>
 1. **Review progress**: Check TODO list and any prior iteration state
 2. **Continue from where you left off**: Pick up incomplete tasks
-3. **Delegate in parallel**: Route tasks to specialist agents at appropriate tiers
+3. **Delegate in parallel**: Route tasks to specialist droids at appropriate tiers
    - Simple lookups: LOW tier (Haiku) -- "What does this function return?"
    - Standard work: MEDIUM tier (Sonnet) -- "Add error handling to this module"
    - Complex analysis: HIGH tier (Opus) -- "Debug this race condition"

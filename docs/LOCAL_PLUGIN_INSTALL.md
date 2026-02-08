@@ -50,7 +50,7 @@ The plugin requires a `plugin.json` manifest:
     "PostToolUse": ["scripts/post-tool-verifier.mjs"],
     "SessionStart": ["scripts/session-start.mjs"]
   },
-  "agents": ["agents/*.md"],
+  "droids": ["droids/*.md"],
   "commands": ["commands/**/*.md"],
   "skills": ["skills/*.md"]
 }
@@ -78,7 +78,7 @@ droid plugin update oh-my-droid@oh-my-droid
 | Method | Command | Files Location |
 |--------|---------|----------------|
 | Plugin | `droid plugin install` | `~/.factory/plugins/cache/` |
-| npm global | `npm install -g` | `~/.factory/agents/`, `~/.factory/commands/` |
+| npm global | `npm install -g` | `~/.factory/droids/`, `~/.factory/commands/` |
 
 **Plugin mode is preferred** - it keeps files isolated and uses the native Droid plugin system with `${DROID_PLUGIN_ROOT}` variable for path resolution.
 

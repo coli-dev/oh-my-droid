@@ -295,9 +295,9 @@ export function formatSummary(summary) {
 export function formatCompactSummary(state) {
     const phase = state.phase.toUpperCase();
     const files = state.execution.files_created.length + state.execution.files_modified.length;
-    const agents = state.total_agents_spawned;
+    const droids = state.total_agents_spawned;
     if (state.phase === 'complete') {
-        return `[AUTOPILOT ✓] Complete | ${files} files | ${agents} agents`;
+        return `[AUTOPILOT ✓] Complete | ${files} files | ${droids} droids`;
     }
     if (state.phase === 'failed') {
         return `[AUTOPILOT ✗] Failed at ${state.phase}`;

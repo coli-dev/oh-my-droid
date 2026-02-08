@@ -22,7 +22,7 @@ Skills are reusable workflow templates that can be invoked via `/oh-my-droid:ski
 | `ultrawork/SKILL.md` | ultrawork | Maximum parallel agent execution |
 | `ralph/SKILL.md` | ralph | Persistence until verified complete |
 | `ultrapilot/SKILL.md` | ultrapilot | Parallel autopilot with file ownership |
-| `swarm/SKILL.md` | swarm | N coordinated agents with task claiming |
+| `swarm/SKILL.md` | swarm | N coordinated droids with task claiming |
 | `pipeline/SKILL.md` | pipeline | Sequential agent chaining |
 | `ecomode/SKILL.md` | ecomode | Token-efficient parallel execution |
 | `ultraqa/SKILL.md` | ultraqa | QA cycling until goal met |
@@ -167,7 +167,7 @@ Any configurable options.
 
 ### Internal
 - Loaded by skill bridge (`scripts/build-skill-bridge.mjs`)
-- References agents from `agents/`
+- References droids from `droids/`
 - Uses hooks from `src/hooks/`
 
 ### External

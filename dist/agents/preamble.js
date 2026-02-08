@@ -1,15 +1,15 @@
 /**
  * Worker Preamble Protocol
  *
- * Provides standardized preamble for delegating work to worker agents.
- * This prevents agents from spawning sub-agents and ensures they execute tasks directly.
+ * Provides standardized preamble for delegating work to worker droids.
+ * This prevents droids from spawning sub-droids and ensures they execute tasks directly.
  */
 export const WORKER_PREAMBLE = `CONTEXT: You are a WORKER agent, not an orchestrator.
 
 RULES:
 - Complete ONLY the task described below
 - Use tools directly (Read, Write, Edit, Bash, etc.)
-- Do NOT spawn sub-agents
+- Do NOT spawn sub-droids
 - Do NOT call TaskCreate or TaskUpdate
 - Report your results with absolute file paths
 
@@ -39,7 +39,7 @@ WORKFLOW:
 11. If no more tasks, notify lead: SendMessage(type: "message", recipient: "team-lead", content: "All assigned tasks complete. Standing by.", summary: "Standing by")
 
 RULES:
-- Do NOT spawn sub-agents or use the Task tool
+- Do NOT spawn sub-droids or use the Task tool
 - Do NOT call TaskCreate (only the team lead creates tasks)
 - Do NOT edit files outside your task's described scope without lead approval
 - Do NOT change task owner fields (lead manages assignment)
@@ -74,7 +74,7 @@ export function wrapWithTeamPreamble(taskDescription, teamName, workerName) {
 /**
  * Template for prompts sent to MCP workers (Codex/Gemini CLIs).
  *
- * Unlike WORKER_PREAMBLE (for Droid agents that call tools directly),
+ * Unlike WORKER_PREAMBLE (for Droid droids that call tools directly),
  * MCP workers are autonomous executors with filesystem access but no team tools.
  * The bridge handles all team protocol on their behalf.
  */

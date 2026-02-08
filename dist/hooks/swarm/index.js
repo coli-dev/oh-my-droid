@@ -2,7 +2,7 @@
  * Swarm Coordination System
  *
  * SQLite-based multi-agent task coordination.
- * Enables N agents to claim and work on tasks from a shared pool
+ * Enables N droids to claim and work on tasks from a shared pool
  * with atomic claiming, lease-based ownership, and heartbeat monitoring.
  *
  * Usage:
@@ -231,7 +231,7 @@ export function heartbeat(agentId) {
     return heartbeatInternal(agentId);
 }
 /**
- * Clean up stale claims from dead agents
+ * Clean up stale claims from dead droids
  *
  * Called automatically by the cleanup timer, but can also be called manually.
  *
@@ -258,9 +258,9 @@ export function isSwarmComplete() {
     return allTasksComplete();
 }
 /**
- * Get the number of active agents
+ * Get the number of active droids
  *
- * @returns Number of agents with recent heartbeats
+ * @returns Number of droids with recent heartbeats
  */
 export function getActiveAgents() {
     return getActiveAgentCount();
@@ -360,10 +360,10 @@ export function addMoreTasks(tasks) {
     return { added: tasks.length, startingId };
 }
 /**
- * Get available slots for spawning new agents
+ * Get available slots for spawning new droids
  * Simple calculation from existing stats
  *
- * @param maxConcurrent - Maximum concurrent agents (default: 5)
+ * @param maxConcurrent - Maximum concurrent droids (default: 5)
  * @returns Number of available slots
  */
 export function getAvailableSlots(maxConcurrent = 5) {
@@ -392,7 +392,7 @@ export function isSwarmReady() {
 /**
  * Initialize database without starting a swarm
  *
- * Useful for agents that join an existing swarm.
+ * Useful for droids that join an existing swarm.
  *
  * @param cwd - Working directory
  * @returns true if database was initialized

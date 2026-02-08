@@ -1,11 +1,11 @@
 ---
 name: team
-description: N coordinated agents on shared task list using Droid native teams
+description: N coordinated droids on shared task list using Droid native teams
 ---
 
 # Team Skill
 
-Spawn N coordinated agents working on a shared task list using Droid's native team tools. Replaces the legacy `/swarm` skill (SQLite-based) with built-in team management, inter-agent messaging, and task dependencies -- no external dependencies required.
+Spawn N coordinated droids working on a shared task list using Droid's native team tools. Replaces the legacy `/swarm` skill (SQLite-based) with built-in team management, inter-agent messaging, and task dependencies -- no external dependencies required.
 
 ## Usage
 
@@ -15,7 +15,7 @@ Spawn N coordinated agents working on a shared task list using Droid's native te
 
 ### Parameters
 
-- **N** - Number of teammate agents (1-5, enforced by Droid limit)
+- **N** - Number of teammate droids (1-5, enforced by Droid limit)
 - **agent-type** - OMD agent to spawn (e.g., executor, executor-low, build-fixer, designer)
 - **task** - High-level task to decompose and distribute among teammates
 
@@ -203,7 +203,7 @@ Spawn N teammates using `Task` with `team_name` and `name` parameters. Each team
 - An **internal task** is auto-created (with `metadata._internal: true`) tracking the agent lifecycle
 - Internal tasks appear in `TaskList` output -- filter them when counting real tasks
 
-**IMPORTANT:** Spawn all teammates in parallel (they are background agents). Do NOT wait for one to finish before spawning the next.
+**IMPORTANT:** Spawn all teammates in parallel (they are background droids). Do NOT wait for one to finish before spawning the next.
 
 ### Phase 6: Monitor
 
@@ -278,7 +278,7 @@ You report to the team lead ("team-lead").
    {"taskId": "ID", "status": "in_progress", "owner": "{worker_name}"}
 
 2. WORK: Execute the task using your tools (Read, Write, Edit, Bash).
-   Do NOT spawn sub-agents. Do NOT delegate. Work directly.
+   Do NOT spawn sub-droids. Do NOT delegate. Work directly.
 
 3. COMPLETE: When done, mark the task completed:
    {"taskId": "ID", "status": "completed"}
@@ -303,7 +303,7 @@ If you cannot complete a task, report the failure to the lead:
 Do NOT mark the task as completed. Leave it in_progress so the lead can reassign.
 
 == RULES ==
-- NEVER spawn sub-agents or use the Task tool
+- NEVER spawn sub-droids or use the Task tool
 - ALWAYS use absolute file paths
 - ALWAYS report progress via SendMessage to "team-lead"
 - Use SendMessage with type "message" only -- never "broadcast"
@@ -438,7 +438,7 @@ For large ambiguous tasks, run analysis before team creation:
 3. Use the analysis to produce better task decomposition
 4. Create team and tasks with enriched context
 
-If ToolSearch finds no MCP tools, skip MCP pre-flight and use Droid agents instead.
+If ToolSearch finds no MCP tools, skip MCP pre-flight and use Droid droids instead.
 
 This is especially useful when the task scope is unclear and benefits from external reasoning before committing to a specific decomposition.
 
@@ -551,8 +551,8 @@ This prevents duplicate teams and allows graceful recovery from lead failures.
 | **Storage** | JSON files in `~/.factory/teams/` and `~/.factory/tasks/` | SQLite in `.omd/state/swarm.db` |
 | **Dependencies** | `better-sqlite3` not needed | Requires `better-sqlite3` npm package |
 | **Task claiming** | `TaskUpdate(owner + in_progress)` -- lead pre-assigns | SQLite IMMEDIATE transaction -- atomic |
-| **Race conditions** | Possible if two agents claim same task (mitigate by pre-assigning) | None (SQLite transactions) |
-| **Communication** | `SendMessage` (DM, broadcast, shutdown) | None (fire-and-forget agents) |
+| **Race conditions** | Possible if two droids claim same task (mitigate by pre-assigning) | None (SQLite transactions) |
+| **Communication** | `SendMessage` (DM, broadcast, shutdown) | None (fire-and-forget droids) |
 | **Task dependencies** | Built-in `blocks` / `blockedBy` arrays | Not supported |
 | **Heartbeat** | Automatic idle notifications from Droid | Manual heartbeat table + polling |
 | **Shutdown** | Graceful request/response protocol | Signal-based termination |

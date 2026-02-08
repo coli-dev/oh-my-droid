@@ -53,17 +53,17 @@ autopilot: build a REST API for a bookstore inventory with CRUD operations for b
 - "Now the architect is designing the system structure"
 - "The critic reviews the architecture to catch issues early"
 - "This is multi-agent consensus - no single agent makes all decisions"
-- Point to HUD: "See the active agents in the statusline"
+- Point to HUD: "See the active droids in the statusline"
 
 ### Phase 3: Execution (1:30-3:30)
 **What happens:**
-- Multiple executor agents spawned in parallel
+- Multiple executor droids spawned in parallel
 - Files created: `src/models/Book.ts`, `src/routes/books.ts`, `src/app.ts`
 - Dependencies installed: express, typescript, validation libs
 - Tests written: `tests/books.test.ts`
 
 **Presenter talking points:**
-- "Now multiple executor agents work in parallel"
+- "Now multiple executor droids work in parallel"
 - "One handles models, another routes, another tests"
 - "All happening simultaneously - this is ultrawork embedded in autopilot"
 - "Dependencies are installing in the background"
@@ -77,7 +77,7 @@ autopilot: build a REST API for a bookstore inventory with CRUD operations for b
 
 **Presenter talking points:**
 - "QA cycle: build, test, fix errors, repeat"
-- "If tests fail, agents debug and fix automatically"
+- "If tests fail, droids debug and fix automatically"
 - "This is the persistence - it won't stop until everything works"
 
 ### Phase 5: Validation (4:30-5:00)
@@ -88,7 +88,7 @@ autopilot: build a REST API for a bookstore inventory with CRUD operations for b
 - Final approval and summary
 
 **Presenter talking points:**
-- "Final validation by architect, security, and code review agents"
+- "Final validation by architect, security, and code review droids"
 - "Only completes when all verifications pass"
 - "This is what 'done' means in autopilot - truly production-ready"
 
@@ -136,7 +136,7 @@ npm test  # All passing
 ### What makes autopilot special?
 1. **Zero manual steps** - From idea to working code with one command
 2. **Multi-phase workflow** - Expansion → Planning → Execution → QA → Validation
-3. **Embedded parallelism** - Multiple agents work simultaneously
+3. **Embedded parallelism** - Multiple droids work simultaneously
 4. **Self-correction** - Automatically fixes errors until tests pass
 5. **Production-ready** - Not just "works on my machine" - fully validated
 
@@ -148,7 +148,7 @@ npm test  # All passing
 ### Architecture highlight
 - "Notice we didn't specify 'use TypeScript' or 'write tests' - autopilot chose best practices automatically"
 - "The analyst expanded our vague request into a proper specification"
-- "Multiple agents collaborated - no single agent did everything"
+- "Multiple droids collaborated - no single agent did everything"
 
 ## Fallback: Pre-recorded Output
 
@@ -180,7 +180,7 @@ Spawning critic to validate design...
   - Suggested: Add input validation middleware
 
 [EXECUTION PHASE - PARALLEL]
-Spawning 3 executor agents...
+Spawning 3 executor droids...
 
 [executor-1] Creating data models...
 [executor-2] Implementing routes...
@@ -226,7 +226,7 @@ Summary:
   - Ready for deployment
 
 Total time: 3m 42s
-Active agents used: 8 (analyst, architect, critic, 3x executor, qa-tester, security-reviewer, code-reviewer)
+Active droids used: 8 (analyst, architect, critic, 3x executor, qa-tester, security-reviewer, code-reviewer)
 
 Next steps:
   - Run: npm start
@@ -261,8 +261,8 @@ Next steps:
 
 ## Q&A Preparation
 
-**Q: How does it choose which agents to spawn?**
-A: The autopilot orchestrator analyzes the task and selects appropriate specialists. For a REST API, it knows to use analysts for specs, architects for design, executors for implementation, and QA agents for testing.
+**Q: How does it choose which droids to spawn?**
+A: The autopilot orchestrator analyzes the task and selects appropriate specialists. For a REST API, it knows to use analysts for specs, architects for design, executors for implementation, and QA droids for testing.
 
 **Q: What if I don't like the choices it made?**
 A: You can guide it with constraints: "autopilot: build a REST API using Go and PostgreSQL" or use planning mode first to review before execution.

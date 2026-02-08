@@ -61,7 +61,7 @@ export declare function decomposeTask(task: string, config: Required<UltrapilotC
 /**
  * Spawn parallel workers for subtasks
  *
- * Creates Task agents for each subtask with non-overlapping file ownership.
+ * Creates Task droids for each subtask with non-overlapping file ownership.
  *
  * @param cwd - Current working directory
  * @param subtasks - Array of subtask descriptions

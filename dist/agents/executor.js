@@ -5,7 +5,7 @@
  * Same discipline as Sisyphus, but works alone.
  *
  * Ported from oh-my-opencode's executor agent.
- * Prompt loaded from: agents/executor.md
+ * Prompt loaded from: droids/executor.md
  */
 import { loadAgentPrompt } from './utils.js';
 export const SISYPHUS_JUNIOR_PROMPT_METADATA = {
@@ -31,7 +31,7 @@ export const SISYPHUS_JUNIOR_PROMPT_METADATA = {
 };
 export const executorAgent = {
     name: 'executor',
-    description: 'Focused task executor. Execute tasks directly. NEVER delegate or spawn other agents. Same discipline as Sisyphus, no delegation.',
+    description: 'Focused task executor. Execute tasks directly. NEVER delegate or spawn other droids. Same discipline as Sisyphus, no delegation.',
     prompt: loadAgentPrompt('executor'),
     model: 'sonnet',
     defaultModel: 'sonnet',

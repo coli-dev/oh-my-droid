@@ -164,7 +164,7 @@ Ralph and Ultrawork are now active. Execute tasks in parallel where possible.
 
 - Read the plan from ${planPath}
 - Identify independent tasks that can run in parallel
-- Spawn multiple executor agents for parallel work
+- Spawn multiple executor droids for parallel work
 - Track progress in the TODO list
 - Use appropriate agent tiers based on task complexity
 

@@ -23,10 +23,10 @@ async function main() {
 
   const customSession = createSisyphusSession({
     config: {
-      agents: {
+      droids: {
         // Use a faster model for the orchestrator in dev
         sisyphus: { model: 'claude-sonnet-4-5-20250514' },
-        // Disable some agents
+        // Disable some droids
         frontendEngineer: { enabled: false },
         documentWriter: { enabled: false }
       },
@@ -45,15 +45,15 @@ async function main() {
   // Example 2: Get agent definitions for custom use
   console.log('Example 2: Agent Definitions');
 
-  const agents = getAgentDefinitions({
+  const droids = getAgentDefinitions({
     oracle: {
       // Override oracle's prompt for a specific use case
       prompt: 'You are a security-focused code reviewer...'
     }
   });
 
-  console.log('Available agents:');
-  for (const [name, agent] of Object.entries(agents)) {
+  console.log('Available droids:');
+  for (const [name, agent] of Object.entries(droids)) {
     console.log(`  - ${name}: ${agent.tools.join(', ')}`);
   }
   console.log('');
@@ -113,7 +113,7 @@ Always:
 3. Document all modifications
 `,
     config: {
-      agents: {
+      droids: {
         sisyphus: { model: 'claude-opus-4-6-20260205' }
       },
       features: {

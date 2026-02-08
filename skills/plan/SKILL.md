@@ -95,7 +95,7 @@ Plans are saved to `.omd/plans/`. Drafts go to `.omd/drafts/`.
 - Use `ask_codex` with `agent_role: "planner"` for planning validation on large-scope plans
 - Use `ask_codex` with `agent_role: "analyst"` for requirements analysis
 - Use `ask_codex` with `agent_role: "critic"` for plan review in consensus and review modes
-- If ToolSearch finds no MCP tools or Codex is unavailable, fall back to equivalent Droid agents -- never block on external tools
+- If ToolSearch finds no MCP tools or Codex is unavailable, fall back to equivalent Droid droids -- never block on external tools
 </Tool_Usage>
 
 <Examples>

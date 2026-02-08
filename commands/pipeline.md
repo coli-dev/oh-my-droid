@@ -7,7 +7,7 @@ aliases: [pipe, chain]
 
 [PIPELINE MODE ACTIVATED]
 
-Chain multiple agents together in sequential workflows where output from one agent flows to the next. Like Unix pipes for AI agents.
+Chain multiple droids together in sequential workflows where output from one agent flows to the next. Like Unix pipes for AI droids.
 
 ## User's Request
 
@@ -15,7 +15,7 @@ Chain multiple agents together in sequential workflows where output from one age
 
 ## Mission
 
-Execute a pipeline of agents where each stage receives context from previous stages and passes refined output to the next.
+Execute a pipeline of droids where each stage receives context from previous stages and passes refined output to the next.
 
 ## Usage Patterns
 
@@ -43,7 +43,7 @@ Define your own agent sequence:
 
 ### With Parallel Stages
 
-Run agents in parallel then merge:
+Run droids in parallel then merge:
 
 ```
 /oh-my-droid:pipeline [explore, researcher] -> architect -> executor "implement OAuth"
@@ -152,7 +152,7 @@ For each stage:
 ### 4. Handle Parallel Stages
 
 When parallel stages detected (e.g., `[explore, researcher]`):
-1. Spawn multiple agents with `run_in_background: true`
+1. Spawn multiple droids with `run_in_background: true`
 2. Wait for all to complete
 3. Merge outputs (concat or summarize)
 4. Pass merged output to next stage

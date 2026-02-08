@@ -97,11 +97,11 @@ Note: These are real problems I faced building production applications with Droi
         +---------+    +---------+    +---------+
 ```
 
-- 28 specialized agents <!-- .element: class="fragment" -->
+- 28 specialized droids <!-- .element: class="fragment" -->
 - 37 skills <!-- .element: class="fragment" -->
 - Zero configuration required <!-- .element: class="fragment" -->
 
-Note: OMD transforms Droid from a single performer into a conductor of an orchestra of specialized AI agents.
+Note: OMD transforms Droid from a single performer into a conductor of an orchestra of specialized AI droids.
 
 ---
 
@@ -134,7 +134,7 @@ Note: This is the core mental model. Droid stops being a generalist trying to do
 
 | Aspect | Before OMD | After OMD |
 |--------|-----------|-----------|
-| **Task execution** | Single-threaded | Parallel agents |
+| **Task execution** | Single-threaded | Parallel droids |
 | **Complex tasks** | Manual breakdown | Automatic decomposition |
 | **Model selection** | Always same model | Smart routing (Haiku/Sonnet/Opus) |
 | **Persistence** | Gives up easily | Continues until verified |
@@ -145,7 +145,7 @@ Note: This is the core mental model. Droid stops being a generalist trying to do
 
 Before: You manually find and fix each error sequentially
 
-After: 5 parallel agents claim and fix errors simultaneously
+After: 5 parallel droids claim and fix errors simultaneously
 
 Note: The cost savings come from using Haiku ($0.25/1M tokens) for simple tasks instead of Opus ($15/1M tokens).
 
@@ -208,7 +208,7 @@ Note: Smart model routing means using the cheapest model that can handle the tas
      +---------------+      +---------------+      +---------------+
 ```
 
-Note: The architecture has three layers - keywords trigger skills, skills coordinate agents, agents do the actual work.
+Note: The architecture has three layers - keywords trigger skills, skills coordinate droids, droids do the actual work.
 
 ---
 <!-- .slide: data-background="#1a1a2e" -->
@@ -230,7 +230,7 @@ Note: The architecture has three layers - keywords trigger skills, skills coordi
 
 1. **Expansion** - Turn vague idea into detailed spec
 2. **Planning** - Create implementation plan with validation
-3. **Execution** - Build with parallel agents (Ralph + Ultrawork)
+3. **Execution** - Build with parallel droids (Ralph + Ultrawork)
 4. **QA** - Test until everything passes (up to 5 cycles)
 5. **Validation** - Multi-reviewer approval (Architect + Security + Code Review)
 
@@ -384,7 +384,7 @@ Note: If your task has 3+ independent components, ultrapilot will likely be fast
 
 ## Mode 3: Swarm - What Is It?
 
-**N coordinated agents with atomic task claiming**
+**N coordinated droids with atomic task claiming**
 
 ```
 /swarm 5:executor "fix all TypeScript errors"
@@ -411,7 +411,7 @@ Note: Swarm is like having a team of developers tackling a shared task list. Any
    +--+--+--+--+--+
    |  |  |  |  |
    v  v  v  v  v
-  E1 E2 E3 E4 E5    <-- 5 Executor agents
+  E1 E2 E3 E4 E5    <-- 5 Executor droids
    |  |  |  |  |
    +--+--+--+--+
           |
@@ -435,7 +435,7 @@ Note: Swarm is like having a team of developers tackling a shared task list. Any
 3. Agent works on task
 4. Agent calls `completeTask()` or `failTask()`
 
-Note: SQLite transactions guarantee no two agents can claim the same task - true atomicity.
+Note: SQLite transactions guarantee no two droids can claim the same task - true atomicity.
 
 ---
 
@@ -470,7 +470,7 @@ Note: Swarm excels when you have many independent tasks that don't depend on eac
 
 **Sequential agent chaining with data passing**
 
-Like Unix pipes, but for AI agents.
+Like Unix pipes, but for AI droids.
 
 ```
 /pipeline explore -> architect -> executor "add authentication"
@@ -803,7 +803,7 @@ ulw fix all TypeScript errors
 Scanning for TypeScript errors...
 Found 23 errors across 8 files.
 
-Spawning parallel agents:
+Spawning parallel droids:
   [executor-low:1] -> src/api/routes.ts (5 errors)
   [executor-low:2] -> src/api/handlers.ts (3 errors)
   [executor-low:3] -> src/ui/App.tsx (4 errors)
@@ -983,12 +983,12 @@ Note: Keywords are optional - natural language works fine. Keywords just give yo
 
 ```
 +------------------------------------------------------------+
-| OMD | autopilot:exec | 3 agents | 5/12 tasks | ctx:45% | $2.34 |
+| OMD | autopilot:exec | 3 droids | 5/12 tasks | ctx:45% | $2.34 |
 +------------------------------------------------------------+
       ^               ^          ^            ^         ^
       |               |          |            |         |
    Active mode    # running   Progress    Context    Cost
-                  agents                  window
+                  droids                  window
 ```
 
 **Setup:**
@@ -1149,9 +1149,9 @@ Note: Zero learning curve means you can start using OMD immediately after instal
 ```
 
 **Agent Customization:**
-- Modify agent prompts in `agents/*.md`
+- Modify agent prompts in `droids/*.md`
 - Override tools per agent
-- Create custom agents
+- Create custom droids
 
 Note: Most users never need to configure anything - defaults work well for typical usage.
 
@@ -1224,7 +1224,7 @@ Note: The GitHub repo has all documentation, examples, and issue tracking.
 | Can I use OMD with other AI models? | No, OMD is specifically for Droid |
 | How do I stop a runaway autopilot? | Say "stop", "cancel", or `/oh-my-droid:cancel` |
 | Why is my HUD not showing? | Run `/oh-my-droid:hud setup` |
-| Can I create custom agents? | Yes, add `.md` files to `agents/` directory |
+| Can I create custom droids? | Yes, add `.md` files to `droids/` directory |
 | Is there a cost limit? | No built-in limit, but ecomode helps control costs |
 
 **Questions?**
@@ -1308,7 +1308,7 @@ autopilot: build something amazing
 | ralph | Persistence mode | "ralph", "don't stop" |
 | ultrawork | Maximum parallelism | "ulw", "ultrawork" |
 | ecomode | Token-efficient mode | "eco", "budget" |
-| swarm | Coordinated agents | `/swarm N:agent` |
+| swarm | Coordinated droids | `/swarm N:agent` |
 | pipeline | Sequential chaining | `/pipeline preset` |
 | plan | Planning interview | "plan the" |
 | ralplan | Iterative planning | "ralplan" |

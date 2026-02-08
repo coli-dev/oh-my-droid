@@ -62,7 +62,7 @@ If you experience issues after updating, clear the old plugin cache:
 
 - **Zero configuration required** - Works out of the box with intelligent defaults
 - **Natural language interface** - No commands to memorize, just describe what you want
-- **Automatic parallelization** - Complex tasks distributed across specialized agents
+- **Automatic parallelization** - Complex tasks distributed across specialized droids
 - **Persistent execution** - Won't give up until the job is verified complete
 - **Cost optimization** - Smart model routing saves 30-50% on tokens
 - **Learn from experience** - Automatically extracts and reuses problem-solving patterns
@@ -87,7 +87,7 @@ Multiple strategies for different use cases - from fully autonomous builds to to
 
 ### Intelligent Orchestration
 
-- **32 specialized agents** for architecture, research, design, testing, data science
+- **32 specialized droids** for architecture, research, design, testing, data science
 - **Smart model routing** - Haiku for simple tasks, Opus for complex reasoning
 - **Automatic delegation** - Right agent for the job, every time
 

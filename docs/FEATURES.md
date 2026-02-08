@@ -15,7 +15,7 @@
 
 ## Notepad Wisdom System
 
-Plan-scoped knowledge capture for agents executing tasks. Each plan gets its own notepad directory at `.omd/notepads/{plan-name}/` with four markdown files:
+Plan-scoped knowledge capture for droids executing tasks. Each plan gets its own notepad directory at `.omd/notepads/{plan-name}/` with four markdown files:
 
 - **learnings.md**: Patterns, conventions, successful approaches
 - **decisions.md**: Architectural choices and rationales
@@ -220,17 +220,17 @@ Generate orchestrator prompts dynamically from agent metadata. Adding a new agen
 
 ```typescript
 // Generate full orchestrator prompt
-generateOrchestratorPrompt(agents: AgentConfig[], options?: GeneratorOptions): string
+generateOrchestratorPrompt(droids: AgentConfig[], options?: GeneratorOptions): string
 
 // Convert definitions to configs
 convertDefinitionsToConfigs(definitions: Record<string, {...}>): AgentConfig[]
 
 // Individual section builders
 buildHeader(): string
-buildAgentRegistry(agents: AgentConfig[]): string
-buildTriggerTable(agents: AgentConfig[]): string
-buildToolSelectionSection(agents: AgentConfig[]): string
-buildDelegationMatrix(agents: AgentConfig[]): string
+buildAgentRegistry(droids: AgentConfig[]): string
+buildTriggerTable(droids: AgentConfig[]): string
+buildToolSelectionSection(droids: AgentConfig[]): string
+buildDelegationMatrix(droids: AgentConfig[]): string
 buildOrchestrationPrinciples(): string
 buildWorkflow(): string
 buildCriticalRules(): string
@@ -255,12 +255,12 @@ export interface GeneratorOptions {
 ### Usage Example
 
 ```typescript
-import { getAgentDefinitions } from '@/agents/definitions';
-import { generateOrchestratorPrompt, convertDefinitionsToConfigs } from '@/agents/prompt-generator';
+import { getAgentDefinitions } from '@/droids/definitions';
+import { generateOrchestratorPrompt, convertDefinitionsToConfigs } from '@/droids/prompt-generator';
 
 const definitions = getAgentDefinitions();
-const agents = convertDefinitionsToConfigs(definitions);
-const prompt = generateOrchestratorPrompt(agents);
+const droids = convertDefinitionsToConfigs(definitions);
+const prompt = generateOrchestratorPrompt(droids);
 ```
 
 ---
@@ -282,7 +282,7 @@ For exploration, research, or search tasks.
 - **REQUIRED SKILLS**: Skills needed
 - **REQUIRED TOOLS**: Tools to use
 
-**Location:** `src/agents/templates/exploration-template.md`
+**Location:** `src/droids/templates/exploration-template.md`
 
 ### Implementation Template
 
@@ -298,7 +298,7 @@ For code implementation, refactoring, or modification tasks.
 - **REQUIRED TOOLS**: Tools to use
 - **VERIFICATION CHECKLIST**: Pre-completion checks
 
-**Location:** `src/agents/templates/implementation-template.md`
+**Location:** `src/droids/templates/implementation-template.md`
 
 ---
 
@@ -579,4 +579,4 @@ All state is persisted to `.omd/state/autopilot-state.json` and includes:
 - [CHANGELOG.md](../CHANGELOG.md) - Version history
 - [ARCHITECTURE.md](./ARCHITECTURE.md) - System architecture
 - [MIGRATION.md](./MIGRATION.md) - Migration guide
-- [Agent Definitions](../src/agents/definitions.ts) - Agent configuration
+- [Agent Definitions](../src/droids/definitions.ts) - Agent configuration

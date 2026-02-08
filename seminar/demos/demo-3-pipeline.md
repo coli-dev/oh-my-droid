@@ -117,7 +117,7 @@ Or demonstrate custom pipeline:
 
 **Presenter talking points:**
 - "Stage 3: Critic validates the architect's findings"
-- "This is consensus-building - two Opus agents agreeing on what matters"
+- "This is consensus-building - two Opus droids agreeing on what matters"
 - "Critic might say 'this issue is actually critical' or 'this one is acceptable given context'"
 - "Output: Prioritized, validated list of real issues to fix"
 

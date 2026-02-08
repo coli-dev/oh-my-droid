@@ -7,9 +7,9 @@ This file provides context for Droid when working on this repository via GitHub 
 oh-my-droid is a Droid plugin that provides multi-agent orchestration capabilities.
 
 ### Key Features
-- **32 specialized agents** with intelligent model routing (Haiku/Sonnet/Opus tiers)
+- **32 specialized droids** with intelligent model routing (Haiku/Sonnet/Opus tiers)
 - **35 slash commands** including /oh-my-droid:ultrawork, /oh-my-droid:deepinit, /oh-my-droid:ralph
-- **Smart delegation** - automatically routes tasks to appropriate specialist agents
+- **Smart delegation** - automatically routes tasks to appropriate specialist droids
 - **Background execution** - runs long-running tasks asynchronously
 - **Cost optimization** - chillwork mode prefers cheaper model tiers
 
@@ -24,7 +24,7 @@ oh-my-droid is a Droid plugin that provides multi-agent orchestration capabiliti
 .factory-plugin/          # Plugin metadata
   plugin.json            # Main plugin config
   marketplace.json       # Marketplace registration
-agents/                  # Agent definitions (YAML)
+droids/                  # Agent definitions (YAML)
 skills/                  # Skill definitions (Markdown)
 commands/                # Slash command definitions
 hooks/                   # Hook scripts
@@ -42,7 +42,7 @@ tests/                   # Test files
 ### Bug Reports
 - Ask for Droid version if not provided
 - Request reproduction steps
-- Check if issue exists in `agents/` or `skills/` definitions
+- Check if issue exists in `droids/` or `skills/` definitions
 
 ### Feature Requests
 - Acknowledge the request
@@ -82,6 +82,6 @@ tests/                   # Test files
 - `question` - User needs help
 - `documentation` - Docs improvement
 - `installation` - Setup/install issues
-- `agents` - Related to agent definitions
+- `droids` - Related to agent definitions
 - `stale` - No recent activity
 - `pinned` - Keep open, don't auto-close

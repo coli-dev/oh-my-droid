@@ -3,16 +3,16 @@
 
 # tools
 
-IDE-like capabilities for AI agents via Language Server Protocol (LSP), Abstract Syntax Tree (AST) tools, and Python REPL.
+IDE-like capabilities for AI droids via Language Server Protocol (LSP), Abstract Syntax Tree (AST) tools, and Python REPL.
 
 ## Purpose
 
-This directory provides agents with powerful code intelligence tools:
+This directory provides droids with powerful code intelligence tools:
 - **LSP Tools (12)**: Hover info, go-to-definition, find references, diagnostics, rename, code actions
 - **AST Tools (2)**: Structural code search and transformation via ast-grep
 - **Python REPL (1)**: Interactive Python execution for data analysis
 
-These tools enable agents to understand and manipulate code at a semantic level, far beyond text search.
+These tools enable droids to understand and manipulate code at a semantic level, far beyond text search.
 
 ## Key Files
 
@@ -135,8 +135,8 @@ The `lsp_diagnostics_directory` tool supports two strategies:
 2. Export from `index.ts` (add to `allCustomTools`)
 3. Update `src/mcp/omd-tools-server.ts` if exposed via MCP
 4. Update `docs/REFERENCE.md` (MCP Tools section)
-5. Update agent tool assignments in `src/agents/definitions.ts` if needed
-6. Update `docs/AGENTS.md` (Agent Tool Matrix) if assigned to agents
+5. Update agent tool assignments in `src/droids/definitions.ts` if needed
+6. Update `docs/AGENTS.md` (Agent Tool Matrix) if assigned to droids
 
 ### Testing Requirements
 

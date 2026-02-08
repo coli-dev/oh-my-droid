@@ -3,9 +3,9 @@
 ## Model Selection Strategy
 
 **Haiku** (90% of Sonnet capability, 3x cost savings):
-- Lightweight agents with frequent invocation
+- Lightweight droids with frequent invocation
 - Code generation and exploration
-- Worker agents in multi-agent systems
+- Worker droids in multi-agent systems
 
 **Sonnet** (Best coding model):
 - Main development work

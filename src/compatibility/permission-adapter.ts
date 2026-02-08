@@ -322,7 +322,7 @@ export function shouldDelegate(toolName: string): boolean {
     return true;
   }
 
-  // Skills and agents from external plugins
+  // Skills and droids from external plugins
   if (
     (tool.type === "skill" || tool.type === "agent") &&
     tool.source !== "oh-my-droid"

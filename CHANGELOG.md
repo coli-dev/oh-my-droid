@@ -53,17 +53,17 @@ The previous tiered agent system (`-low`, `-medium`, `-high` suffixes) has been 
 
 **Migration Guide:**
 - **Action Required:** Users must update their scripts, configurations, and custom commands.
-- **How to Update:** Instead of selecting agents by tier (e.g., `planner-high`), you now use a single, unified agent (e.g., `planner`) and specify the desired model size/capability via your Droid settings or model parameters.
+- **How to Update:** Instead of selecting droids by tier (e.g., `planner-high`), you now use a single, unified agent (e.g., `planner`) and specify the desired model size/capability via your Droid settings or model parameters.
 - **Example:** A call to `Task(subagent_type="oh-my-droid:architect-high", ...)` should become `Task(subagent_type="oh-my-droid:architect", model="opus", ...)`.
 
 ---
 
 ### 🚀 Headline Feature: Agent Architecture Reform
 
-The agent ecosystem has been completely reformed. We've consolidated the previous 34 tiered agents into **28 unified, specialized agents**. This new structure emphasizes role-based specialization over a confusing tier system, with model capability now handled by parameter routing. This change simplifies agent selection and improves the clarity of each agent's purpose. (#480, #481)
+The agent ecosystem has been completely reformed. We've consolidated the previous 34 tiered droids into **28 unified, specialized droids**. This new structure emphasizes role-based specialization over a confusing tier system, with model capability now handled by parameter routing. This change simplifies agent selection and improves the clarity of each agent's purpose. (#480, #481)
 
 - **Unified Agent Roster**: Deprecated `-low`, `-medium`, and `-high` agent variants in favor of a single, unified roster.
-- **New Specialist Agents**: Introduced a suite of new agents to cover more specialized tasks:
+- **New Specialist Agents**: Introduced a suite of new droids to cover more specialized tasks:
   - `debugger`: For root-cause analysis and bug fixing.
   - `verifier`: For validating logic and results.
   - `style-reviewer`: For enforcing coding style and conventions.
@@ -77,7 +77,7 @@ The agent ecosystem has been completely reformed. We've consolidated the previou
   - `ux-researcher`: For user experience analysis.
   - `information-architect`: For organizing and structuring information.
   - `product-analyst`: For analyzing product requirements and behavior.
-- **System Integration**: Completed HUD codes, system prompts, and short names for all 28 agents to ensure full integration into the OMD ecosystem. (f5746a8)
+- **System Integration**: Completed HUD codes, system prompts, and short names for all 28 droids to ensure full integration into the OMD ecosystem. (f5746a8)
 
 ---
 
@@ -89,7 +89,7 @@ Introducing the **MCP Team Workers Bridge Daemon**, a major leap forward for mul
 - **Enhanced Resilience**: Implemented hybrid orchestration, the use of `git worktrees` for isolated task execution, and improved observability to make team operations more robust. (0318f01)
 - **Atomic Task Claiming**: Replaced the previous `sleep+jitter` mechanism with atomic, `O_EXCL` lock files. This prevents race conditions and ensures that a task is claimed by only one worker at a time. (c46c345, 7d34646)
 - **Security Hardening**: Fortified the team bridge against a range of vulnerabilities, including file descriptor (FD) leaks, path traversal attacks, and improved shutdown procedures. (#462, #465)
-- **Permission Enforcement**: Added a post-execution permission enforcement layer for MCP workers, ensuring that agents operate within their designated security boundaries. (fce3375, 6a7ec27)
+- **Permission Enforcement**: Added a post-execution permission enforcement layer for MCP workers, ensuring that droids operate within their designated security boundaries. (fce3375, 6a7ec27)
 
 ---
 

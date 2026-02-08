@@ -5,7 +5,7 @@
  * Same discipline as Sisyphus, but works alone.
  *
  * Ported from oh-my-opencode's executor agent.
- * Prompt loaded from: agents/executor.md
+ * Prompt loaded from: droids/executor.md
  */
 import type { AgentConfig, AgentPromptMetadata } from './types.js';
 export declare const SISYPHUS_JUNIOR_PROMPT_METADATA: AgentPromptMetadata;

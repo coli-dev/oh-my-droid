@@ -1,13 +1,13 @@
 /**
  * OMD HUD - Transcript Parser
  *
- * Parse JSONL transcript from Droid to extract agents and todos.
+ * Parse JSONL transcript from Droid to extract droids and todos.
  * Based on droid-hud reference implementation.
  *
  * Performance optimizations:
  * - Tail-based parsing: reads only the last ~500KB of large transcripts
- * - Bounded agent map: caps at 50 agents during parsing
- * - Early termination: stops when enough running agents found
+ * - Bounded agent map: caps at 50 droids during parsing
+ * - Early termination: stops when enough running droids found
  */
 import { createReadStream, existsSync, statSync, openSync, readSync, closeSync, } from "fs";
 import { createInterface } from "readline";
@@ -52,7 +52,7 @@ export async function parseTranscript(transcriptPath, options) {
     // to prevent stale data from previous HUD invocations
     pendingPermissionMap.clear();
     const result = {
-        agents: [],
+        droids: [],
         todos: [],
         lastActivatedSkill: undefined,
     };
@@ -104,7 +104,7 @@ export async function parseTranscript(transcriptPath, options) {
     catch {
         // Return partial results on error
     }
-    // Filter out stale agents (running for more than threshold minutes are likely abandoned)
+    // Filter out stale droids (running for more than threshold minutes are likely abandoned)
     const staleMinutes = options?.staleTaskThresholdMinutes ?? 30;
     const STALE_AGENT_THRESHOLD_MS = staleMinutes * 60 * 1000;
     const now = Date.now();
@@ -131,10 +131,10 @@ export async function parseTranscript(transcriptPath, options) {
         const age = now - result.thinkingState.lastSeen.getTime();
         result.thinkingState.active = age <= THINKING_RECENCY_MS;
     }
-    // Get running agents first, then recent completed (up to 10 total)
+    // Get running droids first, then recent completed (up to 10 total)
     const running = Array.from(agentMap.values()).filter((a) => a.status === "running");
     const completed = Array.from(agentMap.values()).filter((a) => a.status === "completed");
-    result.agents = [
+    result.droids = [
         ...running,
         ...completed.slice(-(10 - running.length)),
     ].slice(0, 10);
@@ -235,7 +235,7 @@ function processEntry(entry, agentMap, latestTodos, result, maxAgentMapSize = 50
                 lastSeen: timestamp,
             };
         }
-        // Track tool_use for Task (agents) and TodoWrite
+        // Track tool_use for Task (droids) and TodoWrite
         if (block.type === "tool_use" && block.id && block.name) {
             if (block.name === "Task" || block.name === "proxy_Task") {
                 const input = block.input;
@@ -247,7 +247,7 @@ function processEntry(entry, agentMap, latestTodos, result, maxAgentMapSize = 50
                     status: "running",
                     startTime: timestamp,
                 };
-                // Bounded agent map: evict oldest completed agents if at capacity
+                // Bounded agent map: evict oldest completed droids if at capacity
                 if (agentMap.size >= maxAgentMapSize) {
                     // Find and remove oldest completed agent
                     let oldestCompleted = null;
@@ -299,7 +299,7 @@ function processEntry(entry, agentMap, latestTodos, result, maxAgentMapSize = 50
                 });
             }
         }
-        // Track tool_result to mark agents as completed
+        // Track tool_result to mark droids as completed
         if (block.type === "tool_result" && block.tool_use_id) {
             // Clear from pending permissions when tool_result arrives
             pendingPermissionMap.delete(block.tool_use_id);
@@ -349,10 +349,10 @@ function processEntry(entry, agentMap, latestTodos, result, maxAgentMapSize = 50
 // Utility Functions
 // ============================================================================
 /**
- * Get count of running agents
+ * Get count of running droids
  */
-export function getRunningAgentCount(agents) {
-    return agents.filter((a) => a.status === "running").length;
+export function getRunningAgentCount(droids) {
+    return droids.filter((a) => a.status === "running").length;
 }
 /**
  * Get todo completion stats

@@ -28,11 +28,11 @@ function getPackageDir(): string {
  * Load agent definitions for testing
  */
 function loadAgentDefinitions(): Record<string, string> {
-  const agentsDir = join(getPackageDir(), "agents");
+  const agentsDir = join(getPackageDir(), "droids");
   const definitions: Record<string, string> = {};
 
   if (!existsSync(agentsDir)) {
-    throw new Error(`agents directory not found: ${agentsDir}`);
+    throw new Error(`droids directory not found: ${agentsDir}`);
   }
 
   for (const file of readdirSync(agentsDir)) {
@@ -84,7 +84,7 @@ describe("Installer Constants", () => {
   const DROID_MD_CONTENT = loadDroidMdContent();
 
   describe("AGENT_DEFINITIONS", () => {
-    it("should contain expected core agents", () => {
+    it("should contain expected core droids", () => {
       const expectedAgents = [
         "architect.md",
         "explore.md",
@@ -127,7 +127,7 @@ describe("Installer Constants", () => {
         // Check required fields (name, description are required; tools is optional)
         expect(frontmatter).toMatch(/^name:\s+\S+/m);
         expect(frontmatter).toMatch(/^description:\s+.+/m);
-        // Note: tools field removed - agents use disallowedTools or have all tools by default
+        // Note: tools field removed - droids use disallowedTools or have all tools by default
         // Model is optional in some agent definitions
       }
     });
@@ -251,9 +251,9 @@ describe("Installer Constants", () => {
       }
     });
 
-    it("should reference all core agents", () => {
-      // The new AGENTS.md has agents in tables and examples
-      // We'll check for a subset of key agents to ensure the section exists
+    it("should reference all core droids", () => {
+      // The new AGENTS.md has droids in tables and examples
+      // We'll check for a subset of key droids to ensure the section exists
       const keyAgents = [
         "architect",
         "executor",
@@ -316,7 +316,7 @@ describe("Installer Constants", () => {
       const expectedBase = join(homedir(), ".factory");
 
       expect(DROID_CONFIG_DIR).toBe(expectedBase);
-      expect(AGENTS_DIR).toBe(join(expectedBase, "agents"));
+      expect(AGENTS_DIR).toBe(join(expectedBase, "droids"));
       expect(COMMANDS_DIR).toBe(join(expectedBase, "commands"));
       expect(SKILLS_DIR).toBe(join(expectedBase, "skills"));
       expect(HOOKS_DIR).toBe(join(expectedBase, "hooks"));
@@ -351,7 +351,7 @@ describe("Installer Constants", () => {
       expect(commandKeys.length).toBe(uniqueCommandKeys.size);
     });
 
-    it("should have agents referenced in AGENTS.md exist in AGENT_DEFINITIONS", () => {
+    it("should have droids referenced in AGENTS.md exist in AGENT_DEFINITIONS", () => {
       const agentMatches = DROID_MD_CONTENT.matchAll(
         /\`([a-z-]+)\`\s*\|\s*(Opus|Sonnet|Haiku)/g,
       );
@@ -378,7 +378,7 @@ describe("Installer Constants", () => {
         // Skip non-agent files
         if (filename === "AGENTS.md") continue;
 
-        // Skip tiered variants and agents with alternate formats
+        // Skip tiered variants and droids with alternate formats
         if (
           !filename.includes("-low") &&
           !filename.includes("-medium") &&
@@ -397,12 +397,12 @@ describe("Installer Constants", () => {
       }
     });
 
-    it("should have read-only agents not include Edit/Write tools", () => {
+    it("should have read-only droids not include Edit/Write tools", () => {
       const readOnlyAgents = ["architect.md", "critic.md", "analyst.md"];
 
       for (const agent of readOnlyAgents) {
         const content = AGENT_DEFINITIONS[agent];
-        // Read-only agents use disallowedTools: to block Edit/Write
+        // Read-only droids use disallowedTools: to block Edit/Write
         const disallowedMatch = content.match(/^disallowedTools:\s+(.+)/m);
         expect(disallowedMatch).toBeTruthy();
 
@@ -412,12 +412,12 @@ describe("Installer Constants", () => {
       }
     });
 
-    it("should have implementation agents include Edit/Write tools", () => {
+    it("should have implementation droids include Edit/Write tools", () => {
       const implementationAgents = ["executor.md", "designer.md", "writer.md"];
 
       for (const agent of implementationAgents) {
         const content = AGENT_DEFINITIONS[agent];
-        // Implementation agents should NOT have Edit/Write in disallowedTools
+        // Implementation droids should NOT have Edit/Write in disallowedTools
         // (If no disallowedTools field exists, all tools are available by default)
         const disallowedMatch = content.match(/^disallowedTools:\s+(.+)/m);
         if (disallowedMatch) {

@@ -3,8 +3,8 @@
  *
  * Tracks SubagentStart and SubagentStop events for comprehensive agent monitoring.
  * Features:
- * - Track all spawned agents with parent mode context
- * - Detect stuck/stale agents (>5 min without progress)
+ * - Track all spawned droids with parent mode context
+ * - Detect stuck/stale droids (>5 min without progress)
  * - HUD integration for agent status display
  * - Automatic cleanup of orphaned agent state
  */
@@ -156,7 +156,7 @@ export function readTrackingState(directory) {
     const statePath = getStateFilePath(directory);
     if (!existsSync(statePath)) {
         return {
-            agents: [],
+            droids: [],
             total_spawned: 0,
             total_completed: 0,
             total_failed: 0,
@@ -170,7 +170,7 @@ export function readTrackingState(directory) {
     catch (error) {
         console.error("[SubagentTracker] Error reading state:", error);
         return {
-            agents: [],
+            droids: [],
             total_spawned: 0,
             total_completed: 0,
             total_failed: 0,
@@ -273,11 +273,11 @@ function detectParentMode(directory) {
     return "none";
 }
 /**
- * Get list of stale agents (running for too long)
+ * Get list of stale droids (running for too long)
  */
 export function getStaleAgents(state) {
     const now = Date.now();
-    return state.agents.filter((agent) => {
+    return state.droids.filter((agent) => {
         if (agent.status !== "running") {
             return false;
         }
@@ -310,7 +310,7 @@ export function processSubagentStart(input) {
             model: input.model,
         };
         // Add to state
-        state.agents.push(agentInfo);
+        state.droids.push(agentInfo);
         state.total_spawned++;
         // Write updated state
         writeTrackingState(input.cwd, state);
@@ -319,14 +319,14 @@ export function processSubagentStart(input) {
             recordAgentStart(input.cwd, input.session_id, input.agent_id, input.agent_type, input.prompt, parentMode, input.model);
         }
         catch { /* best-effort */ }
-        // Check for stale agents
+        // Check for stale droids
         const staleAgents = getStaleAgents(state);
         return {
             continue: true,
             hookSpecificOutput: {
                 hookEventName: "SubagentStart",
                 additionalContext: `Agent ${input.agent_type} started (${input.agent_id})`,
-                agent_count: state.agents.filter((a) => a.status === "running").length,
+                agent_count: state.droids.filter((a) => a.status === "running").length,
                 stale_agents: staleAgents.map((a) => a.agent_id),
             },
         };
@@ -345,11 +345,11 @@ export function processSubagentStop(input) {
     try {
         const state = readTrackingState(input.cwd);
         // Find the agent
-        const agentIndex = state.agents.findIndex((a) => a.agent_id === input.agent_id);
+        const agentIndex = state.droids.findIndex((a) => a.agent_id === input.agent_id);
         // SDK does not provide `success` field, so default to 'completed' when undefined (Bug #1 fix)
         const succeeded = input.success !== false;
         if (agentIndex !== -1) {
-            const agent = state.agents[agentIndex];
+            const agent = state.droids[agentIndex];
             agent.status = succeeded ? "completed" : "failed";
             agent.completed_at = new Date().toISOString();
             // Calculate duration
@@ -368,8 +368,8 @@ export function processSubagentStop(input) {
                 state.total_failed++;
             }
         }
-        // Evict oldest completed agents if over limit
-        const completedAgents = state.agents.filter((a) => a.status === "completed" || a.status === "failed");
+        // Evict oldest completed droids if over limit
+        const completedAgents = state.droids.filter((a) => a.status === "completed" || a.status === "failed");
         if (completedAgents.length > MAX_COMPLETED_AGENTS) {
             // Sort by completed_at and keep only the most recent
             completedAgents.sort((a, b) => {
@@ -378,19 +378,19 @@ export function processSubagentStop(input) {
                 return timeB - timeA; // Newest first
             });
             const toRemove = new Set(completedAgents.slice(MAX_COMPLETED_AGENTS).map((a) => a.agent_id));
-            state.agents = state.agents.filter((a) => !toRemove.has(a.agent_id));
+            state.droids = state.droids.filter((a) => !toRemove.has(a.agent_id));
         }
         // Write updated state
         writeTrackingState(input.cwd, state);
         // Record to session replay JSONL for /trace
         // Fix: SDK doesn't populate agent_type in SubagentStop, so use tracked state
         try {
-            const trackedAgent = agentIndex !== -1 ? state.agents[agentIndex] : undefined;
+            const trackedAgent = agentIndex !== -1 ? state.droids[agentIndex] : undefined;
             const agentType = trackedAgent?.agent_type || input.agent_type || 'unknown';
             recordAgentStop(input.cwd, input.session_id, input.agent_id, agentType, succeeded, trackedAgent?.duration_ms);
         }
         catch { /* best-effort */ }
-        const runningCount = state.agents.filter((a) => a.status === "running").length;
+        const runningCount = state.droids.filter((a) => a.status === "running").length;
         return {
             continue: true,
             hookSpecificOutput: {
@@ -408,7 +408,7 @@ export function processSubagentStop(input) {
 // Cleanup Functions
 // ============================================================================
 /**
- * Cleanup stale agents (mark as failed)
+ * Cleanup stale droids (mark as failed)
  */
 export function cleanupStaleAgents(directory) {
     if (!acquireLock(directory)) {
@@ -421,11 +421,11 @@ export function cleanupStaleAgents(directory) {
             return 0;
         }
         for (const stale of staleAgents) {
-            const agentIndex = state.agents.findIndex((a) => a.agent_id === stale.agent_id);
+            const agentIndex = state.droids.findIndex((a) => a.agent_id === stale.agent_id);
             if (agentIndex !== -1) {
-                state.agents[agentIndex].status = "failed";
-                state.agents[agentIndex].completed_at = new Date().toISOString();
-                state.agents[agentIndex].output_summary =
+                state.droids[agentIndex].status = "failed";
+                state.droids[agentIndex].completed_at = new Date().toISOString();
+                state.droids[agentIndex].output_summary =
                     "Marked as stale - exceeded timeout";
                 state.total_failed++;
             }
@@ -441,25 +441,25 @@ export function cleanupStaleAgents(directory) {
 // Query Functions
 // ============================================================================
 /**
- * Get count of active (running) agents
+ * Get count of active (running) droids
  */
 export function getActiveAgentCount(directory) {
     const state = readTrackingState(directory);
-    return state.agents.filter((a) => a.status === "running").length;
+    return state.droids.filter((a) => a.status === "running").length;
 }
 /**
- * Get agents by type
+ * Get droids by type
  */
 export function getAgentsByType(directory, agentType) {
     const state = readTrackingState(directory);
-    return state.agents.filter((a) => a.agent_type === agentType);
+    return state.droids.filter((a) => a.agent_type === agentType);
 }
 /**
- * Get all running agents
+ * Get all running droids
  */
 export function getRunningAgents(directory) {
     const state = readTrackingState(directory);
-    return state.agents.filter((a) => a.status === "running");
+    return state.droids.filter((a) => a.status === "running");
 }
 /**
  * Get tracking stats
@@ -467,7 +467,7 @@ export function getRunningAgents(directory) {
 export function getTrackingStats(directory) {
     const state = readTrackingState(directory);
     return {
-        running: state.agents.filter((a) => a.status === "running").length,
+        running: state.droids.filter((a) => a.status === "running").length,
         completed: state.total_completed,
         failed: state.total_failed,
         total: state.total_spawned,
@@ -482,7 +482,7 @@ export function recordToolUsage(directory, agentId, toolName, success) {
         return;
     try {
         const state = readTrackingState(directory);
-        const agent = state.agents.find((a) => a.agent_id === agentId && a.status === "running");
+        const agent = state.droids.find((a) => a.agent_id === agentId && a.status === "running");
         if (agent) {
             if (!agent.tool_usage)
                 agent.tool_usage = [];
@@ -511,7 +511,7 @@ export function recordToolUsageWithTiming(directory, agentId, toolName, duration
         return;
     try {
         const state = readTrackingState(directory);
-        const agent = state.agents.find((a) => a.agent_id === agentId && a.status === "running");
+        const agent = state.droids.find((a) => a.agent_id === agentId && a.status === "running");
         if (agent) {
             if (!agent.tool_usage)
                 agent.tool_usage = [];
@@ -532,12 +532,12 @@ export function recordToolUsageWithTiming(directory, agentId, toolName, duration
     }
 }
 /**
- * Generate a formatted dashboard of all running agents
+ * Generate a formatted dashboard of all running droids
  * Used for debugging parallel agent execution in ultrawork mode
  */
 export function getAgentDashboard(directory) {
     const state = readTrackingState(directory);
-    const running = state.agents.filter((a) => a.status === "running");
+    const running = state.droids.filter((a) => a.status === "running");
     if (running.length === 0)
         return "";
     const now = Date.now();
@@ -559,13 +559,13 @@ export function getAgentDashboard(directory) {
     return lines.join("\n");
 }
 /**
- * Generate a rich observatory view of all running agents
+ * Generate a rich observatory view of all running droids
  * Includes: performance metrics, token usage, file ownership, bottlenecks
  * For HUD integration and debugging parallel agent execution
  */
 export function getAgentObservatory(directory) {
     const state = readTrackingState(directory);
-    const running = state.agents.filter((a) => a.status === "running");
+    const running = state.droids.filter((a) => a.status === "running");
     const efficiency = calculateParallelEfficiency(directory);
     const interventions = suggestInterventions(directory);
     const now = Date.now();
@@ -622,13 +622,13 @@ export function getAgentObservatory(directory) {
 // Intervention Functions
 // ============================================================================
 /**
- * Suggest interventions for problematic agents
- * Checks for: stale agents, cost limit exceeded, file conflicts
+ * Suggest interventions for problematic droids
+ * Checks for: stale droids, cost limit exceeded, file conflicts
  */
 export function suggestInterventions(directory) {
     const state = readTrackingState(directory);
     const interventions = [];
-    const running = state.agents.filter((a) => a.status === "running");
+    const running = state.droids.filter((a) => a.status === "running");
     // 1. Stale agent detection
     const stale = getStaleAgents(state);
     for (const agent of stale) {
@@ -667,15 +667,15 @@ export function suggestInterventions(directory) {
                 .push({ id: agent.agent_id, type: agent.agent_type });
         }
     }
-    for (const [file, agents] of fileToAgents) {
-        if (agents.length > 1) {
+    for (const [file, droids] of fileToAgents) {
+        if (droids.length > 1) {
             // Warn all but first agent (first one "owns" the file)
-            for (let i = 1; i < agents.length; i++) {
+            for (let i = 1; i < droids.length; i++) {
                 interventions.push({
                     type: "file_conflict",
-                    agent_id: agents[i].id,
-                    agent_type: agents[i].type,
-                    reason: `File conflict on ${file} with ${agents[0].type.replace("oh-my-droid:", "")}`,
+                    agent_id: droids[i].id,
+                    agent_type: droids[i].type,
+                    reason: `File conflict on ${file} with ${droids[0].type.replace("oh-my-droid:", "")}`,
                     suggested_action: "warn",
                     auto_execute: false,
                 });
@@ -686,11 +686,11 @@ export function suggestInterventions(directory) {
 }
 /**
  * Calculate parallel efficiency score (0-100)
- * 100 = all agents actively running, 0 = all stale/waiting
+ * 100 = all droids actively running, 0 = all stale/waiting
  */
 export function calculateParallelEfficiency(directory) {
     const state = readTrackingState(directory);
-    const running = state.agents.filter((a) => a.status === "running");
+    const running = state.droids.filter((a) => a.status === "running");
     const stale = getStaleAgents(state);
     if (running.length === 0)
         return { score: 100, active: 0, stale: 0, total: 0 };
@@ -710,7 +710,7 @@ export function recordFileOwnership(directory, agentId, filePath) {
         return;
     try {
         const state = readTrackingState(directory);
-        const agent = state.agents.find((a) => a.agent_id === agentId && a.status === "running");
+        const agent = state.droids.find((a) => a.agent_id === agentId && a.status === "running");
         if (agent) {
             if (!agent.file_ownership)
                 agent.file_ownership = [];
@@ -731,12 +731,12 @@ export function recordFileOwnership(directory, agentId, filePath) {
     }
 }
 /**
- * Check for file conflicts between running agents
+ * Check for file conflicts between running droids
  * Returns files being modified by more than one agent
  */
 export function detectFileConflicts(directory) {
     const state = readTrackingState(directory);
-    const running = state.agents.filter((a) => a.status === "running");
+    const running = state.droids.filter((a) => a.status === "running");
     const fileToAgents = new Map();
     for (const agent of running) {
         for (const file of agent.file_ownership || []) {
@@ -749,19 +749,19 @@ export function detectFileConflicts(directory) {
         }
     }
     const conflicts = [];
-    for (const [file, agents] of fileToAgents) {
-        if (agents.length > 1) {
-            conflicts.push({ file, agents });
+    for (const [file, droids] of fileToAgents) {
+        if (droids.length > 1) {
+            conflicts.push({ file, droids });
         }
     }
     return conflicts;
 }
 /**
- * Get all file ownership for running agents
+ * Get all file ownership for running droids
  */
 export function getFileOwnershipMap(directory) {
     const state = readTrackingState(directory);
-    const running = state.agents.filter((a) => a.status === "running");
+    const running = state.droids.filter((a) => a.status === "running");
     const map = new Map();
     for (const agent of running) {
         const shortType = agent.agent_type.replace("oh-my-droid:", "");
@@ -779,7 +779,7 @@ export function getFileOwnershipMap(directory) {
  */
 export function getAgentPerformance(directory, agentId) {
     const state = readTrackingState(directory);
-    const agent = state.agents.find((a) => a.agent_id === agentId);
+    const agent = state.droids.find((a) => a.agent_id === agentId);
     if (!agent)
         return null;
     const toolTimings = {};
@@ -825,11 +825,11 @@ export function getAgentPerformance(directory, agentId) {
     };
 }
 /**
- * Get performance for all running agents
+ * Get performance for all running droids
  */
 export function getAllAgentPerformance(directory) {
     const state = readTrackingState(directory);
-    return state.agents
+    return state.droids
         .filter((a) => a.status === "running")
         .map((a) => getAgentPerformance(directory, a.agent_id))
         .filter((p) => p !== null);
@@ -842,7 +842,7 @@ export function updateTokenUsage(directory, agentId, tokens) {
         return;
     try {
         const state = readTrackingState(directory);
-        const agent = state.agents.find((a) => a.agent_id === agentId);
+        const agent = state.droids.find((a) => a.agent_id === agentId);
         if (agent) {
             if (!agent.token_usage) {
                 agent.token_usage = {

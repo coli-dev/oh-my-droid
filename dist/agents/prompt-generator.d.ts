@@ -30,7 +30,7 @@ export interface GeneratorOptions {
 /**
  * Generate complete orchestrator prompt from agent definitions
  *
- * @param agents - Array of agent configurations
+ * @param droids - Array of agent configurations
  * @param options - Options controlling which sections to include
  * @returns Generated orchestrator prompt string
  *
@@ -39,7 +39,7 @@ export interface GeneratorOptions {
  * import { getAgentDefinitions } from './definitions.js';
  * import { generateOrchestratorPrompt } from './prompt-generator.js';
  *
- * const agents = Object.values(getAgentDefinitions()).map(def => ({
+ * const droids = Object.values(getAgentDefinitions()).map(def => ({
  *   name: def.name,
  *   description: def.description,
  *   prompt: def.prompt,
@@ -48,19 +48,19 @@ export interface GeneratorOptions {
  *   metadata: def.metadata
  * }));
  *
- * const prompt = generateOrchestratorPrompt(agents);
+ * const prompt = generateOrchestratorPrompt(droids);
  * console.log(prompt);
  * ```
  */
-export declare function generateOrchestratorPrompt(agents: AgentConfig[], options?: GeneratorOptions): string;
+export declare function generateOrchestratorPrompt(droids: AgentConfig[], options?: GeneratorOptions): string;
 /**
  * Build agent section only (for embedding in other prompts)
  */
-export declare function buildAgentSection(agents: AgentConfig[]): string;
+export declare function buildAgentSection(droids: AgentConfig[]): string;
 /**
  * Build triggers section only
  */
-export declare function buildTriggersSection(agents: AgentConfig[]): string;
+export declare function buildTriggersSection(droids: AgentConfig[]): string;
 /**
  * Build tool selection section only (alias for buildToolSelectionSection from prompt-sections)
  */
@@ -68,7 +68,7 @@ export { buildToolSelectionSection };
 /**
  * Build delegation table section only
  */
-export declare function buildDelegationTableSection(agents: AgentConfig[]): string;
+export declare function buildDelegationTableSection(droids: AgentConfig[]): string;
 /**
  * Convert agent definitions record to array of AgentConfig for generation
  *
@@ -81,8 +81,8 @@ export declare function buildDelegationTableSection(agents: AgentConfig[]): stri
  * import { convertDefinitionsToConfigs, generateOrchestratorPrompt } from './prompt-generator.js';
  *
  * const definitions = getAgentDefinitions();
- * const agents = convertDefinitionsToConfigs(definitions);
- * const prompt = generateOrchestratorPrompt(agents);
+ * const droids = convertDefinitionsToConfigs(definitions);
+ * const prompt = generateOrchestratorPrompt(droids);
  * ```
  */
 export declare function convertDefinitionsToConfigs(definitions: Record<string, {

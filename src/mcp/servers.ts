@@ -40,7 +40,7 @@ export function createContext7Server(): McpServerConfig {
 
 /**
  * Playwright MCP Server - Browser automation
- * Enables agents to interact with web pages
+ * Enables droids to interact with web pages
  */
 export function createPlaywrightServer(): McpServerConfig {
   return {
@@ -64,7 +64,7 @@ export function createFilesystemServer(
 
 /**
  * Memory MCP Server - Persistent memory
- * Allows agents to store and retrieve information across sessions
+ * Allows droids to store and retrieve information across sessions
  */
 export function createMemoryServer(): McpServerConfig {
   return {

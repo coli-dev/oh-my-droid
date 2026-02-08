@@ -2,11 +2,11 @@
  * Prompt Injection Helper
  *
  * Shared utilities for injecting system prompts into Codex/Gemini MCP tools.
- * Enables agents to pass their personality/guidelines when consulting external models.
+ * Enables droids to pass their personality/guidelines when consulting external models.
  */
 /**
  * Valid agent roles that can be used with agent_role parameter.
- * Matches the agent prompt files in agents/*.md
+ * Matches the agent prompt files in droids/*.md
  */
 export declare const VALID_AGENT_ROLES: readonly ["architect", "architect-medium", "architect-low", "analyst", "critic", "planner", "executor", "executor-high", "executor-low", "deep-executor", "designer", "designer-low", "designer-high", "explore", "explore-high", "researcher", "writer", "vision", "qa-tester", "scientist", "scientist-high", "security-reviewer", "security-reviewer-low", "build-fixer", "tdd-guide", "tdd-guide-low", "code-reviewer", "git-master"];
 export type AgentRole = typeof VALID_AGENT_ROLES[number];

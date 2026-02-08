@@ -71,7 +71,7 @@ async function getFileMtime(filePath: string): Promise<Date | null> {
 }
 
 /**
- * Update top agents list
+ * Update top droids list
  */
 function updateTopAgents(
   summary: AnalyticsSummary,
@@ -153,7 +153,7 @@ async function rebuildSummaryIncremental(
     });
     summary.totals.estimatedCost += cost.totalCost;
 
-    // Update top agents (use "(main session)" for entries without agentName)
+    // Update top droids (use "(main session)" for entries without agentName)
     const agentKey = record.agentName || "(main session)";
     updateTopAgents(
       summary,

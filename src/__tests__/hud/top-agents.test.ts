@@ -1,7 +1,7 @@
 /**
  * Test for the "Top: none" fix
  *
- * Verifies that calculateSessionHealth correctly fetches top agents
+ * Verifies that calculateSessionHealth correctly fetches top droids
  * from TokenTracker instead of returning an empty hardcoded array.
  */
 
@@ -37,14 +37,14 @@ describe("Top Agents Display Fix", () => {
       expect(sourceCode).toMatch(/topAgents,\s*\n\s*costPerHour/);
     });
 
-    it("has proper error handling for top agents fetch", async () => {
+    it("has proper error handling for top droids fetch", async () => {
       const indexPath = path.join(process.cwd(), "src/hud/index.ts");
       const sourceCode = await fs.readFile(indexPath, "utf-8");
 
-      // Should have try-catch around the top agents fetch
-      expect(sourceCode).toContain("// Get top agents from tracker");
+      // Should have try-catch around the top droids fetch
+      expect(sourceCode).toContain("// Get top droids from tracker");
       expect(sourceCode).toContain(
-        "// Top agents fetch failed - continue with empty",
+        "// Top droids fetch failed - continue with empty",
       );
     });
   });
@@ -158,19 +158,19 @@ describe("Debug Logging for Silent Catch Blocks", () => {
     });
   });
 
-  describe("Top agents fetch error handling", () => {
-    it("catches error parameter in top agents fetch catch block", async () => {
+  describe("Top droids fetch error handling", () => {
+    it("catches error parameter in top droids fetch catch block", async () => {
       const indexPath = path.join(process.cwd(), "src/hud/index.ts");
       const sourceCode = await fs.readFile(indexPath, "utf-8");
 
       // Should catch error parameter (not just empty catch)
       // Looking for: } catch (error) {
       expect(sourceCode).toMatch(
-        /}\s*catch\s*\(\s*error\s*\)\s*{[\s\S]*?Top agents fetch failed/,
+        /}\s*catch\s*\(\s*error\s*\)\s*{[\s\S]*?Top droids fetch failed/,
       );
     });
 
-    it("logs top agents fetch errors when OMD_DEBUG is set", async () => {
+    it("logs top droids fetch errors when OMD_DEBUG is set", async () => {
       const indexPath = path.join(process.cwd(), "src/hud/index.ts");
       const sourceCode = await fs.readFile(indexPath, "utf-8");
 
@@ -180,11 +180,11 @@ describe("Debug Logging for Silent Catch Blocks", () => {
 
       // Should log the error with a clear prefix
       expect(sourceCode).toMatch(
-        /console\.error\(['"]\[HUD\] Top agents fetch failed:/,
+        /console\.error\(['"]\[HUD\] Top droids fetch failed:/,
       );
     });
 
-    it("includes error object in top agents fetch log", async () => {
+    it("includes error object in top droids fetch log", async () => {
       const indexPath = path.join(process.cwd(), "src/hud/index.ts");
       const sourceCode = await fs.readFile(indexPath, "utf-8");
 

@@ -7,7 +7,7 @@
  * This solves the problem where Droid doesn't automatically apply models
  * from agent definitions - every Task call must explicitly pass the model parameter.
  */
-import { getAgentDefinitions } from '../agents/definitions.js';
+import { getAgentDefinitions } from '../droids/definitions.js';
 /**
  * Enforce model parameter for an agent delegation call
  *

@@ -57,17 +57,17 @@ export declare function failTask(agentId: string, taskId: string, errorMessage: 
  * Record agent heartbeat
  *
  * Agents should call this every 60 seconds to indicate they're still alive.
- * Used by cleanupStaleClaims to detect dead agents.
+ * Used by cleanupStaleClaims to detect dead droids.
  *
  * @param agentId - Agent sending heartbeat
  * @returns true if heartbeat was recorded
  */
 export declare function heartbeat(agentId: string): boolean;
 /**
- * Clean up stale claims from dead agents
+ * Clean up stale claims from dead droids
  *
  * Releases tasks that have been claimed for longer than the lease timeout
- * (default 5 minutes) by agents that haven't sent a heartbeat.
+ * (default 5 minutes) by droids that haven't sent a heartbeat.
  *
  * @param leaseTimeout - Lease timeout in milliseconds (default: 5 minutes)
  * @returns Number of tasks released
@@ -93,10 +93,10 @@ export declare function hasPendingTasks(): boolean;
  */
 export declare function allTasksComplete(): boolean;
 /**
- * Get the number of active agents (with recent heartbeats)
+ * Get the number of active droids (with recent heartbeats)
  *
  * @param heartbeatTimeout - How old a heartbeat can be to still be considered active
- * @returns Number of active agents
+ * @returns Number of active droids
  */
 export declare function getActiveAgentCount(heartbeatTimeout?: number): number;
 /**
@@ -109,7 +109,7 @@ export declare function getActiveAgentCount(heartbeatTimeout?: number): number;
 export declare function reclaimFailedTask(agentId: string, taskId: string): ClaimResult;
 /**
  * Claim a task that matches the agent's file scope
- * Used when agents are assigned to specific file patterns.
+ * Used when droids are assigned to specific file patterns.
  *
  * Fetches all pending tasks and filters in TypeScript using
  * simple glob matching. Falls back to regular claimTask if

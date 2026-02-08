@@ -272,7 +272,7 @@ describe('AutopilotSummary', () => {
 
       const compact = formatCompactSummary(state);
 
-      expect(compact).toBe('[AUTOPILOT ✓] Complete | 2 files | 10 agents');
+      expect(compact).toBe('[AUTOPILOT ✓] Complete | 2 files | 10 droids');
     });
 
     it('should show X for failed phase', () => {

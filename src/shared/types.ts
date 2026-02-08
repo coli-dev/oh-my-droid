@@ -18,7 +18,7 @@ export interface AgentConfig {
 
 export interface PluginConfig {
   // Agent model overrides
-  agents?: {
+  droids?: {
     omd?: { model?: string };
     architect?: { model?: string; enabled?: boolean };
     researcher?: { model?: string };
@@ -26,7 +26,7 @@ export interface PluginConfig {
     frontendEngineer?: { model?: string; enabled?: boolean };
     documentWriter?: { model?: string; enabled?: boolean };
     multimodalLooker?: { model?: string; enabled?: boolean };
-    // New agents from oh-my-opencode
+    // New droids from oh-my-opencode
     critic?: { model?: string; enabled?: boolean };
     analyst?: { model?: string; enabled?: boolean };
     orchestratorSisyphus?: { model?: string; enabled?: boolean };

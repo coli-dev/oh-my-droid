@@ -19,7 +19,7 @@ Transform this idea into working code through 5 phases:
 
 1. **Expansion** - Turn the idea into detailed spec
 2. **Planning** - Create implementation plan
-3. **Execution** - Build with parallel agents
+3. **Execution** - Build with parallel droids
 4. **QA** - Test until everything passes
 5. **Validation** - Multi-architect review
 
@@ -109,7 +109,7 @@ During execution, you MUST follow these rules:
 - `.factory/**` (config)
 - `AGENTS.md`, `AGENTS.md` (docs)
 
-**All source code changes MUST go through executor agents.**
+**All source code changes MUST go through executor droids.**
 
 ### Execution Protocol
 
@@ -157,7 +157,7 @@ Signal: **AUTOPILOT_COMPLETE**
 
 ### Delegation Rules (MANDATORY)
 - **NEVER** use Edit/Write/Bash for source code changes
-- **ALWAYS** delegate implementation to executor agents
+- **ALWAYS** delegate implementation to executor droids
 - **ONLY** write directly to `.omd/`, `.factory/`, `AGENTS.md`, `AGENTS.md`
 - If you attempt direct code changes, the PreToolUse hook will warn you
 
@@ -165,7 +165,7 @@ Signal: **AUTOPILOT_COMPLETE**
 - Do NOT stop between phases
 - Do NOT ask for user input unless truly ambiguous
 - Track progress via TODO list
-- Use parallel agents aggressively
+- Use parallel droids aggressively
 - Fix issues automatically when possible
 
 ## Completion

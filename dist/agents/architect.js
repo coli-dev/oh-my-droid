@@ -32,7 +32,7 @@ export const ARCHITECT_PROMPT_METADATA = {
         'Things you can infer from existing code patterns',
     ],
 };
-// Prompt loaded dynamically from agents/architect.md (authoritative source)
+// Prompt loaded dynamically from droids/architect.md (authoritative source)
 export const architectAgent = {
     name: 'architect',
     description: 'Read-only consultation agent. High-IQ reasoning specialist for debugging hard problems and high-difficulty architecture design.',

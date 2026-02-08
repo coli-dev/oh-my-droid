@@ -112,7 +112,7 @@ describe("delegation-enforcer", () => {
       expect(result.warning).toBeUndefined();
     });
 
-    it("works with all agents", () => {
+    it("works with all droids", () => {
       const testCases = [
         { agent: "architect", expectedModel: "opus" },
         { agent: "executor", expectedModel: "sonnet" },

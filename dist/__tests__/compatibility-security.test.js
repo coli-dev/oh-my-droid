@@ -248,13 +248,13 @@ describe('Security: Path Traversal Prevention', () => {
         expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('[Security] Path traversal detected'));
         consoleSpy.mockRestore();
     });
-    it('should reject agents path with path traversal', () => {
+    it('should reject droids path with path traversal', () => {
         const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
-        createPlugin('agents-traversal', {
-            agents: '../../../../tmp/evil',
+        createPlugin('droids-traversal', {
+            droids: '../../../../tmp/evil',
         });
         const plugins = discoverPlugins({ pluginPaths: [TEST_PLUGINS_DIR] });
-        const plugin = plugins.find(p => p.name === 'agents-traversal');
+        const plugin = plugins.find(p => p.name === 'droids-traversal');
         expect(plugin?.tools).toHaveLength(0);
         expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('[Security] Path traversal detected'));
         consoleSpy.mockRestore();
@@ -271,11 +271,11 @@ describe('Security: Path Traversal Prevention', () => {
     it('should allow valid relative paths', () => {
         const pluginDir = createPlugin('valid-paths', {
             skills: './skills',
-            agents: './agents',
+            droids: './droids',
         });
         // Create actual directories
         mkdirSync(join(pluginDir, 'skills'), { recursive: true });
-        mkdirSync(join(pluginDir, 'agents'), { recursive: true });
+        mkdirSync(join(pluginDir, 'droids'), { recursive: true });
         const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => { });
         discoverPlugins({ pluginPaths: [TEST_PLUGINS_DIR] });
         // Should not have any path traversal warnings

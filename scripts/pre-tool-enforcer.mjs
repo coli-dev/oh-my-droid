@@ -28,7 +28,7 @@ function getAgentTrackingInfo(directory) {
   try {
     if (existsSync(trackingFile)) {
       const data = JSON.parse(readFileSync(trackingFile, 'utf-8'));
-      const running = (data.agents || []).filter(a => a.status === 'running').length;
+      const running = (data.droids || []).filter(a => a.status === 'running').length;
       return { running, total: data.total_spawned || 0 };
     }
   } catch {}
@@ -76,7 +76,7 @@ function getTodoStatus(directory) {
 // Generate agent spawn message with metadata
 function generateAgentSpawnMessage(toolInput, directory, todoStatus) {
   if (!toolInput || typeof toolInput !== 'object') {
-    return `${todoStatus}Launch multiple agents in parallel when tasks are independent. Use run_in_background for long operations.`;
+    return `${todoStatus}Launch multiple droids in parallel when tasks are independent. Use run_in_background for long operations.`;
   }
 
   const agentType = toolInput.subagent_type || 'unknown';
@@ -87,7 +87,7 @@ function generateAgentSpawnMessage(toolInput, directory, todoStatus) {
 
   const parts = [`${todoStatus}Spawning agent: ${agentType} (${model})${bg}`];
   if (desc) parts.push(`Task: ${desc}`);
-  if (tracking.running > 0) parts.push(`Active agents: ${tracking.running}`);
+  if (tracking.running > 0) parts.push(`Active droids: ${tracking.running}`);
 
   return parts.join(' | ');
 }

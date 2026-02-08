@@ -45,14 +45,14 @@ describe('Type Tests', () => {
         });
         it('should support agent configuration', () => {
             const config = {
-                agents: {
+                droids: {
                     omd: { model: 'claude-sonnet-4-5' },
                     architect: { model: 'claude-opus-4-6', enabled: true },
                     researcher: { model: 'claude-haiku-4-5' },
                 },
             };
-            expect(config.agents?.omd?.model).toBe('claude-sonnet-4-5');
-            expect(config.agents?.architect?.enabled).toBe(true);
+            expect(config.droids?.omd?.model).toBe('claude-sonnet-4-5');
+            expect(config.droids?.architect?.enabled).toBe(true);
         });
         it('should support routing configuration', () => {
             const config = {

@@ -41,7 +41,7 @@ export async function statsCommand(options: { json?: boolean; session?: string }
     console.log(`Cache Read: ${formatTokenCount(stats.totalCacheRead)} | Cache Write: ${formatTokenCount(stats.totalCacheCreation)}`);
     console.log(`Total Cost: ${formatCostWithColor(totalCost)}`);
 
-    // Display top agents
+    // Display top droids
     if (topAgents.length > 0) {
       console.log(colors.bold('\n🤖 Top Agents by Cost\n'));
       for (const agent of topAgents) {
@@ -81,7 +81,7 @@ export async function statsCommand(options: { json?: boolean; session?: string }
     console.log(`Cache Read: ${formatTokenCount(aggregate.totalCacheRead)} | Cache Write: ${formatTokenCount(aggregate.totalCacheCreation)}`);
     console.log(`Total Cost: ${formatCostWithColor(aggregate.totalCost)}`);
 
-    // Display top agents (only if data available - not tracked by tokscale)
+    // Display top droids (only if data available - not tracked by tokscale)
     if (topAgents.length > 0) {
       console.log(colors.bold('\n🤖 Top Agents by Cost (All Sessions)\n'));
       for (const agent of topAgents) {

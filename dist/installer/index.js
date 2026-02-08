@@ -1,7 +1,7 @@
 /**
  * Installer Module
  *
- * Handles installation of OMD agents, commands, and configuration
+ * Handles installation of OMD droids, commands, and configuration
  * into the Droid config directory (~/.factory/).
  *
  * Cross-platform support via Node.js-based hook scripts (.mjs).
@@ -15,7 +15,7 @@ import { execSync } from 'child_process';
 import { getHookScripts, getHooksSettingsConfig, isWindows, MIN_NODE_VERSION } from './hooks.js';
 /** Droid configuration directory */
 export const DROID_CONFIG_DIR = join(homedir(), '.factory');
-export const AGENTS_DIR = join(DROID_CONFIG_DIR, 'agents');
+export const AGENTS_DIR = join(DROID_CONFIG_DIR, 'droids');
 export const COMMANDS_DIR = join(DROID_CONFIG_DIR, 'commands');
 export const SKILLS_DIR = join(DROID_CONFIG_DIR, 'skills');
 export const HOOKS_DIR = join(DROID_CONFIG_DIR, 'hooks');
@@ -155,13 +155,13 @@ function getPackageDir() {
     return join(__dirname, '..', '..');
 }
 /**
- * Load agent definitions from /agents/*.md files
+ * Load agent definitions from /droids/*.md files
  */
 function loadAgentDefinitions() {
-    const agentsDir = join(getPackageDir(), 'agents');
+    const agentsDir = join(getPackageDir(), 'droids');
     const definitions = {};
     if (!existsSync(agentsDir)) {
-        console.error(`FATAL: agents directory not found: ${agentsDir}`);
+        console.error(`FATAL: droids directory not found: ${agentsDir}`);
         process.exit(1);
     }
     for (const file of readdirSync(agentsDir)) {
@@ -246,7 +246,7 @@ export function mergeDroidMd(existingContent, omdContent, version) {
     return `${START_MARKER}\n${versionMarker}${cleanOmdContent}\n${END_MARKER}\n\n${USER_CUSTOMIZATIONS}\n${existingContent}`;
 }
 /**
- * Install OMD agents, commands, skills, and hooks
+ * Install OMD droids, commands, skills, and hooks
  */
 export function install(options = {}) {
     const result = {
@@ -320,7 +320,7 @@ export function install(options = {}) {
             if (!existsSync(HOOKS_DIR)) {
                 mkdirSync(HOOKS_DIR, { recursive: true });
             }
-            // Install agents
+            // Install droids
             log('Installing agent definitions...');
             for (const [filename, content] of Object.entries(loadAgentDefinitions())) {
                 const filepath = join(AGENTS_DIR, filename);
@@ -641,7 +641,7 @@ export function install(options = {}) {
         }
         result.success = true;
         const hookCount = Object.keys(getHookScripts()).length;
-        result.message = `Successfully installed ${result.installedAgents.length} agents, ${result.installedCommands.length} commands, ${result.installedSkills.length} skills, and ${hookCount} hooks`;
+        result.message = `Successfully installed ${result.installedAgents.length} droids, ${result.installedCommands.length} commands, ${result.installedSkills.length} skills, and ${hookCount} hooks`;
     }
     catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);

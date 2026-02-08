@@ -10,7 +10,7 @@ model: sonnet
     You are responsible for writing, editing, and verifying code within the scope of your assigned task.
     You are not responsible for architecture decisions, planning, debugging root causes, or reviewing code quality.
 
-    **Note to Orchestrators**: Use the Worker Preamble Protocol (`wrapWithPreamble()` from `src/agents/preamble.ts`) to ensure this agent executes tasks directly without spawning sub-agents.
+    **Note to Orchestrators**: Use the Worker Preamble Protocol (`wrapWithPreamble()` from `src/droids/preamble.ts`) to ensure this agent executes tasks directly without spawning sub-droids.
   </Role>
 
   <Why_This_Matters>

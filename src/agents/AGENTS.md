@@ -1,18 +1,18 @@
 <!-- Parent: ../AGENTS.md -->
 <!-- Generated: 2026-01-28 | Updated: 2026-01-31 -->
 
-# agents
+# droids
 
 28 specialized AI agent definitions with 3-tier model routing for optimal cost and performance.
 
 ## Purpose
 
-This directory defines all agents available in oh-my-droid:
+This directory defines all droids available in oh-my-droid:
 
-- **12 base agents** with default model assignments
-- **4 specialized agents** (security-reviewer, build-fixer, tdd-guide, code-reviewer)
+- **12 base droids** with default model assignments
+- **4 specialized droids** (security-reviewer, build-fixer, tdd-guide, code-reviewer)
 - **12 tiered variants** (LOW/MEDIUM/HIGH) for smart routing
-- Prompts loaded dynamically from `/agents/*.md` files
+- Prompts loaded dynamically from `/droids/*.md` files
 - Tools assigned based on agent specialization
 
 ## Key Files
@@ -32,7 +32,7 @@ This directory defines all agents available in oh-my-droid:
 | `planner.ts` | Strategic planning (Opus) |
 | `qa-tester.ts` | CLI/service testing with tmux (Sonnet) |
 | `scientist.ts` | Data analysis & hypothesis testing (Sonnet) |
-| `index.ts` | Exports all agents and utilities |
+| `index.ts` | Exports all droids and utilities |
 
 ## For AI Agents
 
@@ -43,14 +43,14 @@ This directory defines all agents available in oh-my-droid:
 The main registry is in `definitions.ts`:
 
 ```typescript
-// Get all 28 agents
-const agents = getAgentDefinitions();
+// Get all 28 droids
+const droids = getAgentDefinitions();
 
 // Each agent has:
 {
   name: 'architect',
   description: 'Architecture & Debugging Advisor',
-  prompt: '...',  // Loaded from /agents/architect.md
+  prompt: '...',  // Loaded from /droids/architect.md
   tools: ['Read', 'Glob', 'Grep', 'WebSearch', 'WebFetch'],
   model: 'opus',
   defaultModel: 'opus'
@@ -97,14 +97,14 @@ import type { AgentConfig } from '../shared/types.js';
 export const newAgent: AgentConfig = {
   name: 'new-agent',
   description: 'What this agent does',
-  prompt: '', // Will be loaded from /agents/new-agent.md
+  prompt: '', // Will be loaded from /droids/new-agent.md
   tools: ['Read', 'Glob', 'Grep'],
   model: 'sonnet',
   defaultModel: 'sonnet'
 };
 ```
 
-2. **Create prompt template** at `/agents/new-agent.md`:
+2. **Create prompt template** at `/droids/new-agent.md`:
 ```markdown
 ---
 name: new-agent
@@ -124,7 +124,7 @@ import { newAgent } from './new-agent.js';
 
 export function getAgentDefinitions() {
   return {
-    // ... existing agents
+    // ... existing droids
     'new-agent': newAgent,
   };
 }
@@ -165,8 +165,8 @@ export const newAgentHigh: AgentConfig = {
 
 #### When Adding a New Agent
 
-1. Create agent file (`src/agents/new-agent.ts`)
-2. Create prompt template (`agents/new-agent.md`)
+1. Create agent file (`src/droids/new-agent.ts`)
+2. Create prompt template (`droids/new-agent.md`)
 3. Add to `definitions.ts` (import + registry)
 4. Export from `index.ts`
 5. Update `docs/REFERENCE.md` (Agents section, count)
@@ -175,16 +175,16 @@ export const newAgentHigh: AgentConfig = {
 
 #### When Modifying an Agent
 
-1. Update agent file (`src/agents/*.ts`) if changing tools/model
-2. Update prompt template (`agents/*.md`) if changing behavior
+1. Update agent file (`src/droids/*.ts`) if changing tools/model
+2. Update prompt template (`droids/*.md`) if changing behavior
 3. Update tiered variants (`-low`, `-medium`, `-high`) if applicable
 4. Update `docs/REFERENCE.md` if changing agent description/capabilities
 5. Update `docs/AGENTS.md` (Agent Tool Matrix) if changing tool assignments
 
 #### When Removing an Agent
 
-1. Remove agent file from `src/agents/`
-2. Remove prompt template from `agents/`
+1. Remove agent file from `src/droids/`
+2. Remove prompt template from `droids/`
 3. Remove from `definitions.ts` and `index.ts`
 4. Update agent counts in all documentation
 5. Check for skill/hook references to the removed agent
@@ -202,7 +202,7 @@ npm test -- --grep "agent"
 **Prompt loading:**
 ```typescript
 function loadAgentPrompt(agentName: string): string {
-  const agentPath = join(getPackageDir(), 'agents', `${agentName}.md`);
+  const agentPath = join(getPackageDir(), 'droids', `${agentName}.md`);
   const content = readFileSync(agentPath, 'utf-8');
   // Strip YAML frontmatter
   const match = content.match(/^---[\s\S]*?---\s*([\s\S]*)$/);
@@ -211,15 +211,15 @@ function loadAgentPrompt(agentName: string): string {
 ```
 
 **Tool assignment patterns:**
-- Read-only agents: `['Read', 'Glob', 'Grep']`
-- Analysis agents: Add `['WebSearch', 'WebFetch']`
-- Execution agents: Add `['Edit', 'Write', 'Bash', 'TodoWrite']`
-- Data agents: Add `['python_repl']`
+- Read-only droids: `['Read', 'Glob', 'Grep']`
+- Analysis droids: Add `['WebSearch', 'WebFetch']`
+- Execution droids: Add `['Edit', 'Write', 'Bash', 'TodoWrite']`
+- Data droids: Add `['python_repl']`
 
 ## Dependencies
 
 ### Internal
-- Prompts from `/agents/*.md`
+- Prompts from `/droids/*.md`
 - Types from `../shared/types.ts`
 
 ### External

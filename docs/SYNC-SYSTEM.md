@@ -14,7 +14,7 @@ In a typical project lifecycle:
 2. Creates a release commit
 3. **Forgets** to update version badge in `README.md` (still shows `3.4.0`)
 4. **Forgets** to update version header in `docs/REFERENCE.md`
-5. **Forgets** to update agent count in `.github/AGENTS.md` after adding new agents
+5. **Forgets** to update agent count in `.github/AGENTS.md` after adding new droids
 6. Users see inconsistent version information across documentation
 7. CI builds look professional but contain stale metadata
 
@@ -60,7 +60,7 @@ The script syncs these files:
 
 Some metadata is computed, not read:
 
-- **Agent count** - Counts `.yaml`/`.yml` files in `agents/` directory
+- **Agent count** - Counts `.yaml`/`.yml` files in `droids/` directory
 - **Skill count** - Counts `.md` files in `skills/` directory
 
 This ensures documentation always reflects current state.

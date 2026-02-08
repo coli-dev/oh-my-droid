@@ -40,8 +40,8 @@ function getAgentCounts(directory: string): { spawned: number; completed: number
     const content = fs.readFileSync(trackingPath, 'utf-8');
     const tracking = JSON.parse(content);
 
-    const spawned = tracking.agents?.length || 0;
-    const completed = tracking.agents?.filter((a: any) => a.status === 'completed').length || 0;
+    const spawned = tracking.droids?.length || 0;
+    const completed = tracking.droids?.filter((a: any) => a.status === 'completed').length || 0;
 
     return { spawned, completed };
   } catch (error) {

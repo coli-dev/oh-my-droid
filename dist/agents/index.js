@@ -24,15 +24,15 @@ export { deepExecutorAgent, DEEP_EXECUTOR_PROMPT_METADATA } from './deep-executo
 // Backward compatibility: Deprecated researcher export
 /** @deprecated Use dependency-expert agent instead */
 export { researcherAgent, RESEARCHER_PROMPT_METADATA } from './researcher.js';
-// Reformed agents (Build/Analysis Lane)
+// Reformed droids (Build/Analysis Lane)
 export { debuggerAgent, verifierAgent } from './definitions.js';
-// Reformed agents (Review Lane)
+// Reformed droids (Review Lane)
 export { styleReviewerAgent, qualityReviewerAgent, apiReviewerAgent, performanceReviewerAgent } from './definitions.js';
-// Reformed agents (Domain Specialists)
+// Reformed droids (Domain Specialists)
 export { dependencyExpertAgent, testEngineerAgent, qualityStrategistAgent } from './definitions.js';
-// Reformed agents (Product Lane)
+// Reformed droids (Product Lane)
 export { productManagerAgent, uxResearcherAgent, informationArchitectAgent, productAnalystAgent } from './definitions.js';
-// Specialized agents (Security, Build, Code Review, Git)
+// Specialized droids (Security, Build, Code Review, Git)
 export { securityReviewerAgent, buildFixerAgent, codeReviewerAgent, gitMasterAgent } from './definitions.js';
 // Backward compatibility: Deprecated tiered agent aliases
 /** @deprecated Use agent with model parameter instead */

@@ -15,7 +15,7 @@ export const DEFAULT_ROUTING_RULES = [
         action: { tier: 'EXPLICIT', reason: 'User specified model explicitly' },
         priority: 100,
     },
-    // NOTE: ALL agents are now ADAPTIVE based on task complexity
+    // NOTE: ALL droids are now ADAPTIVE based on task complexity
     // This includes: architect, planner, critic, analyst, explore, writer, etc.
     // ============ Advisory Agent Adaptive Rules ============
     // Architect: Simple lookups → LOW, tracing → MEDIUM, debugging/architecture → HIGH

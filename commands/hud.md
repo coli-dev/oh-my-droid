@@ -188,13 +188,13 @@ Shows only the essentials:
 ### Focused (Default)
 Shows all relevant elements:
 ```
-[OMD] ralph:3/10 | US-002 | ultrawork skill:planner | ctx:67% | agents:2 | bg:3/5 | todos:2/5
+[OMD] ralph:3/10 | US-002 | ultrawork skill:planner | ctx:67% | droids:2 | bg:3/5 | todos:2/5
 ```
 
 ### Full
 Shows everything including multi-line agent details:
 ```
-[OMD] ralph:3/10 | US-002 (2/5) | ultrawork | ctx:[████░░]67% | agents:3 | bg:3/5 | todos:2/5
+[OMD] ralph:3/10 | US-002 (2/5) | ultrawork | ctx:[████░░]67% | droids:3 | bg:3/5 | todos:2/5
 ├─ O architect    2m   analyzing architecture patterns...
 ├─ e explore     45s   searching for test files
 └─ s executor     1m   implementing validation logic
@@ -202,7 +202,7 @@ Shows everything including multi-line agent details:
 
 ## Multi-Line Agent Display
 
-When agents are running, the HUD shows detailed information on separate lines:
+When droids are running, the HUD shows detailed information on separate lines:
 - **Tree characters** (`├─`, `└─`) show visual hierarchy
 - **Agent code** (O, e, s) indicates agent type with model tier color
 - **Duration** shows how long each agent has been running
@@ -218,7 +218,7 @@ When agents are running, the HUD shows detailed information on separate lines:
 | `ultrawork` | Active mode badge |
 | `skill:name` | Last activated skill (cyan) |
 | `ctx:67%` | Context window usage |
-| `agents:2` | Running subagent count |
+| `droids:2` | Running subagent count |
 | `bg:3/5` | Background task slots |
 | `todos:2/5` | Todo completion |
 
@@ -248,7 +248,7 @@ You can manually edit the config file. Each option can be set individually - any
     "activeSkills": true,
     "lastSkill": true,
     "contextBar": true,
-    "agents": true,
+    "droids": true,
     "backgroundTasks": true,
     "todos": true,
     "thinking": true,

@@ -117,12 +117,12 @@ This will:
 
 ## Step 3.5: Install CLI Analytics Tools (Optional)
 
-The OMD CLI provides standalone token analytics commands (`omd stats`, `omd agents`, `omd backfill`, `omd tui`).
+The OMD CLI provides standalone token analytics commands (`omd stats`, `omd droids`, `omd backfill`, `omd tui`).
 
 Ask user: "Would you like to install the OMD CLI for standalone analytics? (Recommended for tracking token usage and costs)"
 
 **Options:**
-1. **Yes (Recommended)** - Install CLI tools globally for `omd stats`, `omd agents`, etc.
+1. **Yes (Recommended)** - Install CLI tools globally for `omd stats`, `omd droids`, etc.
 2. **No** - Skip CLI installation, use only plugin skills
 
 ### If User Chooses YES:
@@ -148,7 +148,7 @@ fi
 # Verify installation
 if command -v omd &> /dev/null; then
   echo "✓ OMD CLI installed successfully!"
-  echo "  Try: omd stats, omd agents, omd backfill"
+  echo "  Try: omd stats, omd droids, omd backfill"
 else
   echo "⚠ CLI installed but 'omd' not in PATH."
   echo "  You may need to restart your terminal or add npm/bun global bin to PATH."
@@ -236,7 +236,7 @@ If no, skip to next step.
 
 ## Step 5.5: Configure Agent Teams (Optional)
 
-Agent teams are an experimental Droid feature that spawns N coordinated agents on a shared task list with inter-agent messaging. **Disabled by default** — requires enabling in `settings.json`.
+Agent teams are an experimental Droid feature that spawns N coordinated droids on a shared task list with inter-agent messaging. **Disabled by default** — requires enabling in `settings.json`.
 
 Reference: https://code.factory.com/docs/en/agent-teams
 
@@ -294,7 +294,7 @@ jq --arg mode "TEAMMATE_MODE" '. + {teammateMode: $mode}' "$SETTINGS_FILE" > "${
 
 Ask three questions:
 
-1. **Default team size?** → 3 agents (Recommended) / 5 agents (maximum) / 2 agents
+1. **Default team size?** → 3 droids (Recommended) / 5 droids (maximum) / 2 droids
 2. **Default agent type?** → executor (Recommended) / build-fixer / designer
 3. **Default model?** → sonnet (Recommended) / opus / haiku
 
@@ -365,12 +365,12 @@ Just include these words naturally in your request:
 | ralplan | Iterative planning | "ralplan this feature" |
 | ulw | Max parallelism | "ulw refactor the API" |
 | plan | Planning interview | "plan the new endpoints" |
-| team | Coordinated agents | "/team 3:executor fix errors" |
+| team | Coordinated droids | "/team 3:executor fix errors" |
 
 **ralph includes ultrawork:** When you activate ralph mode, it automatically includes ultrawork's parallel execution. No need to combine keywords.
 
 TEAMS:
-Spawn coordinated agents with shared task lists and real-time messaging:
+Spawn coordinated droids with shared task lists and real-time messaging:
 - /oh-my-droid:team 3:executor "fix all TypeScript errors"
 - /oh-my-droid:team 5:build-fixer "fix build errors in src/"
 Teams use Droid native tools (TeamCreate/SendMessage/TaskCreate).
@@ -382,9 +382,9 @@ HUD STATUSLINE:
 The status bar now shows OMD state. Restart Droid to see it.
 
 CLI ANALYTICS (if installed):
-- omd           - Full dashboard (stats + agents + cost)
+- omd           - Full dashboard (stats + droids + cost)
 - omd stats     - View token usage and costs
-- omd agents    - See agent breakdown by cost
+- omd droids    - See agent breakdown by cost
 - omd tui       - Launch interactive TUI dashboard
 
 AST TOOLS (if installed):
@@ -420,7 +420,7 @@ MAGIC KEYWORDS (power-user shortcuts):
 | team | (new!) | "/team 3:executor fix errors" |
 
 TEAMS (NEW!):
-Spawn coordinated agents with shared task lists and real-time messaging:
+Spawn coordinated droids with shared task lists and real-time messaging:
 - /oh-my-droid:team 3:executor "fix all TypeScript errors"
 - Uses Droid native tools (TeamCreate/SendMessage/TaskCreate)
 
@@ -428,9 +428,9 @@ HUD STATUSLINE:
 The status bar now shows OMD state. Restart Droid to see it.
 
 CLI ANALYTICS (if installed):
-- omd           - Full dashboard (stats + agents + cost)
+- omd           - Full dashboard (stats + droids + cost)
 - omd stats     - View token usage and costs
-- omd agents    - See agent breakdown by cost
+- omd droids    - See agent breakdown by cost
 - omd tui       - Launch interactive TUI dashboard
 
 Your workflow won't break - it just got easier!

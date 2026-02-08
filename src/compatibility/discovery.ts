@@ -59,7 +59,7 @@ const pluginManifestSchema = {
         },
       ],
     },
-    agents: {
+    droids: {
       oneOf: [
         { type: "string", maxLength: 200 },
         {
@@ -397,7 +397,7 @@ function discoverPluginSkills(
 }
 
 /**
- * Discover agents from a plugin directory
+ * Discover droids from a plugin directory
  */
 function discoverPluginAgents(
   pluginPath: string,
@@ -406,24 +406,24 @@ function discoverPluginAgents(
   const tools: ExternalTool[] = [];
   const namespace = manifest.namespace || manifest.name;
 
-  // Handle agents directory
+  // Handle droids directory
   let agentsPaths: string[] = [];
-  if (typeof manifest.agents === "string") {
+  if (typeof manifest.droids === "string") {
     // SECURITY: Validate path stays within plugin directory
-    if (!isPathWithinDirectory(pluginPath, manifest.agents)) {
+    if (!isPathWithinDirectory(pluginPath, manifest.droids)) {
       console.warn(
-        `[Security] Path traversal detected in plugin ${manifest.name}: agents path "${manifest.agents}" escapes plugin directory`,
+        `[Security] Path traversal detected in plugin ${manifest.name}: droids path "${manifest.droids}" escapes plugin directory`,
       );
       return tools;
     }
-    agentsPaths = [join(pluginPath, manifest.agents)];
-  } else if (Array.isArray(manifest.agents)) {
+    agentsPaths = [join(pluginPath, manifest.droids)];
+  } else if (Array.isArray(manifest.droids)) {
     agentsPaths = [];
-    for (const a of manifest.agents) {
+    for (const a of manifest.droids) {
       // SECURITY: Validate each path
       if (!isPathWithinDirectory(pluginPath, a)) {
         console.warn(
-          `[Security] Path traversal detected in plugin ${manifest.name}: agents path "${a}" escapes plugin directory`,
+          `[Security] Path traversal detected in plugin ${manifest.name}: droids path "${a}" escapes plugin directory`,
         );
         continue;
       }

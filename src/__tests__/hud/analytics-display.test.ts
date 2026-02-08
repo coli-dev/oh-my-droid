@@ -173,7 +173,7 @@ describe('renderAnalyticsLineWithConfig', () => {
   });
 
   describe('showCost=false, showCache=false (minimal)', () => {
-    it('shows only top agents', () => {
+    it('shows only top droids', () => {
       const result = renderAnalyticsLineWithConfig(baseAnalytics, false, false);
       expect(result).not.toContain('Cost:');
       expect(result).not.toContain('Cache:');

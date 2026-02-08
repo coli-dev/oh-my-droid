@@ -1,13 +1,13 @@
 ---
-description: N coordinated agents on shared task list using Droid native teams
-aliases: [team-agents, team-mode]
+description: N coordinated droids on shared task list using Droid native teams
+aliases: [team-droids, team-mode]
 ---
 
 # Team Command
 
 [TEAM MODE ACTIVATED]
 
-Spawn N coordinated agents working on a shared task list using Droid's native TeamCreate, SendMessage, and TaskCreate tools. Like a dev team with real-time communication—fast, reliable, and with built-in coordination.
+Spawn N coordinated droids working on a shared task list using Droid's native TeamCreate, SendMessage, and TaskCreate tools. Like a dev team with real-time communication—fast, reliable, and with built-in coordination.
 
 ## User's Request
 
@@ -15,14 +15,14 @@ Spawn N coordinated agents working on a shared task list using Droid's native Te
 
 ## Usage Patterns
 
-### Standard Mode (1-5 agents)
+### Standard Mode (1-5 droids)
 ```
 /oh-my-droid:team N:agent-type "task description"
 ```
 
 ### Parameters
 
-- **N** - Number of agents (1-5, Droid background task limit)
+- **N** - Number of droids (1-5, Droid background task limit)
 - **agent-type** - Agent to spawn (e.g., executor, build-fixer, architect)
 - **task** - High-level task to decompose and distribute
 
@@ -72,7 +72,7 @@ User: "/team 5:executor fix all TypeScript errors"
 
 **EVERY TEAM MODE SESSION MUST FOLLOW THIS EXACT SEQUENCE:**
 
-1. **TeamCreate()** - MUST be called FIRST before any Task agents
+1. **TeamCreate()** - MUST be called FIRST before any Task droids
 2. **TaskCreate() × N** - Create all subtasks on the shared task list
 3. **Task(team_name=..., name=...) × N** - Spawn teammates WITH both team_name and name parameters
 4. **Monitor** - Track progress via TaskList + receive automatic SendMessage from teammates
@@ -83,13 +83,13 @@ User: "/team 5:executor fix all TypeScript errors"
 
 ### ANTI-PATTERNS (NEVER DO THIS)
 
-❌ **Launching Task agents without calling TeamCreate first**
+❌ **Launching Task droids without calling TeamCreate first**
    - If you skip TeamCreate, you're doing ultrawork, NOT team mode
 
 ❌ **Using run_in_background without team_name parameter**
    - That's parallel ultrawork, not team coordination
 
-❌ **Skipping TaskCreate and having agents self-organize**
+❌ **Skipping TaskCreate and having droids self-organize**
    - Defeats the purpose of shared task list coordination
 
 ❌ **Skipping shutdown_request / TeamDelete cleanup**
@@ -98,7 +98,7 @@ User: "/team 5:executor fix all TypeScript errors"
 ❌ **Using Task tool without the `name` parameter**
    - Teammates need names for messaging - name identifies them in SendMessage
 
-❌ **Spawning agents then claiming "team mode complete" without cleanup**
+❌ **Spawning droids then claiming "team mode complete" without cleanup**
    - You MUST call SendMessage(shutdown_request) and TeamDelete
 
 ### Mode Distinction
@@ -160,7 +160,7 @@ From `{{ARGUMENTS}}`, extract:
 - TaskCreate for each subtask (with dependencies if needed)
 
 ### 4. Spawn Teammates
-- Launch N agents via Task tool with BOTH `team_name` AND `name` parameters
+- Launch N droids via Task tool with BOTH `team_name` AND `name` parameters
 - Each teammate: TaskList → claim → work → complete → report
 
 **Example:**

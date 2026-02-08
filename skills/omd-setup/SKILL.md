@@ -581,7 +581,7 @@ Use the AskUserQuestion tool to prompt the user:
 
 **Options:**
 1. **ultrawork (maximum capability)** - Uses all agent tiers including Opus for complex tasks. Best for challenging work where quality matters most. (Recommended)
-2. **ecomode (token efficient)** - Prefers Haiku/Sonnet agents, avoids Opus. Best for pro-plan users who want cost efficiency.
+2. **ecomode (token efficient)** - Prefers Haiku/Sonnet droids, avoids Opus. Best for pro-plan users who want cost efficiency.
 
 Store the preference in `~/.factory/.omd-config.json`:
 
@@ -614,12 +614,12 @@ echo "Ecomode disabled completely"
 
 ## Step 3.8: Install CLI Analytics Tools (Optional)
 
-The OMD CLI provides standalone token analytics commands (`omd stats`, `omd agents`, `omd tui`).
+The OMD CLI provides standalone token analytics commands (`omd stats`, `omd droids`, `omd tui`).
 
 Ask user: "Would you like to install the OMD CLI for standalone analytics? (Recommended for tracking token usage and costs)"
 
 **Options:**
-1. **Yes (Recommended)** - Install CLI tools globally for `omd stats`, `omd agents`, etc.
+1. **Yes (Recommended)** - Install CLI tools globally for `omd stats`, `omd droids`, etc.
 2. **No** - Skip CLI installation, use only plugin skills
 
 ### CLI Installation Note
@@ -716,13 +716,13 @@ If no, skip to next step.
 
 **Note**: If resuming and lastCompletedStep >= 5.5, skip to Step 6.
 
-Agent teams are an experimental Droid feature that lets you spawn N coordinated agents working on a shared task list with inter-agent messaging. **Teams are disabled by default** and require enabling via `settings.json`.
+Agent teams are an experimental Droid feature that lets you spawn N coordinated droids working on a shared task list with inter-agent messaging. **Teams are disabled by default** and require enabling via `settings.json`.
 
 Reference: https://code.factory.com/docs/en/agent-teams
 
 Use the AskUserQuestion tool to prompt:
 
-**Question:** "Would you like to enable agent teams? Teams let you spawn coordinated agents (e.g., `/team 3:executor 'fix all errors'`). This is an experimental Droid feature."
+**Question:** "Would you like to enable agent teams? Teams let you spawn coordinated droids (e.g., `/team 3:executor 'fix all errors'`). This is an experimental Droid feature."
 
 **Options:**
 1. **Yes, enable teams (Recommended)** - Enable the experimental feature and configure defaults
@@ -811,12 +811,12 @@ echo "Teammate display mode set to: TEAMMATE_MODE"
 
 Use the AskUserQuestion tool with multiple questions:
 
-**Question 1:** "How many agents should teams spawn by default?"
+**Question 1:** "How many droids should teams spawn by default?"
 
 **Options:**
-1. **3 agents (Recommended)** - Good balance of speed and resource usage
-2. **5 agents (maximum)** - Maximum parallelism for large tasks
-3. **2 agents** - Conservative, for smaller projects
+1. **3 droids (Recommended)** - Good balance of speed and resource usage
+2. **5 droids (maximum)** - Maximum parallelism for large tasks
+3. **2 droids** - Conservative, for smaller projects
 
 **Question 2:** "Which agent type should teammates use by default?"
 
@@ -852,7 +852,7 @@ echo "$EXISTING" | jq \
   '. + {team: {maxAgents: $maxAgents, defaultAgentType: $agentType, defaultModel: $model, monitorIntervalMs: 30000, shutdownTimeoutMs: 15000}}' > "$CONFIG_FILE"
 
 echo "Team configuration saved:"
-echo "  Max agents: MAX_AGENTS"
+echo "  Max droids: MAX_AGENTS"
 echo "  Default agent: AGENT_TYPE"
 echo "  Default model: MODEL"
 ```
@@ -949,12 +949,12 @@ Just include these words naturally in your request:
 | ulw | Max parallelism | "ulw refactor the API" |
 | eco | Token-efficient mode | "eco refactor the API" |
 | plan | Planning interview | "plan the new endpoints" |
-| team | Coordinated agents | "/team 3:executor fix errors" |
+| team | Coordinated droids | "/team 3:executor fix errors" |
 
 **ralph includes ultrawork:** When you activate ralph mode, it automatically includes ultrawork's parallel execution. No need to combine keywords.
 
 TEAMS:
-Spawn coordinated agents with shared task lists and real-time messaging:
+Spawn coordinated droids with shared task lists and real-time messaging:
 - /oh-my-droid:team 3:executor "fix all TypeScript errors"
 - /oh-my-droid:team 5:build-fixer "fix build errors in src/"
 Teams use Droid native tools (TeamCreate/SendMessage/TaskCreate).
@@ -966,9 +966,9 @@ HUD STATUSLINE:
 The status bar now shows OMD state. Restart Droid to see it.
 
 CLI ANALYTICS (if installed):
-- omd           - Full dashboard (stats + agents + cost)
+- omd           - Full dashboard (stats + droids + cost)
 - omd stats     - View token usage and costs
-- omd agents    - See agent breakdown by cost
+- omd droids    - See agent breakdown by cost
 - omd tui       - Launch interactive TUI dashboard
 
 That's it! Just use Droid normally.
@@ -1000,7 +1000,7 @@ MAGIC KEYWORDS (power-user shortcuts):
 | team | (new!) | "/team 3:executor fix errors" |
 
 TEAMS (NEW!):
-Spawn coordinated agents with shared task lists and real-time messaging:
+Spawn coordinated droids with shared task lists and real-time messaging:
 - /oh-my-droid:team 3:executor "fix all TypeScript errors"
 - Uses Droid native tools (TeamCreate/SendMessage/TaskCreate)
 
@@ -1008,9 +1008,9 @@ HUD STATUSLINE:
 The status bar now shows OMD state. Restart Droid to see it.
 
 CLI ANALYTICS (if installed):
-- omd           - Full dashboard (stats + agents + cost)
+- omd           - Full dashboard (stats + droids + cost)
 - omd stats     - View token usage and costs
-- omd agents    - See agent breakdown by cost
+- omd droids    - See agent breakdown by cost
 - omd tui       - Launch interactive TUI dashboard
 
 Your workflow won't break - it just got easier!

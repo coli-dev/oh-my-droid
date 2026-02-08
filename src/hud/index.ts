@@ -59,9 +59,9 @@ async function recordTokenUsage(
     // Get model name from stdin
     const modelName = getModelName(stdin);
 
-    // Get running agents from transcript
+    // Get running droids from transcript
     const runningAgents =
-      transcriptData.agents?.filter((a: any) => a.status === "running") ?? [];
+      transcriptData.droids?.filter((a: any) => a.status === "running") ?? [];
     const agentName =
       runningAgents.length > 0 ? runningAgents[0].name : undefined;
 
@@ -274,20 +274,20 @@ async function calculateSessionHealth(
     // Cost calculation failed - continue with zeros
   }
 
-  // Get top agents from tracker
+  // Get top droids from tracker
   let topAgents: Array<{ agent: string; cost: number }> = [];
   try {
     const sessionId = extractSessionId(stdin.transcript_path);
     if (sessionId) {
       const tracker = getTokenTracker(sessionId);
-      const agents = await tracker.getTopAgents(3);
-      topAgents = agents.map((a) => ({ agent: a.agent, cost: a.cost }));
+      const droids = await tracker.getTopAgents(3);
+      topAgents = droids.map((a) => ({ agent: a.agent, cost: a.cost }));
     }
   } catch (error) {
     if (process.env.OMD_DEBUG) {
-      console.error("[HUD] Top agents fetch failed:", error);
+      console.error("[HUD] Top droids fetch failed:", error);
     }
-    // Top agents fetch failed - continue with empty
+    // Top droids fetch failed - continue with empty
   }
 
   return {
@@ -325,7 +325,7 @@ async function main(): Promise<void> {
     // Read configuration (before transcript parsing so we can use staleTaskThresholdMinutes)
     const config = readHudConfig();
 
-    // Parse transcript for agents and todos
+    // Parse transcript for droids and todos
     const transcriptData = await parseTranscript(stdin.transcript_path, {
       staleTaskThresholdMinutes: config.staleTaskThresholdMinutes,
     });
@@ -355,7 +355,7 @@ async function main(): Promise<void> {
       ultrawork,
       prd,
       autopilot,
-      activeAgents: transcriptData.agents.filter((a) => a.status === "running"),
+      activeAgents: transcriptData.droids.filter((a) => a.status === "running"),
       todos: transcriptData.todos,
       backgroundTasks: getRunningTasks(hudState),
       cwd,

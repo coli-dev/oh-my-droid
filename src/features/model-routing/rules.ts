@@ -25,7 +25,7 @@ export const DEFAULT_ROUTING_RULES: RoutingRule[] = [
     priority: 100,
   },
 
-  // NOTE: ALL agents are now ADAPTIVE based on task complexity
+  // NOTE: ALL droids are now ADAPTIVE based on task complexity
   // This includes: architect, planner, critic, analyst, explore, writer, etc.
 
   // ============ Advisory Agent Adaptive Rules ============

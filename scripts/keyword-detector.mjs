@@ -12,7 +12,7 @@
  * 4. ultrapilot: Parallel autopilot
  * 5. ultrawork/ulw: Maximum parallel execution
  * 6. ecomode/eco: Token-efficient execution
- * 7. swarm: N coordinated agents
+ * 7. swarm: N coordinated droids
  * 8. pipeline: Sequential agent chaining
  * 9. ralplan: Iterative planning with consensus
  * 10. plan: Planning interview mode
@@ -343,15 +343,15 @@ async function main() {
       matches.push({ name: 'ecomode', args: '' });
     }
 
-    // Swarm - parse N from "swarm N agents"
-    const swarmMatch = cleanPrompt.match(/\bswarm\s+(\d+)\s+agents?\b/i);
-    if (swarmMatch || /\bcoordinated\s+agents\b/i.test(cleanPrompt)) {
+    // Swarm - parse N from "swarm N droids"
+    const swarmMatch = cleanPrompt.match(/\bswarm\s+(\d+)\s+droids?\b/i);
+    if (swarmMatch || /\bcoordinated\s+droids\b/i.test(cleanPrompt)) {
       const agentCount = swarmMatch ? swarmMatch[1] : '3';
       matches.push({ name: 'swarm', args: agentCount });
     }
 
     // Pipeline keywords
-    if (/\b(pipeline)\b/i.test(cleanPrompt) || /\bchain\s+agents\b/i.test(cleanPrompt)) {
+    if (/\b(pipeline)\b/i.test(cleanPrompt) || /\bchain\s+droids\b/i.test(cleanPrompt)) {
       matches.push({ name: 'pipeline', args: '' });
     }
 

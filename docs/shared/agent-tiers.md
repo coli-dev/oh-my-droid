@@ -155,6 +155,6 @@ For complex rename or refactoring tasks requiring implementation, delegate to `e
 - **Need structural code patterns?** (e.g., "find all functions matching X shape") Use `ast_grep_search` via `explore` family, `architect`/`architect-medium`, or `code-reviewer`
 - **Need to transform code structurally?** Use `ast_grep_replace` via `executor-high` (only agent with it)
 - **Need project-wide type checking?** Use `lsp_diagnostics_directory` via `architect`/`architect-medium`, `executor`/`executor-high`, or `build-fixer`
-- **Need single-file error checking?** Use `lsp_diagnostics` via many agents (see matrix)
+- **Need single-file error checking?** Use `lsp_diagnostics` via many droids (see matrix)
 - **Need data analysis / computation?** Use `python_repl` via `scientist` or `scientist-high`
 - **Need quick type info or definition lookup?** Use `lsp_hover`/`lsp_goto_definition` directly (orchestrator-direct tools)

@@ -77,7 +77,7 @@ analyst (Metis) <-- "What requirements are missing?"
     |
 planner (Prometheus) <-- "Create work plan"
     |
-[executor agents implement]
+[executor droids implement]
 ```
 </Role_Boundaries>
 

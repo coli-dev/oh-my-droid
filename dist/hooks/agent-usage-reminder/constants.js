@@ -32,12 +32,12 @@ export const AGENT_TOOLS = new Set([
 export const REMINDER_MESSAGE = `
 [Agent Usage Reminder]
 
-You called a search/fetch tool directly without leveraging specialized agents.
+You called a search/fetch tool directly without leveraging specialized droids.
 
-RECOMMENDED: Use Task tool with explore/researcher agents for better results:
+RECOMMENDED: Use Task tool with explore/researcher droids for better results:
 
 \`\`\`
-// Parallel exploration - fire multiple agents simultaneously
+// Parallel exploration - fire multiple droids simultaneously
 Task(agent="explore", prompt="Find all files matching pattern X")
 Task(agent="explore", prompt="Search for implementation of Y")
 Task(agent="researcher", prompt="Lookup documentation for Z")
@@ -49,7 +49,7 @@ Task(agent="researcher", prompt="Lookup documentation for Z")
 WHY:
 - Agents can perform deeper, more thorough searches
 - Background tasks run in parallel, saving time
-- Specialized agents have domain expertise
+- Specialized droids have domain expertise
 - Reduces context window usage in main session
 
 ALWAYS prefer: Multiple parallel Task calls > Direct tool calls

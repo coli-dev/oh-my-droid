@@ -6,15 +6,15 @@
  *
  * Main features:
  * - Sisyphus: Primary orchestrator that delegates to specialized subagents
- * - Parallel execution: Background agents run concurrently
- * - LSP/AST tools: IDE-like capabilities for agents
+ * - Parallel execution: Background droids run concurrently
+ * - LSP/AST tools: IDE-like capabilities for droids
  * - Context management: Auto-injection from AGENTS.md/AGENTS.md
  * - Continuation enforcement: Ensures tasks complete before stopping
  * - Magic keywords: Special triggers for enhanced behaviors
  */
 
 import { loadConfig, findContextFiles, loadContextFromFiles } from './config/loader.js';
-import { getAgentDefinitions, omdSystemPrompt } from './agents/definitions.js';
+import { getAgentDefinitions, omdSystemPrompt } from './droids/definitions.js';
 import { getDefaultMcpServers, toSdkMcpFormat } from './mcp/servers.js';
 import { omdToolsServer, getOmdToolNames } from './mcp/omd-tools-server.js';
 import { codexMcpServer } from './mcp/codex-server.js';
@@ -141,7 +141,7 @@ export {
   validateAgentConfig,
   deepMerge,
   loadAgentPrompt,
-  // Individual agents with metadata (rebranded intuitive names)
+  // Individual droids with metadata (rebranded intuitive names)
   architectAgent,
   ARCHITECT_PROMPT_METADATA,
   exploreAgent,
@@ -165,7 +165,7 @@ export {
   // Deprecated (backward compat - will be removed in v4.0.0)
   coordinatorAgent,
   ORCHESTRATOR_SISYPHUS_PROMPT_METADATA
-} from './agents/index.js';
+} from './droids/index.js';
 
 // Command expansion utilities for SDK integration
 export {
@@ -221,7 +221,7 @@ export interface SisyphusSession {
   queryOptions: {
     options: {
       systemPrompt: string;
-      agents: Record<string, { description: string; prompt: string; tools?: string[]; model?: string }>;
+      droids: Record<string, { description: string; prompt: string; tools?: string[]; model?: string }>;
       mcpServers: Record<string, { command: string; args: string[] }>;
       allowedTools: string[];
       permissionMode: string;
@@ -299,7 +299,7 @@ export function createSisyphusSession(options?: SisyphusOptions): SisyphusSessio
   }
 
   // Get agent definitions
-  const agents = getAgentDefinitions();
+  const droids = getAgentDefinitions();
 
   // Build MCP servers configuration
   const externalMcpServers = getDefaultMcpServers({
@@ -359,7 +359,7 @@ export function createSisyphusSession(options?: SisyphusOptions): SisyphusSessio
     queryOptions: {
       options: {
         systemPrompt,
-        agents,
+        droids,
         mcpServers: {
           ...toSdkMcpFormat(externalMcpServers),
           't': omdToolsServer as any,

@@ -14,7 +14,7 @@ export interface AgentConfig {
     defaultModel?: ModelType;
 }
 export interface PluginConfig {
-    agents?: {
+    droids?: {
         omd?: {
             model?: string;
         };

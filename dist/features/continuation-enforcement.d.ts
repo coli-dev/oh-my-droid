@@ -1,7 +1,7 @@
 /**
  * Continuation Enforcement Feature
  *
- * Ensures agents complete all tasks before stopping:
+ * Ensures droids complete all tasks before stopping:
  * - Monitors todo list for incomplete items
  * - Adds reminders to continue when tasks remain
  * - Prevents premature stopping

@@ -51,7 +51,7 @@ jobs:
             // Agent-related
             if (body.includes('agent') || body.includes('oracle') || body.includes('sisyphus') ||
                 body.includes('prometheus') || body.includes('ultrawork') || body.includes('chillwork')) {
-              labels.push('agents');
+              labels.push('droids');
             }
 
             // Apply labels if any matched

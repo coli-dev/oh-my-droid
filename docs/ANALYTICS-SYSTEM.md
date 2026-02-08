@@ -28,7 +28,7 @@ Token usage is automatically captured on every HUD render:
 
 1. **TokenExtractor** parses StatuslineStdin for token data
 2. **Delta Calculation** computes change from previous render
-3. **Agent Correlation** associates tokens with running agents
+3. **Agent Correlation** associates tokens with running droids
 4. **TokenTracker** records usage to JSONL log
 5. **Summary Files** provide fast <10ms session loading
 
@@ -71,7 +71,7 @@ omd cost monthly
 omd sessions
 
 # Agent breakdown
-omd agents
+omd droids
 
 # Export data
 omd export cost csv ./costs.csv

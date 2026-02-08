@@ -1,13 +1,13 @@
 ---
-description: N coordinated agents on shared task list with SQLite-based atomic claiming
-aliases: [swarm-agents]
+description: N coordinated droids on shared task list with SQLite-based atomic claiming
+aliases: [swarm-droids]
 ---
 
 # Swarm Command
 
 [SWARM MODE ACTIVATED]
 
-Spawn N coordinated agents working on a shared task list with SQLite-based atomic claiming. Like a dev team tackling multiple files in parallel—fast, reliable, and with full fault tolerance.
+Spawn N coordinated droids working on a shared task list with SQLite-based atomic claiming. Like a dev team tackling multiple files in parallel—fast, reliable, and with full fault tolerance.
 
 ## User's Request
 
@@ -15,7 +15,7 @@ Spawn N coordinated agents working on a shared task list with SQLite-based atomi
 
 ## Usage Patterns
 
-### Standard Mode (1-5 agents)
+### Standard Mode (1-5 droids)
 ```
 /oh-my-droid:swarm N:agent-type "task description"
 ```
@@ -31,16 +31,16 @@ or
 
 When N > 5 or "aggressive" keyword is used, swarm automatically:
 1. Decomposes work into micro-tasks (one function, one file section, one test)
-2. Spawns agents in waves up to the configured concurrent limit
+2. Spawns droids in waves up to the configured concurrent limit
 3. Polls for completions every 5 seconds
-4. Immediately spawns replacement agents as slots free up
+4. Immediately spawns replacement droids as slots free up
 5. Continues until all tasks complete
 
-**Concurrency Note**: The concurrent agent limit is configurable via `permissions.maxBackgroundTasks` (default 5, max 50). Users can raise this in their OMD config to run more agents in parallel.
+**Concurrency Note**: The concurrent agent limit is configurable via `permissions.maxBackgroundTasks` (default 5, max 50). Users can raise this in their OMD config to run more droids in parallel.
 
 ### Parameters
 
-- **N** - Number of agents (1-5 for standard mode, 6+ for aggressive mode)
+- **N** - Number of droids (1-5 for standard mode, 6+ for aggressive mode)
 - **agent-type** - Agent to spawn (e.g., executor, build-fixer, architect)
 - **task** - High-level task to decompose and distribute
 
@@ -94,7 +94,7 @@ User: "/swarm 5:executor fix all TypeScript errors"
 **Key Features:**
 - SQLite transactions ensure only one agent can claim a task
 - Lease-based ownership with automatic timeout and recovery
-- Heartbeat monitoring for detecting dead agents
+- Heartbeat monitoring for detecting dead droids
 - Full ACID compliance for task state
 
 ## Workflow
@@ -161,11 +161,11 @@ Assign filePatterns to tasks for advisory ownership tracking:
 }
 ```
 
-This allows conflict detection (two agents claiming tasks on same file) but does NOT enforce locks.
+This allows conflict detection (two droids claiming tasks on same file) but does NOT enforce locks.
 
 ### 3. Wave-Based Agent Spawning
 
-**Standard Mode (N ≤ 5)**: Spawn all N agents at once, all run concurrently until task pool is empty.
+**Standard Mode (N ≤ 5)**: Spawn all N droids at once, all run concurrently until task pool is empty.
 
 **Aggressive Mode (N > 5)**: Wave-based spawning to respect concurrent agent limits while maximizing throughput.
 
@@ -181,7 +181,7 @@ while (!isSwarmComplete()) {
   // 1. Check available slots
   const freeSlots = maxConcurrent - activeAgents.size;
 
-  // 2. Spawn agents to fill slots
+  // 2. Spawn droids to fill slots
   if (freeSlots > 0 && spawnedCount < totalTasks) {
     const toSpawn = Math.min(freeSlots, totalTasks - spawnedCount);
 
@@ -196,7 +196,7 @@ while (!isSwarmComplete()) {
   // 3. Wait for polling interval
   await sleep(5000); // Poll every 5 seconds
 
-  // 4. Check for completions and remove finished agents
+  // 4. Check for completions and remove finished droids
   const finishedAgents = await checkCompletedAgents(activeAgents);
   finishedAgents.forEach(id => activeAgents.delete(id));
 
@@ -223,7 +223,7 @@ async function monitorSwarm() {
     // Check for agent completions via TaskOutput
     const updates = await pollAgentUpdates();
 
-    // Spawn replacements for completed agents
+    // Spawn replacements for completed droids
     spawnReplacementAgents();
 
     await sleep(pollInterval);
@@ -233,20 +233,20 @@ async function monitorSwarm() {
 
 #### Key Characteristics
 
-- **Agents claim autonomously**: Orchestrator spawns agents but does NOT pre-assign tasks
+- **Agents claim autonomously**: Orchestrator spawns droids but does NOT pre-assign tasks
 - **Wave-based throughput**: Keeps all available slots filled until work is done
 - **Dynamic scaling**: Respects user-configured `maxBackgroundTasks` limit
 - **No manual coordination**: Agents use SQLite atomic claiming to self-coordinate
 
-**Important:** Use worker preamble when spawning agents to prevent sub-agent recursion:
+**Important:** Use worker preamble when spawning droids to prevent sub-agent recursion:
 
 ```typescript
-import { wrapWithPreamble } from '../agents/preamble.js';
+import { wrapWithPreamble } from '../droids/preamble.js';
 
 const prompt = wrapWithPreamble(`Your task: ${taskDescription}`);
 ```
 
-**Concurrency Configuration**: Users can increase `permissions.maxBackgroundTasks` in their OMD config to run more agents in parallel (max 50).
+**Concurrency Configuration**: Users can increase `permissions.maxBackgroundTasks` in their OMD config to run more droids in parallel (max 50).
 
 ### 4. File Ownership (Conflict Prevention)
 
@@ -300,7 +300,7 @@ function detectFileConflicts(): ConflictReport {
 - Pattern: `["**/*.test.ts"]` for test suite work
 
 **Conflict resolution:**
-- If two agents modify the same file, git merge conflict may occur
+- If two droids modify the same file, git merge conflict may occur
 - Agents should pull latest changes before committing
 - Failed tasks can be retried automatically
 
@@ -341,12 +341,12 @@ LOOP:
 - Shows live progress: pending/claimed/done/failed counts
 - Active agent count via getActiveAgents()
 - Reports which agent is working on which task via getAgentTasks()
-- Detects idle agents (all tasks claimed by others)
+- Detects idle droids (all tasks claimed by others)
 
 ### 8. Completion
 Exit when ANY of:
 - isSwarmComplete() returns true (all tasks done or failed)
-- All agents idle (no pending tasks, no claimed tasks)
+- All droids idle (no pending tasks, no claimed tasks)
 - User cancels via `/oh-my-droid:cancel`
 
 ## Storage
@@ -355,7 +355,7 @@ Exit when ANY of:
 
 The swarm uses a single SQLite database stored at `.omd/state/swarm.db`. This provides:
 - **ACID compliance** - All task state transitions are atomic
-- **Concurrent access** - Multiple agents query/update safely
+- **Concurrent access** - Multiple droids query/update safely
 - **Persistence** - State survives agent crashes
 - **Query efficiency** - Fast status lookups and filtering
 
@@ -441,7 +441,7 @@ function claimTask(agentId: string): ClaimResult {
 
 **Why SQLite Transactions Work:**
 - `db.transaction()` uses `IMMEDIATE` locking
-- Prevents other agents from modifying rows between SELECT and UPDATE
+- Prevents other droids from modifying rows between SELECT and UPDATE
 - All-or-nothing atomicity: claim succeeds completely or fails completely
 - No race conditions, no lost updates
 
@@ -525,7 +525,7 @@ Get task counts and timing info.
 
 ```typescript
 interface SwarmConfig {
-  agentCount: number;           // Number of agents (1-5)
+  agentCount: number;           // Number of droids (1-5)
   tasks: string[];              // Task descriptions
   agentType?: string;           // Agent type (default: 'executor')
   leaseTimeout?: number;        // Milliseconds (default: 5 min)
@@ -619,7 +619,7 @@ Use unified cancel command:
 
 This:
 - Stops orchestrator monitoring
-- Signals all background agents to exit
+- Signals all background droids to exit
 - Preserves partial progress in database
 - Marks session as "cancelled"
 
@@ -635,7 +635,7 @@ Spawns 3 executors concurrently. Each claims and fixes individual files. Good fo
 ```
 /oh-my-droid:swarm 30:executor "fix all TypeScript errors across codebase"
 ```
-Creates 30 micro-tasks (one per file with errors). Spawns agents in waves of 5 (or configured limit). As agents complete tasks and exit, new agents spawn to maintain throughput until all 30 tasks are done.
+Creates 30 micro-tasks (one per file with errors). Spawns droids in waves of 5 (or configured limit). As droids complete tasks and exit, new droids spawn to maintain throughput until all 30 tasks are done.
 
 ### Test Suite Expansion
 ```
@@ -647,7 +647,7 @@ Uses "aggressive" keyword to trigger micro-task decomposition. Breaks work into 
 ```
 /oh-my-droid:swarm 25:writer "add JSDoc comments to all exported functions"
 ```
-Creates 25 tasks (one per module or file). Spawns writers in waves, continuously replacing finished agents until documentation is complete.
+Creates 25 tasks (one per module or file). Spawns writers in waves, continuously replacing finished droids until documentation is complete.
 
 ### Security Audit
 ```
@@ -655,7 +655,7 @@ Creates 25 tasks (one per module or file). Spawns writers in waves, continuously
 ```
 Pattern-based decomposition: one task per file with database queries. Aggressive mode ensures thorough coverage across large codebases.
 
-**Note on Persistence**: Unlike ralph/ultrawork which use the persistent-mode hook to block Stop events, aggressive swarm's persistence is handled by the orchestrator's wave loop. The orchestrator continuously polls for completion and spawns replacement agents.
+**Note on Persistence**: Unlike ralph/ultrawork which use the persistent-mode hook to block Stop events, aggressive swarm's persistence is handled by the orchestrator's wave loop. The orchestrator continuously polls for completion and spawns replacement droids.
 
 ## Benefits of SQLite-Based Implementation
 
@@ -666,7 +666,7 @@ Pattern-based decomposition: one task per file with database queries. Aggressive
 
 ### Performance
 - **Fast Queries:** Indexed lookups on task status and agent ID
-- **Concurrent Access:** Multiple agents read/write without blocking
+- **Concurrent Access:** Multiple droids read/write without blocking
 - **Minimal Lock Time:** Transactions are microseconds, not seconds
 
 ### Reliability

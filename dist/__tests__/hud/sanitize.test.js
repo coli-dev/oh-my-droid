@@ -95,8 +95,8 @@ describe('sanitizeOutput', () => {
         expect(sanitizeOutput(input)).toBe('Line 1\nLine 2\nLine 3');
     });
     it('should handle complex HUD output preserving colors', () => {
-        const input = '\x1b[1m[OMD]\x1b[0m | \x1b[32m████░░░░░░\x1b[0m 40% | agents:3';
-        expect(sanitizeOutput(input)).toBe('\x1b[1m[OMD]\x1b[0m | \x1b[32m####------\x1b[0m 40% | agents:3');
+        const input = '\x1b[1m[OMD]\x1b[0m | \x1b[32m████░░░░░░\x1b[0m 40% | droids:3';
+        expect(sanitizeOutput(input)).toBe('\x1b[1m[OMD]\x1b[0m | \x1b[32m####------\x1b[0m 40% | droids:3');
     });
     it('should preserve lines and trim trailing whitespace', () => {
         const input = 'Line 1\n\n\nLine 2\n\n';
@@ -131,8 +131,8 @@ describe('sanitizeOutput', () => {
         expect(sanitizeOutput('   \n   \n   ')).toBe('');
     });
     it('should handle single line output without modification', () => {
-        const input = '[OMD] | 40% | agents:3';
-        expect(sanitizeOutput(input)).toBe('[OMD] | 40% | agents:3');
+        const input = '[OMD] | 40% | droids:3';
+        expect(sanitizeOutput(input)).toBe('[OMD] | 40% | droids:3');
     });
 });
 //# sourceMappingURL=sanitize.test.js.map

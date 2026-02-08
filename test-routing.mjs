@@ -76,8 +76,8 @@ console.log(`\n--- Results: ${passed}/${testCases.length} passed ---\n`);
 
 console.log('--- Test 2: Agent Quick Tier Lookup ---\n');
 
-const agents = ['oracle', 'prometheus', 'momus', 'explore', 'document-writer', 'frontend-engineer', 'sisyphus-junior'];
-for (const agent of agents) {
+const droids = ['oracle', 'prometheus', 'momus', 'explore', 'document-writer', 'frontend-engineer', 'sisyphus-junior'];
+for (const agent of droids) {
   const tier = quickTierForAgent(agent);
   console.log(`  ${agent}: ${tier} → ${TIER_MODELS[tier]}`);
 }
@@ -85,7 +85,7 @@ for (const agent of agents) {
 console.log('\n--- Test 3: Proactive Model Selection (getModelForTask) ---\n');
 
 const modelTestCases = [
-  // Worker agents - adaptive based on task
+  // Worker droids - adaptive based on task
   { agent: 'sisyphus-junior', prompt: 'Fix this typo in the README', expectedModel: 'haiku' },
   { agent: 'sisyphus-junior', prompt: 'Refactor payment system with migration scripts for production data', expectedModel: 'opus' },
 

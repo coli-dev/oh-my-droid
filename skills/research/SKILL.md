@@ -1,19 +1,19 @@
 ---
 name: research
-description: Orchestrate parallel scientist agents for comprehensive research with AUTO mode
+description: Orchestrate parallel scientist droids for comprehensive research with AUTO mode
 argument-hint: <research goal>
 ---
 
 # Research Skill
 
-Orchestrate parallel scientist agents for comprehensive research workflows with optional AUTO mode for fully autonomous execution.
+Orchestrate parallel scientist droids for comprehensive research workflows with optional AUTO mode for fully autonomous execution.
 
 ## Overview
 
 Research is a multi-stage workflow that decomposes complex research goals into parallel investigations:
 
 1. **Decomposition** - Break research goal into independent stages/hypotheses
-2. **Execution** - Run parallel scientist agents on each stage
+2. **Execution** - Run parallel scientist droids on each stage
 3. **Verification** - Cross-validate findings, check consistency
 4. **Synthesis** - Aggregate results into comprehensive report
 
@@ -216,7 +216,7 @@ Validate consistency across all findings:
 
 ### Concurrency Limit
 
-**Maximum 5 concurrent scientist agents** to prevent resource exhaustion.
+**Maximum 5 concurrent scientist droids** to prevent resource exhaustion.
 
 If more than 5 stages, batch them:
 ```

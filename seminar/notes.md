@@ -72,7 +72,7 @@
 
 **The Conductor Metaphor** (Slide 4)
 - "Think about an orchestra conductor. They don't play the violin, the timpani, or the trumpet. They COORDINATE the specialists who do."
-- "That's the shift OMD makes. Droid becomes the conductor, and 28 specialized agents are the orchestra."
+- "That's the shift OMD makes. Droid becomes the conductor, and 28 specialized droids are the orchestra."
 - "When you say 'build a feature,' Droid doesn't do it all personally. It delegates: Explorer finds relevant code, Architect designs the solution, Executor implements, QA Tester verifies."
 
 **Before vs After** (Slide 5)
@@ -85,13 +85,13 @@
 - "1. You speak naturally: 'Fix all TypeScript errors'"
 - "2. Droid detects intent: This is a parallel execution task"
 - "3. Routes to skill: Ultrawork mode activates"
-- "4. Delegates to agents: Multiple executor agents spawn in parallel"
+- "4. Delegates to droids: Multiple executor droids spawn in parallel"
 - "5. Results verified: Architect agent confirms all errors resolved"
 - "You never had to say 'use ultrawork' or 'spawn 3 executors' or 'verify with architect'. It's all automatic."
 
 **The Numbers** (Slide 7)
-- "28 specialized agents across 13 domains - architecture, execution, search, frontend, testing, security, documentation, and more"
-- "37 skills that combine these agents into workflows - autopilot, planning, persistence, parallelism"
+- "28 specialized droids across 13 domains - architecture, execution, search, frontend, testing, security, documentation, and more"
+- "37 skills that combine these droids into workflows - autopilot, planning, persistence, parallelism"
 - "3 model tiers - Haiku for speed and cost, Sonnet for balance, Opus for complex reasoning"
 - "Zero configuration files, zero setup beyond installation"
 
@@ -136,7 +136,7 @@
 **What Happens Under the Hood** (Slide 10)
 - "When autopilot activates, here's the sequence:"
 - "1. PLANNING: Analyst explores codebase, Planner interviews you for requirements, Critic reviews the plan"
-- "2. EXECUTION: Tasks decompose, agents execute in parallel, results integrate continuously"
+- "2. EXECUTION: Tasks decompose, droids execute in parallel, results integrate continuously"
 - "3. VERIFICATION: Build passes, tests pass, linting passes, Architect verifies functionality"
 - "4. PERSISTENCE: If verification fails, automatically fixes and re-verifies. Won't stop until success."
 - "All of this from one command: 'autopilot: build task management API'"
@@ -168,7 +168,7 @@
 - "Ultrapilot does the same. If you're building a fullstack app, one worker handles the database layer, another the API routes, another the frontend components, another the tests - all at once."
 
 **The Coordination Challenge** (Slide 13)
-- "The hard part isn't running agents in parallel - it's preventing them from stepping on each other."
+- "The hard part isn't running droids in parallel - it's preventing them from stepping on each other."
 - "Ultrapilot has a file ownership coordinator. Each worker 'claims' the files they're working on. Shared files go through conflict resolution."
 - "Task decomposition engine analyzes dependencies: 'Database schema must complete before API routes can start' - it builds a dependency graph and schedules optimally."
 
@@ -179,7 +179,7 @@
 
 **Performance Numbers**
 - "Real-world metrics: Building a CRUD API with auth, validation, and tests took autopilot 8 minutes. Ultrapilot did it in 2.5 minutes."
-- "But here's the caveat: ultrapilot uses more tokens because of parallel agents. That's where our next mode comes in."
+- "But here's the caveat: ultrapilot uses more tokens because of parallel droids. That's where our next mode comes in."
 
 ### Mode 3: Swarm (4 min, Slides 15-17)
 
@@ -188,7 +188,7 @@
 
 **Key Points**
 - Atomic task claiming prevents conflicts
-- Dynamic scaling from 2-10 agents
+- Dynamic scaling from 2-10 droids
 - 5-minute timeout per task with auto-release
 - Ideal for homogeneous parallel work
 
@@ -200,7 +200,7 @@
 
 **How Task Claiming Works** (Slide 16)
 - "Every task has a status: PENDING, CLAIMED, DONE"
-- "When an agent is idle, it atomically claims a PENDING task (meaning no two agents can claim the same task)"
+- "When an agent is idle, it atomically claims a PENDING task (meaning no two droids can claim the same task)"
 - "It has 5 minutes to complete. If it times out, the task auto-releases back to PENDING"
 - "The swarm completes when all tasks are DONE"
 
@@ -270,7 +270,7 @@
 - "Three optimization strategies:"
 - "1. AGGRESSIVE BATCHING: Groups similar tasks to reduce context switching overhead"
 - "2. MODEL DOWNGRADING: Uses Haiku for tasks that ultrawork would use Sonnet for"
-- "3. CONTEXT MINIMIZATION: Passes only essential information between agents"
+- "3. CONTEXT MINIMIZATION: Passes only essential information between droids"
 
 **When to Use** (Slide 23)
 - "Perfect for: Budget-conscious work, large batch operations, CI/CD integration"
@@ -304,7 +304,7 @@
 ## Section 4: Agent System (7 min, Slides 24-28)
 
 ### Opening Line
-"Behind every execution mode is a team of specialized agents. Let's explore how they're organized."
+"Behind every execution mode is a team of specialized droids. Let's explore how they're organized."
 
 ### Key Points
 - 13 domain areas covering all aspects of development
@@ -315,7 +315,7 @@
 **Talking Points**
 
 **The 13 Domains** (Slide 24)
-- "OMD organizes agents into 13 specializations:"
+- "OMD organizes droids into 13 specializations:"
 - "ANALYSIS: architect-low, architect-medium, architect (debugging, root cause)"
 - "EXECUTION: executor-low, executor, executor-high (code implementation)"
 - "SEARCH: explore, explore-high (codebase exploration)"
@@ -355,11 +355,11 @@
 - "  Savings: Negative cost, but 3x faster time-to-solution"
 
 **Agent Composition** (Slide 27)
-- "Skills combine agents into workflows. For example:"
+- "Skills combine droids into workflows. For example:"
 - "AUTOPILOT skill = analyst + planner + critic + (executor + qa-tester + build-fixer) loop + architect verification"
 - "DEEPSEARCH skill = explore + architect-medium + writer"
 - "FRONTEND-UI-UX skill = designer-high + executor + qa-tester"
-- "You invoke skills, skills invoke agents. It's turtles all the way down."
+- "You invoke skills, skills invoke droids. It's turtles all the way down."
 
 **The Selection Decision Tree** (Slide 28)
 - "How does OMD decide which agent to use? Three factors:"
@@ -396,7 +396,7 @@ Say: "I'm going to build a complete REST API endpoint from scratch using autopil
 Type: "autopilot: build a POST /api/tasks endpoint with validation, error handling, and tests"
 
 Narrate while it runs:
-- "Notice the HUD at the bottom showing active agents"
+- "Notice the HUD at the bottom showing active droids"
 - "Analyst is exploring the codebase to understand existing patterns"
 - "Planner is drafting a plan - it's asking me about database choice"
 - [Answer planning questions interactively]
@@ -408,13 +408,13 @@ Narrate while it runs:
 When complete:
 - Show the generated code files
 - Run the tests to prove they pass
-- Show the HUD status: all agents completed
+- Show the HUD status: all droids completed
 ```
 
 **Talking Points While Demo Runs**
-- "This is the zero-config experience. I didn't specify which agents to use, which models, how to parallelize. All automatic."
+- "This is the zero-config experience. I didn't specify which droids to use, which models, how to parallelize. All automatic."
 - "The planning interview is optional - if I'd given more detail upfront, it would skip straight to execution."
-- "Watch the HUD - you can see exactly which agents are active at any moment."
+- "Watch the HUD - you can see exactly which droids are active at any moment."
 - "If any test fails, it automatically enters the fix-verify loop. Won't claim completion until architect approves."
 
 **Fallback Plan**
@@ -435,7 +435,7 @@ Say: "Now let's see parallel execution with ultrawork."
 Type: "ulw fix all TypeScript errors"
 
 Narrate:
-- "Multiple executor agents spawning"
+- "Multiple executor droids spawning"
 - "Each is claiming different files"
 - "Watch the HUD - you'll see executor-1, executor-2, executor-3 all active"
 - "They're working simultaneously on different errors"
@@ -447,7 +447,7 @@ When complete:
 
 **Talking Points**
 - "This is the power of parallelism. Sequentially, this would take 5-10 minutes. Parallel, under 2 minutes."
-- "The agents coordinate automatically - no file conflicts, no race conditions."
+- "The droids coordinate automatically - no file conflicts, no race conditions."
 
 ### Demo 3: Pipeline - Code Review Workflow (2 min, Slide 31)
 
@@ -562,7 +562,7 @@ Narrate:
 ```
 - "At a glance you know:"
 - "  Which mode is active"
-- "  How many agents are working"
+- "  How many droids are working"
 - "  What each agent is doing"
 - "Installation: `/oh-my-droid:hud setup` - adds to your shell prompt"
 
@@ -649,7 +649,7 @@ droid-code "autopilot: build me a todo app"
 ### Key Points
 - Shift from interactive assistant to autonomous orchestrator
 - Five execution modes for different scenarios
-- 28 specialized agents with smart model routing
+- 28 specialized droids with smart model routing
 - Zero learning curve, works with natural language
 - Free and open-source (MIT license)
 
@@ -659,7 +659,7 @@ droid-code "autopilot: build me a todo app"
 - "OMD transforms Droid from a single assistant into a coordinated team."
 - "You go from micromanaging every step to stating goals and getting results."
 - "The five execution modes cover everything: greenfield (autopilot), parallel (ultrawork/ultrapilot), batch (swarm), sequential (pipeline), budget (ecomode)."
-- "28 agents with 3-tier model routing save you 30-50% on costs while getting work done faster."
+- "28 droids with 3-tier model routing save you 30-50% on costs while getting work done faster."
 
 **Resources** (Slide 42)
 - "GitHub: github.com/coli-dev/oh-my-droid"
@@ -709,10 +709,10 @@ That said, it's open-source. If there's community interest in adapting it to oth
 **Answer:**
 "Great question. Without OMD, Droid gives you one very smart generalist assistant. You tell it every step: 'search for this, analyze that, now implement this, now test that.'
 
-With OMD, you get 28 specialized agents orchestrated automatically. You state the goal - 'build authentication' - and OMD:
+With OMD, you get 28 specialized droids orchestrated automatically. You state the goal - 'build authentication' - and OMD:
 - Automatically explores your codebase for patterns
 - Plans the implementation
-- Parallelizes execution across multiple agents
+- Parallelizes execution across multiple droids
 - Runs verification and testing
 - Persists until completion
 
@@ -731,16 +731,16 @@ The notepad wisdom system stores data locally in `.omd/notepads/`. Nothing is se
 
 For maximum security, you can review the code - it's fully open-source on GitHub. Every agent prompt is visible."
 
-### 5. "Can I customize the agents?"
+### 5. "Can I customize the droids?"
 
 **Answer:**
 "Absolutely. Agent customization is a first-class feature.
 
-Place custom agent definitions in `~/.factory/agents/{agent-name}.md` and they'll override the defaults.
+Place custom agent definitions in `~/.factory/droids/{agent-name}.md` and they'll override the defaults.
 
 For example, if you want a specialized Python testing agent:
 ```markdown
-# ~/.factory/agents/pytest-specialist.md
+# ~/.factory/droids/pytest-specialist.md
 You are an expert in pytest and Python testing best practices.
 Focus on: fixtures, parametrization, mocking with pytest-mock.
 ```
@@ -756,10 +756,10 @@ Power users go deep on customization. Casual users never need to touch it."
 **Answer:**
 "Yes. OMD works with any language that Droid supports - which is basically all mainstream languages.
 
-Some agents have special optimizations:
+Some droids have special optimizations:
 - build-fixer has deep TypeScript integration
 - tdd-guide understands pytest, jest, go test, cargo test
-- designer agents understand React, Vue, Svelte
+- designer droids understand React, Vue, Svelte
 
 But the core orchestration is language-agnostic. I've used it successfully with TypeScript, Python, Go, Rust, Java, and even Bash scripts.
 
@@ -820,7 +820,7 @@ There's been interest in a 'CI mode' that's fully non-interactive. If that's som
 **Answer:**
 "Zero. Genuinely zero.
 
-The entire design philosophy is 'natural language first.' You don't need to learn commands, agents, or modes.
+The entire design philosophy is 'natural language first.' You don't need to learn commands, droids, or modes.
 
 Day one: 'autopilot: build a todo app'
 That's it. Everything else is automatic.

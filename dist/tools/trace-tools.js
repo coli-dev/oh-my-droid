@@ -132,7 +132,7 @@ function filterEvents(events, filter) {
         all: [],
         hooks: ['hook_fire', 'hook_result'],
         skills: ['skill_activated', 'skill_invoked'],
-        agents: ['agent_start', 'agent_stop'],
+        droids: ['agent_start', 'agent_stop'],
         keywords: ['keyword_detected'],
         tools: ['tool_start', 'tool_end'],
         modes: ['mode_change'],
@@ -192,10 +192,10 @@ function buildExecutionFlow(events) {
 // ============================================================================
 export const traceTimelineTool = {
     name: 'trace_timeline',
-    description: 'Show chronological agent flow trace timeline. Displays hooks, keywords, skills, agents, and tools in time order. Use filter to show specific event types.',
+    description: 'Show chronological agent flow trace timeline. Displays hooks, keywords, skills, droids, and tools in time order. Use filter to show specific event types.',
     schema: {
         sessionId: z.string().optional().describe('Session ID (auto-detects latest if omitted)'),
-        filter: z.enum(['all', 'hooks', 'skills', 'agents', 'keywords', 'tools', 'modes']).optional().describe('Filter to show specific event types (default: all)'),
+        filter: z.enum(['all', 'hooks', 'skills', 'droids', 'keywords', 'tools', 'modes']).optional().describe('Filter to show specific event types (default: all)'),
         last: z.number().optional().describe('Limit to last N events'),
         workingDirectory: z.string().optional().describe('Working directory (defaults to cwd)'),
     },

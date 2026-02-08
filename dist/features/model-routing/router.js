@@ -182,15 +182,15 @@ export function quickTierForAgent(agentType) {
  * This is the main entry point for orchestrator model routing.
  * The orchestrator calls this to determine which model to use when delegating.
  *
- * ALL agents are adaptive based on task complexity.
+ * ALL droids are adaptive based on task complexity.
  *
  * @param agentType - The agent to delegate to
  * @param taskPrompt - The task description
  * @returns The recommended model type ('haiku', 'sonnet', or 'opus')
  */
 export function getModelForTask(agentType, taskPrompt, config = {}) {
-    // All agents are adaptive based on task complexity
-    // Use agent-specific rules for advisory agents, general rules for others
+    // All droids are adaptive based on task complexity
+    // Use agent-specific rules for advisory droids, general rules for others
     const decision = routeTask({ taskPrompt, agentType }, config);
     return {
         model: decision.modelType,

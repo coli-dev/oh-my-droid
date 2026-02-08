@@ -1,13 +1,13 @@
 # Demo 2: Ultrawork - Maximum Parallelism
 
 **Duration:** 3 minutes
-**Objective:** Demonstrate multiple agents fixing different issues simultaneously
+**Objective:** Demonstrate multiple droids fixing different issues simultaneously
 
 ## Pre-requisites
 
 - Project with intentional TypeScript errors
 - OMD installed and configured
-- HUD statusline visible (shows multiple active agents)
+- HUD statusline visible (shows multiple active droids)
 
 ## Setup (2 minutes before demo)
 
@@ -168,28 +168,28 @@ ulw fix all TypeScript errors in the project
 
 ### Phase 2: Parallel Execution (0:20-2:00)
 **What happens:**
-- 4 executor agents spawned simultaneously
+- 4 executor droids spawned simultaneously
 - Each assigned to a different file
-- All agents work in parallel:
+- All droids work in parallel:
   - executor-1: Fixes `src/user.ts`
   - executor-2: Fixes `src/order.ts`
   - executor-3: Fixes `src/product.ts`
   - executor-4: Fixes `src/index.ts`
 
 **Presenter talking points:**
-- Point to HUD: "See the statusline? Four agents active simultaneously"
+- Point to HUD: "See the statusline? Four droids active simultaneously"
 - "Each agent is fixing a different file - no conflicts"
 - "Traditional approach: Fix one file, wait, fix next. Ultrawork: Fix all at once"
 - "This is how OMD achieves 3-5x speedup on multi-file tasks"
 
 ### Phase 3: Verification (2:00-2:30)
 **What happens:**
-- All agents complete
+- All droids complete
 - Build-fixer runs TypeScript compilation
 - All errors resolved
 
 **Presenter talking points:**
-- "All agents completed in parallel"
+- "All droids completed in parallel"
 - "Final TypeScript check..."
 - "Zero errors! All fixed simultaneously"
 
@@ -217,7 +217,7 @@ I'm activating ultrawork for maximum parallel execution.
 Scanning codebase for TypeScript errors...
 ✓ Found 8 errors across 4 files (3s)
 
-Spawning 4 executor agents in parallel...
+Spawning 4 executor droids in parallel...
 [executor-1] Assigned: src/user.ts (2 errors)
 [executor-2] Assigned: src/order.ts (2 errors)
 [executor-3] Assigned: src/product.ts (3 errors)
@@ -299,10 +299,10 @@ export function filterInStock(products: Product[]): Product[] {
 
 ### What makes ultrawork special?
 1. **Intelligent parallelization** - Automatically determines which tasks can run in parallel
-2. **File-level coordination** - No conflicts between agents working on different files
+2. **File-level coordination** - No conflicts between droids working on different files
 3. **Maximum throughput** - 3-5x faster than serial execution
-4. **Automatic task distribution** - You don't specify how many agents or which files
-5. **HUD visibility** - See all active agents in real-time
+4. **Automatic task distribution** - You don't specify how many droids or which files
+5. **HUD visibility** - See all active droids in real-time
 
 ### When to use ultrawork
 - Multiple independent errors across files
@@ -311,7 +311,7 @@ export function filterInStock(products: Product[]): Product[] {
 - Batch operations (e.g., "add error handling to all services")
 
 ### Architecture highlight
-- "OMD uses a file ownership coordinator - prevents two agents from editing the same file"
+- "OMD uses a file ownership coordinator - prevents two droids from editing the same file"
 - "Each agent gets exclusive write access to its assigned files"
 - "Shared reads are fine - conflicts only happen on writes"
 
@@ -344,7 +344,7 @@ Scanning codebase for TypeScript errors...
 
 [HUD: OMD │ executor-low:4 active │ Tasks: 4/4 in progress]
 
-Spawning 4 executor agents in parallel...
+Spawning 4 executor droids in parallel...
 [executor-1] Assigned: src/user.ts (2 errors)
 [executor-2] Assigned: src/order.ts (2 errors)
 [executor-3] Assigned: src/product.ts (3 errors)
@@ -377,7 +377,7 @@ Summary:
   Errors fixed: 8
   Errors remaining: 0
   Time: 1m 34s
-  Peak agents: 4 executors (parallel)
+  Peak droids: 4 executors (parallel)
 
 Serial execution estimate: ~5m 30s
 Speedup achieved: 3.5x
@@ -389,15 +389,15 @@ Success: no errors found.
 
 ## Common Issues & Troubleshooting
 
-### Issue: Fewer agents spawn than expected
+### Issue: Fewer droids spawn than expected
 **Solution:**
-- Still good for demo! Point out: "OMD determined 3 agents was optimal for this workload"
+- Still good for demo! Point out: "OMD determined 3 droids was optimal for this workload"
 - Explain: "It balances parallelism with coordination overhead"
 
 ### Issue: One agent takes much longer
 **Solution:**
 - Point it out: "See? That file had a complex error requiring more analysis"
-- Emphasize: "Other agents finished while this one worked - still faster than serial"
+- Emphasize: "Other droids finished while this one worked - still faster than serial"
 
 ### Issue: TypeScript errors still remain after fixes
 **Solution:**
@@ -425,27 +425,27 @@ OMD │ build-fixer:1 verifying │ 22s
 
 **After completion:**
 ```
-OMD │ idle │ Last: 4 agents, 1m34s
+OMD │ idle │ Last: 4 droids, 1m34s
 ```
 
 ## Transition to Next Demo
 
-"That's ultrawork - maximum parallelism for speed. But sometimes you need coordination, not just speed. What if you want agents to pass data between each other in a specific sequence? That's where pipeline comes in - our next demo."
+"That's ultrawork - maximum parallelism for speed. But sometimes you need coordination, not just speed. What if you want droids to pass data between each other in a specific sequence? That's where pipeline comes in - our next demo."
 
 **Transition action:** Navigate to a codebase directory for pipeline demo (or use the same directory from Demo 2)
 
 ## Q&A Preparation
 
-**Q: How many agents can run in parallel?**
-A: Typically 3-5 for ultrawork. The system balances parallelism with context overhead. For larger swarms, use the `swarm` skill (10+ agents).
+**Q: How many droids can run in parallel?**
+A: Typically 3-5 for ultrawork. The system balances parallelism with context overhead. For larger swarms, use the `swarm` skill (10+ droids).
 
-**Q: What happens if two agents need to edit the same file?**
+**Q: What happens if two droids need to edit the same file?**
 A: The file ownership coordinator prevents this. One agent gets the file, the other waits or is assigned different work. Shared reads are fine.
 
 **Q: Does ultrawork work with any task?**
 A: Best for tasks that are naturally parallelizable - multiple files, independent modules, batch operations. For sequential dependencies, use `pipeline` instead.
 
-**Q: Can I control how many agents spawn?**
+**Q: Can I control how many droids spawn?**
 A: Yes! Use `/oh-my-droid:swarm N:agent-type "task"` for explicit control. Ultrawork auto-determines the optimal number.
 
 **Q: What's the token cost of ultrawork vs serial?**

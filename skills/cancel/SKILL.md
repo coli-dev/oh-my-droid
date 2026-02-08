@@ -705,7 +705,7 @@ fi
 | Ultrawork | "Ultrawork cancelled. Parallel execution mode deactivated." |
 | Ecomode | "Ecomode cancelled. Token-efficient execution mode deactivated." |
 | UltraQA | "UltraQA cancelled. QA cycling workflow stopped." |
-| Swarm | "Swarm cancelled. Coordinated agents stopped." |
+| Swarm | "Swarm cancelled. Coordinated droids stopped." |
 | Ultrapilot | "Ultrapilot cancelled. Parallel autopilot workers stopped." |
 | Pipeline | "Pipeline cancelled. Sequential agent chain stopped." |
 | Team | "Team cancelled. Teammates shut down and cleaned up." |

@@ -7,7 +7,7 @@ This directory contains demo scripts for showcasing Oh-My-DroidCode's capabiliti
 The seminar includes 5 progressive demos that showcase different aspects of OMD:
 
 1. **Autopilot** (5 min) - Full autonomous execution from idea to working code
-2. **Ultrawork** (3 min) - Maximum parallelism with multiple agents
+2. **Ultrawork** (3 min) - Maximum parallelism with multiple droids
 3. **Pipeline** (3 min) - Sequential agent chaining with data passing
 4. **Planning** (2 min) - Interactive planning with interview workflow
 5. **Ralph** (2 min) - Persistent execution with self-correction
@@ -47,26 +47,26 @@ echo "HUD should display in your terminal prompt"
 ## Demo Flow
 
 ### Opening (1 min)
-"Today I'll show you Oh-My-DroidCode - a multi-agent orchestration system that transforms Droid from a single assistant into a coordinated team of specialists. Instead of doing everything yourself, you conduct a symphony of AI agents, each optimized for specific tasks."
+"Today I'll show you Oh-My-DroidCode - a multi-agent orchestration system that transforms Droid from a single assistant into a coordinated team of specialists. Instead of doing everything yourself, you conduct a symphony of AI droids, each optimized for specific tasks."
 
 ### Demo Sequence (15 min)
 1. **Demo 1: Autopilot** - "The flagship experience - say what you want, get working code"
-2. **Demo 2: Ultrawork** - "When you need speed - multiple agents working in parallel"
-3. **Demo 3: Pipeline** - "For complex workflows - chaining agents with data passing"
+2. **Demo 2: Ultrawork** - "When you need speed - multiple droids working in parallel"
+3. **Demo 3: Pipeline** - "For complex workflows - chaining droids with data passing"
 4. **Demo 4: Planning** - "For unclear requirements - interactive planning interview"
 5. **Demo 5: Ralph** - "For mission-critical tasks - never gives up until verified complete"
 
 ### Closing (1 min)
-"OMD transforms how you work with Droid - from manual coding to orchestrating specialized agents. All open source at github.com/coli-dev/oh-my-droid."
+"OMD transforms how you work with Droid - from manual coding to orchestrating specialized droids. All open source at github.com/coli-dev/oh-my-droid."
 
 ## Tips for Presenters
 
 ### General Tips
 - **Announce behaviors**: OMD announces what it's activating ("I'm activating autopilot...")
-- **Watch the HUD**: The statusline shows active agents, tasks, and progress
+- **Watch the HUD**: The statusline shows active droids, tasks, and progress
 - **Embrace async**: Background tasks run while you talk - no waiting
 - **Have fallbacks**: Pre-recorded outputs for each demo in case of issues
-- **Highlight automation**: Point out when agents delegate to other agents automatically
+- **Highlight automation**: Point out when droids delegate to other droids automatically
 
 ### Technical Tips
 - **Terminal size**: Ensure output is readable from the back of the room
@@ -81,7 +81,7 @@ echo "HUD should display in your terminal prompt"
 **Solution**: Check `.omd/logs/agent-lifecycle.log` for errors, or skip to fallback output
 
 ### Issue: HUD not showing
-**Solution**: Mention it verbally ("The HUD would show 3 active agents here...")
+**Solution**: Mention it verbally ("The HUD would show 3 active droids here...")
 
 ### Issue: Demo taking too long
 **Solution**: Jump to next phase or use `/oh-my-droid:cancel` and show fallback

@@ -23,7 +23,7 @@ import { install as installSisyphus, isInstalled, getInstallInfo } from '../inst
 import { statsCommand } from './commands/stats.js';
 import { costCommand } from './commands/cost.js';
 import { sessionsCommand } from './commands/sessions.js';
-import { agentsCommand } from './commands/agents.js';
+import { agentsCommand } from './commands/droids.js';
 import { exportCommand } from './commands/export.js';
 import { cleanupCommand } from './commands/cleanup.js';
 import { backfillCommand } from './commands/backfill.js';
@@ -112,7 +112,7 @@ async function defaultAction() {
     console.log(chalk.gray('─'.repeat(50)));
     await costCommand('monthly', { json: false });
     console.log('\n');
-    // Show top agents
+    // Show top droids
     console.log(chalk.bold('🤖 Top Agents'));
     console.log(chalk.gray('─'.repeat(50)));
     await agentsCommand({ json: false, limit: 10 });
@@ -184,15 +184,15 @@ Examples:
 });
 // Agents command
 program
-    .command('agents')
+    .command('droids')
     .description('Show agent usage breakdown')
     .option('--json', 'Output as JSON')
-    .option('-n, --limit <number>', 'Limit number of agents', '10')
+    .option('-n, --limit <number>', 'Limit number of droids', '10')
     .addHelpText('after', `
 Examples:
-  $ omd agents                   Show top 10 agents by usage
-  $ omd agents --limit 20        Show top 20 agents
-  $ omd agents --json            Export agent data as JSON`)
+  $ omd droids                   Show top 10 droids by usage
+  $ omd droids --limit 20        Show top 20 droids
+  $ omd droids --json            Export agent data as JSON`)
     .action(async (options) => {
     await ensureBackfillDone();
     await agentsCommand({ ...options, limit: parseInt(options.limit) });
@@ -328,7 +328,7 @@ Examples:
   "$schema": "./sisyphus-schema.json",
 
   // Agent model configurations
-  "agents": {
+  "droids": {
     "sisyphus": {
       // Main orchestrator - uses the most capable model
       "model": "claude-opus-4-6-20260205"
@@ -409,7 +409,7 @@ Examples:
     if (!existsSync(agentsMdPath) && !options.global) {
         const agentsMdContent = `# Project Agents Configuration
 
-This file provides context and instructions to AI agents working on this project.
+This file provides context and instructions to AI droids working on this project.
 
 ## Project Overview
 
@@ -425,7 +425,7 @@ This file provides context and instructions to AI agents working on this project
 
 ## Important Files
 
-<!-- List key files agents should know about -->
+<!-- List key files droids should know about -->
 
 ## Common Tasks
 
@@ -602,14 +602,14 @@ program
     .description('Show system and agent information')
     .addHelpText('after', `
 Examples:
-  $ omd info                     Show agents, features, and MCP servers`)
+  $ omd info                     Show droids, features, and MCP servers`)
     .action(async () => {
     const session = createSisyphusSession();
     console.log(chalk.blue.bold('\nOh-My-DroidCode System Information\n'));
     console.log(chalk.gray('━'.repeat(50)));
     console.log(chalk.blue('\nAvailable Agents:'));
-    const agents = session.queryOptions.options.agents;
-    for (const [name, agent] of Object.entries(agents)) {
+    const droids = session.queryOptions.options.droids;
+    for (const [name, agent] of Object.entries(droids)) {
         console.log(`  ${chalk.green(name)}`);
         console.log(`    ${chalk.gray(agent.description.split('\n')[0])}`);
     }
@@ -762,11 +762,11 @@ Examples:
     console.log(chalk.gray('\nTo check for updates, run: oh-my-droid update --check'));
 });
 /**
- * Install command - Install agents and commands to ~/.factory/
+ * Install command - Install droids and commands to ~/.factory/
  */
 program
     .command('install')
-    .description('Install Sisyphus agents and commands to Droid config (~/.factory/)')
+    .description('Install Sisyphus droids and commands to Droid config (~/.factory/)')
     .option('-f, --force', 'Overwrite existing files')
     .option('-q, --quiet', 'Suppress output except for errors')
     .option('--skip-droid-check', 'Skip checking if Droid is installed')
@@ -1035,7 +1035,7 @@ program
     });
     if (result.success) {
         console.log(chalk.green('✓ Oh-My-DroidCode installed successfully!'));
-        console.log(chalk.gray('  Run "oh-my-droid info" to see available agents.'));
+        console.log(chalk.gray('  Run "oh-my-droid info" to see available droids.'));
         console.log(chalk.yellow('  Run "/sisyphus-default" (project) or "/sisyphus-default-global" (global) in Droid.'));
     }
     else {

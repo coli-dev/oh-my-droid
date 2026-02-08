@@ -19,7 +19,7 @@
   },
   "files": [
     "dist",
-    "agents",
+    "droids",
     "bridge",
     "bridge/mcp-server.cjs",
     "bridge/codex-server.cjs",

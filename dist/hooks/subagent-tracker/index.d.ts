@@ -3,8 +3,8 @@
  *
  * Tracks SubagentStart and SubagentStop events for comprehensive agent monitoring.
  * Features:
- * - Track all spawned agents with parent mode context
- * - Detect stuck/stale agents (>5 min without progress)
+ * - Track all spawned droids with parent mode context
+ * - Detect stuck/stale droids (>5 min without progress)
  * - HUD integration for agent status display
  * - Automatic cleanup of orphaned agent state
  */
@@ -50,7 +50,7 @@ export interface TokenUsage {
     cost_usd: number;
 }
 export interface SubagentTrackingState {
-    agents: SubagentInfo[];
+    droids: SubagentInfo[];
     total_spawned: number;
     total_completed: number;
     total_failed: number;
@@ -117,7 +117,7 @@ export declare function writeTrackingState(directory: string, state: SubagentTra
  */
 export declare function flushPendingWrites(): void;
 /**
- * Get list of stale agents (running for too long)
+ * Get list of stale droids (running for too long)
  */
 export declare function getStaleAgents(state: SubagentTrackingState): SubagentInfo[];
 /**
@@ -129,19 +129,19 @@ export declare function processSubagentStart(input: SubagentStartInput): HookOut
  */
 export declare function processSubagentStop(input: SubagentStopInput): HookOutput;
 /**
- * Cleanup stale agents (mark as failed)
+ * Cleanup stale droids (mark as failed)
  */
 export declare function cleanupStaleAgents(directory: string): number;
 /**
- * Get count of active (running) agents
+ * Get count of active (running) droids
  */
 export declare function getActiveAgentCount(directory: string): number;
 /**
- * Get agents by type
+ * Get droids by type
  */
 export declare function getAgentsByType(directory: string, agentType: string): SubagentInfo[];
 /**
- * Get all running agents
+ * Get all running droids
  */
 export declare function getRunningAgents(directory: string): SubagentInfo[];
 /**
@@ -164,12 +164,12 @@ export declare function recordToolUsage(directory: string, agentId: string, tool
  */
 export declare function recordToolUsageWithTiming(directory: string, agentId: string, toolName: string, durationMs: number, success: boolean): void;
 /**
- * Generate a formatted dashboard of all running agents
+ * Generate a formatted dashboard of all running droids
  * Used for debugging parallel agent execution in ultrawork mode
  */
 export declare function getAgentDashboard(directory: string): string;
 /**
- * Generate a rich observatory view of all running agents
+ * Generate a rich observatory view of all running droids
  * Includes: performance metrics, token usage, file ownership, bottlenecks
  * For HUD integration and debugging parallel agent execution
  */
@@ -184,13 +184,13 @@ export declare function getAgentObservatory(directory: string): {
     };
 };
 /**
- * Suggest interventions for problematic agents
- * Checks for: stale agents, cost limit exceeded, file conflicts
+ * Suggest interventions for problematic droids
+ * Checks for: stale droids, cost limit exceeded, file conflicts
  */
 export declare function suggestInterventions(directory: string): AgentIntervention[];
 /**
  * Calculate parallel efficiency score (0-100)
- * 100 = all agents actively running, 0 = all stale/waiting
+ * 100 = all droids actively running, 0 = all stale/waiting
  */
 export declare function calculateParallelEfficiency(directory: string): {
     score: number;
@@ -204,15 +204,15 @@ export declare function calculateParallelEfficiency(directory: string): {
  */
 export declare function recordFileOwnership(directory: string, agentId: string, filePath: string): void;
 /**
- * Check for file conflicts between running agents
+ * Check for file conflicts between running droids
  * Returns files being modified by more than one agent
  */
 export declare function detectFileConflicts(directory: string): Array<{
     file: string;
-    agents: string[];
+    droids: string[];
 }>;
 /**
- * Get all file ownership for running agents
+ * Get all file ownership for running droids
  */
 export declare function getFileOwnershipMap(directory: string): Map<string, string>;
 /**
@@ -220,7 +220,7 @@ export declare function getFileOwnershipMap(directory: string): Map<string, stri
  */
 export declare function getAgentPerformance(directory: string, agentId: string): AgentPerformance | null;
 /**
- * Get performance for all running agents
+ * Get performance for all running droids
  */
 export declare function getAllAgentPerformance(directory: string): AgentPerformance[];
 /**

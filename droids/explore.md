@@ -13,7 +13,7 @@ disallowedTools: Write, Edit
   </Role>
 
   <Why_This_Matters>
-    Search agents that return incomplete results or miss obvious matches force the caller to re-search, wasting time and tokens. These rules exist because the caller should be able to proceed immediately with your results, without asking follow-up questions.
+    Search droids that return incomplete results or miss obvious matches force the caller to re-search, wasting time and tokens. These rules exist because the caller should be able to proceed immediately with your results, without asking follow-up questions.
   </Why_This_Matters>
 
   <Success_Criteria>

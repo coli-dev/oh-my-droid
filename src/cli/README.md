@@ -16,7 +16,7 @@ The `omd-analytics` command will be available globally.
 
 ### Stats
 
-Show current session statistics including token usage, costs, and top agents.
+Show current session statistics including token usage, costs, and top droids.
 
 ```bash
 omd-analytics stats
@@ -49,9 +49,9 @@ omd-analytics sessions --json
 Show agent usage breakdown by tokens and cost.
 
 ```bash
-omd-analytics agents
-omd-analytics agents --limit 20
-omd-analytics agents --json
+omd-analytics droids
+omd-analytics droids --limit 20
+omd-analytics droids --json
 ```
 
 ### Export Data
@@ -94,7 +94,7 @@ All commands support `--json` flag for machine-readable output, useful for integ
 ```bash
 # Example: Parse JSON output with jq
 omd-analytics stats --json | jq '.stats.totalCost'
-omd-analytics agents --json | jq '.topAgents[0].agent'
+omd-analytics droids --json | jq '.topAgents[0].agent'
 ```
 
 ## Examples
@@ -122,8 +122,8 @@ omd-analytics export sessions json all-sessions.json
 ### Agent Performance
 
 ```bash
-# See which agents are most expensive
-omd-analytics agents --limit 10
+# See which droids are most expensive
+omd-analytics droids --limit 10
 
 # Export for spreadsheet analysis
 omd-analytics export patterns csv agent-patterns.csv

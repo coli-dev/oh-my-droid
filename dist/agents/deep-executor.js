@@ -30,7 +30,7 @@ export const DEEP_EXECUTOR_PROMPT_METADATA = {
         'Quick lookups (use explore)',
         'When explicit step-by-step guidance is provided',
         'Cost-sensitive operations (use executor tiers instead)',
-        'Tasks requiring delegation to sub-agents (use orchestrator)',
+        'Tasks requiring delegation to sub-droids (use orchestrator)',
     ],
     promptDescription: 'Deep executor for complex goal-oriented tasks. Explores extensively before acting, executes all work itself, and guarantees completion with evidence.',
 };

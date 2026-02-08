@@ -11,7 +11,7 @@
  * Source identifier for context injection.
  * Each source registers context that will be merged and injected together.
  */
-export type ContextSourceType = 'keyword-detector' | 'rules-injector' | 'directory-agents' | 'directory-readme' | 'boulder-state' | 'session-context' | 'learner' | 'beads' | 'project-memory' | 'custom';
+export type ContextSourceType = 'keyword-detector' | 'rules-injector' | 'directory-droids' | 'directory-readme' | 'boulder-state' | 'session-context' | 'learner' | 'beads' | 'project-memory' | 'custom';
 /**
  * Priority levels for context ordering.
  * Higher priority contexts appear first in the merged output.

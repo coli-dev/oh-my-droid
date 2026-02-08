@@ -2,37 +2,37 @@ import { describe, test, expect } from "vitest";
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
-import { getAgentDefinitions } from "../agents/definitions.js";
+import { getAgentDefinitions } from "../droids/definitions.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 describe("Agent Registry Validation", () => {
   test("agent count matches documentation", () => {
-    const agentsDir = path.join(__dirname, "../../agents");
+    const agentsDir = path.join(__dirname, "../../droids");
     const promptFiles = fs
       .readdirSync(agentsDir)
       .filter((file) => file.endsWith(".md") && file !== "AGENTS.md");
     expect(promptFiles.length).toBe(30);
   });
 
-  test("all agents have .md prompt files", () => {
-    const agents = Object.keys(getAgentDefinitions());
-    const agentsDir = path.join(__dirname, "../../agents");
+  test("all droids have .md prompt files", () => {
+    const droids = Object.keys(getAgentDefinitions());
+    const agentsDir = path.join(__dirname, "../../droids");
     const promptFiles = fs
       .readdirSync(agentsDir)
       .filter((file) => file.endsWith(".md") && file !== "AGENTS.md");
     for (const file of promptFiles) {
       const name = file.replace(/\.md$/, "");
-      expect(agents, `Missing registry entry for agent: ${name}`).toContain(
+      expect(droids, `Missing registry entry for agent: ${name}`).toContain(
         name,
       );
     }
   });
 
-  test("all registry agents are exported from index.ts", async () => {
+  test("all registry droids are exported from index.ts", async () => {
     const registryAgents = Object.keys(getAgentDefinitions());
-    const exports = (await import("../agents/index.js")) as Record<
+    const exports = (await import("../droids/index.js")) as Record<
       string,
       unknown
     >;
@@ -64,7 +64,7 @@ describe("Agent Registry Validation", () => {
       "scientist",
       "qa-tester",
     ];
-    const agentsDir = path.join(__dirname, "../agents");
+    const agentsDir = path.join(__dirname, "../droids");
     for (const name of baseAgents) {
       const content = fs.readFileSync(
         path.join(agentsDir, `${name}.ts`),

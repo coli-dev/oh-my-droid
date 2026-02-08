@@ -574,7 +574,7 @@ function processPreToolUse(input: HookInput): HookOutput {
     }
   }
 
-  // Inject agent dashboard for Task tool calls (debugging parallel agents)
+  // Inject agent dashboard for Task tool calls (debugging parallel droids)
   if (input.toolName === "Task") {
     const dashboard = getAgentDashboard(directory);
     if (dashboard) {

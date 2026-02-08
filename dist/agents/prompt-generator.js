@@ -21,7 +21,7 @@ const DEFAULT_OPTIONS = {
 /**
  * Generate complete orchestrator prompt from agent definitions
  *
- * @param agents - Array of agent configurations
+ * @param droids - Array of agent configurations
  * @param options - Options controlling which sections to include
  * @returns Generated orchestrator prompt string
  *
@@ -30,7 +30,7 @@ const DEFAULT_OPTIONS = {
  * import { getAgentDefinitions } from './definitions.js';
  * import { generateOrchestratorPrompt } from './prompt-generator.js';
  *
- * const agents = Object.values(getAgentDefinitions()).map(def => ({
+ * const droids = Object.values(getAgentDefinitions()).map(def => ({
  *   name: def.name,
  *   description: def.description,
  *   prompt: def.prompt,
@@ -39,11 +39,11 @@ const DEFAULT_OPTIONS = {
  *   metadata: def.metadata
  * }));
  *
- * const prompt = generateOrchestratorPrompt(agents);
+ * const prompt = generateOrchestratorPrompt(droids);
  * console.log(prompt);
  * ```
  */
-export function generateOrchestratorPrompt(agents, options) {
+export function generateOrchestratorPrompt(droids, options) {
     const opts = { ...DEFAULT_OPTIONS, ...options };
     const sections = [];
     // Always include header
@@ -51,7 +51,7 @@ export function generateOrchestratorPrompt(agents, options) {
     sections.push('');
     // Agent registry
     if (opts.includeAgents) {
-        sections.push(buildAgentRegistry(agents));
+        sections.push(buildAgentRegistry(droids));
     }
     // Orchestration principles
     if (opts.includePrinciples) {
@@ -60,18 +60,18 @@ export function generateOrchestratorPrompt(agents, options) {
     }
     // Trigger table
     if (opts.includeTriggers) {
-        const triggerSection = buildTriggerTable(agents);
+        const triggerSection = buildTriggerTable(droids);
         if (triggerSection) {
             sections.push(triggerSection);
         }
     }
     // Tool selection guidance
     if (opts.includeTools) {
-        sections.push(buildToolSelectionSection(agents));
+        sections.push(buildToolSelectionSection(droids));
     }
     // Delegation matrix
     if (opts.includeDelegationTable) {
-        sections.push(buildDelegationMatrix(agents));
+        sections.push(buildDelegationMatrix(droids));
     }
     // Workflow
     if (opts.includeWorkflow) {
@@ -92,14 +92,14 @@ export function generateOrchestratorPrompt(agents, options) {
 /**
  * Build agent section only (for embedding in other prompts)
  */
-export function buildAgentSection(agents) {
-    return buildAgentRegistry(agents);
+export function buildAgentSection(droids) {
+    return buildAgentRegistry(droids);
 }
 /**
  * Build triggers section only
  */
-export function buildTriggersSection(agents) {
-    return buildTriggerTable(agents);
+export function buildTriggersSection(droids) {
+    return buildTriggerTable(droids);
 }
 /**
  * Build tool selection section only (alias for buildToolSelectionSection from prompt-sections)
@@ -108,8 +108,8 @@ export { buildToolSelectionSection };
 /**
  * Build delegation table section only
  */
-export function buildDelegationTableSection(agents) {
-    return buildDelegationMatrix(agents);
+export function buildDelegationTableSection(droids) {
+    return buildDelegationMatrix(droids);
 }
 /**
  * Convert agent definitions record to array of AgentConfig for generation
@@ -123,8 +123,8 @@ export function buildDelegationTableSection(agents) {
  * import { convertDefinitionsToConfigs, generateOrchestratorPrompt } from './prompt-generator.js';
  *
  * const definitions = getAgentDefinitions();
- * const agents = convertDefinitionsToConfigs(definitions);
- * const prompt = generateOrchestratorPrompt(agents);
+ * const droids = convertDefinitionsToConfigs(definitions);
+ * const prompt = generateOrchestratorPrompt(droids);
  * ```
  */
 export function convertDefinitionsToConfigs(definitions) {

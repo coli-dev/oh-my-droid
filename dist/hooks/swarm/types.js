@@ -2,7 +2,7 @@
  * Swarm Coordination Types
  *
  * Type definitions for the SQLite-based swarm coordination system.
- * Swarm enables multiple agents to claim and work on tasks atomically
+ * Swarm enables multiple droids to claim and work on tasks atomically
  * with lease-based ownership and heartbeat monitoring.
  */
 /**

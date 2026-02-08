@@ -1,5 +1,5 @@
 ---
-description: Token-efficient parallel execution mode using Haiku and Sonnet agents
+description: Token-efficient parallel execution mode using Haiku and Sonnet droids
 aliases: [eco, efficient, save-tokens, budget]
 ---
 
@@ -38,7 +38,7 @@ budget mode: add form validation
 
 ## Agent Routing
 
-Ecomode routes tasks to lower-tier agents:
+Ecomode routes tasks to lower-tier droids:
 
 | Domain | Ecomode Uses | Ultrawork Uses |
 |--------|--------------|----------------|

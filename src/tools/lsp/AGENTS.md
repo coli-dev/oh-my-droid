@@ -7,7 +7,7 @@ Language Server Protocol (LSP) client implementation providing IDE-like code int
 
 ## Purpose
 
-This directory implements the LSP client that enables agents to:
+This directory implements the LSP client that enables droids to:
 - Connect to language servers (TypeScript, Python, Rust, Go, etc.)
 - Get type information, documentation, and signatures
 - Find definitions, references, and symbols

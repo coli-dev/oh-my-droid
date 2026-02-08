@@ -20,7 +20,7 @@ Ralph automatically activates Ultrawork for maximum parallel execution. You MUST
 |--------|--------|----------|
 | Read files for context | ✓ | |
 | Track progress (TODO) | ✓ | |
-| Spawn agents | ✓ | |
+| Spawn droids | ✓ | |
 | **ANY code change** | ✗ NEVER | executor-low/executor/executor-high |
 | **UI work** | ✗ NEVER | designer/designer-high |
 | **Docs** | ✗ NEVER | writer |
@@ -30,7 +30,7 @@ Ralph automatically activates Ultrawork for maximum parallel execution. You MUST
 ### Parallel Execution Rules
 - **PARALLEL**: Fire independent calls simultaneously - NEVER wait sequentially
 - **BACKGROUND FIRST**: Use Task(run_in_background=true) for long operations (10+ concurrent)
-- **DELEGATE**: Route ALL implementation to executor agents - NEVER edit code yourself
+- **DELEGATE**: Route ALL implementation to executor droids - NEVER edit code yourself
 
 ### Smart Model Routing (SAVE TOKENS)
 

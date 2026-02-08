@@ -47,18 +47,18 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     exit 0
 fi
 
-# Remove agents
-echo -e "${BLUE}Removing agents...${NC}"
-rm -f "$DROID_CONFIG_DIR/agents/oracle.md"
-rm -f "$DROID_CONFIG_DIR/agents/librarian.md"
-rm -f "$DROID_CONFIG_DIR/agents/explore.md"
-rm -f "$DROID_CONFIG_DIR/agents/frontend-engineer.md"
-rm -f "$DROID_CONFIG_DIR/agents/document-writer.md"
-rm -f "$DROID_CONFIG_DIR/agents/multimodal-looker.md"
-rm -f "$DROID_CONFIG_DIR/agents/momus.md"
-rm -f "$DROID_CONFIG_DIR/agents/metis.md"
-rm -f "$DROID_CONFIG_DIR/agents/sisyphus-junior.md"
-rm -f "$DROID_CONFIG_DIR/agents/prometheus.md"
+# Remove droids
+echo -e "${BLUE}Removing droids...${NC}"
+rm -f "$DROID_CONFIG_DIR/droids/oracle.md"
+rm -f "$DROID_CONFIG_DIR/droids/librarian.md"
+rm -f "$DROID_CONFIG_DIR/droids/explore.md"
+rm -f "$DROID_CONFIG_DIR/droids/frontend-engineer.md"
+rm -f "$DROID_CONFIG_DIR/droids/document-writer.md"
+rm -f "$DROID_CONFIG_DIR/droids/multimodal-looker.md"
+rm -f "$DROID_CONFIG_DIR/droids/momus.md"
+rm -f "$DROID_CONFIG_DIR/droids/metis.md"
+rm -f "$DROID_CONFIG_DIR/droids/sisyphus-junior.md"
+rm -f "$DROID_CONFIG_DIR/droids/prometheus.md"
 
 # Remove commands
 echo -e "${BLUE}Removing commands...${NC}"

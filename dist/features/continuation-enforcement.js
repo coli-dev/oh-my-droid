@@ -1,7 +1,7 @@
 /**
  * Continuation Enforcement Feature
  *
- * Ensures agents complete all tasks before stopping:
+ * Ensures droids complete all tasks before stopping:
  * - Monitors todo list for incomplete items
  * - Adds reminders to continue when tasks remain
  * - Prevents premature stopping
@@ -9,7 +9,7 @@
  */
 import { getBackgroundTaskGuidance, DEFAULT_MAX_BACKGROUND_TASKS } from './background-tasks.js';
 /**
- * Messages to remind agents to continue
+ * Messages to remind droids to continue
  * ENHANCED: Using exact pattern from oh-my-opencode's todo-continuation-enforcer
  */
 const CONTINUATION_REMINDERS = [

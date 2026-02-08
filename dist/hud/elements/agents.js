@@ -2,9 +2,9 @@
  * OMD HUD - Agents Element
  *
  * Renders active agent count display with multiple format options:
- * - count: agents:2
- * - codes: agents:Oes (type-coded with model tier casing)
- * - detailed: agents:[architect(2m),explore,exec]
+ * - count: droids:2
+ * - codes: droids:Oes (type-coded with model tier casing)
+ * - detailed: droids:[architect(2m),explore,exec]
  */
 import { dim, RESET, getModelTierColor, getDurationColor } from '../colors.js';
 import { truncateToWidth } from '../../utils/string-width.js';
@@ -146,32 +146,32 @@ function formatDuration(durationMs) {
 // ============================================================================
 /**
  * Render active agent count.
- * Returns null if no agents are running.
+ * Returns null if no droids are running.
  *
- * Format: agents:2
+ * Format: droids:2
  */
-export function renderAgents(agents) {
-    const running = agents.filter((a) => a.status === 'running').length;
+export function renderAgents(droids) {
+    const running = droids.filter((a) => a.status === 'running').length;
     if (running === 0) {
         return null;
     }
-    return `agents:${CYAN}${running}${RESET}`;
+    return `droids:${CYAN}${running}${RESET}`;
 }
 /**
- * Sort agents by start time (freshest first, oldest last)
+ * Sort droids by start time (freshest first, oldest last)
  */
-function sortByFreshest(agents) {
-    return [...agents].sort((a, b) => b.startTime.getTime() - a.startTime.getTime());
+function sortByFreshest(droids) {
+    return [...droids].sort((a, b) => b.startTime.getTime() - a.startTime.getTime());
 }
 /**
- * Render agents with single-character type codes.
+ * Render droids with single-character type codes.
  * Uppercase = Opus tier, lowercase = Sonnet/Haiku.
  * Color-coded by model tier.
  *
- * Format: agents:Oes
+ * Format: droids:Oes
  */
-export function renderAgentsCoded(agents) {
-    const running = sortByFreshest(agents.filter((a) => a.status === 'running'));
+export function renderAgentsCoded(droids) {
+    const running = sortByFreshest(droids.filter((a) => a.status === 'running'));
     if (running.length === 0) {
         return null;
     }
@@ -181,16 +181,16 @@ export function renderAgentsCoded(agents) {
         const color = getModelTierColor(a.model);
         return `${color}${code}${RESET}`;
     });
-    return `agents:${codes.join('')}`;
+    return `droids:${codes.join('')}`;
 }
 /**
- * Render agents with codes and duration indicators.
+ * Render droids with codes and duration indicators.
  * Shows how long each agent has been running.
  *
- * Format: agents:O(2m)es
+ * Format: droids:O(2m)es
  */
-export function renderAgentsCodedWithDuration(agents) {
-    const running = sortByFreshest(agents.filter((a) => a.status === 'running'));
+export function renderAgentsCodedWithDuration(droids) {
+    const running = sortByFreshest(droids.filter((a) => a.status === 'running'));
     if (running.length === 0) {
         return null;
     }
@@ -216,15 +216,15 @@ export function renderAgentsCodedWithDuration(agents) {
             return `${modelColor}${code}${RESET}`;
         }
     });
-    return `agents:${codes.join('')}`;
+    return `droids:${codes.join('')}`;
 }
 /**
  * Render detailed agent list (for full mode).
  *
- * Format: agents:[architect(2m),explore,exec]
+ * Format: droids:[architect(2m),explore,exec]
  */
-export function renderAgentsDetailed(agents) {
-    const running = sortByFreshest(agents.filter((a) => a.status === 'running'));
+export function renderAgentsDetailed(droids) {
+    const running = sortByFreshest(droids.filter((a) => a.status === 'running'));
     if (running.length === 0) {
         return null;
     }
@@ -284,7 +284,7 @@ export function renderAgentsDetailed(agents) {
         const duration = formatDuration(durationMs);
         return duration ? `${name}${duration}` : name;
     });
-    return `agents:[${CYAN}${names.join(',')}${RESET}]`;
+    return `droids:[${CYAN}${names.join(',')}${RESET}]`;
 }
 /**
  * Truncate description to fit in statusline.
@@ -336,13 +336,13 @@ function getShortAgentName(agentType) {
     return abbrevs[name] || name;
 }
 /**
- * Render agents with descriptions - most informative format.
+ * Render droids with descriptions - most informative format.
  * Shows what each agent is actually doing.
  *
  * Format: O:analyzing code | e:searching files
  */
-export function renderAgentsWithDescriptions(agents) {
-    const running = sortByFreshest(agents.filter((a) => a.status === 'running'));
+export function renderAgentsWithDescriptions(droids) {
+    const running = sortByFreshest(droids.filter((a) => a.status === 'running'));
     if (running.length === 0) {
         return null;
     }
@@ -368,13 +368,13 @@ export function renderAgentsWithDescriptions(agents) {
     return entries.join(dim(' | '));
 }
 /**
- * Render agents showing descriptions only (no codes).
+ * Render droids showing descriptions only (no codes).
  * Maximum clarity about what's running.
  *
  * Format: [analyzing code, searching files]
  */
-export function renderAgentsDescOnly(agents) {
-    const running = sortByFreshest(agents.filter((a) => a.status === 'running'));
+export function renderAgentsDescOnly(droids) {
+    const running = sortByFreshest(droids.filter((a) => a.status === 'running'));
     if (running.length === 0) {
         return null;
     }
@@ -417,7 +417,7 @@ function formatDurationPadded(durationMs) {
     }
 }
 /**
- * Render agents as multi-line display for maximum clarity.
+ * Render droids as multi-line display for maximum clarity.
  * Returns header addition + multiple detail lines.
  *
  * Format:
@@ -425,13 +425,13 @@ function formatDurationPadded(durationMs) {
  * ├─ e explore    45s  searching for test files
  * └─ x exec       1m   implementing validation logic
  */
-export function renderAgentsMultiLine(agents, maxLines = 5) {
-    const running = sortByFreshest(agents.filter((a) => a.status === 'running'));
+export function renderAgentsMultiLine(droids, maxLines = 5) {
+    const running = sortByFreshest(droids.filter((a) => a.status === 'running'));
     if (running.length === 0) {
         return { headerPart: null, detailLines: [] };
     }
     // Header part shows count for awareness
-    const headerPart = `agents:${CYAN}${running.length}${RESET}`;
+    const headerPart = `droids:${CYAN}${running.length}${RESET}`;
     // Build detail lines
     const now = Date.now();
     const detailLines = [];
@@ -453,33 +453,33 @@ export function renderAgentsMultiLine(agents, maxLines = 5) {
     // Add overflow indicator if needed
     if (running.length > maxLines) {
         const remaining = running.length - maxLines;
-        detailLines.push(`${dim(`└─ +${remaining} more agents...`)}`);
+        detailLines.push(`${dim(`└─ +${remaining} more droids...`)}`);
     }
     return { headerPart, detailLines };
 }
 /**
- * Render agents based on format configuration.
+ * Render droids based on format configuration.
  */
-export function renderAgentsByFormat(agents, format) {
+export function renderAgentsByFormat(droids, format) {
     switch (format) {
         case 'count':
-            return renderAgents(agents);
+            return renderAgents(droids);
         case 'codes':
-            return renderAgentsCoded(agents);
+            return renderAgentsCoded(droids);
         case 'codes-duration':
-            return renderAgentsCodedWithDuration(agents);
+            return renderAgentsCodedWithDuration(droids);
         case 'detailed':
-            return renderAgentsDetailed(agents);
+            return renderAgentsDetailed(droids);
         case 'descriptions':
-            return renderAgentsWithDescriptions(agents);
+            return renderAgentsWithDescriptions(droids);
         case 'tasks':
-            return renderAgentsDescOnly(agents);
+            return renderAgentsDescOnly(droids);
         case 'multiline':
             // For backward compatibility, return just the header part
             // The render.ts will handle the full multi-line output
-            return renderAgentsMultiLine(agents).headerPart;
+            return renderAgentsMultiLine(droids).headerPart;
         default:
-            return renderAgentsCoded(agents);
+            return renderAgentsCoded(droids);
     }
 }
-//# sourceMappingURL=agents.js.map
+//# sourceMappingURL=droids.js.map
