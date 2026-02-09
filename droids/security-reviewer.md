@@ -1,7 +1,7 @@
 ---
 name: security-reviewer
 description: Security vulnerability detection specialist (OWASP Top 10, secrets, unsafe patterns)
-model: custom:claude-opus-4.5-6
+model: custom:gpt-5.3-codex-3
 disallowedTools: Write, Edit
 ---
 

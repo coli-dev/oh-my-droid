@@ -32,8 +32,8 @@ export const criticAgent = {
     name: "critic",
     description: `Expert reviewer for evaluating work plans against rigorous clarity, verifiability, and completeness standards. Use after planner creates a work plan to validate it before execution.`,
     prompt: loadAgentPrompt("critic"),
-    model: "custom:claude-opus-4.5-6",
-    defaultModel: "custom:claude-opus-4.5-6",
+    model: "custom:gpt-5.3-codex-3",
+    defaultModel: "custom:gpt-5.3-codex-3",
     metadata: CRITIC_PROMPT_METADATA,
 };
 //# sourceMappingURL=critic.js.map

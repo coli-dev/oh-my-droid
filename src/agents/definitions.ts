@@ -226,8 +226,8 @@ export const securityReviewerAgent: AgentConfig = {
   description:
     "Security vulnerability detection specialist (Sonnet). Use for security audits and OWASP detection.",
   prompt: loadAgentPrompt("security-reviewer"),
-  model: "custom:claude-opus-4.5-6",
-  defaultModel: "custom:claude-opus-4.5-6",
+  model: "custom:gpt-5.3-codex-3",
+  defaultModel: "custom:gpt-5.3-codex-3",
 };
 
 /**
@@ -250,8 +250,8 @@ export const codeReviewerAgent: AgentConfig = {
   description:
     "Expert code review specialist (Opus). Use for comprehensive code quality review.",
   prompt: loadAgentPrompt("code-reviewer"),
-  model: "custom:claude-opus-4.5-6",
-  defaultModel: "custom:claude-opus-4.5-6",
+  model: "custom:gpt-5.3-codex-3",
+  defaultModel: "custom:gpt-5.3-codex-3",
 };
 
 /**

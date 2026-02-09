@@ -33,8 +33,8 @@ export const analystAgent = {
     name: "analyst",
     description: `Pre-planning consultant that analyzes requests before implementation to identify hidden requirements, edge cases, and potential risks. Use before creating a work plan.`,
     prompt: loadAgentPrompt("analyst"),
-    model: "custom:claude-opus-4.5-6",
-    defaultModel: "custom:claude-opus-4.5-6",
+    model: "custom:gpt-5.3-codex-3",
+    defaultModel: "custom:gpt-5.3-codex-3",
     metadata: ANALYST_PROMPT_METADATA,
 };
 //# sourceMappingURL=analyst.js.map

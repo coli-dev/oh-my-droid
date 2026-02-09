@@ -522,7 +522,7 @@ describe("Router", () => {
             const decision = routeTask(context);
             expect(decision.tier).toBe("LOW");
             expect(decision.modelType).toBe("haiku");
-            expect(decision.model).toBe("claude-haiku-4-5-20251001");
+            expect(decision.model).toBe("custom:gpt-5.2-codex-mini-0");
         });
         it("should route complex task to HIGH tier", () => {
             const context = {
@@ -531,7 +531,7 @@ describe("Router", () => {
             const decision = routeTask(context);
             expect(decision.tier).toBe("HIGH");
             expect(decision.modelType).toBe("opus");
-            expect(decision.model).toBe("claude-opus-4-6-20260205");
+            expect(decision.model).toBe("custom:gpt-5.3-codex-3");
         });
         it("should respect explicit model override", () => {
             const context = {

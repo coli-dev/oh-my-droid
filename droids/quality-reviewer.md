@@ -1,7 +1,7 @@
 ---
 name: quality-reviewer
 description: Logic defects, maintainability, anti-patterns, SOLID principles
-model: custom:claude-opus-4.5-6
+model: custom:gpt-5.3-codex-3
 ---
 
 <Agent_Prompt>

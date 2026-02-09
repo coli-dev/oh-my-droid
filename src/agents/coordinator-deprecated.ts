@@ -43,6 +43,6 @@ export const coordinatorAgent: AgentConfig = {
     "DEPRECATED: The coordinator agent was removed. This stub exists for backward compatibility.",
   prompt: "",
   tools: [],
-  model: "custom:claude-opus-4.5-6",
+  model: "custom:gpt-5.3-codex-3",
   metadata: ORCHESTRATOR_SISYPHUS_PROMPT_METADATA,
 };

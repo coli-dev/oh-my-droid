@@ -17,9 +17,9 @@ export const TIER_MODELS = {
  * Model tier to simple model type mapping
  */
 export const TIER_TO_MODEL_TYPE = {
-    LOW: 'custom:gpt-5.2-codex-mini-0',
-    MEDIUM: 'custom:gpt-5.2-codex-2',
-    HIGH: 'custom:gpt-5.3-codex-3',
+    LOW: 'haiku',
+    MEDIUM: 'sonnet',
+    HIGH: 'opus',
 };
 /**
  * Default routing configuration

@@ -37,7 +37,7 @@ describe("delegation-enforcer", () => {
             };
             const result = enforceModel(input);
             expect(result.injected).toBe(true);
-            expect(result.modifiedInput.model).toBe("sonnet"); // executor defaults to sonnet
+            expect(result.modifiedInput.model).toBe("custom:gpt-5.2-codex-2"); // executor defaults to gpt-5.2 codex
             expect(result.originalInput.model).toBeUndefined();
         });
         it("handles agent type without prefix", () => {
@@ -48,7 +48,7 @@ describe("delegation-enforcer", () => {
             };
             const result = enforceModel(input);
             expect(result.injected).toBe(true);
-            expect(result.modifiedInput.model).toBe("sonnet"); // debugger defaults to sonnet
+            expect(result.modifiedInput.model).toBe("custom:gpt-5.3-codex-3"); // debugger defaults to gpt-5.3 codex
         });
         it("throws error for unknown agent type", () => {
             const input = {
@@ -73,7 +73,7 @@ describe("delegation-enforcer", () => {
             const resultWithDebug = enforceModel(input);
             expect(resultWithDebug.warning).toBeDefined();
             expect(resultWithDebug.warning).toContain("Auto-injecting model");
-            expect(resultWithDebug.warning).toContain("sonnet");
+            expect(resultWithDebug.warning).toContain("custom:gpt-5.2-codex-2");
             expect(resultWithDebug.warning).toContain("executor");
         });
         it("does not log warning when OMD_DEBUG is false", () => {
@@ -88,18 +88,18 @@ describe("delegation-enforcer", () => {
         });
         it("works with all droids", () => {
             const testCases = [
-                { agent: "architect", expectedModel: "opus" },
-                { agent: "executor", expectedModel: "sonnet" },
-                { agent: "explore", expectedModel: "haiku" },
-                { agent: "designer", expectedModel: "sonnet" },
-                { agent: "debugger", expectedModel: "sonnet" },
-                { agent: "verifier", expectedModel: "sonnet" },
-                { agent: "style-reviewer", expectedModel: "haiku" },
-                { agent: "quality-reviewer", expectedModel: "sonnet" },
-                { agent: "api-reviewer", expectedModel: "sonnet" },
-                { agent: "performance-reviewer", expectedModel: "sonnet" },
-                { agent: "dependency-expert", expectedModel: "sonnet" },
-                { agent: "test-engineer", expectedModel: "sonnet" },
+                { agent: "architect", expectedModel: "custom:claude-opus-4.5-6" },
+                { agent: "executor", expectedModel: "custom:gpt-5.2-codex-2" },
+                { agent: "explore", expectedModel: "custom:gpt-5.2-codex-mini-0" },
+                { agent: "designer", expectedModel: "custom:gemini-3-pro-8" },
+                { agent: "debugger", expectedModel: "custom:gpt-5.3-codex-3" },
+                { agent: "verifier", expectedModel: "custom:gpt-5.3-codex-3" },
+                { agent: "style-reviewer", expectedModel: "custom:claude-haiku-4.5-4" },
+                { agent: "quality-reviewer", expectedModel: "custom:claude-sonnet-4.5-5" },
+                { agent: "api-reviewer", expectedModel: "custom:claude-sonnet-4.5-5" },
+                { agent: "performance-reviewer", expectedModel: "custom:claude-sonnet-4.5-5" },
+                { agent: "dependency-expert", expectedModel: "custom:gpt-5.2-1" },
+                { agent: "test-engineer", expectedModel: "custom:claude-sonnet-4.5-5" },
             ];
             for (const testCase of testCases) {
                 const input = {
@@ -161,7 +161,7 @@ describe("delegation-enforcer", () => {
                 subagent_type: "executor",
             };
             const result = processPreToolUse("Agent", toolInput);
-            expect(result.modifiedInput).toHaveProperty("model", "sonnet");
+            expect(result.modifiedInput).toHaveProperty("model", "custom:gpt-5.2-codex-2");
         });
         it("does not modify input when model already specified", () => {
             const toolInput = {
@@ -192,14 +192,14 @@ describe("delegation-enforcer", () => {
     });
     describe("getModelForAgent", () => {
         it("returns correct model for agent with prefix", () => {
-            expect(getModelForAgent("oh-my-droid:executor")).toBe("sonnet");
-            expect(getModelForAgent("oh-my-droid:debugger")).toBe("sonnet");
-            expect(getModelForAgent("oh-my-droid:architect")).toBe("opus");
+            expect(getModelForAgent("oh-my-droid:executor")).toBe("custom:gpt-5.2-codex-2");
+            expect(getModelForAgent("oh-my-droid:debugger")).toBe("custom:gpt-5.3-codex-3");
+            expect(getModelForAgent("oh-my-droid:architect")).toBe("custom:claude-opus-4.5-6");
         });
         it("returns correct model for agent without prefix", () => {
-            expect(getModelForAgent("executor")).toBe("sonnet");
-            expect(getModelForAgent("debugger")).toBe("sonnet");
-            expect(getModelForAgent("architect")).toBe("opus");
+            expect(getModelForAgent("executor")).toBe("custom:gpt-5.2-codex-2");
+            expect(getModelForAgent("debugger")).toBe("custom:gpt-5.3-codex-3");
+            expect(getModelForAgent("architect")).toBe("custom:claude-opus-4.5-6");
         });
         it("throws error for unknown agent", () => {
             expect(() => getModelForAgent("unknown")).toThrow("Unknown agent type");

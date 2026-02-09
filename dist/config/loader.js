@@ -23,8 +23,8 @@ export const DEFAULT_CONFIG = {
         documentWriter: { model: "custom:claude-haiku-4.5-4", enabled: true },
         multimodalLooker: { model: "custom:gemini-3-pro-8", enabled: true },
         // New droids from oh-my-opencode
-        critic: { model: "custom:claude-opus-4.5-6", enabled: true },
-        analyst: { model: "custom:claude-opus-4.5-6", enabled: true },
+        critic: { model: "custom:gpt-5.3-codex-3", enabled: true },
+        analyst: { model: "custom:gpt-5.3-codex-3", enabled: true },
         orchestratorSisyphus: {
             model: "custom:gpt-5.3-codex-3",
             enabled: true,
