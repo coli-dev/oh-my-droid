@@ -1,7 +1,7 @@
 ---
 name: security-reviewer
 description: Security vulnerability detection specialist (OWASP Top 10, secrets, unsafe patterns)
-model: opus
+model: custom:claude-opus-4.5-6
 disallowedTools: Write, Edit
 ---
 

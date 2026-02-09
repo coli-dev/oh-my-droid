@@ -1,7 +1,7 @@
 ---
 name: planner
 description: Strategic planning consultant with interview workflow (Opus)
-model: opus
+model: custom:claude-opus-4.5-6
 ---
 
 <Agent_Prompt>

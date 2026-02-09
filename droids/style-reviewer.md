@@ -1,7 +1,7 @@
 ---
 name: style-reviewer
 description: Formatting, naming conventions, idioms, lint/style conventions
-model: haiku
+model: custom:gemini-3-flash-7
 ---
 
 <Agent_Prompt>

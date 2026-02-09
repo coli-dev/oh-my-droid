@@ -1,7 +1,7 @@
 ---
 name: vision
 description: Visual/media file analyzer for images, PDFs, and diagrams (Sonnet)
-model: sonnet
+model: custom:gemini-3-pro-8
 disallowedTools: Write, Edit
 ---
 

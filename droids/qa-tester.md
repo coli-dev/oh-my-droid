@@ -1,7 +1,7 @@
 ---
 name: qa-tester
 description: Interactive CLI testing specialist using tmux for session management
-model: sonnet
+model: custom:gpt-5.2-1
 ---
 
 <Agent_Prompt>

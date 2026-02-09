@@ -1,7 +1,7 @@
 ---
 name: test-engineer
 description: Test strategy, integration/e2e coverage, flaky test hardening, TDD workflows
-model: sonnet
+model: custom:gpt-5.2-codex-2
 ---
 
 <Agent_Prompt>

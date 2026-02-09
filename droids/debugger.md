@@ -1,7 +1,7 @@
 ---
 name: debugger
 description: Root-cause analysis, regression isolation, stack trace analysis
-model: sonnet
+model: custom:gpt-5.2-1
 ---
 
 <Agent_Prompt>

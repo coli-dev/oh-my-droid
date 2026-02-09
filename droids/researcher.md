@@ -1,7 +1,7 @@
 ---
 name: researcher
 description: External Documentation & Reference Researcher
-model: sonnet
+model: custom:claude-sonnet-4.5-5
 disallowedTools: Write, Edit
 ---
 

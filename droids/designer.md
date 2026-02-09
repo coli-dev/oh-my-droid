@@ -1,7 +1,7 @@
 ---
 name: designer
 description: UI/UX Designer-Developer for stunning interfaces (Sonnet)
-model: sonnet
+model: custom:gemini-3-pro-8
 ---
 
 <Agent_Prompt>

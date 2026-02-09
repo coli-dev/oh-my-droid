@@ -1,7 +1,7 @@
 ---
 name: api-reviewer
 description: API contracts, backward compatibility, versioning, error semantics
-model: sonnet
+model: custom:claude-sonnet-4.5-5
 ---
 
 <Agent_Prompt>

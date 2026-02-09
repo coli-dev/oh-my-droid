@@ -1,7 +1,7 @@
 ---
 name: executor
 description: Focused task executor for implementation work (Sonnet)
-model: sonnet
+model: custom:gpt-5.3-codex-3
 ---
 
 <Agent_Prompt>

@@ -1,7 +1,7 @@
 ---
 name: performance-reviewer
 description: Hotspots, algorithmic complexity, memory/latency tradeoffs, profiling plans
-model: sonnet
+model: custom:claude-sonnet-4.5-5
 ---
 
 <Agent_Prompt>

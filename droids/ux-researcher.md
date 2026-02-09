@@ -1,7 +1,7 @@
 ---
 name: ux-researcher
 description: Usability research, heuristic audits, and user evidence synthesis (Sonnet)
-model: sonnet
+model: custom:gemini-3-pro-8
 disallowedTools: Write, Edit
 ---
 

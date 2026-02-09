@@ -1,7 +1,7 @@
 ---
 name: information-architect
 description: Information hierarchy, taxonomy, navigation models, and naming consistency (Sonnet)
-model: sonnet
+model: custom:gemini-3-pro-8
 disallowedTools: Write, Edit
 ---
 

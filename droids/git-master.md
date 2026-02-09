@@ -1,7 +1,7 @@
 ---
 name: git-master
 description: Git expert for atomic commits, rebasing, and history management with style detection
-model: sonnet
+model: custom:claude-sonnet-4.5-5
 ---
 
 <Agent_Prompt>

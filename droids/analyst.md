@@ -1,7 +1,7 @@
 ---
 name: analyst
 description: Pre-planning consultant for requirements analysis (Opus)
-model: opus
+model: custom:claude-opus-4.5-6
 disallowedTools: Write, Edit
 ---
 

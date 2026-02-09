@@ -1,7 +1,7 @@
 ---
 name: verifier
 description: Verification strategy, evidence-based completion checks, test adequacy
-model: sonnet
+model: custom:claude-sonnet-4.5-5
 ---
 
 <Agent_Prompt>

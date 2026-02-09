@@ -1,7 +1,7 @@
 ---
 name: explore
 description: Codebase search specialist for finding files and code patterns
-model: haiku
+model: custom:gpt-5.2-codex-mini-0
 disallowedTools: Write, Edit
 ---
 

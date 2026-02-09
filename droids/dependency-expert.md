@@ -1,7 +1,7 @@
 ---
 name: dependency-expert
 description: Dependency Expert - External SDK/API/Package Evaluator
-model: sonnet
+model: custom:claude-sonnet-4.5-5
 disallowedTools: Write, Edit
 ---
 

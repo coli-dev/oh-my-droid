@@ -1,7 +1,7 @@
 ---
 name: build-fixer
 description: Build and compilation error resolution specialist (minimal diffs, no architecture changes)
-model: sonnet
+model: custom:gpt-5.2-codex-2
 ---
 
 <Agent_Prompt>
