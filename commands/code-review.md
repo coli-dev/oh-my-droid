@@ -35,7 +35,7 @@ Review code for quality, security, and maintainability. Provide severity-rated f
 
 ## Invocation
 
-This command delegates to the `code-reviewer` agent (Opus model) for thorough analysis.
+This command delegates to the `code-reviewer` droid (Opus model) for thorough analysis.
 
 ## Output
 

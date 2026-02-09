@@ -19,7 +19,7 @@ This skill activates when:
 
 ## What It Does
 
-Delegates to the `security-reviewer` agent (Opus model) for deep security analysis:
+Delegates to the `security-reviewer` droid (Opus model) for deep security analysis:
 
 1. **OWASP Top 10 Scan**
    - A01: Broken Access Control
@@ -58,7 +58,7 @@ Delegates to the `security-reviewer` agent (Opus model) for deep security analys
    - Check for outdated dependencies
    - Identify high-severity CVEs
 
-## Agent Delegation
+## Droid Delegation
 
 ```
 Task(
@@ -88,7 +88,7 @@ Output: Security review report with:
 
 ## External Model Consultation (Preferred)
 
-The security-reviewer agent SHOULD consult Codex for cross-validation.
+The security-reviewer droid SHOULD consult Codex for cross-validation.
 
 ### Protocol
 1. **Form your OWN security analysis FIRST** - Complete the review independently
@@ -112,7 +112,7 @@ The security-reviewer agent SHOULD consult Codex for cross-validation.
 ### Tool Usage
 Before first MCP tool use, call `ToolSearch("mcp")` to discover deferred MCP tools.
 Use `mcp__x__ask_codex` with `agent_role: "security-reviewer"`.
-If ToolSearch finds no MCP tools, fall back to the `security-reviewer` Droid agent.
+If ToolSearch finds no MCP tools, fall back to the `security-reviewer` Droid droid.
 
 **Note:** Security second opinions are high-value. Consider consulting for CRITICAL/HIGH findings.
 
@@ -198,7 +198,7 @@ Recommendation: DO NOT DEPLOY until CRITICAL and HIGH issues resolved.
 
 ## Security Checklist
 
-The security-reviewer agent verifies:
+The security-reviewer droid verifies:
 
 ### Authentication & Authorization
 - [ ] Passwords hashed with strong algorithm (bcrypt/argon2)

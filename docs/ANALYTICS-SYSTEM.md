@@ -28,7 +28,7 @@ Token usage is automatically captured on every HUD render:
 
 1. **TokenExtractor** parses StatuslineStdin for token data
 2. **Delta Calculation** computes change from previous render
-3. **Agent Correlation** associates tokens with running droids
+3. **Droid Correlation** associates tokens with running droids
 4. **TokenTracker** records usage to JSONL log
 5. **Summary Files** provide fast <10ms session loading
 
@@ -70,7 +70,7 @@ omd cost monthly
 # Session history
 omd sessions
 
-# Agent breakdown
+# Droid breakdown
 omd droids
 
 # Export data
@@ -143,7 +143,7 @@ The `omd` CLI automatically runs a silent backfill on startup if more than 24 ho
 
 - **Transcript Location**: `~/.factory/projects/<encoded-path>/<uuid>.jsonl`
 - **Token Data**: Actual `output_tokens` from API responses (not estimates)
-- **Agent Detection**: Extracted from `tool_use` blocks with Task tool
+- **Droid Detection**: Extracted from `tool_use` blocks with Task tool
 
 ### Deduplication
 

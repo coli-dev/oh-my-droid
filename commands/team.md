@@ -17,13 +17,13 @@ Spawn N coordinated droids working on a shared task list using Droid's native Te
 
 ### Standard Mode (1-5 droids)
 ```
-/oh-my-droid:team N:agent-type "task description"
+/oh-my-droid:team N:droid-type "task description"
 ```
 
 ### Parameters
 
 - **N** - Number of droids (1-5, Droid background task limit)
-- **agent-type** - Agent to spawn (e.g., executor, build-fixer, architect)
+- **droid-type** - Droid to spawn (e.g., executor, build-fixer, architect)
 - **task** - High-level task to decompose and distribute
 
 ### Examples
@@ -61,7 +61,7 @@ User: "/team 5:executor fix all TypeScript errors"
 
 **Key Features:**
 - Native Droid team tools (TeamCreate/SendMessage/TaskCreate)
-- Real-time inter-agent messaging (DMs and broadcasts)
+- Real-time inter-droid messaging (DMs and broadcasts)
 - Built-in task dependencies (blocks/blockedBy)
 - Graceful shutdown protocol
 - Zero external dependencies (no SQLite needed)
@@ -117,15 +117,15 @@ User: "/team 5:executor fix all TypeScript errors"
 ### Tool Call Requirements
 
 **Task tool for teammates MUST include:**
-- `team_name` - Links agent to team's shared task list
-- `name` - Identifies agent for messaging (e.g., "agent-1", "executor-2", "fixer-a")
+- `team_name` - Links droid to team's shared task list
+- `name` - Identifies droid for messaging (e.g., "droid-1", "executor-2", "fixer-a")
 
 **Example:**
 ```typescript
 Task(
   subagent_type="oh-my-droid:executor",
   team_name="fix-issues",
-  name="agent-1",
+  name="droid-1",
   prompt="Fix TypeScript errors in src/commands/"
 )
 ```
@@ -146,8 +146,8 @@ Task(
 ### 1. Parse Input
 
 From `{{ARGUMENTS}}`, extract:
-- N (agent count, validate <= 5)
-- agent-type (executor, build-fixer, etc.)
+- N (droid count, validate <= 5)
+- droid-type (executor, build-fixer, etc.)
 - task description
 
 ### 2. Analyze & Decompose Task
@@ -168,7 +168,7 @@ From `{{ARGUMENTS}}`, extract:
 Task(
   subagent_type="oh-my-droid:executor",
   team_name="fix-issues",
-  name="agent-1",
+  name="droid-1",
   prompt="Fix TypeScript errors in src/commands/"
 )
 ```
@@ -194,6 +194,6 @@ Use unified cancel command:
 
 Report when complete:
 - Total tasks completed
-- Tasks per agent
+- Tasks per droid
 - Total time elapsed
 - Summary of changes made

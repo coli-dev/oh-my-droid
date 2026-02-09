@@ -7,20 +7,20 @@ description: Chain droids together in sequential or branching workflows with dat
 
 ## Overview
 
-The pipeline skill enables chaining multiple droids together in defined workflows where the output of one agent becomes the input to the next. This creates powerful agent pipelines similar to Unix pipes but designed for AI agent orchestration.
+The pipeline skill enables chaining multiple droids together in defined workflows where the output of one droid becomes the input to the next. This creates powerful droid pipelines similar to Unix pipes but designed for AI droid orchestration.
 
 ## Core Concepts
 
 ### 1. Sequential Pipelines
 
-The simplest form: Agent A's output flows to Agent B, which flows to Agent C.
+The simplest form: Droid A's output flows to Droid B, which flows to Droid C.
 
 ```
 explore -> architect -> executor
 ```
 
 **Flow:**
-1. Explore agent searches codebase and produces findings
+1. Explore droid searches codebase and produces findings
 2. Architect receives findings and produces analysis/recommendations
 3. Executor receives recommendations and implements changes
 
@@ -182,7 +182,7 @@ parallel(explore, researcher) -> architect -> executor
 
 ## Data Passing Protocol
 
-Each agent in the pipeline receives structured context from the previous stage:
+Each droid in the pipeline receives structured context from the previous stage:
 
 ```json
 {
@@ -190,7 +190,7 @@ Each agent in the pipeline receives structured context from the previous stage:
     "original_task": "user's original request",
     "previous_stages": [
       {
-        "agent": "explore",
+        "droid": "explore",
         "model": "haiku",
         "findings": "...",
         "files_identified": ["src/auth.ts", "src/user.ts"]
@@ -199,7 +199,7 @@ Each agent in the pipeline receives structured context from the previous stage:
     "current_stage": "architect",
     "next_stage": "executor"
   },
-  "task": "specific task for this agent"
+  "task": "specific task for this droid"
 }
 ```
 
@@ -207,12 +207,12 @@ Each agent in the pipeline receives structured context from the previous stage:
 
 ### Retry Logic
 
-When an agent fails, the pipeline can:
+When an droid fails, the pipeline can:
 
-1. **Retry** - Re-run the same agent (up to 3 times)
+1. **Retry** - Re-run the same droid (up to 3 times)
 2. **Skip** - Continue to next stage with partial output
 3. **Abort** - Stop entire pipeline
-4. **Fallback** - Route to alternative agent
+4. **Fallback** - Route to alternative droid
 
 **Configuration:**
 
@@ -250,21 +250,21 @@ Pipelines maintain state in `.omd/pipeline-state.json`:
   "stages": [
     {
       "name": "explore",
-      "agent": "explore",
+      "droid": "explore",
       "model": "haiku",
       "status": "completed",
       "output": "..."
     },
     {
       "name": "architect",
-      "agent": "architect",
+      "droid": "architect",
       "model": "opus",
       "status": "in_progress",
       "started_at": "2026-01-23T10:30:00Z"
     },
     {
       "name": "executor",
-      "agent": "executor",
+      "droid": "executor",
       "model": "sonnet",
       "status": "pending"
     }
@@ -288,7 +288,7 @@ Before pipeline completion, verify:
 
 ### Conditional Branching
 
-Based on agent output, route to different paths:
+Based on droid output, route to different paths:
 
 ```
 explore -> {
@@ -362,7 +362,7 @@ Pipelines can be used within other skills:
 
 1. **Start with presets** - Use built-in pipelines before creating custom ones
 2. **Match model to complexity** - Don't waste opus on simple tasks
-3. **Keep stages focused** - Each agent should have one clear responsibility
+3. **Keep stages focused** - Each droid should have one clear responsibility
 4. **Use parallel stages** - Run independent work simultaneously
 5. **Verify at checkpoints** - Use architect or critic to verify progress
 6. **Document custom pipelines** - Save successful patterns for reuse
@@ -374,24 +374,24 @@ Pipelines can be used within other skills:
 **Check:** `.omd/pipeline-state.json` for current stage
 **Fix:** Resume with `/pipeline resume` or cancel and restart
 
-### Agent Fails Repeatedly
+### Droid Fails Repeatedly
 
 **Check:** Retry count and error messages
-**Fix:** Route to higher-tier agent or add architect consultation
+**Fix:** Route to higher-tier droid or add architect consultation
 
 ### Output Not Flowing
 
-**Check:** Data passing structure in agent prompts
-**Fix:** Ensure each agent is prompted with `pipeline_context`
+**Check:** Data passing structure in droid prompts
+**Fix:** Ensure each droid is prompted with `pipeline_context`
 
 ## Technical Implementation
 
 The pipeline orchestrator:
 
-1. **Parses pipeline definition** - Validates syntax and agent names
+1. **Parses pipeline definition** - Validates syntax and droid names
 2. **Initializes state** - Creates pipeline-state.json
 3. **Executes stages sequentially** - Spawns droids with Task tool
-4. **Passes context between stages** - Structures output for next agent
+4. **Passes context between stages** - Structures output for next droid
 5. **Handles branching logic** - Evaluates conditions and routes
 6. **Manages parallel execution** - Spawns concurrent droids and merges
 7. **Persists state** - Updates state file after each stage
@@ -415,8 +415,8 @@ This ensures clean state for future sessions. Stale state files with `active: fa
 This skill activates when:
 
 - User types `/pipeline` command
-- User mentions "agent chain", "workflow", "pipe droids"
-- Pattern detected: "X then Y then Z" with agent names
+- User mentions "droid chain", "workflow", "pipe droids"
+- Pattern detected: "X then Y then Z" with droid names
 
 **Explicit invocation:**
 ```

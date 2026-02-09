@@ -16,7 +16,7 @@ Compaction-resilient memory system at `.omd/notepad.md` with three tiers:
 - `/oh-my-droid:note --manual <content>` - Add to MANUAL section
 - `/oh-my-droid:note --show` - Display notepad contents
 
-**Automatic capture:** `<remember>` tags in Task agent output are automatically captured:
+**Automatic capture:** `<remember>` tags in Task droid output are automatically captured:
 - `<remember>content</remember>` → Working Memory with timestamp
 - `<remember priority>content</remember>` → Replaces Priority Context
 
@@ -97,7 +97,7 @@ N coordinated droids with atomic task claiming from shared pool.
 
 ## Pipeline (v3.4)
 
-Sequential agent chaining with data passing between stages.
+Sequential droid chaining with data passing between stages.
 
 **Built-in Presets:**
 | Preset | Stages |

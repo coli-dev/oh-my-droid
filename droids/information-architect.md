@@ -231,7 +231,7 @@ For each core user task:
 - Use **Read** to examine help text, command definitions, navigation structure, documentation TOC
 - Use **Glob** to find all user-facing entry points: commands, skills, help files, docs structure
 - Use **Grep** to find naming inconsistencies: search for variant spellings, synonyms, duplicate labels
-- Request **explore** agent for broader codebase structure understanding
+- Request **explore** droid for broader codebase structure understanding
 - Request **ux-researcher** when findability hypotheses need user validation
 - Request **writer** when naming changes require documentation updates
 </Tool_Usage>

@@ -57,7 +57,7 @@ This creates a navigable hierarchy:
 |-----------|---------|
 | `subdir/` | What it contains (see `subdir/AGENTS.md`) |
 
-## For AI Agents
+## For AI Droids
 
 ### Working In This Directory
 {Special instructions for AI droids modifying files here}
@@ -148,7 +148,7 @@ grep -r "<!-- Parent:" --include="AGENTS.md" .
 
 ## Smart Delegation
 
-| Task | Agent |
+| Task | Droid |
 |------|-------|
 | Directory mapping | `explore` |
 | File analysis | `architect-low` |
@@ -184,8 +184,8 @@ Container directory for organizing related modules.
 
 1. **Same-level directories**: Process in parallel
 2. **Different levels**: Sequential (parent first)
-3. **Large directories**: Spawn dedicated agent per directory
-4. **Small directories**: Batch multiple into one agent
+3. **Large directories**: Spawn dedicated droid per directory
+4. **Small directories**: Batch multiple into one droid
 
 ## Quality Standards
 
@@ -193,7 +193,7 @@ Container directory for organizing related modules.
 - [ ] Accurate file descriptions
 - [ ] Correct parent references
 - [ ] Subdirectory links
-- [ ] AI agent instructions
+- [ ] AI droid instructions
 
 ### Must Avoid
 - [ ] Generic boilerplate
@@ -226,7 +226,7 @@ A web application for managing user tasks with real-time collaboration features.
 | `docs/` | Documentation (see `docs/AGENTS.md`) |
 | `tests/` | Test suites (see `tests/AGENTS.md`) |
 
-## For AI Agents
+## For AI Droids
 
 ### Working In This Directory
 - Always install dependencies after modifying the project manifest
@@ -274,7 +274,7 @@ Reusable React components organized by feature and complexity.
 | `forms/` | Form-related components (see `forms/AGENTS.md`) |
 | `layout/` | Layout components (see `layout/AGENTS.md`) |
 
-## For AI Agents
+## For AI Droids
 
 ### Working In This Directory
 - Each component has its own file

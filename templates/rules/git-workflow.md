@@ -21,9 +21,9 @@ When creating PRs:
 
 ## Feature Implementation Workflow
 
-1. **Plan First** - Use `planner` agent
-2. **TDD Approach** - Use `tdd-guide` agent
-3. **Code Review** - Use `code-reviewer` agent after writing code
+1. **Plan First** - Use `planner` droid
+2. **TDD Approach** - Use `tdd-guide` droid
+3. **Code Review** - Use `code-reviewer` droid after writing code
 4. **Commit** - Follow conventional commits format
 
 ## Branch Naming

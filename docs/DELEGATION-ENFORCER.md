@@ -1,10 +1,10 @@
 # Delegation Enforcer
 
-**Automatic model parameter injection for Task/Agent calls**
+**Automatic model parameter injection for Task/Droid calls**
 
 ## Problem
 
-Droid does NOT automatically apply model parameters from agent definitions. When you invoke the `Task` tool (or `Agent` tool), you must manually specify the `model` parameter every time, even though each agent has a default model defined in its configuration.
+Droid does NOT automatically apply model parameters from droid definitions. When you invoke the `Task` tool (or `Droid` tool), you must manually specify the `model` parameter every time, even though each droid has a default model defined in its configuration.
 
 This leads to:
 - Verbose delegation code
@@ -13,13 +13,13 @@ This leads to:
 
 ## Solution
 
-The **Delegation Enforcer** is middleware that automatically injects the model parameter based on agent definitions when not explicitly specified.
+The **Delegation Enforcer** is middleware that automatically injects the model parameter based on droid definitions when not explicitly specified.
 
 ## How It Works
 
 ### 1. Pre-Tool-Use Hook
 
-The enforcer runs as a pre-tool-use hook that intercepts `Task` and `Agent` tool calls:
+The enforcer runs as a pre-tool-use hook that intercepts `Task` and `Droid` tool calls:
 
 ```typescript
 // Before enforcement
@@ -36,9 +36,9 @@ Task(
 )
 ```
 
-### 2. Agent Definition Lookup
+### 2. Droid Definition Lookup
 
-Each agent has a default model in its definition:
+Each droid has a default model in its definition:
 
 ```typescript
 export const executorAgent: AgentConfig = {
@@ -71,7 +71,7 @@ Task(
 
 #### `enforceModel(agentInput: AgentInput): EnforcementResult`
 
-Enforces model parameter for a single agent delegation call.
+Enforces model parameter for a single droid delegation call.
 
 ```typescript
 import { enforceModel } from 'oh-my-droid';
@@ -89,7 +89,7 @@ console.log(result.injected); // true
 
 #### `getModelForAgent(agentType: string): ModelType`
 
-Get the default model for an agent type.
+Get the default model for an droid type.
 
 ```typescript
 import { getModelForAgent } from 'oh-my-droid';
@@ -101,7 +101,7 @@ getModelForAgent('executor-high'); // 'opus'
 
 #### `isAgentCall(toolName: string, toolInput: unknown): boolean`
 
-Check if a tool invocation is an agent delegation call.
+Check if a tool invocation is an droid delegation call.
 
 ```typescript
 import { isAgentCall } from 'oh-my-droid';
@@ -130,9 +130,9 @@ const result = await processHook('pre-tool-use', hookInput);
 console.log(result.modifiedInput.model); // 'sonnet'
 ```
 
-## Agent Model Mapping
+## Droid Model Mapping
 
-| Agent Type | Default Model | Use Case |
+| Droid Type | Default Model | Use Case |
 |------------|---------------|----------|
 | `architect` | opus | Complex analysis, debugging |
 | `architect-medium` | sonnet | Standard analysis |
@@ -222,24 +222,24 @@ Task(
 The enforcer runs in the `pre-tool-use` hook:
 
 1. Hook receives tool invocation
-2. Checks if tool is `Task` or `Agent`
+2. Checks if tool is `Task` or `Droid`
 3. Checks if `model` parameter is missing
-4. Looks up agent definition
+4. Looks up droid definition
 5. Injects default model
 6. Returns modified input
 
 ### Error Handling
 
-- Unknown agent types throw errors
-- Agents without default models throw errors
+- Unknown droid types throw errors
+- Droids without default models throw errors
 - Invalid input structures are passed through unchanged
-- Non-agent tools are ignored
+- Non-droid tools are ignored
 
 ### Performance
 
-- O(1) lookup: Direct hash map lookup for agent definitions
+- O(1) lookup: Direct hash map lookup for droid definitions
 - No async operations: Synchronous enforcement
-- Minimal overhead: Only applies to Task/Agent calls
+- Minimal overhead: Only applies to Task/Droid calls
 
 ## Testing
 
@@ -258,10 +258,10 @@ npx tsx examples/delegation-enforcer-demo.ts
 ## Benefits
 
 1. **Cleaner Code**: No need to manually specify model every time
-2. **Consistency**: Always uses correct model tier for each agent
+2. **Consistency**: Always uses correct model tier for each droid
 3. **Safety**: Explicit models always preserved
 4. **Transparency**: Debug mode shows when models are injected
-5. **Zero Config**: Works automatically with existing agent definitions
+5. **Zero Config**: Works automatically with existing droid definitions
 
 ## Migration
 
@@ -273,5 +273,5 @@ No migration needed! The enforcer is backward compatible:
 
 ## Related
 
-- [Agent Definitions](./AGENTS.md) - Complete agent reference
+- [Droid Definitions](./AGENTS.md) - Complete droid reference
 - [Features Reference](./FEATURES.md) - Model routing and delegation categories

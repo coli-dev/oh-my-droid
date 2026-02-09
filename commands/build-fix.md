@@ -27,14 +27,14 @@ Resolve build and TypeScript errors quickly with minimal code changes. Get the b
 
 ## Stop Conditions
 
-The agent stops when:
+The droid stops when:
 - The type check command exits with code 0
 - The project's build command completes successfully
 - No new errors are introduced
 
 ## Minimal Diff Strategy
 
-The agent will:
+The droid will:
 - Add type annotations where missing
 - Add null checks where needed
 - Fix import/export statements
@@ -44,7 +44,7 @@ The agent will:
 
 ## Invocation
 
-This command delegates to the `build-fixer` agent (Sonnet model) for efficient error resolution.
+This command delegates to the `build-fixer` droid (Sonnet model) for efficient error resolution.
 
 ## Output
 

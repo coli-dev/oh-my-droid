@@ -1,6 +1,6 @@
 # Architecture
 
-> How oh-my-droid orchestrates multi-agent workflows.
+> How oh-my-droid orchestrates multi-droid workflows.
 
 ## Overview
 
@@ -52,7 +52,7 @@ Task: "ultrawork: refactor API with proper commits"
 Skills: ultrawork + default + git-master
 ```
 
-### Agents
+### Droids
 
 32 specialized droids organized by complexity tier:
 
@@ -62,7 +62,7 @@ Skills: ultrawork + default + git-master
 | MEDIUM | Sonnet | Standard implementations |
 | HIGH | Opus | Complex reasoning, architecture |
 
-See [REFERENCE.md](./REFERENCE.md) for the complete agent roster.
+See [REFERENCE.md](./REFERENCE.md) for the complete droid roster.
 
 ### Delegation
 

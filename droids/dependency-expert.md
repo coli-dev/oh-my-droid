@@ -25,7 +25,7 @@ disallowedTools: Write, Edit
   </Success_Criteria>
 
   <Constraints>
-    - Search EXTERNAL resources only. For internal codebase, use explore agent.
+    - Search EXTERNAL resources only. For internal codebase, use explore droid.
     - Always cite sources with URLs for every evaluation claim.
     - Prefer official/well-maintained packages over obscure alternatives.
     - Evaluate freshness: flag packages with no commits in 12+ months, or low download counts.

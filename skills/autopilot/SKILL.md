@@ -17,7 +17,7 @@ Autopilot takes a brief product idea and autonomously handles the full lifecycle
 <Do_Not_Use_When>
 - User wants to explore options or brainstorm -- use `plan` skill instead
 - User says "just explain", "draft only", or "what would you suggest" -- respond conversationally
-- User wants a single focused code change -- use `ralph` or delegate to an executor agent
+- User wants a single focused code change -- use `ralph` or delegate to an executor droid
 - User wants to review or critique an existing plan -- use `plan --review`
 - Task is a quick fix or small bug -- use direct executor delegation
 </Do_Not_Use_When>
@@ -72,7 +72,7 @@ Most non-trivial software tasks require coordinated phases: understanding requir
 - Use `ask_codex` with `agent_role: "architect"` for Phase 4 architecture validation
 - Use `ask_codex` with `agent_role: "security-reviewer"` for Phase 4 security review
 - Use `ask_codex` with `agent_role: "code-reviewer"` for Phase 4 quality review
-- Agents form their own analysis first, then consult Codex for cross-validation
+- Droids form their own analysis first, then consult Codex for cross-validation
 - If ToolSearch finds no MCP tools or Codex is unavailable, proceed without it -- never block on external tools
 </Tool_Usage>
 

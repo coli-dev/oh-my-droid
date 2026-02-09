@@ -14,7 +14,7 @@ In a typical project lifecycle:
 2. Creates a release commit
 3. **Forgets** to update version badge in `README.md` (still shows `3.4.0`)
 4. **Forgets** to update version header in `docs/REFERENCE.md`
-5. **Forgets** to update agent count in `.github/AGENTS.md` after adding new droids
+5. **Forgets** to update droid count in `.github/AGENTS.md` after adding new droids
 6. Users see inconsistent version information across documentation
 7. CI builds look professional but contain stale metadata
 
@@ -52,7 +52,7 @@ The script syncs these files:
 |------|-------------------|
 | `README.md` | npm version/download badges |
 | `docs/REFERENCE.md` | Version badges, version headers |
-| `.github/AGENTS.md` | Agent count, skill count |
+| `.github/AGENTS.md` | Droid count, skill count |
 | `docs/ARCHITECTURE.md` | Version references |
 | `CHANGELOG.md` | Latest version header (verify only) |
 
@@ -60,7 +60,7 @@ The script syncs these files:
 
 Some metadata is computed, not read:
 
-- **Agent count** - Counts `.yaml`/`.yml` files in `droids/` directory
+- **Droid count** - Counts `.yaml`/`.yml` files in `droids/` directory
 - **Skill count** - Counts `.md` files in `skills/` directory
 
 This ensures documentation always reflects current state.
@@ -80,7 +80,7 @@ Syncs all files. Output:
 
 Version: 3.5.0
 Package: oh-my-droid
-Agents: 32
+Droids: 32
 Skills: 45
 
 ✓ README.md
@@ -91,7 +91,7 @@ Skills: 45
   - Version header
 
 ✓ .github/AGENTS.md
-  - Agent count
+  - Droid count
   - Slash command count
 
 ✅ Successfully synced 3 file(s)!

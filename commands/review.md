@@ -6,7 +6,7 @@ description: Alias for /plan --review
 
 **Alias for:** `/plan --review`
 
-Review a plan with the Critic agent.
+Review a plan with the Critic droid.
 
 ## Usage
 
@@ -22,7 +22,7 @@ This is equivalent to:
 
 ## Description
 
-The review workflow uses the Critic agent to:
+The review workflow uses the Critic droid to:
 - Evaluate plan completeness
 - Identify gaps and risks
 - Suggest improvements

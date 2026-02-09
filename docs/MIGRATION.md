@@ -24,7 +24,7 @@ Maintenance release fixing test suite issues and continuing skill consolidation 
 
 **Test Fixes:**
 - Delegation-enforcer tests marked as skipped (implementation pending)
-- Analytics expectations corrected for agent attribution
+- Analytics expectations corrected for droid attribution
 - All remaining tests now pass cleanly
 
 **Skill Consolidation:**
@@ -165,9 +165,9 @@ Work naturally. Droid detects intent and activates behaviors automatically:
 "commit these changes properly"                     # Auto-activates git expertise
 ```
 
-### Agent Name Mapping
+### Droid Name Mapping
 
-All agent names have been updated from Greek mythology references to intuitive, descriptive names:
+All droid names have been updated from Greek mythology references to intuitive, descriptive names:
 
 | Old Name (Greek) | New Name (Intuitive) |
 |------------------|----------------------|
@@ -346,7 +346,7 @@ Update your shell configuration files (`.bashrc`, `.zshrc`, etc.):
 
 Search for and update any references to:
 - Package name: `oh-my-droid` → `oh-my-droid`
-- Agent names: Use the mapping table above
+- Droid names: Use the mapping table above
 - Commands: Use the new slash commands
 - Directory paths: Update `.sisyphus` → `.omd`
 
@@ -562,7 +562,7 @@ Once upgraded, droids automatically gain access to:
 - Notepad wisdom APIs (read/write wisdom during execution)
 - Delegation categories (automatic categorization)
 - Directory diagnostics (project-level type checking)
-- Session resume (recover background agent state)
+- Session resume (recover background droid state)
 
 ---
 
@@ -590,7 +590,7 @@ Execute complex tasks with up to 5 concurrent workers for 3-5x speedup:
 
 **Best for:** Multi-component systems, fullstack apps, large refactoring
 
-#### 2. Swarm: Coordinated Agent Teams
+#### 2. Swarm: Coordinated Droid Teams
 
 N coordinated droids with atomic task claiming:
 
@@ -604,7 +604,7 @@ N coordinated droids with atomic task claiming:
 - Scales from 2 to 10 workers
 - Clean completion when all tasks done
 
-#### 3. Pipeline: Sequential Agent Chaining
+#### 3. Pipeline: Sequential Droid Chaining
 
 Chain droids with data passing between stages:
 
@@ -654,7 +654,7 @@ Individual cancel commands are deprecated but still work:
 
 Use `/oh-my-droid:cancel` instead.
 
-#### 6. Explore-High Agent
+#### 6. Explore-High Droid
 
 Opus-powered architectural search for complex codebase exploration:
 
@@ -729,7 +729,7 @@ Once upgraded, you automatically gain access to:
 - Pipeline workflows
 - Ecomode execution
 - Unified cancel command
-- Explore-high agent
+- Explore-high droid
 
 ### Best Practices for v3.4.0
 
@@ -804,8 +804,8 @@ Version 4.0 is a complete architectural redesign focusing on scalability, mainta
    - Core/extension separation
    - Better dependency management
 
-2. **Enhanced Agent System**
-   - Improved agent lifecycle management
+2. **Enhanced Droid System**
+   - Improved droid lifecycle management
    - Better error recovery
    - Performance optimizations
 

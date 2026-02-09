@@ -318,7 +318,7 @@ EOF
 - Backup: Previous AGENTS.md backed up to `.factory/AGENTS.md.backup.YYYY-MM-DD` (if existed)
 - Scope: **PROJECT** - applies only to this project
 - Hooks: Provided by plugin (no manual installation needed)
-- Agents: 28+ available (base + tiered variants)
+- Droids: 28+ available (base + tiered variants)
 - Model routing: Haiku/Sonnet/Opus based on task complexity
 
 **Note**: This configuration is project-specific and won't affect other projects or global settings.
@@ -466,7 +466,7 @@ EOF
 - Backup: Previous AGENTS.md backed up to `~/.factory/AGENTS.md.backup.YYYY-MM-DD` (if existed)
 - Scope: **GLOBAL** - applies to all Droid sessions
 - Hooks: Provided by plugin (no manual installation needed)
-- Agents: 28+ available (base + tiered variants)
+- Droids: 28+ available (base + tiered variants)
 - Model routing: Haiku/Sonnet/Opus based on task complexity
 
 **Note**: Hooks are now managed by the plugin system automatically. No manual hook installation required.
@@ -580,7 +580,7 @@ Use the AskUserQuestion tool to prompt the user:
 **Question:** "Which parallel execution mode should be your default when you say 'fast' or 'parallel'?"
 
 **Options:**
-1. **ultrawork (maximum capability)** - Uses all agent tiers including Opus for complex tasks. Best for challenging work where quality matters most. (Recommended)
+1. **ultrawork (maximum capability)** - Uses all droid tiers including Opus for complex tasks. Best for challenging work where quality matters most. (Recommended)
 2. **ecomode (token efficient)** - Prefers Haiku/Sonnet droids, avoids Opus. Best for pro-plan users who want cost efficiency.
 
 Store the preference in `~/.factory/.omd-config.json`:
@@ -712,17 +712,17 @@ If yes, invoke the mcp-setup skill:
 
 If no, skip to next step.
 
-## Step 5.5: Configure Agent Teams (Optional)
+## Step 5.5: Configure Droid Teams (Optional)
 
 **Note**: If resuming and lastCompletedStep >= 5.5, skip to Step 6.
 
-Agent teams are an experimental Droid feature that lets you spawn N coordinated droids working on a shared task list with inter-agent messaging. **Teams are disabled by default** and require enabling via `settings.json`.
+Droid teams are an experimental Droid feature that lets you spawn N coordinated droids working on a shared task list with inter-droid messaging. **Teams are disabled by default** and require enabling via `settings.json`.
 
-Reference: https://code.factory.com/docs/en/agent-teams
+Reference: https://code.factory.com/docs/en/droid-teams
 
 Use the AskUserQuestion tool to prompt:
 
-**Question:** "Would you like to enable agent teams? Teams let you spawn coordinated droids (e.g., `/team 3:executor 'fix all errors'`). This is an experimental Droid feature."
+**Question:** "Would you like to enable droid teams? Teams let you spawn coordinated droids (e.g., `/team 3:executor 'fix all errors'`). This is an experimental Droid feature."
 
 **Options:**
 1. **Yes, enable teams (Recommended)** - Enable the experimental feature and configure defaults
@@ -730,9 +730,9 @@ Use the AskUserQuestion tool to prompt:
 
 ### If User Chooses YES:
 
-#### Step 5.5.1: Enable Agent Teams in settings.json
+#### Step 5.5.1: Enable Droid Teams in settings.json
 
-**CRITICAL**: Agent teams require `DROID_CODE_EXPERIMENTAL_AGENT_TEAMS` to be set in `~/.factory/settings.json`. This must be done carefully to preserve existing user settings.
+**CRITICAL**: Droid teams require `DROID_CODE_EXPERIMENTAL_AGENT_TEAMS` to be set in `~/.factory/settings.json`. This must be done carefully to preserve existing user settings.
 
 First, read the current settings.json:
 
@@ -818,10 +818,10 @@ Use the AskUserQuestion tool with multiple questions:
 2. **5 droids (maximum)** - Maximum parallelism for large tasks
 3. **2 droids** - Conservative, for smaller projects
 
-**Question 2:** "Which agent type should teammates use by default?"
+**Question 2:** "Which droid type should teammates use by default?"
 
 **Options:**
-1. **executor (Recommended)** - General-purpose code implementation agent
+1. **executor (Recommended)** - General-purpose code implementation droid
 2. **build-fixer** - Specialized for build/type error fixing
 3. **designer** - Specialized for UI/frontend work
 
@@ -853,7 +853,7 @@ echo "$EXISTING" | jq \
 
 echo "Team configuration saved:"
 echo "  Max droids: MAX_AGENTS"
-echo "  Default agent: AGENT_TYPE"
+echo "  Default droid: AGENT_TYPE"
 echo "  Default model: MODEL"
 ```
 
@@ -875,9 +875,9 @@ fi
 
 # Verify teams env var is present
 if jq -e '.env.factory_CODE_EXPERIMENTAL_AGENT_TEAMS' "$SETTINGS_FILE" > /dev/null 2>&1; then
-  echo "Agent teams: ENABLED"
+  echo "Droid teams: ENABLED"
 else
-  echo "WARNING: Agent teams env var not found in settings.json"
+  echo "WARNING: Droid teams env var not found in settings.json"
 fi
 
 # Show final settings.json for user review
@@ -888,7 +888,7 @@ jq '.' "$SETTINGS_FILE"
 
 ### If User Chooses NO:
 
-Skip this step. Agent teams will remain disabled. User can enable later by adding to `~/.factory/settings.json`:
+Skip this step. Droid teams will remain disabled. User can enable later by adding to `~/.factory/settings.json`:
 ```json
 {
   "env": {
@@ -968,7 +968,7 @@ The status bar now shows OMD state. Restart Droid to see it.
 CLI ANALYTICS (if installed):
 - omd           - Full dashboard (stats + droids + cost)
 - omd stats     - View token usage and costs
-- omd droids    - See agent breakdown by cost
+- omd droids    - See droid breakdown by cost
 - omd tui       - Launch interactive TUI dashboard
 
 That's it! Just use Droid normally.
@@ -1010,7 +1010,7 @@ The status bar now shows OMD state. Restart Droid to see it.
 CLI ANALYTICS (if installed):
 - omd           - Full dashboard (stats + droids + cost)
 - omd stats     - View token usage and costs
-- omd droids    - See agent breakdown by cost
+- omd droids    - See droid breakdown by cost
 - omd tui       - Launch interactive TUI dashboard
 
 Your workflow won't break - it just got easier!
@@ -1097,7 +1097,7 @@ After installing oh-my-droid updates (via npm or plugin update):
 - `/oh-my-droid:omd-setup --global` to update global config only
 - `/oh-my-droid:omd-setup --force` to re-run the full wizard (reconfigure preferences)
 
-This ensures you have the newest features and agent configurations without the token cost of repeating the full setup.
+This ensures you have the newest features and droid configurations without the token cost of repeating the full setup.
 
 ## Help Text
 
@@ -1120,7 +1120,7 @@ MODES:
     - Sets up HUD statusline
     - Checks for updates
     - Offers MCP server configuration
-    - Configures team mode defaults (agent count, type, model)
+    - Configures team mode defaults (droid count, type, model)
     - If already configured, offers quick update option
 
   Local Configuration (--local)

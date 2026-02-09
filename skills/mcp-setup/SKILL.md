@@ -1,6 +1,6 @@
 ---
 name: mcp-setup
-description: Configure popular MCP servers for enhanced agent capabilities
+description: Configure popular MCP servers for enhanced droid capabilities
 ---
 
 # MCP Setup
@@ -175,7 +175,7 @@ droid mcp add --transport http --header "Authorization: Bearer <token>" <server-
 - GitHub: Ensure token has required scopes (repo, read:org)
 - Re-run `droid mcp add` with correct credentials if needed
 
-### Agents Still Using Built-in Tools
+### Droids Still Using Built-in Tools
 - Restart Droid after configuration
 - The built-in websearch will be deprioritized when exa is configured
 - Run `droid mcp list` to confirm servers are active

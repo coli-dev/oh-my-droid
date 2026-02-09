@@ -52,7 +52,7 @@ Have many similar independent tasks (e.g., "fix 47 errors")?
 These run independently:
 - **autopilot**: Autonomous end-to-end execution
 - **ultrapilot**: Parallel autonomous with file ownership
-- **swarm**: N-agent coordination with task pool
+- **swarm**: N-droid coordination with task pool
 
 ### Wrapper Modes
 These wrap other modes:

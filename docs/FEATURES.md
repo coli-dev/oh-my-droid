@@ -7,7 +7,7 @@
 2. [Delegation Categories](#delegation-categories)
 3. [Directory Diagnostics](#directory-diagnostics)
 4. [Dynamic Prompt Generation](#dynamic-prompt-generation)
-5. [Agent Templates](#agent-templates)
+5. [Droid Templates](#droid-templates)
 6. [Session Resume](#session-resume)
 7. [Autopilot](#autopilot)
 
@@ -214,7 +214,7 @@ console.log('Build quality check passed!');
 
 ## Dynamic Prompt Generation
 
-Generate orchestrator prompts dynamically from agent metadata. Adding a new agent to `definitions.ts` automatically includes it in generated prompts.
+Generate orchestrator prompts dynamically from droid metadata. Adding a new droid to `definitions.ts` automatically includes it in generated prompts.
 
 ### Core Functions
 
@@ -265,7 +265,7 @@ const prompt = generateOrchestratorPrompt(droids);
 
 ---
 
-## Agent Templates
+## Droid Templates
 
 Standardized prompt structures for common task types.
 
@@ -304,7 +304,7 @@ For code implementation, refactoring, or modification tasks.
 
 ## Session Resume
 
-Wrapper for resuming background agent sessions with full context.
+Wrapper for resuming background droid sessions with full context.
 
 ### API
 
@@ -540,7 +540,7 @@ const prompt = getPhasePrompt('expansion', { idea });
 // Monitor progress
 const currentState = readAutopilotState(process.cwd());
 console.log(`Phase: ${currentState?.phase}`);
-console.log(`Agents spawned: ${currentState?.total_agents_spawned}`);
+console.log(`Droids spawned: ${currentState?.total_agents_spawned}`);
 
 // Transition phases
 if (currentState?.phase === 'execution' && currentState.execution.ralph_completed_at) {
@@ -568,7 +568,7 @@ All state is persisted to `.omd/state/autopilot-state.json` and includes:
 - Original user idea
 - Phase-specific progress (expansion, planning, execution, qa, validation)
 - Files created and modified
-- Agent spawn count and metrics
+- Droid spawn count and metrics
 - Phase duration tracking
 - Session binding
 
@@ -579,4 +579,4 @@ All state is persisted to `.omd/state/autopilot-state.json` and includes:
 - [CHANGELOG.md](../CHANGELOG.md) - Version history
 - [ARCHITECTURE.md](./ARCHITECTURE.md) - System architecture
 - [MIGRATION.md](./MIGRATION.md) - Migration guide
-- [Agent Definitions](../src/droids/definitions.ts) - Agent configuration
+- [Droid Definitions](../src/droids/definitions.ts) - Droid configuration

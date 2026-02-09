@@ -16,13 +16,13 @@ ultrapilot (parallel autopilot)
 ├── includes: worker coordination (up to 5 workers)
 └── falls back to: autopilot (if not parallelizable)
 
-swarm (N-agent coordination)
+swarm (N-droid coordination)
 ├── includes: SQLite task claiming
 ├── includes: heartbeat monitoring
 └── orthogonal to: autopilot/ultrapilot (different paradigm)
 
 ecomode (token efficiency ONLY)
-└── modifies: agent tier selection (prefer haiku/sonnet)
+└── modifies: droid tier selection (prefer haiku/sonnet)
     (does NOT include persistence - that's ralph's job)
 
 ralph (persistence wrapper)
@@ -30,7 +30,7 @@ ralph (persistence wrapper)
     (adds: loop until done + architect verification)
 
 ultrawork (parallelism engine)
-└── COMPONENT only - parallel agent spawning
+└── COMPONENT only - parallel droid spawning
     (no persistence, no verification loop)
 ```
 

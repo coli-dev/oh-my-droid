@@ -29,7 +29,7 @@ First, expand the user's idea into a detailed specification.
 
 ### Step 1: Requirements Analysis
 
-Spawn the Analyst agent:
+Spawn the Analyst droid:
 
 ```
 Task(
@@ -115,7 +115,7 @@ During execution, you MUST follow these rules:
 
 1. Spawn parallel executors for independent tasks
 2. Track progress via TODO list
-3. Use appropriate agent tiers:
+3. Use appropriate droid tiers:
    - Simple/single-file → `executor-low` (haiku)
    - Standard feature → `executor` (sonnet)
    - Complex/multi-file → `executor-high` (opus)

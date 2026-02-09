@@ -40,7 +40,7 @@ Ralph automatically activates Ultrawork for maximum parallel execution. You MUST
 | Standard work | MEDIUM (sonnet) | "Add error handling", "Implement this feature" |
 | Complex analysis | HIGH (opus) | "Debug this race condition", "Refactor auth module" |
 
-### Available Agents by Tier
+### Available Droids by Tier
 
 | Domain | LOW (Haiku) | MEDIUM (Sonnet) | HIGH (Opus) |
 |--------|-------------|-----------------|-------------|

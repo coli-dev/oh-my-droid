@@ -231,7 +231,7 @@ Writer Memory integrates with `.omd/notepad.md`:
 - Character insights from analysis sessions are preserved
 - Cross-reference between notepad and memory
 
-### With Architect Agent
+### With Architect Droid
 For complex character analysis:
 ```
 Task(subagent_type="oh-my-droid:architect",

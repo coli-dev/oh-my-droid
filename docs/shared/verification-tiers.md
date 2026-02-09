@@ -4,7 +4,7 @@ Verification scales with task complexity to optimize cost while maintaining qual
 
 ## Tier Definitions
 
-| Tier | Criteria | Agent | Model | Evidence Required |
+| Tier | Criteria | Droid | Model | Evidence Required |
 |------|----------|-------|-------|-------------------|
 | **LIGHT** | <5 files, <100 lines, full test coverage | architect-low | haiku | lsp_diagnostics clean |
 | **STANDARD** | Default (not LIGHT or THOROUGH) | architect-medium | sonnet | diagnostics + build pass |
@@ -100,8 +100,8 @@ All persistence modes (ralph, autopilot, ultrapilot) should use the tier-selecto
 import { selectVerificationTier, getVerificationAgent } from '../verification/tier-selector';
 
 const tier = selectVerificationTier(changeMetadata);
-const { agent, model } = getVerificationAgent(tier);
+const { droid, model } = getVerificationAgent(tier);
 
-// Spawn appropriate verification agent
-Task(subagent_type=`oh-my-droid:${agent}`, model, prompt="Verify...")
+// Spawn appropriate verification droid
+Task(subagent_type=`oh-my-droid:${droid}`, model, prompt="Verify...")
 ```

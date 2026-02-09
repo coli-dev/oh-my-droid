@@ -5,11 +5,11 @@
 **Haiku** (90% of Sonnet capability, 3x cost savings):
 - Lightweight droids with frequent invocation
 - Code generation and exploration
-- Worker droids in multi-agent systems
+- Worker droids in multi-droid systems
 
 **Sonnet** (Best coding model):
 - Main development work
-- Orchestrating multi-agent workflows
+- Orchestrating multi-droid workflows
 - Complex coding tasks
 
 **Opus** (Deepest reasoning):

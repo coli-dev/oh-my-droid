@@ -1,6 +1,6 @@
-# Agent Tiers Reference
+# Droid Tiers Reference
 
-This is the single source of truth for all agent tier information. All skill files and documentation should reference this file instead of duplicating the table.
+This is the single source of truth for all droid tier information. All skill files and documentation should reference this file instead of duplicating the table.
 
 ## Tier Matrix
 
@@ -32,9 +32,9 @@ This is the single source of truth for all agent tier information. All skill fil
 | Standard | MEDIUM | sonnet | Feature implementation, standard debugging, "Add validation" |
 | Complex | HIGH | opus | Architecture decisions, complex debugging, "Refactor system" |
 
-## Agent Selection by Task Type
+## Droid Selection by Task Type
 
-| Task Type | Best Agent | Tier |
+| Task Type | Best Droid | Tier |
 |-----------|------------|------|
 | Quick code lookup | explore | LOW |
 | Find files/patterns | explore | LOW |
@@ -89,11 +89,11 @@ For token savings, prefer lower tiers when the task allows:
 - Use `sonnet` for standard implementation work
 - Reserve `opus` for complex reasoning tasks
 
-## MCP Tools & Agent Capabilities
+## MCP Tools & Droid Capabilities
 
 ### Tool Inventory
 
-| Tool | Category | Purpose | Assigned to Agents? |
+| Tool | Category | Purpose | Assigned to Droids? |
 |------|----------|---------|---------------------|
 | `lsp_hover` | LSP | Get type info and documentation at a code position | NO (orchestrator-direct) |
 | `lsp_goto_definition` | LSP | Jump to where a symbol is defined | NO (orchestrator-direct) |
@@ -111,9 +111,9 @@ For token savings, prefer lower tiers when the task allows:
 | `ast_grep_replace` | AST | Pattern-based structural code transformation | YES (`executor-high` only) |
 | `python_repl` | Data | Persistent Python REPL for data analysis and computation | YES |
 
-### Agent Tool Matrix (MCP Tools Only)
+### Droid Tool Matrix (MCP Tools Only)
 
-| Agent | LSP Diagnostics | LSP Dir Diagnostics | LSP Symbols | LSP References | AST Search | AST Replace | Python REPL |
+| Droid | LSP Diagnostics | LSP Dir Diagnostics | LSP Symbols | LSP References | AST Search | AST Replace | Python REPL |
 |-------|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 | `explore` | - | - | doc + workspace | - | yes | - | - |
 | `explore-high` | - | - | doc + workspace | yes | yes | - | - |
@@ -134,7 +134,7 @@ For token savings, prefer lower tiers when the task allows:
 
 ### Unassigned Tools (Orchestrator-Direct)
 
-The following 7 MCP tools are NOT assigned to any agent. Use directly when needed:
+The following 7 MCP tools are NOT assigned to any droid. Use directly when needed:
 
 | Tool | When to Use Directly |
 |------|---------------------|
@@ -151,9 +151,9 @@ For complex rename or refactoring tasks requiring implementation, delegate to `e
 ### Tool Selection Guidance
 
 - **Need file symbol outline or workspace search?** Use `lsp_document_symbols`/`lsp_workspace_symbols` via `explore` or `explore-high`
-- **Need to find all usages of a symbol?** Use `lsp_find_references` via `explore-high` (only agent with it)
+- **Need to find all usages of a symbol?** Use `lsp_find_references` via `explore-high` (only droid with it)
 - **Need structural code patterns?** (e.g., "find all functions matching X shape") Use `ast_grep_search` via `explore` family, `architect`/`architect-medium`, or `code-reviewer`
-- **Need to transform code structurally?** Use `ast_grep_replace` via `executor-high` (only agent with it)
+- **Need to transform code structurally?** Use `ast_grep_replace` via `executor-high` (only droid with it)
 - **Need project-wide type checking?** Use `lsp_diagnostics_directory` via `architect`/`architect-medium`, `executor`/`executor-high`, or `build-fixer`
 - **Need single-file error checking?** Use `lsp_diagnostics` via many droids (see matrix)
 - **Need data analysis / computation?** Use `python_repl` via `scientist` or `scientist-high`

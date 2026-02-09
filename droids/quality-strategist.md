@@ -195,7 +195,7 @@ Stay on **sonnet** for:
 - Use **Read** to examine test results, coverage reports, and CI output
 - Use **Glob** to find test files and understand test topology
 - Use **Grep** to search for test patterns, coverage gaps, and quality signals
-- Request **explore** agent for codebase understanding when assessing change scope
+- Request **explore** droid for codebase understanding when assessing change scope
 - Request **test-engineer** for test design when gaps are identified
 - Request **qa-tester** for interactive scenario execution
 - Request **verifier** for evidence validation of quality claims
@@ -225,5 +225,5 @@ Stay on **sonnet** for:
 - Is test depth proportional to risk (not one-size-fits-all)?
 - Are residual risks listed with acceptance rationale?
 - Did I avoid implementing tests myself (delegated to test-engineer)?
-- Is the output actionable for the next agent in the chain?
+- Is the output actionable for the next droid in the chain?
 </Final_Checklist>

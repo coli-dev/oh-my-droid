@@ -47,7 +47,7 @@ Task(subagent_type="oh-my-droid:scientist-high", model="opus", prompt="[RESEARCH
 
 ### Smart Model Routing
 
-| Task Complexity | Agent | Model | Use For |
+| Task Complexity | Droid | Model | Use For |
 |-----------------|-------|-------|---------|
 | Data gathering | `scientist` (model=haiku) | haiku | File enumeration, pattern counting, simple lookups |
 | Standard analysis | `scientist` | sonnet | Code analysis, pattern detection, documentation review |

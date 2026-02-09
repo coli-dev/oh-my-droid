@@ -5,18 +5,18 @@ description: N coordinated droids on shared task list using Droid native teams
 
 # Team Skill
 
-Spawn N coordinated droids working on a shared task list using Droid's native team tools. Replaces the legacy `/swarm` skill (SQLite-based) with built-in team management, inter-agent messaging, and task dependencies -- no external dependencies required.
+Spawn N coordinated droids working on a shared task list using Droid's native team tools. Replaces the legacy `/swarm` skill (SQLite-based) with built-in team management, inter-droid messaging, and task dependencies -- no external dependencies required.
 
 ## Usage
 
 ```
-/oh-my-droid:team N:agent-type "task description"
+/oh-my-droid:team N:droid-type "task description"
 ```
 
 ### Parameters
 
 - **N** - Number of teammate droids (1-5, enforced by Droid limit)
-- **agent-type** - OMD agent to spawn (e.g., executor, executor-low, build-fixer, designer)
+- **droid-type** - OMD droid to spawn (e.g., executor, executor-low, build-fixer, designer)
 - **task** - High-level task to decompose and distribute among teammates
 
 ### Examples
@@ -80,13 +80,13 @@ User: "/team 3:executor fix all TypeScript errors"
 
 ### Phase 1: Parse Input
 
-- Extract **N** (agent count), validate 1-5
-- Extract **agent-type**, validate it maps to a known OMD subagent
+- Extract **N** (droid count), validate 1-5
+- Extract **droid-type**, validate it maps to a known OMD custom droid
 - Extract **task** description
 
 ### Phase 2: Analyze & Decompose
 
-Use `explore` or `architect` (via MCP or agent) to analyze the codebase and break the task into N subtasks:
+Use `explore` or `architect` (via MCP or droid) to analyze the codebase and break the task into N subtasks:
 
 - Each subtask should be **file-scoped** or **module-scoped** to avoid conflicts
 - Subtasks must be independent or have clear dependency ordering
@@ -200,7 +200,7 @@ Spawn N teammates using `Task` with `team_name` and `name` parameters. Each team
 
 **Side effects:**
 - Teammate added to `config.json` members array
-- An **internal task** is auto-created (with `metadata._internal: true`) tracking the agent lifecycle
+- An **internal task** is auto-created (with `metadata._internal: true`) tracking the droid lifecycle
 - Internal tasks appear in `TaskList` output -- filter them when counting real tasks
 
 **IMPORTANT:** Spawn all teammates in parallel (they are background droids). Do NOT wait for one to finish before spawning the next.
@@ -262,7 +262,7 @@ When all real tasks (non-internal) are completed or failed:
 5. **Clean OMD state** -- Remove `.omd/state/team-state.json`
 6. **Report summary** -- Present results to the user
 
-## Agent Preamble
+## Droid Preamble
 
 When spawning teammates, include this preamble in the prompt to establish the work protocol. Adapt it per teammate with their specific task assignments.
 
@@ -372,7 +372,7 @@ After approval:
 
 ## MCP Workers (Hybrid Roles)
 
-The team skill supports **hybrid execution** combining Droid agent teammates with external MCP workers (Codex and Gemini CLIs). Both types can make code changes -- they differ in capabilities and cost.
+The team skill supports **hybrid execution** combining Droid droid teammates with external MCP workers (Codex and Gemini CLIs). Both types can make code changes -- they differ in capabilities and cost.
 
 ### Execution Modes
 
@@ -380,7 +380,7 @@ Tasks are tagged with an execution mode during decomposition:
 
 | Execution Mode | Provider | Capabilities |
 |---------------|----------|-------------|
-| `droid_worker` | Droid agent | Full Droid tool access (Read/Write/Edit/Bash/Task). Best for tasks needing Droid's reasoning + iterative tool use. |
+| `droid_worker` | Droid droid | Full Droid tool access (Read/Write/Edit/Bash/Task). Best for tasks needing Droid's reasoning + iterative tool use. |
 | `mcp_codex` | Codex CLI (`ask_codex`) | Full filesystem access in working_directory. Runs autonomously. Best for code review, security analysis, refactoring, architecture. |
 | `mcp_gemini` | Gemini CLI (`ask_gemini`) | Full filesystem access + 1M token context. Runs autonomously. Best for UI/frontend work, large-scale changes, documentation. |
 
@@ -556,13 +556,13 @@ This prevents duplicate teams and allows graceful recovery from lead failures.
 | **Task dependencies** | Built-in `blocks` / `blockedBy` arrays | Not supported |
 | **Heartbeat** | Automatic idle notifications from Droid | Manual heartbeat table + polling |
 | **Shutdown** | Graceful request/response protocol | Signal-based termination |
-| **Agent lifecycle** | Auto-tracked via internal tasks + config members | Manual tracking via heartbeat table |
+| **Droid lifecycle** | Auto-tracked via internal tasks + config members | Manual tracking via heartbeat table |
 | **Progress visibility** | `TaskList` shows live status with owner | SQL queries on tasks table |
 | **Conflict prevention** | Owner field (lead-assigned) | Lease-based claiming with timeout |
 | **Crash recovery** | Lead detects via missing messages, reassigns | Auto-release after 5-min lease timeout |
 | **State cleanup** | `TeamDelete` removes everything | Manual `rm` of SQLite database |
 
-**When to use Team over Swarm:** Always prefer `/team` for new work. It uses Droid's built-in infrastructure, requires no external dependencies, supports inter-agent communication, and has task dependency management.
+**When to use Team over Swarm:** Always prefer `/team` for new work. It uses Droid's built-in infrastructure, requires no external dependencies, supports inter-droid communication, and has task dependency management.
 
 ## Cancellation
 
@@ -592,11 +592,11 @@ Optional settings via `.omd-config.json`:
 ```
 
 - **maxAgents** - Maximum teammates (hard cap: 5)
-- **defaultAgentType** - Agent type when not specified (default: `executor`)
+- **defaultAgentType** - Droid type when not specified (default: `executor`)
 - **monitorIntervalMs** - How often to poll `TaskList` (default: 30s)
 - **shutdownTimeoutMs** - How long to wait for shutdown responses (default: 15s)
 
-> **Note:** Team members do not have a hardcoded model default. Each teammate is a separate Droid session that inherits the user's configured model. Since teammates can spawn their own subagents, the session model acts as the orchestration layer while subagents can use any model tier.
+> **Note:** Team members do not have a hardcoded model default. Each teammate is a separate Droid session that inherits the user's configured model. Since teammates can spawn their own custom droids, the session model acts as the orchestration layer while custom droids can use any model tier.
 
 ## State Cleanup
 

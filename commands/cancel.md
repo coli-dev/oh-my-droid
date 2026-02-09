@@ -19,7 +19,7 @@ The skill checks state files to determine what's active and cancels in order of 
 5. **UltraQA** - Stops QA cycling workflow
 6. **Swarm** - Stops coordinated droids, releases claimed tasks
 7. **Ultrapilot** - Stops parallel autopilot workers
-8. **Pipeline** - Stops sequential agent chain
+8. **Pipeline** - Stops sequential droid chain
 
 ## Usage
 

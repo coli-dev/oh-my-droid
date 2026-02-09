@@ -1,9 +1,9 @@
 ---
 name: trace
-description: Show agent flow trace timeline and summary
+description: Show droid flow trace timeline and summary
 ---
 
-# Agent Flow Trace
+# Droid Flow Trace
 
 [TRACE MODE ACTIVATED]
 
@@ -30,4 +30,4 @@ Display the flow trace showing how hooks, keywords, skills, droids, and tools in
 Present the timeline first, then the summary. Highlight:
 - **Mode transitions** (how execution modes changed)
 - **Bottlenecks** (slow tools or droids)
-- **Flow patterns** (keyword -> skill -> agent chains)
+- **Flow patterns** (keyword -> skill -> droid chains)

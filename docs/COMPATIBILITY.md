@@ -50,7 +50,7 @@ Scans for external plugins and MCP servers from:
 - Plugin manifests (`plugin.json`) for embedded MCP servers
 
 **Discovers:**
-- Plugin skills and droids (from SKILL.md and agent .md files)
+- Plugin skills and droids (from SKILL.md and droid .md files)
 - MCP server configurations
 - Tool definitions from plugin manifests
 
@@ -113,8 +113,8 @@ Plugins are discovered from `~/.factory/plugins/` and `~/.factory/installed-plug
 │   │   └── skill-2/
 │   │       └── SKILL.md
 │   ├── droids/              (optional)
-│   │   ├── agent-1.md
-│   │   └── agent-2.md
+│   │   ├── droid-1.md
+│   │   └── droid-2.md
 │   └── commands/            (optional)
 └── another-plugin/
     └── plugin.json
@@ -166,7 +166,7 @@ The `plugin.json` defines the plugin's metadata and tools:
 }
 ```
 
-### Skill and Agent Discovery
+### Skill and Droid Discovery
 
 **Skills** are discovered from `SKILL.md` files in the skills directory. Each skill directory must contain a SKILL.md with frontmatter:
 
@@ -180,7 +180,7 @@ tags: tag1, tag2
 Skill documentation here...
 ```
 
-**Agents** are discovered from `.md` files in the droids directory with similar frontmatter structure.
+**Droids** are discovered from `.md` files in the droids directory with similar frontmatter structure.
 
 ## MCP Server Discovery
 

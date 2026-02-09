@@ -262,7 +262,7 @@ Every metric MUST include:
 - Use **Read** to examine existing analytics code, event tracking, metric definitions
 - Use **Glob** to find analytics files, tracking implementations, configuration
 - Use **Grep** to search for existing event names, metric calculations, tracking calls
-- Request **explore** agent to understand current instrumentation in the codebase
+- Request **explore** droid to understand current instrumentation in the codebase
 - Request **scientist** when statistical analysis (power analysis, significance testing) is needed
 - Request **product-manager** when metrics need business context or prioritization
 </Tool_Usage>
@@ -295,7 +295,7 @@ Every metric MUST include:
 - Do metrics connect to user outcomes, not just system activity?
 - For experiments: is sample size calculated? Is MDE specified? Are guardrails defined?
 - Did I flag metrics that require instrumentation not yet in place?
-- Is output actionable for the next agent (scientist for analysis, executor for instrumentation)?
+- Is output actionable for the next droid (scientist for analysis, executor for instrumentation)?
 - Did I distinguish leading from lagging indicators?
 - Did I avoid defining vanity metrics?
 </Final_Checklist>

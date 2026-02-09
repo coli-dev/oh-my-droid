@@ -234,13 +234,13 @@ If yes, invoke the mcp-setup skill:
 
 If no, skip to next step.
 
-## Step 5.5: Configure Agent Teams (Optional)
+## Step 5.5: Configure Droid Teams (Optional)
 
-Agent teams are an experimental Droid feature that spawns N coordinated droids on a shared task list with inter-agent messaging. **Disabled by default** — requires enabling in `settings.json`.
+Droid teams are an experimental Droid feature that spawns N coordinated droids on a shared task list with inter-droid messaging. **Disabled by default** — requires enabling in `settings.json`.
 
-Reference: https://code.factory.com/docs/en/agent-teams
+Reference: https://code.factory.com/docs/en/droid-teams
 
-Ask user: "Would you like to enable agent teams? (experimental Droid feature)"
+Ask user: "Would you like to enable droid teams? (experimental Droid feature)"
 
 **Options:**
 1. **Yes, enable teams (Recommended)** - Enable the experimental feature and configure defaults
@@ -295,7 +295,7 @@ jq --arg mode "TEAMMATE_MODE" '. + {teammateMode: $mode}' "$SETTINGS_FILE" > "${
 Ask three questions:
 
 1. **Default team size?** → 3 droids (Recommended) / 5 droids (maximum) / 2 droids
-2. **Default agent type?** → executor (Recommended) / build-fixer / designer
+2. **Default droid type?** → executor (Recommended) / build-fixer / designer
 3. **Default model?** → sonnet (Recommended) / opus / haiku
 
 Store in `~/.factory/.omd-config.json`:
@@ -321,7 +321,7 @@ echo "$EXISTING" | jq \
 
 ```bash
 jq empty "$SETTINGS_FILE" 2>/dev/null && echo "settings.json: valid" || echo "ERROR: invalid JSON!"
-jq -e '.env.factory_CODE_EXPERIMENTAL_AGENT_TEAMS' "$SETTINGS_FILE" > /dev/null 2>&1 && echo "Agent teams: ENABLED" || echo "WARNING: not enabled"
+jq -e '.env.factory_CODE_EXPERIMENTAL_AGENT_TEAMS' "$SETTINGS_FILE" > /dev/null 2>&1 && echo "Droid teams: ENABLED" || echo "WARNING: not enabled"
 ```
 
 ### If User Chooses NO:
@@ -384,7 +384,7 @@ The status bar now shows OMD state. Restart Droid to see it.
 CLI ANALYTICS (if installed):
 - omd           - Full dashboard (stats + droids + cost)
 - omd stats     - View token usage and costs
-- omd droids    - See agent breakdown by cost
+- omd droids    - See droid breakdown by cost
 - omd tui       - Launch interactive TUI dashboard
 
 AST TOOLS (if installed):
@@ -430,7 +430,7 @@ The status bar now shows OMD state. Restart Droid to see it.
 CLI ANALYTICS (if installed):
 - omd           - Full dashboard (stats + droids + cost)
 - omd stats     - View token usage and costs
-- omd droids    - See agent breakdown by cost
+- omd droids    - See droid breakdown by cost
 - omd tui       - Launch interactive TUI dashboard
 
 Your workflow won't break - it just got easier!

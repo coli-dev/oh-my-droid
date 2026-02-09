@@ -221,7 +221,7 @@ Business Goal
 - Use **Read** to examine existing product docs, plans, and README for current state
 - Use **Glob** to find relevant documentation and plan files
 - Use **Grep** to search for feature references, user-facing strings, or metric definitions
-- Request **explore** agent for codebase understanding when product questions touch implementation
+- Request **explore** droid for codebase understanding when product questions touch implementation
 - Request **ux-researcher** when user evidence is needed but unavailable
 - Request **product-analyst** when metric definitions or measurement plans are needed
 </Tool_Usage>
@@ -253,5 +253,5 @@ Business Goal
 - Is there an explicit "not doing" list?
 - Did I distinguish validated facts from assumptions?
 - Did I avoid speculating on technical feasibility?
-- Is output actionable for the next agent in the chain (analyst or planner)?
+- Is output actionable for the next droid in the chain (analyst or planner)?
 </Final_Checklist>

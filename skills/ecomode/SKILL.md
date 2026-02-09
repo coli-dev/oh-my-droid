@@ -43,13 +43,13 @@ Ecomode is a modifier that combines with execution modes:
 | UPGRADE | Escalate to MEDIUM (Sonnet) when LOW tier fails or task requires multi-file reasoning |
 | AVOID | HIGH tier (Opus) - only for planning/critique if essential |
 
-## Agent Selection in Ecomode
+## Droid Selection in Ecomode
 
-**FIRST ACTION:** Before delegating any work, read the agent reference file:
+**FIRST ACTION:** Before delegating any work, read the droid reference file:
 ```
-Read file: docs/shared/agent-tiers.md
+Read file: docs/shared/droid-tiers.md
 ```
-This provides the complete agent tier matrix, MCP tool assignments, and selection guidance.
+This provides the complete droid tier matrix, MCP tool assignments, and selection guidance.
 
 **Ecomode preference order:**
 
@@ -83,7 +83,7 @@ Long-running commands (install, build, test) run in background. Maximum 5 concur
 
 ## Token Savings Tips
 
-1. **Batch similar tasks** to one agent instead of spawning many
+1. **Batch similar tasks** to one droid instead of spawning many
 2. **Use explore (haiku)** for file discovery, not architect
 3. **Prefer executor-low** for simple changes - only upgrade if it fails
 4. **Use writer (haiku)** for all documentation tasks

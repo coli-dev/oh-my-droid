@@ -102,7 +102,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${DROID_PLUGIN_ROOT}/scripts/subagent-tracker.mjs\" start",
+            "command": "node \"${DROID_PLUGIN_ROOT}/scripts/custom droid-tracker.mjs\" start",
             "timeout": 3
           }
         ]
@@ -114,7 +114,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${DROID_PLUGIN_ROOT}/scripts/subagent-tracker.mjs\" stop",
+            "command": "node \"${DROID_PLUGIN_ROOT}/scripts/custom droid-tracker.mjs\" stop",
             "timeout": 5
           }
         ]

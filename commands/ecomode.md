@@ -36,7 +36,7 @@ ecomode: refactor the API
 budget mode: add form validation
 ```
 
-## Agent Routing
+## Droid Routing
 
 Ecomode routes tasks to lower-tier droids:
 

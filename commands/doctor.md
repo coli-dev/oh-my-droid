@@ -51,7 +51,7 @@ ls -la ~/.factory/hooks/*.sh 2>/dev/null
 ls -la ~/.factory/AGENTS.md 2>/dev/null
 
 # Check for OMD marker
-grep -q "oh-my-droid Multi-Agent System" ~/.factory/AGENTS.md 2>/dev/null && echo "Has OMD config" || echo "Missing OMD config"
+grep -q "oh-my-droid Multi-Droid System" ~/.factory/AGENTS.md 2>/dev/null && echo "Has OMD config" || echo "Missing OMD config"
 ```
 
 **Diagnosis**:
@@ -114,7 +114,7 @@ After running all checks, output a report:
 | Legacy Scripts (~/.factory/hooks/) | OK/WARN | ... |
 | AGENTS.md | OK/WARN/CRITICAL | ... |
 | Plugin Cache | OK/WARN | ... |
-| Legacy Agents (~/.factory/droids/) | OK/WARN | ... |
+| Legacy Droids (~/.factory/droids/) | OK/WARN | ... |
 | Legacy Commands (~/.factory/commands/) | OK/WARN | ... |
 | Legacy Skills (~/.factory/skills/) | OK/WARN | ... |
 

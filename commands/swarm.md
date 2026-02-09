@@ -17,12 +17,12 @@ Spawn N coordinated droids working on a shared task list with SQLite-based atomi
 
 ### Standard Mode (1-5 droids)
 ```
-/oh-my-droid:swarm N:agent-type "task description"
+/oh-my-droid:swarm N:droid-type "task description"
 ```
 
 ### Aggressive Mode (20-50+ tasks)
 ```
-/oh-my-droid:swarm aggressive:agent-type "large task description"
+/oh-my-droid:swarm aggressive:droid-type "large task description"
 ```
 or
 ```
@@ -36,12 +36,12 @@ When N > 5 or "aggressive" keyword is used, swarm automatically:
 4. Immediately spawns replacement droids as slots free up
 5. Continues until all tasks complete
 
-**Concurrency Note**: The concurrent agent limit is configurable via `permissions.maxBackgroundTasks` (default 5, max 50). Users can raise this in their OMD config to run more droids in parallel.
+**Concurrency Note**: The concurrent droid limit is configurable via `permissions.maxBackgroundTasks` (default 5, max 50). Users can raise this in their OMD config to run more droids in parallel.
 
 ### Parameters
 
 - **N** - Number of droids (1-5 for standard mode, 6+ for aggressive mode)
-- **agent-type** - Agent to spawn (e.g., executor, build-fixer, architect)
+- **droid-type** - Droid to spawn (e.g., executor, build-fixer, architect)
 - **task** - High-level task to decompose and distribute
 
 ### Examples
@@ -87,12 +87,12 @@ User: "/swarm 5:executor fix all TypeScript errors"
     │ error               │
     ├─────────────────────┤
     │ heartbeats table    │
-    │ (agent monitoring)  │
+    │ (droid monitoring)  │
     └─────────────────────┘
 ```
 
 **Key Features:**
-- SQLite transactions ensure only one agent can claim a task
+- SQLite transactions ensure only one droid can claim a task
 - Lease-based ownership with automatic timeout and recovery
 - Heartbeat monitoring for detecting dead droids
 - Full ACID compliance for task state
@@ -102,8 +102,8 @@ User: "/swarm 5:executor fix all TypeScript errors"
 ### 1. Parse Input
 
 From `{{ARGUMENTS}}`, extract:
-- N (agent count, validate <= 5)
-- agent-type (executor, build-fixer, etc.)
+- N (droid count, validate <= 5)
+- droid-type (executor, build-fixer, etc.)
 - task description
 
 ### 2. Create Task Pool
@@ -163,11 +163,11 @@ Assign filePatterns to tasks for advisory ownership tracking:
 
 This allows conflict detection (two droids claiming tasks on same file) but does NOT enforce locks.
 
-### 3. Wave-Based Agent Spawning
+### 3. Wave-Based Droid Spawning
 
 **Standard Mode (N ≤ 5)**: Spawn all N droids at once, all run concurrently until task pool is empty.
 
-**Aggressive Mode (N > 5)**: Wave-based spawning to respect concurrent agent limits while maximizing throughput.
+**Aggressive Mode (N > 5)**: Wave-based spawning to respect concurrent droid limits while maximizing throughput.
 
 #### Wave Loop Algorithm
 
@@ -186,7 +186,7 @@ while (!isSwarmComplete()) {
     const toSpawn = Math.min(freeSlots, totalTasks - spawnedCount);
 
     for (let i = 0; i < toSpawn; i++) {
-      const agentId = `agent-${spawnedCount + 1}`;
+      const agentId = `droid-${spawnedCount + 1}`;
       spawnAgent(agentId, agentType);
       activeAgents.add(agentId);
       spawnedCount++;
@@ -220,7 +220,7 @@ async function monitorSwarm() {
     console.log(`Progress: ${stats.doneTasks}/${stats.totalTasks} complete`);
     console.log(`Active: ${stats.claimedTasks}, Failed: ${stats.failedTasks}`);
 
-    // Check for agent completions via TaskOutput
+    // Check for droid completions via TaskOutput
     const updates = await pollAgentUpdates();
 
     // Spawn replacements for completed droids
@@ -233,12 +233,12 @@ async function monitorSwarm() {
 
 #### Key Characteristics
 
-- **Agents claim autonomously**: Orchestrator spawns droids but does NOT pre-assign tasks
+- **Droids claim autonomously**: Orchestrator spawns droids but does NOT pre-assign tasks
 - **Wave-based throughput**: Keeps all available slots filled until work is done
 - **Dynamic scaling**: Respects user-configured `maxBackgroundTasks` limit
-- **No manual coordination**: Agents use SQLite atomic claiming to self-coordinate
+- **No manual coordination**: Droids use SQLite atomic claiming to self-coordinate
 
-**Important:** Use worker preamble when spawning droids to prevent sub-agent recursion:
+**Important:** Use worker preamble when spawning droids to prevent sub-droid recursion:
 
 ```typescript
 import { wrapWithPreamble } from '../droids/preamble.js';
@@ -301,13 +301,13 @@ function detectFileConflicts(): ConflictReport {
 
 **Conflict resolution:**
 - If two droids modify the same file, git merge conflict may occur
-- Agents should pull latest changes before committing
+- Droids should pull latest changes before committing
 - Failed tasks can be retried automatically
 
-**Note:** File ownership is purely advisory. SQLite ensures task claiming atomicity, but file-level conflicts must be handled by git or agent coordination strategies.
+**Note:** File ownership is purely advisory. SQLite ensures task claiming atomicity, but file-level conflicts must be handled by git or droid coordination strategies.
 
 ### 5. Task Claiming Protocol (SQLite Transactional)
-Each agent follows this loop:
+Each droid follows this loop:
 
 ```
 LOOP:
@@ -316,7 +316,7 @@ LOOP:
      - Find first pending task
      - UPDATE status='claimed', claimed_by=agentId, claimed_at=now
      - INSERT/UPDATE heartbeat record
-     - Atomically commit (only one agent succeeds)
+     - Atomically commit (only one droid succeeds)
   3. Execute task
   4. Call completeTask(agentId, taskId, result) or failTask()
   5. GOTO LOOP (until hasPendingWork() returns false)
@@ -324,14 +324,14 @@ LOOP:
 
 **Atomic Claiming Details:**
 - SQLite `IMMEDIATE` transaction prevents race conditions
-- Only agent updating the row successfully gets the task
+- Only droid updating the row successfully gets the task
 - Heartbeat automatically updated on claim
-- If claim fails (already claimed), agent retries with next task
+- If claim fails (already claimed), droid retries with next task
 - Lease Timeout: 5 minutes per task
 - If timeout exceeded + no heartbeat, cleanupStaleClaims releases task back to pending
 
 ### 6. Heartbeat Protocol
-- Agents call `heartbeat(agentId)` every 60 seconds (or custom interval)
+- Droids call `heartbeat(agentId)` every 60 seconds (or custom interval)
 - Heartbeat records: agent_id, last_heartbeat timestamp, current_task_id
 - Orchestrator runs cleanupStaleClaims every 60 seconds
 - If heartbeat is stale (>5 minutes old) and task claimed, task auto-releases
@@ -339,8 +339,8 @@ LOOP:
 ### 7. Progress Tracking
 - Orchestrator monitors via TaskOutput
 - Shows live progress: pending/claimed/done/failed counts
-- Active agent count via getActiveAgents()
-- Reports which agent is working on which task via getAgentTasks()
+- Active droid count via getActiveAgents()
+- Reports which droid is working on which task via getAgentTasks()
 - Detects idle droids (all tasks claimed by others)
 
 ### 8. Completion
@@ -356,7 +356,7 @@ Exit when ANY of:
 The swarm uses a single SQLite database stored at `.omd/state/swarm.db`. This provides:
 - **ACID compliance** - All task state transitions are atomic
 - **Concurrent access** - Multiple droids query/update safely
-- **Persistence** - State survives agent crashes
+- **Persistence** - State survives droid crashes
 - **Query efficiency** - Fast status lookups and filtering
 
 #### `tasks` Table Schema
@@ -366,10 +366,10 @@ CREATE TABLE tasks (
   description TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'pending',
     -- pending: waiting to be claimed
-    -- claimed: claimed by an agent, in progress
+    -- claimed: claimed by an droid, in progress
     -- done: completed successfully
     -- failed: completed with error
-  claimed_by TEXT,                  -- agent ID that claimed this task
+  claimed_by TEXT,                  -- droid ID that claimed this task
   claimed_at INTEGER,               -- Unix timestamp when claimed
   completed_at INTEGER,             -- Unix timestamp when completed
   result TEXT,                      -- Optional result/output from task
@@ -382,7 +382,7 @@ CREATE TABLE tasks (
 CREATE TABLE heartbeats (
   agent_id TEXT PRIMARY KEY,
   last_heartbeat INTEGER NOT NULL,  -- Unix timestamp of last heartbeat
-  current_task_id TEXT              -- Task agent is currently working on
+  current_task_id TEXT              -- Task droid is currently working on
 );
 ```
 
@@ -406,7 +406,7 @@ The core strength of the implementation is transactional atomicity:
 
 ```typescript
 function claimTask(agentId: string): ClaimResult {
-  // Transaction ensures only ONE agent succeeds
+  // Transaction ensures only ONE droid succeeds
   const claimTransaction = db.transaction(() => {
     // Step 1: Find first pending task
     const task = db.prepare(
@@ -423,8 +423,8 @@ function claimTask(agentId: string): ClaimResult {
     ).run(agentId, Date.now(), task.id);
 
     if (result.changes === 0) {
-      // Another agent claimed it between SELECT and UPDATE - try next
-      return { success: false, reason: 'Task was claimed by another agent' };
+      // Another droid claimed it between SELECT and UPDATE - try next
+      return { success: false, reason: 'Task was claimed by another droid' };
     }
 
     // Step 3: Update heartbeat to show we're alive and working
@@ -457,7 +457,7 @@ function cleanupStaleClaims(leaseTimeout: number = 5 * 60 * 1000) {
   const cleanupTransaction = db.transaction(() => {
     // Find claimed tasks where:
     // 1. Claimed longer than timeout, OR
-    // 2. Agent hasn't sent heartbeat in that time
+    // 2. Droid hasn't sent heartbeat in that time
     const staleTasks = db.prepare(`
       SELECT t.id
       FROM tasks t
@@ -482,10 +482,10 @@ function cleanupStaleClaims(leaseTimeout: number = 5 * 60 * 1000) {
 
 **How Recovery Works:**
 1. Orchestrator calls cleanupStaleClaims() every 60 seconds
-2. If agent hasn't sent heartbeat in 5 minutes, task is auto-released
-3. Another agent picks up the orphaned task
-4. Original agent can continue working (it doesn't know it was released)
-5. When original agent tries to mark task as done, verification fails safely
+2. If droid hasn't sent heartbeat in 5 minutes, task is auto-released
+3. Another droid picks up the orphaned task
+4. Original droid can continue working (it doesn't know it was released)
+5. When original droid tries to mark task as done, verification fails safely
 
 ## API Reference
 
@@ -501,13 +501,13 @@ Stop the swarm and optionally delete the database.
 Claim the next pending task. Returns `{ success, taskId, description, reason }`.
 
 #### `completeTask(agentId: string, taskId: string, result?: string): boolean`
-Mark a task as done. Only succeeds if agent still owns the task.
+Mark a task as done. Only succeeds if droid still owns the task.
 
 #### `failTask(agentId: string, taskId: string, error: string): boolean`
 Mark a task as failed with error details.
 
 #### `heartbeat(agentId: string): boolean`
-Send a heartbeat to indicate agent is alive. Call every 60 seconds during long-running tasks.
+Send a heartbeat to indicate droid is alive. Call every 60 seconds during long-running tasks.
 
 #### `cleanupStaleClaims(leaseTimeout?: number): number`
 Manually trigger cleanup of expired claims. Called automatically every 60 seconds.
@@ -527,7 +527,7 @@ Get task counts and timing info.
 interface SwarmConfig {
   agentCount: number;           // Number of droids (1-5)
   tasks: string[];              // Task descriptions
-  agentType?: string;           // Agent type (default: 'executor')
+  agentType?: string;           // Droid type (default: 'executor')
   leaseTimeout?: number;        // Milliseconds (default: 5 min)
   heartbeatInterval?: number;   // Milliseconds (default: 60 sec)
   cwd?: string;                 // Working directory
@@ -568,47 +568,47 @@ interface SwarmStats {
 
 ## Key Parameters
 
-- **Max Agents:** 5 (enforced by Droid background task limit)
+- **Max Droids:** 5 (enforced by Droid background task limit)
 - **Lease Timeout:** 5 minutes (default, configurable)
   - Tasks claimed longer than this without heartbeat are auto-released
 - **Heartbeat Interval:** 60 seconds (recommended)
-  - Agents should call `heartbeat()` at least this often
+  - Droids should call `heartbeat()` at least this often
   - Prevents false timeout while working on long tasks
 - **Cleanup Interval:** 60 seconds
   - Orchestrator automatically runs `cleanupStaleClaims()` to release orphaned tasks
 - **Database:** SQLite (stored at `.omd/state/swarm.db`)
   - One database per swarm session
-  - Survives agent crashes
+  - Survives droid crashes
   - Provides ACID guarantees
 
 ## Error Handling & Recovery
 
-### Agent Crash
-- Task is claimed but agent stops sending heartbeats
+### Droid Crash
+- Task is claimed but droid stops sending heartbeats
 - After 5 minutes of no heartbeat, cleanupStaleClaims() releases the task
-- Task returns to 'pending' status for another agent to claim
-- Original agent's incomplete work is safely abandoned
+- Task returns to 'pending' status for another droid to claim
+- Original droid's incomplete work is safely abandoned
 
 ### Task Completion Failure
-- Agent calls `completeTask()` but is no longer the owner (was released)
-- The update silently fails (no agent matches in WHERE clause)
-- Agent can detect this by checking return value
-- Agent should log error and continue to next task
+- Droid calls `completeTask()` but is no longer the owner (was released)
+- The update silently fails (no droid matches in WHERE clause)
+- Droid can detect this by checking return value
+- Droid should log error and continue to next task
 
 ### Database Unavailable
 - `startSwarm()` returns false if database initialization fails
 - `claimTask()` returns `{ success: false, reason: 'Database not initialized' }`
 - Check `isSwarmReady()` before proceeding
 
-### All Agents Idle
+### All Droids Idle
 - Orchestrator detects via `getActiveAgents() === 0` or `hasPendingWork() === false`
 - Triggers final cleanup and marks swarm as complete
 - Remaining failed tasks are preserved in database
 
 ### No Tasks Available
 - `claimTask()` returns success=false with reason 'No pending tasks available'
-- Agent should check `hasPendingWork()` before looping
-- Safe for agent to exit cleanly when no work remains
+- Droid should check `hasPendingWork()` before looping
+- Safe for droid to exit cleanly when no work remains
 
 ## Cancellation
 
@@ -660,23 +660,23 @@ Pattern-based decomposition: one task per file with database queries. Aggressive
 ## Benefits of SQLite-Based Implementation
 
 ### Atomicity & Safety
-- **Race-Condition Free:** SQLite transactions guarantee only one agent claims each task
+- **Race-Condition Free:** SQLite transactions guarantee only one droid claims each task
 - **No Lost Updates:** ACID compliance means state changes are durable
 - **Orphan Prevention:** Expired claims are automatically released without manual intervention
 
 ### Performance
-- **Fast Queries:** Indexed lookups on task status and agent ID
+- **Fast Queries:** Indexed lookups on task status and droid ID
 - **Concurrent Access:** Multiple droids read/write without blocking
 - **Minimal Lock Time:** Transactions are microseconds, not seconds
 
 ### Reliability
-- **Crash Recovery:** Database survives agent failures
+- **Crash Recovery:** Database survives droid failures
 - **Automatic Cleanup:** Stale claims don't block progress
 - **Lease-Based:** Time-based expiration prevents indefinite hangs
 
 ### Developer Experience
 - **Simple API:** Just `claimTask()`, `completeTask()`, `heartbeat()`
-- **Full Visibility:** Query any task or agent status at any time
+- **Full Visibility:** Query any task or droid status at any time
 - **Easy Debugging:** SQL queries show exact state without decoding JSON
 
 ### Scalability
@@ -688,7 +688,7 @@ Pattern-based decomposition: one task per file with database queries. Aggressive
 
 Report when complete:
 - Total tasks completed
-- Tasks per agent (performance comparison)
+- Tasks per droid (performance comparison)
 - Total time elapsed
 - Final verification status
 - Summary of changes made

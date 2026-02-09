@@ -1,5 +1,5 @@
 ---
-description: Configure popular MCP servers for enhanced agent capabilities
+description: Configure popular MCP servers for enhanced droid capabilities
 ---
 
 # MCP Setup
@@ -190,6 +190,6 @@ Then add to mcpServers section accordingly.
 - Exa: Verify key at https://dashboard.exa.ai
 - GitHub: Ensure token has required scopes
 
-### Agents Still Using Built-in Tools
+### Droids Still Using Built-in Tools
 - Restart Droid after configuration
 - The built-in websearch will be deprioritized when exa is configured

@@ -17,7 +17,7 @@ This skill activates when:
 
 ## What It Does
 
-Delegates to the `code-reviewer` agent (Opus model) for deep analysis:
+Delegates to the `code-reviewer` droid (Opus model) for deep analysis:
 
 1. **Identify Changes**
    - Run `git diff` to find changed files
@@ -41,7 +41,7 @@ Delegates to the `code-reviewer` agent (Opus model) for deep analysis:
    - Concrete fix suggestions
    - Code examples where applicable
 
-## Agent Delegation
+## Droid Delegation
 
 ```
 Task(
@@ -71,7 +71,7 @@ Output: Code review report with:
 
 ## External Model Consultation (Preferred)
 
-The code-reviewer agent SHOULD consult Codex for cross-validation.
+The code-reviewer droid SHOULD consult Codex for cross-validation.
 
 ### Protocol
 1. **Form your OWN review FIRST** - Complete the review independently
@@ -94,7 +94,7 @@ The code-reviewer agent SHOULD consult Codex for cross-validation.
 ### Tool Usage
 Before first MCP tool use, call `ToolSearch("mcp")` to discover deferred MCP tools.
 Use `mcp__x__ask_codex` with `agent_role: "code-reviewer"`.
-If ToolSearch finds no MCP tools, fall back to the `code-reviewer` Droid agent.
+If ToolSearch finds no MCP tools, fall back to the `code-reviewer` Droid droid.
 
 **Note:** Codex calls can take up to 1 hour. Consider the review timeline before consulting.
 
@@ -143,7 +143,7 @@ Critical security issues must be addressed before merge.
 
 ## Review Checklist
 
-The code-reviewer agent checks:
+The code-reviewer droid checks:
 
 ### Security
 - [ ] No hardcoded secrets (API keys, passwords, tokens)

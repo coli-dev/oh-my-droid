@@ -67,7 +67,7 @@ Analyze your oh-my-droid usage and get tailored recommendations to improve your 
 
 1. Reads token tracking from `~/.omd/state/token-tracking.jsonl`
 2. Reads session history from `.omd/state/session-history.json`
-3. Analyzes agent usage patterns
+3. Analyzes droid usage patterns
 4. Identifies underutilized features
 5. Recommends configuration changes
 
@@ -106,7 +106,7 @@ if [[ -f "$CONFIG_FILE" ]]; then
 fi
 ```
 
-### Step 2: Analyze Agent Usage (if token data exists)
+### Step 2: Analyze Droid Usage (if token data exists)
 
 ```bash
 if [[ "$HAS_TOKENS" == "true" ]]; then
@@ -165,7 +165,7 @@ UNDERUTILIZED FEATURES:
 RECOMMENDATIONS:
 1. Set defaultExecutionMode: "ecomode" to save tokens
 2. Try /pipeline review for PR reviews
-3. Use explore agent before architect to save context
+3. Use explore droid before architect to save context
 ```
 
 ### Graceful Degradation

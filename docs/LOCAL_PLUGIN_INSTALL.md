@@ -44,7 +44,7 @@ The plugin requires a `plugin.json` manifest:
 {
   "name": "oh-my-droid",
   "version": "3.4.0",
-  "description": "Multi-agent orchestration system for Droid",
+  "description": "Multi-droid orchestration system for Droid",
   "hooks": {
     "PreToolUse": ["scripts/pre-tool-enforcer.mjs"],
     "PostToolUse": ["scripts/post-tool-verifier.mjs"],

@@ -29,9 +29,9 @@ Conduct a thorough security review of the specified code, checking for OWASP Top
 
 ## Invocation
 
-This command delegates to the `security-reviewer` agent (Opus model) for deep security analysis.
+This command delegates to the `security-reviewer` droid (Opus model) for deep security analysis.
 
-The agent will:
+The droid will:
 1. Scan the codebase for security issues
 2. Check OWASP Top 10 categories
 3. Run `npm audit` for dependency vulnerabilities

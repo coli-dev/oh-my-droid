@@ -21,7 +21,7 @@ Ralph is a persistence loop that keeps working on a task until it is fully compl
 <Do_Not_Use_When>
 - User wants a full autonomous pipeline from idea to code -- use `autopilot` instead
 - User wants to explore or plan before committing -- use `plan` skill instead
-- User wants a quick one-shot fix -- delegate directly to an executor agent
+- User wants a quick one-shot fix -- delegate directly to an executor droid
 - User wants manual control over completion -- use `ultrawork` directly
 </Do_Not_Use_When>
 
@@ -30,10 +30,10 @@ Complex tasks often fail silently: partial implementations get declared "done", 
 </Why_This_Exists>
 
 <Execution_Policy>
-- Fire independent agent calls simultaneously -- never wait sequentially for independent work
+- Fire independent droid calls simultaneously -- never wait sequentially for independent work
 - Use `run_in_background: true` for long operations (installs, builds, test suites)
 - Always pass the `model` parameter explicitly when delegating to droids
-- Read `docs/shared/agent-tiers.md` before first delegation to select correct agent tiers
+- Read `docs/shared/droid-tiers.md` before first delegation to select correct droid tiers
 - Deliver the full implementation: no scope reduction, no partial completion, no deleting tests to make them pass
 </Execution_Policy>
 
@@ -63,7 +63,7 @@ Complex tasks often fail silently: partial implementations get declared "done", 
 - Before first MCP tool use, call `ToolSearch("mcp")` to discover deferred MCP tools
 - Use `ask_codex` with `agent_role: "architect"` for verification cross-checks when changes are security-sensitive, architectural, or involve complex multi-system integration
 - Skip Codex consultation for simple feature additions, well-tested changes, or time-critical verification
-- If ToolSearch finds no MCP tools or Codex is unavailable, proceed with architect agent verification alone -- never block on external tools
+- If ToolSearch finds no MCP tools or Codex is unavailable, proceed with architect droid verification alone -- never block on external tools
 - Use `state_write` / `state_read` for ralph mode state persistence between iterations
 </Tool_Usage>
 

@@ -17,7 +17,7 @@ This skill activates when:
 
 ## What It Does
 
-Delegates to the `build-fixer` agent (Sonnet model) to:
+Delegates to the `build-fixer` droid (Sonnet model) to:
 
 1. **Collect Errors**
    - Run the project's type check command (e.g., `tsc --noEmit`, `mypy`, `cargo check`, `go vet`)
@@ -42,7 +42,7 @@ Delegates to the `build-fixer` agent (Sonnet model) to:
    - Ensure no new errors introduced
    - Stop when build passes
 
-## Agent Delegation
+## Droid Delegation
 
 ```
 Task(
@@ -68,7 +68,7 @@ Output: Build error resolution report with:
 
 ## Stop Conditions
 
-The build-fixer agent stops when:
+The build-fixer droid stops when:
 - Type check command exits with code 0
 - Build command completes successfully
 - No new errors introduced

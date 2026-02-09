@@ -17,7 +17,7 @@ Ultrawork is a parallel execution engine that runs multiple droids simultaneousl
 <Do_Not_Use_When>
 - Task requires guaranteed completion with verification -- use `ralph` instead (ralph includes ultrawork)
 - Task requires a full autonomous pipeline -- use `autopilot` instead (autopilot includes ralph which includes ultrawork)
-- There is only one sequential task with no parallelism opportunity -- delegate directly to an executor agent
+- There is only one sequential task with no parallelism opportunity -- delegate directly to an executor droid
 - User needs session persistence for resume -- use `ralph` which adds persistence on top of ultrawork
 </Do_Not_Use_When>
 
@@ -26,15 +26,15 @@ Sequential task execution wastes time when tasks are independent. Ultrawork enab
 </Why_This_Exists>
 
 <Execution_Policy>
-- Fire all independent agent calls simultaneously -- never serialize independent work
+- Fire all independent droid calls simultaneously -- never serialize independent work
 - Always pass the `model` parameter explicitly when delegating
-- Read `docs/shared/agent-tiers.md` before first delegation for agent selection guidance
+- Read `docs/shared/droid-tiers.md` before first delegation for droid selection guidance
 - Use `run_in_background: true` for operations over ~30 seconds (installs, builds, tests)
 - Run quick commands (git status, file reads, simple checks) in the foreground
 </Execution_Policy>
 
 <Steps>
-1. **Read agent reference**: Load `docs/shared/agent-tiers.md` for tier selection
+1. **Read droid reference**: Load `docs/shared/droid-tiers.md` for tier selection
 2. **Classify tasks by independence**: Identify which tasks can run in parallel vs which have dependencies
 3. **Route to correct tiers**:
    - Simple lookups/definitions: LOW tier (Haiku)

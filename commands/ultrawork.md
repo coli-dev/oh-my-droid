@@ -1,11 +1,11 @@
 ---
-description: Activate maximum performance mode with parallel agent orchestration for high-throughput task completion
+description: Activate maximum performance mode with parallel droid orchestration for high-throughput task completion
 aliases: [ulw, uw, turbo]
 ---
 
 # Ultrawork Skill
 
-Activates maximum performance mode with parallel agent orchestration.
+Activates maximum performance mode with parallel droid orchestration.
 
 ## When Activated
 
@@ -38,7 +38,7 @@ The PreToolUse hook will warn you if you attempt direct code changes.
 
 **Choose tier based on task complexity: LOW (haiku) → MEDIUM (sonnet) → HIGH (opus)**
 
-### Available Agents by Tier
+### Available Droids by Tier
 
 | Domain | LOW (Haiku) | MEDIUM (Sonnet) | HIGH (Opus) |
 |--------|-------------|-----------------|-------------|
@@ -62,7 +62,7 @@ The PreToolUse hook will warn you if you attempt direct code changes.
 
 ### Routing Examples
 
-**CRITICAL: Always pass `model` parameter explicitly - Droid does NOT auto-apply models from agent definitions!**
+**CRITICAL: Always pass `model` parameter explicitly - Droid does NOT auto-apply models from droid definitions!**
 
 ```
 // Simple question → LOW tier (saves tokens!)

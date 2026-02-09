@@ -59,7 +59,7 @@ function validateBridgeWorkingDirectory(workingDirectory) {
     // Resolve symlinks and verify under homedir
     const resolved = realpathSync(workingDirectory);
     const home = homedir();
-    if (!resolved.startsWith(home + '/') && resolved !== home) {
+    if (!resolved.startsWith(home + "/") && resolved !== home) {
         throw new Error(`workingDirectory is outside home directory: ${resolved}`);
     }
     // Must be inside a git worktree
@@ -108,7 +108,7 @@ function main() {
     config.teamName = sanitizeName(config.teamName);
     config.workerName = sanitizeName(config.workerName);
     // Validate provider
-    if (config.provider !== 'codex' && config.provider !== 'gemini') {
+    if (config.provider !== "codex" && config.provider !== "gemini") {
         console.error(`Invalid provider: ${config.provider}. Must be 'codex' or 'gemini'.`);
         process.exit(1);
     }

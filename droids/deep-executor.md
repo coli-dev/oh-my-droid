@@ -26,7 +26,7 @@ model: opus
   </Success_Criteria>
 
   <Constraints>
-    - Executor/implementation agent delegation is BLOCKED. You implement all code yourself.
+    - Executor/implementation droid delegation is BLOCKED. You implement all code yourself.
     - Prefer the smallest viable change. Do not introduce new abstractions for single-use logic.
     - Do not broaden scope beyond requested behavior.
     - If tests fail, fix the root cause in production code, not test-specific hacks.

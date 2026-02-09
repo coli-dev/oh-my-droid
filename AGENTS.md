@@ -2,7 +2,7 @@
 
 # oh-my-droid
 
-Multi-agent orchestration system for Droid CLI, providing intelligent delegation, parallel execution, and IDE-like capabilities through LSP/AST integration.
+Multi-droid orchestration system for Droid CLI, providing intelligent delegation, parallel execution, and IDE-like capabilities through LSP/AST integration.
 
 **Version:** 4.0.0
 **Purpose:** Transform Droid into a conductor of specialized AI droids
@@ -45,7 +45,7 @@ oh-my-droid enhances Droid with:
 | `benchmark/` | Performance testing framework | - |
 | `bridge/` | Pre-bundled MCP server for plugin distribution | - |
 
-## For AI Agents
+## For AI Droids
 
 ### Working In This Directory
 
@@ -94,11 +94,11 @@ oh-my-droid enhances Droid with:
 | `skills/*/SKILL.md` | `commands/*.md` (mirror), `scripts/build-skill-bridge.mjs` |
 | `commands/*.md` | `skills/*/SKILL.md` (mirror) |
 | `src/hooks/*` | `src/hooks/index.ts`, `src/hooks/bridge.ts`, related skill/command |
-| Agent prompt | Tiered variants (`-low`, `-medium`, `-high`) |
+| Droid prompt | Tiered variants (`-low`, `-medium`, `-high`) |
 | Tool definition | `src/tools/index.ts`, `src/mcp/omd-tools-server.ts`, `docs/REFERENCE.md` |
 | `src/hud/*` | `commands/hud.md`, `skills/hud/SKILL.md` |
 | `src/mcp/*` | `docs/REFERENCE.md` (MCP Tools section) |
-| Agent tool assignments | `docs/AGENTS.md` (Agent Tool Matrix) |
+| Droid tool assignments | `docs/AGENTS.md` (Droid Tool Matrix) |
 | `templates/rules/*` | `src/hooks/rules-injector/` if pattern changes |
 | New execution mode | `src/hooks/*/`, `skills/*/SKILL.md`, `commands/*.md` (all three) |
 
@@ -106,14 +106,14 @@ oh-my-droid enhances Droid with:
 
 | If you change... | Update this docs/ file |
 |------------------|----------------------|
-| Agent count or agent list | `docs/REFERENCE.md` (Agents section) |
+| Droid count or droid list | `docs/REFERENCE.md` (Droids section) |
 | Skill count or skill list | `docs/REFERENCE.md` (Skills section) |
 | Hook count or hook list | `docs/REFERENCE.md` (Hooks System section) |
 | Magic keywords | `docs/REFERENCE.md` (Magic Keywords section) |
 | Architecture or skill composition | `docs/ARCHITECTURE.md` |
 | Internal API or feature | `docs/FEATURES.md` |
 | Breaking changes | `docs/MIGRATION.md` |
-| Tiered agent design | `docs/TIERED_AGENTS_V2.md` |
+| Tiered droid design | `docs/TIERED_AGENTS_V2.md` |
 | Compatibility requirements | `docs/COMPATIBILITY.md` |
 | AGENTS.md content | `docs/AGENTS.md` (end-user instructions) |
 
@@ -163,7 +163,7 @@ npm run test:coverage # Coverage report
 import { createSisyphusSession } from 'oh-my-droid';
 const session = createSisyphusSession();
 
-// Agent registration
+// Droid registration
 import { getAgentDefinitions } from './droids/definitions';
 const droids = getAgentDefinitions();
 
@@ -179,7 +179,7 @@ import { allCustomTools, lspTools, astTools } from './tools';
 ├─────────────────────────────────────────────────────────────┤
 │                  oh-my-droid (OMD)                     │
 │  ┌─────────────┬─────────────┬─────────────┬─────────────┐  │
-│  │   Skills    │   Agents    │    Tools    │   Hooks     │  │
+│  │   Skills    │   Droids    │    Tools    │   Hooks     │  │
 │  │ (37 skills) │ (28 droids) │(LSP/AST/REPL)│ (31 hooks)  │  │
 │  └─────────────┴─────────────┴─────────────┴─────────────┘  │
 │  ┌─────────────────────────────────────────────────────────┐│
@@ -190,11 +190,11 @@ import { allCustomTools, lspTools, astTools } from './tools';
 └─────────────────────────────────────────────────────────────┘
 ```
 
-## Agent Summary (28 Total)
+## Droid Summary (28 Total)
 
-### Base Agents (12)
+### Base Droids (12)
 
-| Agent | Model | Purpose |
+| Droid | Model | Purpose |
 |-------|-------|---------|
 | architect | opus | Architecture, debugging, root cause analysis |
 | researcher | sonnet | Documentation, external API research |
@@ -209,9 +209,9 @@ import { allCustomTools, lspTools, astTools } from './tools';
 | qa-tester | sonnet | Interactive CLI/service testing |
 | scientist | sonnet | Data analysis, hypothesis testing |
 
-### Specialized Agents (4)
+### Specialized Droids (4)
 
-| Agent | Model | Purpose |
+| Droid | Model | Purpose |
 |-------|-------|---------|
 | security-reviewer | opus | Security vulnerability detection and audits |
 | build-fixer | sonnet | Build/type error resolution (multi-language) |
@@ -220,7 +220,7 @@ import { allCustomTools, lspTools, astTools } from './tools';
 
 ### Tiered Variants (12)
 
-| Tier | Agents |
+| Tier | Droids |
 |------|--------|
 | **LOW** (Haiku) | `architect-low`, `executor-low`, `designer-low`, `security-reviewer-low`, `tdd-guide-low` (5) |
 | **MEDIUM** (Sonnet) | `architect-medium` (1) |
@@ -231,11 +231,11 @@ import { allCustomTools, lspTools, astTools } from './tools';
 | Mode | Trigger | Purpose |
 |------|---------|---------|
 | autopilot | "autopilot", "build me", "I want a" | Full autonomous execution |
-| ultrawork | "ulw", "ultrawork" | Maximum parallel agent execution |
+| ultrawork | "ulw", "ultrawork" | Maximum parallel droid execution |
 | ralph | "ralph", "don't stop until" | Persistence with architect verification |
 | ultrapilot | "ultrapilot", "parallel build" | Parallel autopilot with file ownership |
 | swarm | "swarm N droids" | N coordinated droids with SQLite task claiming |
-| pipeline | "pipeline" | Sequential agent chaining with data passing |
+| pipeline | "pipeline" | Sequential droid chaining with data passing |
 | ecomode | "eco", "efficient", "budget" | Token-efficient parallel execution |
 
 ## Skills (37)
@@ -318,7 +318,7 @@ npm run dev             # Watch mode
 npm test                # Run tests
 npm run test:coverage   # Coverage report
 npm run lint            # ESLint
-npm run sync-metadata   # Sync agent/skill metadata
+npm run sync-metadata   # Sync droid/skill metadata
 ```
 
 ## Hook System (31)
@@ -329,7 +329,7 @@ Key hooks in `src/hooks/`:
 - `ralph/` - Persistence until verified
 - `ultrawork/` - Parallel execution
 - `ultrapilot/` - Parallel autopilot with ownership
-- `swarm/` - Coordinated multi-agent
+- `swarm/` - Coordinated multi-droid
 - `learner/` - Skill extraction
 - `recovery/` - Error recovery
 - `rules-injector/` - Rule file injection

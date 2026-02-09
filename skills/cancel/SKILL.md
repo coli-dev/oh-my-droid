@@ -21,9 +21,9 @@ Automatically detects which mode is active and cancels it:
 - **Ultrawork**: Stops parallel execution (standalone or linked)
 - **Ecomode**: Stops token-efficient parallel execution (standalone or linked to ralph)
 - **UltraQA**: Stops QA cycling workflow
-- **Swarm**: Stops coordinated agent swarm, releases claimed tasks
+- **Swarm**: Stops coordinated droid swarm, releases claimed tasks
 - **Ultrapilot**: Stops parallel autopilot workers
-- **Pipeline**: Stops sequential agent pipeline
+- **Pipeline**: Stops sequential droid pipeline
 - **Team**: Sends shutdown_request to all teammates, waits for responses, calls TeamDelete
 
 ## Usage
@@ -95,8 +95,8 @@ This removes all state files:
 - `.omd/state/ralplan-state.json`
 - `.omd/state/boulder.json`
 - `.omd/state/hud-state.json`
-- `.omd/state/subagent-tracking.json`
-- `.omd/state/subagent-tracker.lock`
+- `.omd/state/custom droid-tracking.json`
+- `.omd/state/custom droid-tracker.lock`
 - `.omd/state/rate-limit-daemon.pid`
 - `.omd/state/rate-limit-daemon.log`
 - `.omd/state/checkpoints/` (directory)
@@ -181,8 +181,8 @@ if [[ "$FORCE_MODE" == "true" ]]; then
   rm -f .omd/state/ralplan-state.json
   rm -f .omd/state/boulder.json
   rm -f .omd/state/hud-state.json
-  rm -f .omd/state/subagent-tracking.json
-  rm -f .omd/state/subagent-tracker.lock
+  rm -f .omd/state/custom droid-tracking.json
+  rm -f .omd/state/custom droid-tracker.lock
   rm -f .omd/state/rate-limit-daemon.pid
   rm -f .omd/state/rate-limit-daemon.log
   rm -rf .omd/state/checkpoints/
@@ -434,8 +434,8 @@ if [[ "$FORCE_MODE" == "true" ]]; then
   rm -f .omd/state/ralplan-state.json
   rm -f .omd/state/boulder.json
   rm -f .omd/state/hud-state.json
-  rm -f .omd/state/subagent-tracking.json
-  rm -f .omd/state/subagent-tracker.lock
+  rm -f .omd/state/custom droid-tracking.json
+  rm -f .omd/state/custom droid-tracker.lock
   rm -f .omd/state/rate-limit-daemon.log
   rm -rf .omd/state/checkpoints/
 
@@ -657,7 +657,7 @@ if [[ -f .omd/state/pipeline-state.json ]]; then
 
   if [[ "$PIPELINE_ACTIVE" == "true" ]]; then
     rm -f .omd/state/pipeline-state.json
-    echo "Pipeline cancelled. Sequential agent chain stopped."
+    echo "Pipeline cancelled. Sequential droid chain stopped."
     CANCELLED_ANYTHING=true
     exit 0
   fi
@@ -707,7 +707,7 @@ fi
 | UltraQA | "UltraQA cancelled. QA cycling workflow stopped." |
 | Swarm | "Swarm cancelled. Coordinated droids stopped." |
 | Ultrapilot | "Ultrapilot cancelled. Parallel autopilot workers stopped." |
-| Pipeline | "Pipeline cancelled. Sequential agent chain stopped." |
+| Pipeline | "Pipeline cancelled. Sequential droid chain stopped." |
 | Team | "Team cancelled. Teammates shut down and cleaned up." |
 | Plan Consensus | "Plan Consensus cancelled. Planning session ended." |
 | Force | "All OMD modes cleared. You are free to start fresh." |

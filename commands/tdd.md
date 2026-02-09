@@ -32,7 +32,7 @@ Implement features using Test-Driven Development methodology: write tests first,
 
 ## Invocation
 
-This command delegates to the `tdd-guide` agent (Sonnet model) which will:
+This command delegates to the `tdd-guide` droid (Sonnet model) which will:
 1. Understand the feature requirements
 2. Write failing tests first
 3. Implement code to pass tests

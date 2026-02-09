@@ -1,5 +1,5 @@
 ---
-description: Sequential agent chaining with data passing between stages
+description: Sequential droid chaining with data passing between stages
 aliases: [pipe, chain]
 ---
 
@@ -7,7 +7,7 @@ aliases: [pipe, chain]
 
 [PIPELINE MODE ACTIVATED]
 
-Chain multiple droids together in sequential workflows where output from one agent flows to the next. Like Unix pipes for AI droids.
+Chain multiple droids together in sequential workflows where output from one droid flows to the next. Like Unix pipes for AI droids.
 
 ## User's Request
 
@@ -34,7 +34,7 @@ Use predefined pipelines for common workflows:
 
 ### Custom Pipelines
 
-Define your own agent sequence:
+Define your own droid sequence:
 
 ```
 /oh-my-droid:pipeline explore -> architect -> executor "add authentication"
@@ -105,7 +105,7 @@ Pipelines maintain state in `.omd/pipeline-state.json`:
 
 ## Data Passing Protocol
 
-Each agent receives structured context:
+Each droid receives structured context:
 
 ```json
 {
@@ -113,7 +113,7 @@ Each agent receives structured context:
     "original_task": "user's request",
     "previous_stages": [
       {
-        "agent": "explore",
+        "droid": "explore",
         "findings": "...",
         "files_identified": ["src/auth.ts"]
       }
@@ -129,7 +129,7 @@ Each agent receives structured context:
 ### 1. Parse Pipeline Definition
 
 Extract:
-- Pipeline name (preset) or custom agent sequence
+- Pipeline name (preset) or custom droid sequence
 - Model specifications for each stage
 - Task description
 
@@ -143,7 +143,7 @@ Create `.omd/pipeline-state.json` with:
 ### 3. Execute Stages Sequentially
 
 For each stage:
-1. Spawn agent via Task tool
+1. Spawn droid via Task tool
 2. Pass context from previous stages
 3. Collect output
 4. Update pipeline state
@@ -169,8 +169,8 @@ Before completion:
 ## Error Handling
 
 When a stage fails:
-- **Retry** - Re-run same agent (up to 3 times)
-- **Fallback** - Route to higher-tier agent
+- **Retry** - Re-run same droid (up to 3 times)
+- **Fallback** - Route to higher-tier droid
 - **Abort** - Stop entire pipeline
 
 Configuration:
@@ -216,7 +216,7 @@ Triggers: parallel(researcher, explore) → architect → writer
 
 1. **Start with presets** - Use built-in pipelines before custom ones
 2. **Match model to complexity** - haiku for simple, opus for complex
-3. **Keep stages focused** - One clear responsibility per agent
+3. **Keep stages focused** - One clear responsibility per droid
 4. **Use parallel stages** - Run independent work simultaneously
 5. **Verify at checkpoints** - Use architect or critic to verify progress
 6. **Document custom pipelines** - Save successful patterns for reuse

@@ -4,7 +4,7 @@ description: Deep analysis and investigation
 ---
 
 <Purpose>
-Analyze performs deep investigation of architecture, bugs, performance issues, and dependencies. It routes to the architect agent or Codex MCP for thorough analysis and returns structured findings with evidence.
+Analyze performs deep investigation of architecture, bugs, performance issues, and dependencies. It routes to the architect droid or Codex MCP for thorough analysis and returns structured findings with evidence.
 </Purpose>
 
 <Use_When>
@@ -18,17 +18,17 @@ Analyze performs deep investigation of architecture, bugs, performance issues, a
 <Do_Not_Use_When>
 - User wants code changes made -- use executor droids or `ralph` instead
 - User wants a full plan with acceptance criteria -- use `plan` skill instead
-- User wants a quick file lookup or symbol search -- use `explore` agent instead
+- User wants a quick file lookup or symbol search -- use `explore` droid instead
 - User asks a simple factual question that can be answered from one file -- just read and answer directly
 </Do_Not_Use_When>
 
 <Why_This_Exists>
-Deep investigation requires a different approach than quick lookups or code changes. Analysis tasks need broad context gathering, cross-file reasoning, and structured findings. Routing these to the architect agent or Codex ensures the right level of depth without the overhead of a full planning or execution workflow.
+Deep investigation requires a different approach than quick lookups or code changes. Analysis tasks need broad context gathering, cross-file reasoning, and structured findings. Routing these to the architect droid or Codex ensures the right level of depth without the overhead of a full planning or execution workflow.
 </Why_This_Exists>
 
 <Execution_Policy>
 - Prefer Codex MCP for analysis when available (faster, lower cost)
-- Fall back to architect Droid agent when Codex is unavailable
+- Fall back to architect Droid droid when Codex is unavailable
 - Always provide context files to the analysis tool for grounded reasoning
 - Return structured findings, not just raw observations
 </Execution_Policy>
@@ -47,7 +47,7 @@ Deep investigation requires a different approach than quick lookups or code chan
 - Use `ask_codex` with `agent_role: "architect"` as the preferred analysis route
 - Pass `context_files` with all relevant source files for grounded analysis
 - Use `Task(subagent_type="oh-my-droid:architect", model="opus", ...)` as fallback when ToolSearch finds no MCP tools or Codex is unavailable
-- For broad analysis, use `explore` agent first to identify relevant files before routing to architect
+- For broad analysis, use `explore` droid first to identify relevant files before routing to architect
 </Tool_Usage>
 
 <Examples>
@@ -59,7 +59,7 @@ Why good: Clear investigation target, structured output with evidence.
 
 <Good>
 User: "investigate the dependency chain from src/api/routes.ts"
-Action: Use explore agent to map the import graph, then route to architect for impact analysis.
+Action: Use explore droid to map the import graph, then route to architect for impact analysis.
 Why good: Uses explore for fact-gathering, architect for reasoning.
 </Good>
 
@@ -79,7 +79,7 @@ Why bad: This is a fix request, not an analysis request. Route to executor or ra
 <Escalation_And_Stop_Conditions>
 - If analysis reveals the issue requires code changes, report findings and recommend using `ralph` or executor for the fix
 - If the analysis scope is too broad ("analyze everything"), ask the user to narrow the focus
-- If Codex is unavailable and the architect agent also fails, report what context was gathered and suggest manual investigation paths
+- If Codex is unavailable and the architect droid also fails, report what context was gathered and suggest manual investigation paths
 </Escalation_And_Stop_Conditions>
 
 <Final_Checklist>

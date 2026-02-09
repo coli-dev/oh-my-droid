@@ -848,7 +848,7 @@ Options:
 ### 12.1 Credential Handling
 
 - **GitHub Token**: Uses existing `gh` CLI auth, never stored by PSM
-- **SSH Keys**: Relies on system SSH agent
+- **SSH Keys**: Relies on system SSH droid
 - **Secrets in Worktrees**: Worktrees inherit .gitignore, secrets not duplicated
 
 ### 12.2 Path Sanitization

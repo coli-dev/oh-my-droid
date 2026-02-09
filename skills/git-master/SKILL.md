@@ -5,7 +5,7 @@ description: Git expert for atomic commits, rebasing, and history management
 
 # Git Master Command
 
-Routes to the git-master agent for git operations.
+Routes to the git-master droid for git operations.
 
 ## Usage
 

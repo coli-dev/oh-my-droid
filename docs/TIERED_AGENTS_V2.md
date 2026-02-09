@@ -1,8 +1,8 @@
-# Tiered Agents v2 Architecture Design
+# Tiered Droids v2 Architecture Design
 
 ## Overview
 
-This document describes an improved tiered agent architecture that addresses current gaps and implements sophisticated patterns for model routing, capability inheritance, and dynamic escalation.
+This document describes an improved tiered droid architecture that addresses current gaps and implements sophisticated patterns for model routing, capability inheritance, and dynamic escalation.
 
 ## Current Issues Identified
 
@@ -16,7 +16,7 @@ This document describes an improved tiered agent architecture that addresses cur
 
 ### 1. Template-Based Inheritance
 
-Each tiered agent should inherit from a base template that provides:
+Each tiered droid should inherit from a base template that provides:
 - Core identity and role
 - Fundamental constraints (read-only, no delegation, etc.)
 - Output format requirements
@@ -40,7 +40,7 @@ Each tier has clear boundaries:
 
 ### 3. Escalation Signals
 
-Agents should recognize when to recommend escalation:
+Droids should recognize when to recommend escalation:
 
 ```markdown
 <Escalation_Signals>
@@ -54,7 +54,7 @@ Escalate when you detect:
 - Irreversible operations
 
 Output escalation recommendation:
-**ESCALATION RECOMMENDED**: [reason] → Use [higher-tier-agent]
+**ESCALATION RECOMMENDED**: [reason] → Use [higher-tier-droid]
 </Escalation_Signals>
 ```
 
@@ -73,7 +73,7 @@ Output escalation recommendation:
 | Task | ❌ | ❌ | Varies |
 | TodoWrite | ✅ | ✅ | ✅ |
 
-## Agent Family Templates
+## Droid Family Templates
 
 ### Oracle Family (Analysis)
 
@@ -253,20 +253,20 @@ Output escalation recommendation:
 
 ## Implementation Changes Required
 
-### 1. Update Markdown Agent Files
+### 1. Update Markdown Droid Files
 
-Each tiered agent file should include:
+Each tiered droid file should include:
 
 ```markdown
 ---
-name: [agent]-[tier]
+name: [droid]-[tier]
 description: [tier-specific description]
 tools: [restricted tool list]
 model: [haiku|sonnet|opus]
 ---
 
 <Inherits_From>
-Base: [base-agent].md
+Base: [base-droid].md
 </Inherits_From>
 
 <Tier_Identity>
@@ -289,14 +289,14 @@ When you detect tasks beyond your scope, output:
 ### 2. Update TypeScript Router
 
 The router should:
-- Parse agent capabilities from markdown
+- Parse droid capabilities from markdown
 - Match task signals to tier boundaries
 - Provide escalation recommendations in output
 
 ### 3. Add Escalation Detection
 
 The orchestrator should:
-- Detect "ESCALATION RECOMMENDED" in agent output
+- Detect "ESCALATION RECOMMENDED" in droid output
 - Automatically retry with recommended higher tier
 - Log escalation patterns for optimization
 
@@ -317,6 +317,6 @@ Intelligent routing can reduce costs by ~47% while improving quality for complex
 
 1. Create updated markdown files for all tiered droids
 2. Add escalation detection to hooks
-3. Update router to use agent capability parsing
+3. Update router to use droid capability parsing
 4. Add telemetry for tier usage optimization
 5. Create tests for escalation scenarios

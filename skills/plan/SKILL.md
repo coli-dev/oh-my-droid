@@ -29,7 +29,7 @@ Jumping into code without understanding requirements leads to rework, scope cree
 <Execution_Policy>
 - Auto-detect interview vs direct mode based on request specificity
 - Ask one question at a time during interviews -- never batch multiple questions
-- Gather codebase facts via `explore` agent before asking the user about them
+- Gather codebase facts via `explore` droid before asking the user about them
 - Plans must meet quality standards: 80%+ claims cite file/line, 90%+ criteria are testable
 - Consensus mode requires explicit user approval before proceeding to implementation
 </Execution_Policy>
@@ -49,7 +49,7 @@ Jumping into code without understanding requirements leads to rework, scope cree
 
 1. **Classify the request**: Broad (vague verbs, no specific files, touches 3+ areas) triggers interview mode
 2. **Ask one focused question** using `AskUserQuestion` for preferences, scope, and constraints
-3. **Gather codebase facts first**: Before asking "what patterns does your code use?", spawn an `explore` agent to find out, then ask informed follow-up questions
+3. **Gather codebase facts first**: Before asking "what patterns does your code use?", spawn an `explore` droid to find out, then ask informed follow-up questions
 4. **Build on answers**: Each question builds on the previous answer
 5. **Consult Analyst** (Opus) for hidden requirements, edge cases, and risks
 6. **Create plan** when the user signals readiness: "create the plan", "I'm ready", "make it a work plan"
@@ -91,7 +91,7 @@ Plans are saved to `.omd/plans/`. Drafts go to `.omd/drafts/`.
 - Before first MCP tool use, call `ToolSearch("mcp")` to discover deferred MCP tools
 - Use `AskUserQuestion` for preference questions (scope, priority, timeline, risk tolerance) -- provides clickable UI
 - Use plain text for questions needing specific values (port numbers, names, follow-up clarifications)
-- Use `explore` agent (Haiku, 30s timeout) to gather codebase facts before asking the user
+- Use `explore` droid (Haiku, 30s timeout) to gather codebase facts before asking the user
 - Use `ask_codex` with `agent_role: "planner"` for planning validation on large-scope plans
 - Use `ask_codex` with `agent_role: "analyst"` for requirements analysis
 - Use `ask_codex` with `agent_role: "critic"` for plan review in consensus and review modes
@@ -102,7 +102,7 @@ Plans are saved to `.omd/plans/`. Drafts go to `.omd/drafts/`.
 <Good>
 Adaptive interview (gathering facts before asking):
 ```
-Planner: [spawns explore agent: "find authentication implementation"]
+Planner: [spawns explore droid: "find authentication implementation"]
 Planner: [receives: "Auth is in src/auth/ using JWT with passport.js"]
 Planner: "I see you're using JWT authentication with passport.js in src/auth/.
          For this new feature, should we extend the existing auth or add a separate auth flow?"
@@ -128,7 +128,7 @@ Asking about things you could look up:
 Planner: "Where is authentication implemented in your codebase?"
 User: "Uh, somewhere in src/auth I think?"
 ```
-Why bad: The planner should spawn an explore agent to find this, not ask the user.
+Why bad: The planner should spawn an explore droid to find this, not ask the user.
 </Bad>
 
 <Bad>

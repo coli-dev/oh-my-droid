@@ -1,6 +1,6 @@
 # Tier-Specific Instructions
 
-This document defines the behavioral differences between agent tiers (LOW/MEDIUM/HIGH).
+This document defines the behavioral differences between droid tiers (LOW/MEDIUM/HIGH).
 
 ## LOW Tier (Haiku)
 **Model**: claude-haiku-4-5
@@ -30,7 +30,7 @@ This document defines the behavioral differences between agent tiers (LOW/MEDIUM
 - Balance thoroughness with efficiency
 - Can explore up to 20 files
 - Handle moderate complexity tasks
-- Consult architect agent for architectural decisions
+- Consult architect droid for architectural decisions
 - Escalate to HIGH tier if:
   - Task requires deep architectural changes
   - System-wide refactoring needed
@@ -74,7 +74,7 @@ This document defines the behavioral differences between agent tiers (LOW/MEDIUM
 
 ## Template Usage
 
-When creating an agent prompt, replace `{{TIER_INSTRUCTIONS}}` with the appropriate tier block above.
+When creating an droid prompt, replace `{{TIER_INSTRUCTIONS}}` with the appropriate tier block above.
 
 Example for executor-low:
 ```markdown

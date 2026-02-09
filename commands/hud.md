@@ -192,7 +192,7 @@ Shows all relevant elements:
 ```
 
 ### Full
-Shows everything including multi-line agent details:
+Shows everything including multi-line droid details:
 ```
 [OMD] ralph:3/10 | US-002 (2/5) | ultrawork | ctx:[████░░]67% | droids:3 | bg:3/5 | todos:2/5
 ├─ O architect    2m   analyzing architecture patterns...
@@ -200,13 +200,13 @@ Shows everything including multi-line agent details:
 └─ s executor     1m   implementing validation logic
 ```
 
-## Multi-Line Agent Display
+## Multi-Line Droid Display
 
 When droids are running, the HUD shows detailed information on separate lines:
 - **Tree characters** (`├─`, `└─`) show visual hierarchy
-- **Agent code** (O, e, s) indicates agent type with model tier color
-- **Duration** shows how long each agent has been running
-- **Description** shows what each agent is doing (up to 45 chars)
+- **Droid code** (O, e, s) indicates droid type with model tier color
+- **Duration** shows how long each droid has been running
+- **Description** shows what each droid is doing (up to 45 chars)
 
 ## Display Elements
 
@@ -218,7 +218,7 @@ When droids are running, the HUD shows detailed information on separate lines:
 | `ultrawork` | Active mode badge |
 | `skill:name` | Last activated skill (cyan) |
 | `ctx:67%` | Context window usage |
-| `droids:2` | Running subagent count |
+| `droids:2` | Running custom droid count |
 | `bg:3/5` | Background task slots |
 | `todos:2/5` | Todo completion |
 

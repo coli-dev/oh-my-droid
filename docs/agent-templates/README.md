@@ -1,10 +1,10 @@
-# Agent Prompt Templates
+# Droid Prompt Templates
 
-This directory contains reusable templates for creating agent prompts, reducing duplication across tiers.
+This directory contains reusable templates for creating droid prompts, reducing duplication across tiers.
 
 ## Files
 
-- **base-agent.md**: Core template structure with injection points
+- **base-droid.md**: Core template structure with injection points
 - **tier-instructions.md**: Tier-specific behavioral instructions (LOW/MEDIUM/HIGH)
 - **README.md**: This file - usage guide
 
@@ -16,30 +16,30 @@ The template uses the following placeholders:
 
 | Placeholder | Description | Example |
 |-------------|-------------|---------|
-| `{{AGENT_NAME}}` | Agent identifier | `executor-low`, `architect-medium` |
-| `{{ROLE_DESCRIPTION}}` | What this agent does | "You execute simple code changes..." |
+| `{{AGENT_NAME}}` | Droid identifier | `executor-low`, `architect-medium` |
+| `{{ROLE_DESCRIPTION}}` | What this droid does | "You execute simple code changes..." |
 | `{{TIER_INSTRUCTIONS}}` | Tier-specific behavior | LOW/MEDIUM/HIGH instructions |
-| `{{TASK_SPECIFIC_INSTRUCTIONS}}` | Agent-specific protocols | "When fixing bugs, always add tests" |
+| `{{TASK_SPECIFIC_INSTRUCTIONS}}` | Droid-specific protocols | "When fixing bugs, always add tests" |
 | `{{EXPECTED_DELIVERABLES}}` | What to output | "Modified files + test results" |
 
 ### Usage
 
 1. **Copy the base template**:
    ```bash
-   cp droids/templates/base-agent.md droids/my-new-agent.md
+   cp droids/templates/base-droid.md droids/my-new-droid.md
    ```
 
 2. **Replace placeholders**:
-   - Set `{{AGENT_NAME}}` to your agent name
-   - Write `{{ROLE_DESCRIPTION}}` specific to your agent
+   - Set `{{AGENT_NAME}}` to your droid name
+   - Write `{{ROLE_DESCRIPTION}}` specific to your droid
    - Copy appropriate tier instructions from `tier-instructions.md`
-   - Add any `{{TASK_SPECIFIC_INSTRUCTIONS}}` unique to this agent
+   - Add any `{{TASK_SPECIFIC_INSTRUCTIONS}}` unique to this droid
    - Define `{{EXPECTED_DELIVERABLES}}`
 
 3. **Review common protocol**:
    - The base template includes shared verification and tool usage protocols
    - These apply to ALL droids and don't need modification
-   - Only extend if your agent needs additional protocols
+   - Only extend if your droid needs additional protocols
 
 ### Example: Creating executor-low
 
@@ -63,7 +63,7 @@ You execute simple, well-defined code changes quickly and efficiently. Handle si
 - Skip deep investigation - implement what's asked
 
 ## Common Protocol
-[... standard protocol from base-agent.md ...]
+[... standard protocol from base-droid.md ...]
 
 ## Task Execution
 - Read the target file first
@@ -88,7 +88,7 @@ You execute simple, well-defined code changes quickly and efficiently. Handle si
 
 - **Don't override common protocol** unless absolutely necessary
 - **Be specific in role descriptions** - avoid vague terms like "handle tasks"
-- **Document escalation paths** - when should this agent call another?
+- **Document escalation paths** - when should this droid call another?
 - **Include examples** in task-specific instructions when helpful
 - **Keep tier instructions pure** - only capability/scope guidance, not role-specific behavior
 

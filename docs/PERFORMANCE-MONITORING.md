@@ -8,7 +8,7 @@ Comprehensive guide to monitoring, debugging, and optimizing Droid and oh-my-dro
 
 - [Overview](#overview)
 - [Built-in Monitoring](#built-in-monitoring)
-  - [Agent Observatory](#agent-observatory)
+  - [Droid Observatory](#droid-observatory)
   - [Token & Cost Analytics](#token--cost-analytics)
   - [Session Replay](#session-replay)
 - [HUD Integration](#hud-integration)
@@ -21,43 +21,43 @@ Comprehensive guide to monitoring, debugging, and optimizing Droid and oh-my-dro
 
 ## Overview
 
-oh-my-droid provides comprehensive monitoring capabilities for tracking agent performance, token usage, costs, and identifying bottlenecks in multi-agent workflows. This guide covers both built-in tools and external resources for monitoring Droid's performance.
+oh-my-droid provides comprehensive monitoring capabilities for tracking droid performance, token usage, costs, and identifying bottlenecks in multi-droid workflows. This guide covers both built-in tools and external resources for monitoring Droid's performance.
 
 ### What You Can Monitor
 
 | Metric | Tool | Granularity |
 |--------|------|-------------|
-| Agent lifecycle | Agent Observatory | Per-agent |
+| Droid lifecycle | Droid Observatory | Per-droid |
 | Tool timing | Session Replay | Per-tool call |
-| Token usage | Analytics System | Per-session/agent |
+| Token usage | Analytics System | Per-session/droid |
 | API costs | Analytics System | Per-session/daily/monthly |
-| File ownership | Subagent Tracker | Per-file |
+| File ownership | Custom Droid Tracker | Per-file |
 | Parallel efficiency | Observatory | Real-time |
 
 ---
 
 ## Built-in Monitoring
 
-### Agent Observatory
+### Droid Observatory
 
-The Agent Observatory provides real-time visibility into all running droids, their performance metrics, and potential issues.
+The Droid Observatory provides real-time visibility into all running droids, their performance metrics, and potential issues.
 
 #### Accessing the Observatory
 
 The observatory is automatically displayed in the HUD when droids are running. You can also query it programmatically:
 
 ```typescript
-import { getAgentObservatory } from 'oh-my-droid/hooks/subagent-tracker';
+import { getAgentObservatory } from 'oh-my-droid/hooks/custom droid-tracker';
 
 const obs = getAgentObservatory(process.cwd());
-console.log(obs.header);  // "Agent Observatory (3 active, 85% efficiency)"
+console.log(obs.header);  // "Droid Observatory (3 active, 85% efficiency)"
 obs.lines.forEach(line => console.log(line));
 ```
 
 #### Observatory Output
 
 ```
-Agent Observatory (3 active, 85% efficiency)
+Droid Observatory (3 active, 85% efficiency)
 🟢 [a1b2c3d] executor 45s tools:12 tokens:8k $0.15 files:3
 🟢 [e4f5g6h] researcher 30s tools:5 tokens:3k $0.08
 🟡 [i7j8k9l] architect 120s tools:8 tokens:15k $0.42
@@ -69,9 +69,9 @@ Agent Observatory (3 active, 85% efficiency)
 
 | Icon | Meaning |
 |------|---------|
-| 🟢 | Healthy - agent running normally |
+| 🟢 | Healthy - droid running normally |
 | 🟡 | Warning - intervention suggested |
-| 🔴 | Critical - stale agent (>5 min) |
+| 🔴 | Critical - stale droid (>5 min) |
 
 #### Key Metrics
 
@@ -101,7 +101,7 @@ omd cost monthly
 # View session history
 omd sessions
 
-# View agent breakdown
+# View droid breakdown
 omd droids
 
 # Export data
@@ -146,39 +146,39 @@ omd backfill --from "2026-01-01"
 
 ### Session Replay
 
-Session replay records agent lifecycle events as JSONL for post-session analysis and timeline visualization.
+Session replay records droid lifecycle events as JSONL for post-session analysis and timeline visualization.
 
 #### Event Types
 
 | Event | Description |
 |-------|-------------|
-| `agent_start` | Agent spawned with task info |
-| `agent_stop` | Agent completed/failed with duration |
+| `agent_start` | Droid spawned with task info |
+| `agent_stop` | Droid completed/failed with duration |
 | `tool_start` | Tool invocation begins |
 | `tool_end` | Tool completes with timing |
-| `file_touch` | File modified by agent |
+| `file_touch` | File modified by droid |
 | `intervention` | System intervention triggered |
 
 #### Replay Files
 
-Replay data is stored at: `.omd/state/agent-replay-{sessionId}.jsonl`
+Replay data is stored at: `.omd/state/droid-replay-{sessionId}.jsonl`
 
 Each line is a JSON event:
 ```json
-{"t":0.0,"agent":"a1b2c3d","agent_type":"executor","event":"agent_start","task":"Implement feature","parent_mode":"ultrawork"}
-{"t":5.2,"agent":"a1b2c3d","event":"tool_start","tool":"Read"}
-{"t":5.4,"agent":"a1b2c3d","event":"tool_end","tool":"Read","duration_ms":200,"success":true}
+{"t":0.0,"droid":"a1b2c3d","agent_type":"executor","event":"agent_start","task":"Implement feature","parent_mode":"ultrawork"}
+{"t":5.2,"droid":"a1b2c3d","event":"tool_start","tool":"Read"}
+{"t":5.4,"droid":"a1b2c3d","event":"tool_end","tool":"Read","duration_ms":200,"success":true}
 ```
 
 #### Analyzing Replay Data
 
 ```typescript
-import { getReplaySummary } from 'oh-my-droid/hooks/subagent-tracker/session-replay';
+import { getReplaySummary } from 'oh-my-droid/hooks/custom droid-tracker/session-replay';
 
 const summary = getReplaySummary(process.cwd(), sessionId);
 
 console.log(`Duration: ${summary.duration_seconds}s`);
-console.log(`Agents: ${summary.agents_spawned} spawned, ${summary.agents_completed} completed`);
+console.log(`Droids: ${summary.agents_spawned} spawned, ${summary.agents_completed} completed`);
 console.log(`Bottlenecks:`, summary.bottlenecks);
 console.log(`Files touched:`, summary.files_touched);
 ```
@@ -187,7 +187,7 @@ console.log(`Files touched:`, summary.files_touched);
 
 The replay system automatically identifies bottlenecks:
 - Tools averaging >1s with 2+ calls
-- Per-agent tool timing analysis
+- Per-droid tool timing analysis
 - Sorted by impact (highest avg time first)
 
 ---
@@ -226,7 +226,7 @@ Edit `~/.factory/settings.json`:
 
 | Element | Description |
 |---------|-------------|
-| `droids` | Active agent count and status |
+| `droids` | Active droid count and status |
 | `todos` | Todo progress (completed/total) |
 | `ralph` | Ralph loop iteration count |
 | `autopilot` | Autopilot phase indicator |
@@ -237,14 +237,14 @@ Edit `~/.factory/settings.json`:
 
 ## Debugging Techniques
 
-### Identifying Slow Agents
+### Identifying Slow Droids
 
 1. **Check the Observatory** for droids running >2 minutes
 2. **Look for bottleneck indicators** (tool averaging >1s)
-3. **Review tool_usage** in agent state
+3. **Review tool_usage** in droid state
 
 ```typescript
-import { getAgentPerformance } from 'oh-my-droid/hooks/subagent-tracker';
+import { getAgentPerformance } from 'oh-my-droid/hooks/custom droid-tracker';
 
 const perf = getAgentPerformance(process.cwd(), agentId);
 console.log('Tool timings:', perf.tool_timings);
@@ -256,7 +256,7 @@ console.log('Bottleneck:', perf.bottleneck);
 When multiple droids modify the same file:
 
 ```typescript
-import { detectFileConflicts } from 'oh-my-droid/hooks/subagent-tracker';
+import { detectFileConflicts } from 'oh-my-droid/hooks/custom droid-tracker';
 
 const conflicts = detectFileConflicts(process.cwd());
 conflicts.forEach(c => {
@@ -270,12 +270,12 @@ OMD automatically detects problematic droids:
 
 | Intervention | Trigger | Action |
 |--------------|---------|--------|
-| `timeout` | Agent running >5 min | Kill suggested |
+| `timeout` | Droid running >5 min | Kill suggested |
 | `excessive_cost` | Cost >$1.00 | Warning |
 | `file_conflict` | Multiple droids on file | Warning |
 
 ```typescript
-import { suggestInterventions } from 'oh-my-droid/hooks/subagent-tracker';
+import { suggestInterventions } from 'oh-my-droid/hooks/custom droid-tracker';
 
 const interventions = suggestInterventions(process.cwd());
 interventions.forEach(i => {
@@ -288,7 +288,7 @@ interventions.forEach(i => {
 Track how well your parallel droids are performing:
 
 ```typescript
-import { calculateParallelEfficiency } from 'oh-my-droid/hooks/subagent-tracker';
+import { calculateParallelEfficiency } from 'oh-my-droid/hooks/custom droid-tracker';
 
 const eff = calculateParallelEfficiency(process.cwd());
 console.log(`Efficiency: ${eff.score}%`);
@@ -299,12 +299,12 @@ console.log(`Active: ${eff.active}, Stale: ${eff.stale}, Total: ${eff.total}`);
 - **<80%**: Some droids stale or waiting
 - **<50%**: Significant parallelization issues
 
-### Stale Agent Cleanup
+### Stale Droid Cleanup
 
 Clean up droids that exceed the timeout threshold:
 
 ```typescript
-import { cleanupStaleAgents } from 'oh-my-droid/hooks/subagent-tracker';
+import { cleanupStaleAgents } from 'oh-my-droid/hooks/custom droid-tracker';
 
 const cleaned = cleanupStaleAgents(process.cwd());
 console.log(`Cleaned ${cleaned} stale droids`);
@@ -377,15 +377,15 @@ Session replay is automatically enabled. Review replays after complex workflows:
 
 ```bash
 # Find replay files
-ls .omd/state/agent-replay-*.jsonl
+ls .omd/state/droid-replay-*.jsonl
 
 # View recent events
-tail -20 .omd/state/agent-replay-*.jsonl
+tail -20 .omd/state/droid-replay-*.jsonl
 ```
 
 ### 4. Set Cost Limits
 
-The default cost limit per agent is $1.00 USD. Agents exceeding this trigger warnings.
+The default cost limit per droid is $1.00 USD. Droids exceeding this trigger warnings.
 
 ### 5. Review Bottlenecks Regularly
 
@@ -400,10 +400,10 @@ if (summary.bottlenecks.length > 0) {
 
 ### 6. Clean Up Stale State
 
-Periodically clean up old replay files and stale agent state:
+Periodically clean up old replay files and stale droid state:
 
 ```typescript
-import { cleanupReplayFiles } from 'oh-my-droid/hooks/subagent-tracker/session-replay';
+import { cleanupReplayFiles } from 'oh-my-droid/hooks/custom droid-tracker/session-replay';
 
 cleanupReplayFiles(process.cwd()); // Keeps last 10 sessions
 ```
@@ -418,13 +418,13 @@ cleanupReplayFiles(process.cwd()); // Keeps last 10 sessions
 
 **Solutions**:
 1. Use `eco` mode for token-efficient execution: `eco fix all errors`
-2. Check for unnecessary file reads in agent prompts
-3. Review `omd droids` for agent-level breakdown
+2. Check for unnecessary file reads in droid prompts
+3. Review `omd droids` for droid-level breakdown
 4. Enable cache - check cache efficiency in analytics
 
-### Slow Agent Execution
+### Slow Droid Execution
 
-**Symptoms**: Agents running >5 minutes, low parallel efficiency
+**Symptoms**: Droids running >5 minutes, low parallel efficiency
 
 **Solutions**:
 1. Check Observatory for bottleneck indicators
@@ -439,7 +439,7 @@ cleanupReplayFiles(process.cwd()); // Keeps last 10 sessions
 **Solutions**:
 1. Use `ultrapilot` mode for automatic file ownership
 2. Check `detectFileConflicts()` before parallel execution
-3. Review file_ownership in agent state
+3. Review file_ownership in droid state
 4. Use `swarm` mode with explicit task isolation
 
 ### Missing Analytics Data
@@ -452,14 +452,14 @@ cleanupReplayFiles(process.cwd()); // Keeps last 10 sessions
 3. Check `.omd/state/` directory exists
 4. Review `token-tracking.jsonl` for raw data
 
-### Stale Agent State
+### Stale Droid State
 
 **Symptoms**: Observatory showing droids that aren't running
 
 **Solutions**:
 1. Run `cleanupStaleAgents(cwd)` programmatically
-2. Delete `.omd/state/subagent-tracking.json` to reset
-3. Check for orphaned lock files: `.omd/state/subagent-tracker.lock`
+2. Delete `.omd/state/custom droid-tracking.json` to reset
+3. Check for orphaned lock files: `.omd/state/custom droid-tracker.lock`
 
 ---
 
@@ -467,17 +467,17 @@ cleanupReplayFiles(process.cwd()); // Keeps last 10 sessions
 
 | File | Purpose | Format |
 |------|---------|--------|
-| `.omd/state/subagent-tracking.json` | Current agent states | JSON |
-| `.omd/state/agent-replay-{id}.jsonl` | Session event timeline | JSONL |
+| `.omd/state/custom droid-tracking.json` | Current droid states | JSON |
+| `.omd/state/droid-replay-{id}.jsonl` | Session event timeline | JSONL |
 | `.omd/state/token-tracking.jsonl` | Token usage log | JSONL |
 | `.omd/state/analytics-summary-{id}.json` | Cached session summaries | JSON |
-| `.omd/state/subagent-tracker.lock` | Concurrent access lock | Text |
+| `.omd/state/custom droid-tracker.lock` | Concurrent access lock | Text |
 
 ---
 
 ## API Reference
 
-### Subagent Tracker
+### Custom Droid Tracker
 
 ```typescript
 // Core tracking

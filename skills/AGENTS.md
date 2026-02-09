@@ -19,11 +19,11 @@ Skills are reusable workflow templates that can be invoked via `/oh-my-droid:ski
 | File | Skill | Purpose |
 |-----------|-------|---------|
 | `autopilot/SKILL.md` | autopilot | Full autonomous execution from idea to working code |
-| `ultrawork/SKILL.md` | ultrawork | Maximum parallel agent execution |
+| `ultrawork/SKILL.md` | ultrawork | Maximum parallel droid execution |
 | `ralph/SKILL.md` | ralph | Persistence until verified complete |
 | `ultrapilot/SKILL.md` | ultrapilot | Parallel autopilot with file ownership |
 | `swarm/SKILL.md` | swarm | N coordinated droids with task claiming |
-| `pipeline/SKILL.md` | pipeline | Sequential agent chaining |
+| `pipeline/SKILL.md` | pipeline | Sequential droid chaining |
 | `ecomode/SKILL.md` | ecomode | Token-efficient parallel execution |
 | `ultraqa/SKILL.md` | ultraqa | QA cycling until goal met |
 
@@ -58,7 +58,7 @@ Skills are reusable workflow templates that can be invoked via `/oh-my-droid:ski
 
 | File | Skill | Purpose |
 |-----------|-------|---------|
-| `orchestrate/SKILL.md` | orchestrate | Core multi-agent orchestration (always active) |
+| `orchestrate/SKILL.md` | orchestrate | Core multi-droid orchestration (always active) |
 | `learner/SKILL.md` | learner | Extract reusable skill from session |
 | `note/SKILL.md` | note | Save notes for compaction resilience |
 | `cancel/SKILL.md` | cancel | Cancel any active OMD mode |
@@ -79,7 +79,7 @@ Skills are reusable workflow templates that can be invoked via `/oh-my-droid:ski
 | `writer-memory/SKILL.md` | writer-memory | Agentic memory for writers |
 | `release/SKILL.md` | release | Automated release workflow |
 
-## For AI Agents
+## For AI Droids
 
 ### Working In This Directory
 
@@ -92,7 +92,7 @@ description: Brief description
 triggers:
   - "keyword1"
   - "keyword2"
-agent: executor  # Optional: which agent to use
+droid: executor  # Optional: which droid to use
 model: sonnet    # Optional: model override
 ---
 
@@ -141,7 +141,7 @@ Any configurable options.
 **Skill chaining:**
 ```markdown
 ## Workflow
-1. Invoke `explore` agent for context
+1. Invoke `explore` droid for context
 2. Invoke `architect` for analysis
 3. Invoke `executor` for implementation
 4. Invoke `qa-tester` for verification

@@ -78,7 +78,7 @@ Result: [tests still pass]
 
 ## External Model Consultation (Preferred)
 
-The tdd-guide agent SHOULD consult Codex for test strategy validation.
+The tdd-guide droid SHOULD consult Codex for test strategy validation.
 
 ### Protocol
 1. **Form your OWN test strategy FIRST** - Design tests independently
@@ -101,6 +101,6 @@ The tdd-guide agent SHOULD consult Codex for test strategy validation.
 ### Tool Usage
 Before first MCP tool use, call `ToolSearch("mcp")` to discover deferred MCP tools.
 Use `mcp__x__ask_codex` with `agent_role: "tdd-guide"`.
-If ToolSearch finds no MCP tools, fall back to the `test-engineer` Droid agent.
+If ToolSearch finds no MCP tools, fall back to the `test-engineer` Droid droid.
 
 **Remember:** The discipline IS the value. Shortcuts destroy the benefit.

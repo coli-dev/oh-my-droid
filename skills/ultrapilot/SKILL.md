@@ -98,7 +98,7 @@ backend frontend database api-docs tests
 
 **Goal:** Break task into parallel-safe subtasks
 
-**Agent:** Architect (Opus)
+**Droid:** Architect (Opus)
 
 **Method:** AI-Powered Task Decomposition
 
@@ -118,7 +118,7 @@ const prompt = generateDecompositionPrompt(task, codebaseContext, {
   preferredModel: 'sonnet'
 });
 
-// 2. Call Architect agent
+// 2. Call Architect droid
 const response = await Task({
   subagent_type: 'oh-my-droid:architect',
   model: 'opus',
@@ -136,9 +136,9 @@ const finalResult = extractSharedFiles(result);
 ```
 
 **Process:**
-1. Analyze task requirements via Architect agent
+1. Analyze task requirements via Architect droid
 2. Identify independent components with file boundaries
-3. Assign agent type (executor-low/executor/executor-high) per complexity
+3. Assign droid type (executor-low/executor/executor-high) per complexity
 4. Map dependencies between subtasks (blockedBy)
 5. Generate parallel execution groups
 6. Identify shared files (handled by coordinator)
@@ -272,7 +272,7 @@ Deliver: Code changes + list of boundary dependencies`,
 4. **Integrate boundary files** - Merge type definitions, shared utilities
 5. **Resolve imports** - Ensure cross-boundary imports are valid
 
-**Agent:** Executor (Sonnet) - sequential processing
+**Droid:** Executor (Sonnet) - sequential processing
 
 **Conflict Resolution:**
 - If workers unexpectedly touched same file → manual merge
@@ -290,7 +290,7 @@ Deliver: Code changes + list of boundary dependencies`,
 4. **Unit tests** - All tests pass
 5. **Integration tests** - Cross-component tests
 
-**Agents (parallel):**
+**Droids (parallel):**
 - Build-fixer (Sonnet) - Fix build errors
 - Architect (Opus) - Functional completeness
 - Security-reviewer (Opus) - Cross-component vulnerabilities
