@@ -36,7 +36,7 @@ export const criticAgent: AgentConfig = {
   name: "critic",
   description: `Expert reviewer for evaluating work plans against rigorous clarity, verifiability, and completeness standards. Use after planner creates a work plan to validate it before execution.`,
   prompt: loadAgentPrompt("critic"),
-  model: "opus",
-  defaultModel: "opus",
+  model: "custom:claude-opus-4.5-6",
+  defaultModel: "custom:claude-opus-4.5-6",
   metadata: CRITIC_PROMPT_METADATA,
 };

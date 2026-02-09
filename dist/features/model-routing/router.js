@@ -71,6 +71,15 @@ function createDecision(tier, reasons, escalated, originalTier) {
  * Convert ModelType to ComplexityTier
  */
 function modelTypeToTier(modelType) {
+    if (modelType.includes('gpt-5.3-codex-3') || modelType.includes('claude-opus') || modelType === 'opus') {
+        return 'HIGH';
+    }
+    if (modelType.includes('gpt-5.2-codex-mini-0') || modelType.includes('claude-haiku') || modelType === 'haiku') {
+        return 'LOW';
+    }
+    if (modelType.includes('gpt-5.2-codex-2') || modelType.includes('claude-sonnet') || modelType === 'sonnet') {
+        return 'MEDIUM';
+    }
     switch (modelType) {
         case 'opus':
             return 'HIGH';

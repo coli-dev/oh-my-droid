@@ -15,7 +15,7 @@ export interface AgentInput {
     description: string;
     prompt: string;
     subagent_type: string;
-    model?: "sonnet" | "opus" | "haiku";
+    model?: ModelType;
     resume?: string;
     run_in_background?: boolean;
 }

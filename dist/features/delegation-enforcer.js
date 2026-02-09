@@ -64,7 +64,7 @@ export function enforceModel(agentInput) {
  */
 function convertToSdkModel(model) {
     if (model === "inherit") {
-        return "sonnet"; // Default fallback
+        return "custom:claude-sonnet-4.5-5";
     }
     return model;
 }

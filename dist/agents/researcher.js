@@ -42,8 +42,8 @@ export const researcherAgent = {
     name: "researcher",
     description: "Documentation researcher and external reference finder. Use for official docs, GitHub examples, OSS implementations, API references. Searches EXTERNAL resources, not internal codebase.",
     prompt: loadAgentPrompt("researcher"),
-    model: "sonnet",
-    defaultModel: "sonnet",
+    model: "custom:gpt-5.2-1",
+    defaultModel: "custom:gpt-5.2-1",
     metadata: RESEARCHER_PROMPT_METADATA,
 };
 //# sourceMappingURL=researcher.js.map

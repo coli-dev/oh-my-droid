@@ -61,8 +61,8 @@ export const scientistAgent = {
     name: "scientist",
     description: "Data analysis and research execution specialist. Executes Python code for EDA, statistical analysis, and generating data-driven findings. Works with CSV, JSON, Parquet files using pandas, numpy, scipy.",
     prompt: loadAgentPrompt("scientist"),
-    model: "sonnet",
-    defaultModel: "sonnet",
+    model: "custom:gpt-5.2-1",
+    defaultModel: "custom:gpt-5.2-1",
     metadata: SCIENTIST_PROMPT_METADATA,
 };
 //# sourceMappingURL=scientist.js.map

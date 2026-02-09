@@ -50,8 +50,8 @@ export const debuggerAgent = {
     name: "debugger",
     description: "Root-cause analysis, regression isolation, failure diagnosis (Sonnet).",
     prompt: loadAgentPrompt("debugger"),
-    model: "sonnet",
-    defaultModel: "sonnet",
+    model: "custom:gpt-5.3-codex-3",
+    defaultModel: "custom:gpt-5.3-codex-3",
 };
 /**
  * Verifier Agent - Completion Evidence & Test Validation (Sonnet)
@@ -60,8 +60,8 @@ export const verifierAgent = {
     name: "verifier",
     description: "Completion evidence, claim validation, test adequacy (Sonnet).",
     prompt: loadAgentPrompt("verifier"),
-    model: "sonnet",
-    defaultModel: "sonnet",
+    model: "custom:gpt-5.3-codex-3",
+    defaultModel: "custom:gpt-5.3-codex-3",
 };
 // ============================================================
 // REFORMED AGENTS (REVIEW LANE)
@@ -73,8 +73,8 @@ export const styleReviewerAgent = {
     name: "style-reviewer",
     description: "Formatting, naming, idioms, lint/style conventions (Haiku).",
     prompt: loadAgentPrompt("style-reviewer"),
-    model: "haiku",
-    defaultModel: "haiku",
+    model: "custom:claude-haiku-4.5-4",
+    defaultModel: "custom:claude-haiku-4.5-4",
 };
 /**
  * Quality-Reviewer Agent - Logic Defects & Maintainability (Sonnet)
@@ -83,8 +83,8 @@ export const qualityReviewerAgent = {
     name: "quality-reviewer",
     description: "Logic defects, maintainability, anti-patterns (Sonnet).",
     prompt: loadAgentPrompt("quality-reviewer"),
-    model: "sonnet",
-    defaultModel: "sonnet",
+    model: "custom:claude-sonnet-4.5-5",
+    defaultModel: "custom:claude-sonnet-4.5-5",
 };
 /**
  * API-Reviewer Agent - API Contracts & Versioning (Sonnet)
@@ -93,8 +93,8 @@ export const apiReviewerAgent = {
     name: "api-reviewer",
     description: "API contracts, versioning, backward compatibility (Sonnet).",
     prompt: loadAgentPrompt("api-reviewer"),
-    model: "sonnet",
-    defaultModel: "sonnet",
+    model: "custom:claude-sonnet-4.5-5",
+    defaultModel: "custom:claude-sonnet-4.5-5",
 };
 /**
  * Performance-Reviewer Agent - Performance & Complexity (Sonnet)
@@ -103,8 +103,8 @@ export const performanceReviewerAgent = {
     name: "performance-reviewer",
     description: "Hotspots, complexity, memory/latency optimization (Sonnet).",
     prompt: loadAgentPrompt("performance-reviewer"),
-    model: "sonnet",
-    defaultModel: "sonnet",
+    model: "custom:claude-sonnet-4.5-5",
+    defaultModel: "custom:claude-sonnet-4.5-5",
 };
 // ============================================================
 // REFORMED AGENTS (DOMAIN SPECIALISTS)
@@ -117,8 +117,8 @@ export const dependencyExpertAgent = {
     name: "dependency-expert",
     description: "External SDK/API/package evaluation (Sonnet).",
     prompt: loadAgentPrompt("dependency-expert"),
-    model: "sonnet",
-    defaultModel: "sonnet",
+    model: "custom:gpt-5.2-1",
+    defaultModel: "custom:gpt-5.2-1",
 };
 /**
  * Test-Engineer Agent - Test Strategy & Coverage (Sonnet)
@@ -128,8 +128,8 @@ export const testEngineerAgent = {
     name: "test-engineer",
     description: "Test strategy, coverage, flaky test hardening (Sonnet).",
     prompt: loadAgentPrompt("test-engineer"),
-    model: "sonnet",
-    defaultModel: "sonnet",
+    model: "custom:claude-sonnet-4.5-5",
+    defaultModel: "custom:claude-sonnet-4.5-5",
 };
 /**
  * Quality-Strategist Agent - Quality Strategy & Release Readiness (Sonnet)
@@ -138,8 +138,8 @@ export const qualityStrategistAgent = {
     name: "quality-strategist",
     description: "Quality strategy, release readiness, risk assessment, and quality gates (Sonnet).",
     prompt: loadAgentPrompt("quality-strategist"),
-    model: "sonnet",
-    defaultModel: "sonnet",
+    model: "custom:claude-sonnet-4.5-5",
+    defaultModel: "custom:claude-sonnet-4.5-5",
 };
 // ============================================================
 // REFORMED AGENTS (PRODUCT LANE)
@@ -151,8 +151,8 @@ export const productManagerAgent = {
     name: "product-manager",
     description: "Problem framing, personas/JTBD, value hypothesis, PRDs, KPI trees (Sonnet).",
     prompt: loadAgentPrompt("product-manager"),
-    model: "sonnet",
-    defaultModel: "sonnet",
+    model: "custom:gemini-3-pro-8",
+    defaultModel: "custom:gemini-3-pro-8",
 };
 /**
  * UX Researcher Agent - Heuristic Audits & Usability (Sonnet)
@@ -161,8 +161,8 @@ export const uxResearcherAgent = {
     name: "ux-researcher",
     description: "Heuristic audits, usability risks, accessibility, research plans (Sonnet).",
     prompt: loadAgentPrompt("ux-researcher"),
-    model: "sonnet",
-    defaultModel: "sonnet",
+    model: "custom:gemini-3-pro-8",
+    defaultModel: "custom:gemini-3-pro-8",
 };
 /**
  * Information Architect Agent - Taxonomy & Navigation (Sonnet)
@@ -171,8 +171,8 @@ export const informationArchitectAgent = {
     name: "information-architect",
     description: "Taxonomy, navigation, findability, naming consistency (Sonnet).",
     prompt: loadAgentPrompt("information-architect"),
-    model: "sonnet",
-    defaultModel: "sonnet",
+    model: "custom:gemini-3-pro-8",
+    defaultModel: "custom:gemini-3-pro-8",
 };
 /**
  * Product Analyst Agent - Metrics & Experiment Design (Sonnet)
@@ -181,8 +181,8 @@ export const productAnalystAgent = {
     name: "product-analyst",
     description: "Product metrics, funnel analysis, experiment design, KPI definitions (Sonnet).",
     prompt: loadAgentPrompt("product-analyst"),
-    model: "sonnet",
-    defaultModel: "sonnet",
+    model: "custom:gemini-3-pro-8",
+    defaultModel: "custom:gemini-3-pro-8",
 };
 // ============================================================
 // SPECIALIZED AGENTS (Security, Build, TDD, Code Review)
@@ -194,8 +194,8 @@ export const securityReviewerAgent = {
     name: "security-reviewer",
     description: "Security vulnerability detection specialist (Sonnet). Use for security audits and OWASP detection.",
     prompt: loadAgentPrompt("security-reviewer"),
-    model: "sonnet",
-    defaultModel: "sonnet",
+    model: "custom:claude-opus-4.5-6",
+    defaultModel: "custom:claude-opus-4.5-6",
 };
 /**
  * Build-Fixer Agent - Build Error Resolution (Sonnet)
@@ -204,8 +204,8 @@ export const buildFixerAgent = {
     name: "build-fixer",
     description: "Build and compilation error resolution specialist (Sonnet). Use for fixing build/type errors in any language.",
     prompt: loadAgentPrompt("build-fixer"),
-    model: "sonnet",
-    defaultModel: "sonnet",
+    model: "custom:gpt-5.3-codex-3",
+    defaultModel: "custom:gpt-5.3-codex-3",
 };
 /**
  * Code-Reviewer Agent - Expert Code Review (Opus)
@@ -214,8 +214,8 @@ export const codeReviewerAgent = {
     name: "code-reviewer",
     description: "Expert code review specialist (Opus). Use for comprehensive code quality review.",
     prompt: loadAgentPrompt("code-reviewer"),
-    model: "opus",
-    defaultModel: "opus",
+    model: "custom:claude-opus-4.5-6",
+    defaultModel: "custom:claude-opus-4.5-6",
 };
 /**
  * Git-Master Agent - Git Operations Expert (Sonnet)
@@ -224,8 +224,8 @@ export const gitMasterAgent = {
     name: "git-master",
     description: "Git expert for atomic commits, rebasing, and history management with style detection",
     prompt: loadAgentPrompt("git-master"),
-    model: "sonnet",
-    defaultModel: "sonnet",
+    model: "custom:gpt-5.3-codex-3",
+    defaultModel: "custom:gpt-5.3-codex-3",
 };
 // ============================================================
 // DEPRECATED ALIASES (Backward Compatibility)

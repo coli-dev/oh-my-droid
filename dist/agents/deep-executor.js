@@ -47,8 +47,8 @@ export const deepExecutorAgent = {
     name: "deep-executor",
     description: "Deep executor for complex goal-oriented tasks. Explores extensively, executes all work itself, guarantees 100% completion with evidence.",
     prompt: loadAgentPrompt("deep-executor"),
-    model: "opus",
-    defaultModel: "opus",
+    model: "custom:gpt-5.3-codex-3",
+    defaultModel: "custom:gpt-5.3-codex-3",
     metadata: DEEP_EXECUTOR_PROMPT_METADATA,
 };
 //# sourceMappingURL=deep-executor.js.map

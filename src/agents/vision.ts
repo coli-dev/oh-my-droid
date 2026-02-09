@@ -37,7 +37,7 @@ export const visionAgent: AgentConfig = {
   name: "vision",
   description: `Analyze media files (PDFs, images, diagrams) that require interpretation beyond raw text. Extracts specific information or summaries from documents, describes visual content.`,
   prompt: loadAgentPrompt("vision"),
-  model: "sonnet",
-  defaultModel: "sonnet",
+  model: "custom:gemini-3-pro-8",
+  defaultModel: "custom:gemini-3-pro-8",
   metadata: MULTIMODAL_LOOKER_PROMPT_METADATA,
 };

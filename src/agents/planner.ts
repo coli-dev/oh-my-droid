@@ -36,7 +36,7 @@ export const plannerAgent: AgentConfig = {
   name: "planner",
   description: `Strategic planning consultant. Interviews users to understand requirements, then creates comprehensive work plans. NEVER implements - only plans.`,
   prompt: loadAgentPrompt("planner"),
-  model: "opus",
-  defaultModel: "opus",
+  model: "custom:claude-opus-4.5-6",
+  defaultModel: "custom:claude-opus-4.5-6",
   metadata: PLANNER_PROMPT_METADATA,
 };

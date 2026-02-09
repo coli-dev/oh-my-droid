@@ -59,8 +59,8 @@ export const debuggerAgent: AgentConfig = {
   description:
     "Root-cause analysis, regression isolation, failure diagnosis (Sonnet).",
   prompt: loadAgentPrompt("debugger"),
-  model: "sonnet",
-  defaultModel: "sonnet",
+  model: "custom:gpt-5.3-codex-3",
+  defaultModel: "custom:gpt-5.3-codex-3",
 };
 
 /**
@@ -70,8 +70,8 @@ export const verifierAgent: AgentConfig = {
   name: "verifier",
   description: "Completion evidence, claim validation, test adequacy (Sonnet).",
   prompt: loadAgentPrompt("verifier"),
-  model: "sonnet",
-  defaultModel: "sonnet",
+  model: "custom:gpt-5.3-codex-3",
+  defaultModel: "custom:gpt-5.3-codex-3",
 };
 
 // ============================================================
@@ -85,8 +85,8 @@ export const styleReviewerAgent: AgentConfig = {
   name: "style-reviewer",
   description: "Formatting, naming, idioms, lint/style conventions (Haiku).",
   prompt: loadAgentPrompt("style-reviewer"),
-  model: "haiku",
-  defaultModel: "haiku",
+  model: "custom:claude-haiku-4.5-4",
+  defaultModel: "custom:claude-haiku-4.5-4",
 };
 
 /**
@@ -96,8 +96,8 @@ export const qualityReviewerAgent: AgentConfig = {
   name: "quality-reviewer",
   description: "Logic defects, maintainability, anti-patterns (Sonnet).",
   prompt: loadAgentPrompt("quality-reviewer"),
-  model: "sonnet",
-  defaultModel: "sonnet",
+  model: "custom:claude-sonnet-4.5-5",
+  defaultModel: "custom:claude-sonnet-4.5-5",
 };
 
 /**
@@ -107,8 +107,8 @@ export const apiReviewerAgent: AgentConfig = {
   name: "api-reviewer",
   description: "API contracts, versioning, backward compatibility (Sonnet).",
   prompt: loadAgentPrompt("api-reviewer"),
-  model: "sonnet",
-  defaultModel: "sonnet",
+  model: "custom:claude-sonnet-4.5-5",
+  defaultModel: "custom:claude-sonnet-4.5-5",
 };
 
 /**
@@ -118,8 +118,8 @@ export const performanceReviewerAgent: AgentConfig = {
   name: "performance-reviewer",
   description: "Hotspots, complexity, memory/latency optimization (Sonnet).",
   prompt: loadAgentPrompt("performance-reviewer"),
-  model: "sonnet",
-  defaultModel: "sonnet",
+  model: "custom:claude-sonnet-4.5-5",
+  defaultModel: "custom:claude-sonnet-4.5-5",
 };
 
 // ============================================================
@@ -134,8 +134,8 @@ export const dependencyExpertAgent: AgentConfig = {
   name: "dependency-expert",
   description: "External SDK/API/package evaluation (Sonnet).",
   prompt: loadAgentPrompt("dependency-expert"),
-  model: "sonnet",
-  defaultModel: "sonnet",
+  model: "custom:gpt-5.2-1",
+  defaultModel: "custom:gpt-5.2-1",
 };
 
 /**
@@ -146,8 +146,8 @@ export const testEngineerAgent: AgentConfig = {
   name: "test-engineer",
   description: "Test strategy, coverage, flaky test hardening (Sonnet).",
   prompt: loadAgentPrompt("test-engineer"),
-  model: "sonnet",
-  defaultModel: "sonnet",
+  model: "custom:claude-sonnet-4.5-5",
+  defaultModel: "custom:claude-sonnet-4.5-5",
 };
 
 /**
@@ -158,8 +158,8 @@ export const qualityStrategistAgent: AgentConfig = {
   description:
     "Quality strategy, release readiness, risk assessment, and quality gates (Sonnet).",
   prompt: loadAgentPrompt("quality-strategist"),
-  model: "sonnet",
-  defaultModel: "sonnet",
+  model: "custom:claude-sonnet-4.5-5",
+  defaultModel: "custom:claude-sonnet-4.5-5",
 };
 
 // ============================================================
@@ -174,8 +174,8 @@ export const productManagerAgent: AgentConfig = {
   description:
     "Problem framing, personas/JTBD, value hypothesis, PRDs, KPI trees (Sonnet).",
   prompt: loadAgentPrompt("product-manager"),
-  model: "sonnet",
-  defaultModel: "sonnet",
+  model: "custom:gemini-3-pro-8",
+  defaultModel: "custom:gemini-3-pro-8",
 };
 
 /**
@@ -186,8 +186,8 @@ export const uxResearcherAgent: AgentConfig = {
   description:
     "Heuristic audits, usability risks, accessibility, research plans (Sonnet).",
   prompt: loadAgentPrompt("ux-researcher"),
-  model: "sonnet",
-  defaultModel: "sonnet",
+  model: "custom:gemini-3-pro-8",
+  defaultModel: "custom:gemini-3-pro-8",
 };
 
 /**
@@ -198,8 +198,8 @@ export const informationArchitectAgent: AgentConfig = {
   description:
     "Taxonomy, navigation, findability, naming consistency (Sonnet).",
   prompt: loadAgentPrompt("information-architect"),
-  model: "sonnet",
-  defaultModel: "sonnet",
+  model: "custom:gemini-3-pro-8",
+  defaultModel: "custom:gemini-3-pro-8",
 };
 
 /**
@@ -210,8 +210,8 @@ export const productAnalystAgent: AgentConfig = {
   description:
     "Product metrics, funnel analysis, experiment design, KPI definitions (Sonnet).",
   prompt: loadAgentPrompt("product-analyst"),
-  model: "sonnet",
-  defaultModel: "sonnet",
+  model: "custom:gemini-3-pro-8",
+  defaultModel: "custom:gemini-3-pro-8",
 };
 
 // ============================================================
@@ -226,8 +226,8 @@ export const securityReviewerAgent: AgentConfig = {
   description:
     "Security vulnerability detection specialist (Sonnet). Use for security audits and OWASP detection.",
   prompt: loadAgentPrompt("security-reviewer"),
-  model: "sonnet",
-  defaultModel: "sonnet",
+  model: "custom:claude-opus-4.5-6",
+  defaultModel: "custom:claude-opus-4.5-6",
 };
 
 /**
@@ -238,8 +238,8 @@ export const buildFixerAgent: AgentConfig = {
   description:
     "Build and compilation error resolution specialist (Sonnet). Use for fixing build/type errors in any language.",
   prompt: loadAgentPrompt("build-fixer"),
-  model: "sonnet",
-  defaultModel: "sonnet",
+  model: "custom:gpt-5.3-codex-3",
+  defaultModel: "custom:gpt-5.3-codex-3",
 };
 
 /**
@@ -250,8 +250,8 @@ export const codeReviewerAgent: AgentConfig = {
   description:
     "Expert code review specialist (Opus). Use for comprehensive code quality review.",
   prompt: loadAgentPrompt("code-reviewer"),
-  model: "opus",
-  defaultModel: "opus",
+  model: "custom:claude-opus-4.5-6",
+  defaultModel: "custom:claude-opus-4.5-6",
 };
 
 /**
@@ -262,8 +262,8 @@ export const gitMasterAgent: AgentConfig = {
   description:
     "Git expert for atomic commits, rebasing, and history management with style detection",
   prompt: loadAgentPrompt("git-master"),
-  model: "sonnet",
-  defaultModel: "sonnet",
+  model: "custom:gpt-5.3-codex-3",
+  defaultModel: "custom:gpt-5.3-codex-3",
 };
 
 // ============================================================

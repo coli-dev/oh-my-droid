@@ -37,8 +37,8 @@ export const exploreAgent = {
     name: "explore",
     description: "Fast codebase exploration and pattern search. Use for finding files, understanding structure, locating implementations. Searches INTERNAL codebase.",
     prompt: loadAgentPrompt("explore"),
-    model: "haiku",
-    defaultModel: "haiku",
+    model: "custom:gpt-5.2-codex-mini-0",
+    defaultModel: "custom:gpt-5.2-codex-mini-0",
     metadata: EXPLORE_PROMPT_METADATA,
 };
 //# sourceMappingURL=explore.js.map

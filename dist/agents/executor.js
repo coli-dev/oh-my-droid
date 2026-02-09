@@ -36,8 +36,8 @@ export const executorAgent = {
     name: "executor",
     description: "Focused task executor. Execute tasks directly. NEVER delegate or spawn other droids. Same discipline as Sisyphus, no delegation.",
     prompt: loadAgentPrompt("executor"),
-    model: "sonnet",
-    defaultModel: "sonnet",
+    model: "custom:gpt-5.2-codex-2",
+    defaultModel: "custom:gpt-5.2-codex-2",
     metadata: SISYPHUS_JUNIOR_PROMPT_METADATA,
 };
 //# sourceMappingURL=executor.js.map

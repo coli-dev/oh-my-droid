@@ -102,6 +102,15 @@ function createDecision(
  * Convert ModelType to ComplexityTier
  */
 function modelTypeToTier(modelType: string): ComplexityTier {
+  if (modelType.includes('gpt-5.3-codex-3') || modelType.includes('claude-opus') || modelType === 'opus') {
+    return 'HIGH';
+  }
+  if (modelType.includes('gpt-5.2-codex-mini-0') || modelType.includes('claude-haiku') || modelType === 'haiku') {
+    return 'LOW';
+  }
+  if (modelType.includes('gpt-5.2-codex-2') || modelType.includes('claude-sonnet') || modelType === 'sonnet') {
+    return 'MEDIUM';
+  }
   switch (modelType) {
     case 'opus':
       return 'HIGH';
@@ -243,13 +252,13 @@ export function getModelForTask(
   agentType: string,
   taskPrompt: string,
   config: Partial<RoutingConfig> = {}
-): { model: 'haiku' | 'sonnet' | 'opus'; tier: ComplexityTier; reason: string } {
+): { model: string; tier: ComplexityTier; reason: string } {
   // All droids are adaptive based on task complexity
   // Use agent-specific rules for advisory droids, general rules for others
   const decision = routeTask({ taskPrompt, agentType }, config);
 
   return {
-    model: decision.modelType as 'haiku' | 'sonnet' | 'opus',
+    model: decision.modelType,
     tier: decision.tier,
     reason: decision.reasons[0] ?? 'Complexity analysis',
   };

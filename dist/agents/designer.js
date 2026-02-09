@@ -37,8 +37,8 @@ export const designerAgent = {
     name: "designer",
     description: `Designer-turned-developer who crafts stunning UI/UX even without design mockups. Use for VISUAL changes only (styling, layout, animation). Pure logic changes in frontend files should be handled directly.`,
     prompt: loadAgentPrompt("designer"),
-    model: "sonnet",
-    defaultModel: "sonnet",
+    model: "custom:gemini-3-pro-8",
+    defaultModel: "custom:gemini-3-pro-8",
     metadata: FRONTEND_ENGINEER_PROMPT_METADATA,
 };
 //# sourceMappingURL=designer.js.map

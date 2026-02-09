@@ -49,7 +49,7 @@ export const architectAgent: AgentConfig = {
   description:
     "Read-only consultation agent. High-IQ reasoning specialist for debugging hard problems and high-difficulty architecture design.",
   prompt: loadAgentPrompt("architect"),
-  model: "opus",
-  defaultModel: "opus",
+  model: "custom:claude-opus-4.5-6",
+  defaultModel: "custom:claude-opus-4.5-6",
   metadata: ARCHITECT_PROMPT_METADATA,
 };

@@ -37,7 +37,7 @@ export const analystAgent: AgentConfig = {
   name: "analyst",
   description: `Pre-planning consultant that analyzes requests before implementation to identify hidden requirements, edge cases, and potential risks. Use before creating a work plan.`,
   prompt: loadAgentPrompt("analyst"),
-  model: "opus",
-  defaultModel: "opus",
+  model: "custom:claude-opus-4.5-6",
+  defaultModel: "custom:claude-opus-4.5-6",
   metadata: ANALYST_PROMPT_METADATA,
 };

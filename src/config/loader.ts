@@ -19,22 +19,22 @@ import { getConfigDir } from "../utils/paths.js";
  */
 export const DEFAULT_CONFIG: PluginConfig = {
   droids: {
-    omd: { model: "claude-opus-4-6-20260205" },
-    architect: { model: "claude-opus-4-6-20260205", enabled: true },
-    researcher: { model: "claude-sonnet-4-5-20250929" },
-    explore: { model: "claude-haiku-4-5-20251001" },
-    frontendEngineer: { model: "claude-sonnet-4-5-20250929", enabled: true },
-    documentWriter: { model: "claude-haiku-4-5-20251001", enabled: true },
-    multimodalLooker: { model: "claude-sonnet-4-5-20250929", enabled: true },
+    omd: { model: "custom:gpt-5.3-codex-3" },
+    architect: { model: "custom:claude-opus-4.5-6", enabled: true },
+    researcher: { model: "custom:gpt-5.2-1" },
+    explore: { model: "custom:gpt-5.2-codex-mini-0" },
+    frontendEngineer: { model: "custom:gemini-3-pro-8", enabled: true },
+    documentWriter: { model: "custom:claude-haiku-4.5-4", enabled: true },
+    multimodalLooker: { model: "custom:gemini-3-pro-8", enabled: true },
     // New droids from oh-my-opencode
-    critic: { model: "claude-opus-4-6-20260205", enabled: true },
-    analyst: { model: "claude-opus-4-6-20260205", enabled: true },
+    critic: { model: "custom:claude-opus-4.5-6", enabled: true },
+    analyst: { model: "custom:claude-opus-4.5-6", enabled: true },
     orchestratorSisyphus: {
-      model: "claude-sonnet-4-5-20250929",
+      model: "custom:gpt-5.3-codex-3",
       enabled: true,
     },
-    sisyphusJunior: { model: "claude-sonnet-4-5-20250929", enabled: true },
-    planner: { model: "claude-opus-4-6-20260205", enabled: true },
+    sisyphusJunior: { model: "custom:gpt-5.2-codex-2", enabled: true },
+    planner: { model: "custom:claude-opus-4.5-6", enabled: true },
   },
   features: {
     parallelExecution: true,
@@ -66,9 +66,9 @@ export const DEFAULT_CONFIG: PluginConfig = {
     escalationEnabled: true,
     maxEscalations: 2,
     tierModels: {
-      LOW: "claude-haiku-4-5-20251001",
-      MEDIUM: "claude-sonnet-4-5-20250929",
-      HIGH: "claude-opus-4-6-20260205",
+      LOW: "custom:gpt-5.2-codex-mini-0",
+      MEDIUM: "custom:gpt-5.2-codex-2",
+      HIGH: "custom:gpt-5.3-codex-3",
     },
     agentOverrides: {
       architect: {

@@ -17,9 +17,9 @@ export type ComplexityTier = 'LOW' | 'MEDIUM' | 'HIGH';
  * Model tier mapping to actual Droid models
  */
 export const TIER_MODELS: Record<ComplexityTier, string> = {
-  LOW: 'claude-haiku-4-5-20251001',
-  MEDIUM: 'claude-sonnet-4-5-20250929',
-  HIGH: 'claude-opus-4-6-20260205',
+  LOW: 'custom:gpt-5.2-codex-mini-0',
+  MEDIUM: 'custom:gpt-5.2-codex-2',
+  HIGH: 'custom:gpt-5.3-codex-3',
 };
 
 /**

@@ -52,7 +52,7 @@ export const qaTesterAgent: AgentConfig = {
   description:
     "Interactive CLI testing specialist using tmux. Tests CLI applications, background services, and interactive tools. Manages test sessions, sends commands, verifies output, and ensures cleanup.",
   prompt: loadAgentPrompt("qa-tester"),
-  model: "sonnet",
-  defaultModel: "sonnet",
+  model: "custom:gpt-5.2-1",
+  defaultModel: "custom:gpt-5.2-1",
   metadata: QA_TESTER_PROMPT_METADATA,
 };

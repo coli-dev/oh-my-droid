@@ -2,7 +2,20 @@
  * Shared types for Oh-My-Droid-Sisyphus
  */
 
-export type ModelType = "sonnet" | "opus" | "haiku" | "inherit";
+export type ModelType =
+  | "sonnet"
+  | "opus"
+  | "haiku"
+  | "inherit"
+  | "custom:gpt-5.2-codex-mini-0"
+  | "custom:gpt-5.2-1"
+  | "custom:gpt-5.2-codex-2"
+  | "custom:gpt-5.3-codex-3"
+  | "custom:claude-haiku-4.5-4"
+  | "custom:claude-sonnet-4.5-5"
+  | "custom:claude-opus-4.5-6"
+  | "custom:gemini-3-flash-7"
+  | "custom:gemini-3-pro-8";
 
 export interface AgentConfig {
   name: string;

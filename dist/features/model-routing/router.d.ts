@@ -54,7 +54,7 @@ export declare function quickTierForAgent(agentType: string): ComplexityTier | n
  * @returns The recommended model type ('haiku', 'sonnet', or 'opus')
  */
 export declare function getModelForTask(agentType: string, taskPrompt: string, config?: Partial<RoutingConfig>): {
-    model: 'haiku' | 'sonnet' | 'opus';
+    model: string;
     tier: ComplexityTier;
     reason: string;
 };

@@ -189,7 +189,7 @@ describe("Installer Constants", () => {
         });
         it("should contain essential sections", () => {
             const essentialSections = [
-                "Multi-Agent Orchestration",
+                "Multi-Droid Orchestration",
                 "delegation_rules",
                 "skills",
                 "cancellation",
