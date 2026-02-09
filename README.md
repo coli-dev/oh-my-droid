@@ -1,10 +1,5 @@
 # oh-my-droid
 
-This project is a fork of [Yeachan-Heo/oh-my-claudecode](https://github.com/Yeachan-Heo/oh-my-claudecode).
-
-[![npm version](https://img.shields.io/npm/v/oh-my-droid?color=cb3837)](https://www.npmjs.com/package/oh-my-droid)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-
 **Multi-droid orchestration for Droid CLI. Zero learning curve.**
 
 `oh-my-droid` extends Droid with execution modes, specialized droids, skills, hooks, model routing, and MCP bridge servers.
