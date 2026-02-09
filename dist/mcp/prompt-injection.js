@@ -4,27 +4,40 @@
  * Shared utilities for injecting system prompts into Codex/Gemini MCP tools.
  * Enables droids to pass their personality/guidelines when consulting external models.
  */
-import { loadAgentPrompt } from '../droids/utils.js';
+import { loadAgentPrompt } from "../agents/utils.js";
 /**
  * Valid agent roles that can be used with agent_role parameter.
  * Matches the agent prompt files in droids/*.md
  */
 export const VALID_AGENT_ROLES = [
-    'architect', 'architect-medium', 'architect-low',
-    'analyst', 'critic', 'planner',
-    'executor', 'executor-high', 'executor-low',
-    'deep-executor',
-    'designer', 'designer-low', 'designer-high',
-    'explore', 'explore-high',
-    'researcher',
-    'writer', 'vision',
-    'qa-tester',
-    'scientist', 'scientist-high',
-    'security-reviewer', 'security-reviewer-low',
-    'build-fixer',
-    'tdd-guide', 'tdd-guide-low',
-    'code-reviewer',
-    'git-master',
+    "architect",
+    "architect-medium",
+    "architect-low",
+    "analyst",
+    "critic",
+    "planner",
+    "executor",
+    "executor-high",
+    "executor-low",
+    "deep-executor",
+    "designer",
+    "designer-low",
+    "designer-high",
+    "explore",
+    "explore-high",
+    "researcher",
+    "writer",
+    "vision",
+    "qa-tester",
+    "scientist",
+    "scientist-high",
+    "security-reviewer",
+    "security-reviewer-low",
+    "build-fixer",
+    "tdd-guide",
+    "tdd-guide-low",
+    "code-reviewer",
+    "git-master",
 ];
 /**
  * Resolve the system prompt from either explicit system_prompt or agent_role.
@@ -43,7 +56,7 @@ export function resolveSystemPrompt(systemPrompt, agentRole) {
         // loadAgentPrompt already validates the name and handles errors gracefully
         const prompt = loadAgentPrompt(role);
         // loadAgentPrompt returns "Agent: {name}\n\nPrompt unavailable." on failure
-        if (prompt.includes('Prompt unavailable')) {
+        if (prompt.includes("Prompt unavailable")) {
             console.warn(`[prompt-injection] Agent role "${role}" prompt not found, skipping injection`);
             return undefined;
         }
@@ -67,6 +80,6 @@ export function buildPromptWithSystemContext(userPrompt, fileContext, systemProm
         parts.push(fileContext);
     }
     parts.push(userPrompt);
-    return parts.join('\n\n');
+    return parts.join("\n\n");
 }
 //# sourceMappingURL=prompt-injection.js.map

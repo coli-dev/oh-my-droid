@@ -12,7 +12,7 @@
  * echo "$INPUT" | node ~/.factory/omd/hook-bridge.mjs --hook=keyword-detector
  * ```
  */
-import { pathToFileURL } from 'url';
+import { pathToFileURL } from "url";
 import { removeCodeBlocks, getAllKeywords } from "./keyword-detector/index.js";
 import { readRalphState, incrementRalphIteration, clearRalphState, createRalphLoopHook, } from "./ralph/index.js";
 import { processOrchestratorPreTool } from "./omd-orchestrator/index.js";

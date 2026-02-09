@@ -3,7 +3,7 @@
  *
  * Type definitions for the HUD state, configuration, and rendering.
  */
-import type { AutopilotStateForHud } from './elements/autopilot.js';
+import type { AutopilotStateForHud } from "./elements/autopilot.js";
 export type { AutopilotStateForHud };
 export interface BackgroundTask {
     id: string;
@@ -11,7 +11,7 @@ export interface BackgroundTask {
     agentType?: string;
     startedAt: string;
     completedAt?: string;
-    status: 'running' | 'completed' | 'failed';
+    status: "running" | "completed" | "failed";
     startTime?: string;
     exitCode?: number;
 }
@@ -42,7 +42,7 @@ export interface StatuslineStdin {
 }
 export interface TodoItem {
     content: string;
-    status: 'pending' | 'in_progress' | 'completed';
+    status: "pending" | "in_progress" | "completed";
     activeForm?: string;
 }
 export interface ActiveAgent {
@@ -50,7 +50,7 @@ export interface ActiveAgent {
     type: string;
     model?: string;
     description?: string;
-    status: 'running' | 'completed';
+    status: "running" | "completed";
     startTime: Date;
     endTime?: Date;
 }
@@ -71,7 +71,7 @@ export interface ThinkingState {
 export interface SessionHealth {
     durationMinutes: number;
     messageCount: number;
-    health: 'healthy' | 'warning' | 'critical';
+    health: "healthy" | "warning" | "critical";
     sessionCost?: number;
     totalTokens?: number;
     cacheHitRate?: number;
@@ -152,7 +152,7 @@ export interface HudRenderContext {
     /** Session health metrics */
     sessionHealth: SessionHealth | null;
 }
-export type HudPreset = 'minimal' | 'focused' | 'full' | 'opencode' | 'dense' | 'analytics';
+export type HudPreset = "minimal" | "focused" | "full" | "opencode" | "dense" | "analytics";
 /**
  * Agent display format options:
  * - count: droids:2
@@ -163,7 +163,7 @@ export type HudPreset = 'minimal' | 'focused' | 'full' | 'opencode' | 'dense' | 
  * - tasks: [analyzing code, searching...] (just descriptions - most readable)
  * - multiline: Multi-line display with full agent details on separate lines
  */
-export type AgentsFormat = 'count' | 'codes' | 'codes-duration' | 'detailed' | 'descriptions' | 'tasks' | 'multiline';
+export type AgentsFormat = "count" | "codes" | "codes-duration" | "detailed" | "descriptions" | "tasks" | "multiline";
 /**
  * Thinking indicator format options:
  * - bubble: 💭 (thought bubble emoji)
@@ -171,14 +171,14 @@ export type AgentsFormat = 'count' | 'codes' | 'codes-duration' | 'detailed' | '
  * - face: 🤔 (thinking face emoji)
  * - text: "thinking" (full text)
  */
-export type ThinkingFormat = 'bubble' | 'brain' | 'face' | 'text';
+export type ThinkingFormat = "bubble" | "brain" | "face" | "text";
 /**
  * CWD path format options:
  * - relative: ~/workspace/dotfiles (home-relative)
  * - absolute: /Users/dat/workspace/dotfiles (full path)
  * - folder: dotfiles (folder name only)
  */
-export type CwdFormat = 'relative' | 'absolute' | 'folder';
+export type CwdFormat = "relative" | "absolute" | "folder";
 export interface HudElementConfig {
     cwd: boolean;
     cwdFormat: CwdFormat;

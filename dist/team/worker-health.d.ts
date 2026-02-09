@@ -3,13 +3,13 @@
  * Aggregates heartbeat, tmux session, task history, and audit log data
  * to provide a comprehensive health report for each worker.
  */
-import type { HeartbeatData } from './types.js';
+import type { HeartbeatData } from "./types.js";
 export interface WorkerHealthReport {
     workerName: string;
     isAlive: boolean;
     tmuxSessionAlive: boolean;
     heartbeatAge: number | null;
-    status: HeartbeatData['status'] | 'dead' | 'unknown';
+    status: HeartbeatData["status"] | "dead" | "unknown";
     consecutiveErrors: number;
     currentTaskId: string | null;
     totalTasksCompleted: number;

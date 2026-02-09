@@ -6,7 +6,7 @@
  *
  * Ported from oh-my-opencode's agent utils.
  */
-import type { AgentConfig, AgentPromptMetadata, AvailableAgent, AgentOverrideConfig } from './types.js';
+import type { AgentConfig, AgentPromptMetadata, AvailableAgent, AgentOverrideConfig } from "./types.js";
 /**
  * Load an agent prompt from /droids/{agentName}.md
  * Strips YAML frontmatter and returns the content

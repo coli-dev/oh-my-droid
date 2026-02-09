@@ -1,4 +1,4 @@
-import type { TaskFile, TaskFileUpdate, TaskFailureSidecar } from './types.js';
+import type { TaskFile, TaskFileUpdate, TaskFailureSidecar } from "./types.js";
 /** Handle returned by acquireTaskLock; pass to releaseTaskLock. */
 export interface LockHandle {
     fd: number;

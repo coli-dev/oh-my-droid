@@ -1,4 +1,4 @@
-import type { HeartbeatData } from './types.js';
+import type { HeartbeatData } from "./types.js";
 /** Write/update heartbeat. Called every poll cycle by the bridge. */
 export declare function writeHeartbeat(workingDirectory: string, data: HeartbeatData): void;
 /** Read heartbeat for a specific worker. Returns null if not found. */

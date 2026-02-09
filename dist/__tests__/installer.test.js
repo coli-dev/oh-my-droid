@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { VERSION, DROID_CONFIG_DIR, AGENTS_DIR, COMMANDS_DIR, SKILLS_DIR, HOOKS_DIR, isRunningAsPlugin, isProjectScopedPlugin, } from '../installer/index.js';
-import { join, dirname } from 'path';
-import { homedir } from 'os';
-import { readdirSync, readFileSync, existsSync } from 'fs';
-import { fileURLToPath } from 'url';
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { VERSION, DROID_CONFIG_DIR, AGENTS_DIR, COMMANDS_DIR, SKILLS_DIR, HOOKS_DIR, isRunningAsPlugin, isProjectScopedPlugin, } from "../installer/index.js";
+import { join, dirname } from "path";
+import { homedir } from "os";
+import { readdirSync, readFileSync, existsSync } from "fs";
+import { fileURLToPath } from "url";
 /**
  * Get the package root directory for testing
  */
@@ -11,20 +11,20 @@ function getPackageDir() {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = dirname(__filename);
     // From src/__tests__/installer.test.ts, go up to package root
-    return join(__dirname, '..', '..');
+    return join(__dirname, "..", "..");
 }
 /**
  * Load agent definitions for testing
  */
 function loadAgentDefinitions() {
-    const agentsDir = join(getPackageDir(), 'droids');
+    const agentsDir = join(getPackageDir(), "droids");
     const definitions = {};
     if (!existsSync(agentsDir)) {
         throw new Error(`droids directory not found: ${agentsDir}`);
     }
     for (const file of readdirSync(agentsDir)) {
-        if (file.endsWith('.md')) {
-            definitions[file] = readFileSync(join(agentsDir, file), 'utf-8');
+        if (file.endsWith(".md")) {
+            definitions[file] = readFileSync(join(agentsDir, file), "utf-8");
         }
     }
     return definitions;
@@ -33,14 +33,14 @@ function loadAgentDefinitions() {
  * Load command definitions for testing
  */
 function loadCommandDefinitions() {
-    const commandsDir = join(getPackageDir(), 'commands');
+    const commandsDir = join(getPackageDir(), "commands");
     const definitions = {};
     if (!existsSync(commandsDir)) {
         throw new Error(`commands directory not found: ${commandsDir}`);
     }
     for (const file of readdirSync(commandsDir)) {
-        if (file.endsWith('.md')) {
-            definitions[file] = readFileSync(join(commandsDir, file), 'utf-8');
+        if (file.endsWith(".md")) {
+            definitions[file] = readFileSync(join(commandsDir, file), "utf-8");
         }
     }
     return definitions;
@@ -49,43 +49,43 @@ function loadCommandDefinitions() {
  * Load AGENTS.md content for testing
  */
 function loadDroidMdContent() {
-    const droidMdPath = join(getPackageDir(), 'docs', 'AGENTS.md');
+    const droidMdPath = join(getPackageDir(), "docs", "AGENTS.md");
     if (!existsSync(droidMdPath)) {
         throw new Error(`AGENTS.md not found: ${droidMdPath}`);
     }
-    return readFileSync(droidMdPath, 'utf-8');
+    return readFileSync(droidMdPath, "utf-8");
 }
-describe('Installer Constants', () => {
+describe("Installer Constants", () => {
     // Load definitions once for all tests
     const AGENT_DEFINITIONS = loadAgentDefinitions();
     const COMMAND_DEFINITIONS = loadCommandDefinitions();
     const DROID_MD_CONTENT = loadDroidMdContent();
-    describe('AGENT_DEFINITIONS', () => {
-        it('should contain expected core droids', () => {
+    describe("AGENT_DEFINITIONS", () => {
+        it("should contain expected core droids", () => {
             const expectedAgents = [
-                'architect.md',
-                'explore.md',
-                'designer.md',
-                'writer.md',
-                'vision.md',
-                'critic.md',
-                'analyst.md',
-                'executor.md',
-                'planner.md',
-                'qa-tester.md',
-                'debugger.md',
-                'verifier.md',
+                "architect.md",
+                "explore.md",
+                "designer.md",
+                "writer.md",
+                "vision.md",
+                "critic.md",
+                "analyst.md",
+                "executor.md",
+                "planner.md",
+                "qa-tester.md",
+                "debugger.md",
+                "verifier.md",
             ];
             for (const agent of expectedAgents) {
                 expect(AGENT_DEFINITIONS).toHaveProperty(agent);
-                expect(typeof AGENT_DEFINITIONS[agent]).toBe('string');
+                expect(typeof AGENT_DEFINITIONS[agent]).toBe("string");
                 expect(AGENT_DEFINITIONS[agent].length).toBeGreaterThan(0);
             }
         });
-        it('should have valid frontmatter for each agent', () => {
+        it("should have valid frontmatter for each agent", () => {
             for (const [filename, content] of Object.entries(AGENT_DEFINITIONS)) {
                 // Skip non-agent files (AGENTS.md is documentation, not an agent)
-                if (filename === 'AGENTS.md')
+                if (filename === "AGENTS.md")
                     continue;
                 // Check for frontmatter delimiters
                 expect(content).toMatch(/^---\n/);
@@ -101,7 +101,7 @@ describe('Installer Constants', () => {
                 // Model is optional in some agent definitions
             }
         });
-        it('should have unique agent names', () => {
+        it("should have unique agent names", () => {
             const names = new Set();
             for (const content of Object.values(AGENT_DEFINITIONS)) {
                 const nameMatch = content.match(/^name:\s+(\S+)/m);
@@ -111,51 +111,51 @@ describe('Installer Constants', () => {
                 names.add(name);
             }
         });
-        it('should have consistent model assignments', () => {
+        it("should have consistent model assignments", () => {
             const modelExpectations = {
-                'architect.md': 'opus',
-                'executor.md': 'sonnet',
-                'designer.md': 'sonnet',
-                'writer.md': 'haiku',
-                'vision.md': 'sonnet',
-                'critic.md': 'opus',
-                'analyst.md': 'opus',
-                'planner.md': 'opus',
-                'qa-tester.md': 'sonnet',
-                'debugger.md': 'sonnet',
-                'verifier.md': 'sonnet',
-                'style-reviewer.md': 'haiku',
-                'quality-reviewer.md': 'opus',
-                'api-reviewer.md': 'sonnet',
-                'performance-reviewer.md': 'sonnet',
-                'test-engineer.md': 'sonnet',
-                'security-reviewer.md': 'opus',
-                'build-fixer.md': 'sonnet',
-                'git-master.md': 'sonnet',
-                'deep-executor.md': 'opus',
+                "architect.md": "opus",
+                "executor.md": "sonnet",
+                "designer.md": "sonnet",
+                "writer.md": "haiku",
+                "vision.md": "sonnet",
+                "critic.md": "opus",
+                "analyst.md": "opus",
+                "planner.md": "opus",
+                "qa-tester.md": "sonnet",
+                "debugger.md": "sonnet",
+                "verifier.md": "sonnet",
+                "style-reviewer.md": "haiku",
+                "quality-reviewer.md": "opus",
+                "api-reviewer.md": "sonnet",
+                "performance-reviewer.md": "sonnet",
+                "test-engineer.md": "sonnet",
+                "security-reviewer.md": "opus",
+                "build-fixer.md": "sonnet",
+                "git-master.md": "sonnet",
+                "deep-executor.md": "opus",
             };
             for (const [filename, expectedModel] of Object.entries(modelExpectations)) {
                 const content = AGENT_DEFINITIONS[filename];
                 expect(content).toBeTruthy();
-                expect(content).toMatch(new RegExp(`^model:\\s+${expectedModel}`, 'm'));
+                expect(content).toMatch(new RegExp(`^model:\\s+${expectedModel}`, "m"));
             }
         });
-        it('should not contain duplicate file names', () => {
+        it("should not contain duplicate file names", () => {
             const filenames = Object.keys(AGENT_DEFINITIONS);
             const uniqueFilenames = new Set(filenames);
             expect(filenames.length).toBe(uniqueFilenames.size);
         });
     });
-    describe('COMMAND_DEFINITIONS', () => {
-        it('should contain expected commands (0 commands - all migrated to skills)', () => {
+    describe("COMMAND_DEFINITIONS", () => {
+        it("should contain expected commands (0 commands - all migrated to skills)", () => {
             const expectedCommands = [];
             for (const command of expectedCommands) {
                 expect(COMMAND_DEFINITIONS).toHaveProperty(command);
-                expect(typeof COMMAND_DEFINITIONS[command]).toBe('string');
+                expect(typeof COMMAND_DEFINITIONS[command]).toBe("string");
                 expect(COMMAND_DEFINITIONS[command].length).toBeGreaterThan(0);
             }
         });
-        it('should have valid frontmatter for each command', () => {
+        it("should have valid frontmatter for each command", () => {
             for (const [_filename, content] of Object.entries(COMMAND_DEFINITIONS)) {
                 // Check for frontmatter delimiters
                 expect(content).toMatch(/^---\n/);
@@ -168,101 +168,97 @@ describe('Installer Constants', () => {
                 expect(frontmatter).toMatch(/^description:\s+.+/m);
             }
         });
-        it('should not contain duplicate command names', () => {
+        it("should not contain duplicate command names", () => {
             const commandNames = Object.keys(COMMAND_DEFINITIONS);
             const uniqueNames = new Set(commandNames);
             expect(commandNames.length).toBe(uniqueNames.size);
         });
-        it('should contain $ARGUMENTS placeholder in commands that need it', () => {
+        it("should contain $ARGUMENTS placeholder in commands that need it", () => {
             const commandsWithArgs = [];
             for (const command of commandsWithArgs) {
                 const content = COMMAND_DEFINITIONS[command];
-                expect(content).toContain('$ARGUMENTS');
+                expect(content).toContain("$ARGUMENTS");
             }
         });
     });
-    describe('DROID_MD_CONTENT', () => {
-        it('should be valid markdown', () => {
-            expect(typeof DROID_MD_CONTENT).toBe('string');
+    describe("DROID_MD_CONTENT", () => {
+        it("should be valid markdown", () => {
+            expect(typeof DROID_MD_CONTENT).toBe("string");
             expect(DROID_MD_CONTENT.length).toBeGreaterThan(100);
             expect(DROID_MD_CONTENT).toMatch(/^#\s+/m); // Has headers
         });
-        it('should contain essential sections', () => {
+        it("should contain essential sections", () => {
             const essentialSections = [
-                'Multi-Agent Orchestration',
-                'delegation_rules',
-                'skills',
-                'cancellation',
+                "Multi-Agent Orchestration",
+                "delegation_rules",
+                "skills",
+                "cancellation",
             ];
             for (const section of essentialSections) {
                 expect(DROID_MD_CONTENT).toContain(section);
             }
         });
-        it('should reference all core droids', () => {
+        it("should reference all core droids", () => {
             // The new AGENTS.md has droids in tables and examples
             // We'll check for a subset of key droids to ensure the section exists
             const keyAgents = [
-                'architect',
-                'executor',
-                'explore',
-                'designer',
-                'writer',
-                'planner',
+                "architect",
+                "executor",
+                "explore",
+                "designer",
+                "writer",
+                "planner",
             ];
             for (const agent of keyAgents) {
                 // Agents appear in tables and delegation examples
                 expect(DROID_MD_CONTENT).toContain(agent);
             }
         });
-        it('should include model routing', () => {
+        it("should include model routing", () => {
             // Verify model routing section exists with model names
-            expect(DROID_MD_CONTENT).toContain('model_routing');
-            expect(DROID_MD_CONTENT).toContain('haiku');
-            expect(DROID_MD_CONTENT).toContain('sonnet');
-            expect(DROID_MD_CONTENT).toContain('opus');
+            expect(DROID_MD_CONTENT).toContain("model_routing");
+            expect(DROID_MD_CONTENT).toContain("haiku");
+            expect(DROID_MD_CONTENT).toContain("sonnet");
+            expect(DROID_MD_CONTENT).toContain("opus");
         });
-        it('should document magic keywords and compatibility commands', () => {
+        it("should document magic keywords and compatibility commands", () => {
             // Keywords are now in skill trigger columns
             // Check for key keywords in the skill tables
-            const keywords = [
-                'ralph',
-                'ulw',
-                'plan',
-            ];
+            const keywords = ["ralph", "ulw", "plan"];
             for (const keyword of keywords) {
                 expect(DROID_MD_CONTENT).toContain(keyword);
             }
             // Verify skills section exists with trigger patterns
-            expect(DROID_MD_CONTENT).toContain('skills');
-            expect(DROID_MD_CONTENT).toContain('trigger');
+            expect(DROID_MD_CONTENT).toContain("skills");
+            expect(DROID_MD_CONTENT).toContain("trigger");
         });
-        it('should contain XML behavioral tags', () => {
+        it("should contain XML behavioral tags", () => {
             // Check for XML tag structure used in best-practices rewrite
             expect(DROID_MD_CONTENT).toMatch(/<\w+>/); // Contains opening tags
             expect(DROID_MD_CONTENT).toMatch(/<\/\w+>/); // Contains closing tags
         });
     });
-    describe('VERSION', () => {
-        it('should be properly formatted', () => {
-            expect(typeof VERSION).toBe('string');
+    describe("VERSION", () => {
+        it("should be properly formatted", () => {
+            expect(typeof VERSION).toBe("string");
             // Semantic versioning pattern (with optional beta suffix)
             expect(VERSION).toMatch(/^\d+\.\d+\.\d+(-[\w.]+)?$/);
         });
-        it('should match package.json version', () => {
+        it("should match package.json version", () => {
             // This is a runtime check - VERSION should match the package.json
-            expect(VERSION).toBe('0.0.1');
+            expect(VERSION).toBe("0.0.1");
         });
     });
-    describe('File Paths', () => {
-        it('should define valid directory paths', () => {
-            const expectedBase = join(homedir(), '.factory');
+    describe("File Paths", () => {
+        it("should define valid directory paths", () => {
+            const expectedBase = join(homedir(), ".factory");
             expect(DROID_CONFIG_DIR).toBe(expectedBase);
-            expect(AGENTS_DIR).toBe(join(expectedBase, 'droids'));
-            expect(COMMANDS_DIR).toBe(join(expectedBase, 'commands'));
-            expect(SKILLS_DIR).toBe(join(expectedBase, 'skills'));
-            expect(HOOKS_DIR).toBe(join(expectedBase, 'hooks'));
+            expect(AGENTS_DIR).toBe(join(expectedBase, "droids"));
+            expect(COMMANDS_DIR).toBe(join(expectedBase, "commands"));
+            expect(SKILLS_DIR).toBe(join(expectedBase, "skills"));
+            expect(HOOKS_DIR).toBe(join(expectedBase, "hooks"));
         });
-        it('should use absolute paths', () => {
+        it("should use absolute paths", () => {
             const paths = [
                 DROID_CONFIG_DIR,
                 AGENTS_DIR,
@@ -276,23 +272,23 @@ describe('Installer Constants', () => {
             }
         });
     });
-    describe('Content Consistency', () => {
-        it('should not have duplicate agent definitions', () => {
+    describe("Content Consistency", () => {
+        it("should not have duplicate agent definitions", () => {
             const agentKeys = Object.keys(AGENT_DEFINITIONS);
             const uniqueAgentKeys = new Set(agentKeys);
             expect(agentKeys.length).toBe(uniqueAgentKeys.size);
         });
-        it('should not have duplicate command definitions', () => {
+        it("should not have duplicate command definitions", () => {
             const commandKeys = Object.keys(COMMAND_DEFINITIONS);
             const uniqueCommandKeys = new Set(commandKeys);
             expect(commandKeys.length).toBe(uniqueCommandKeys.size);
         });
-        it('should have droids referenced in AGENTS.md exist in AGENT_DEFINITIONS', () => {
+        it("should have droids referenced in AGENTS.md exist in AGENT_DEFINITIONS", () => {
             const agentMatches = DROID_MD_CONTENT.matchAll(/\`([a-z-]+)\`\s*\|\s*(Opus|Sonnet|Haiku)/g);
             for (const match of agentMatches) {
                 const agentName = match[1];
                 // Find corresponding agent file
-                const agentFile = Object.keys(AGENT_DEFINITIONS).find(key => {
+                const agentFile = Object.keys(AGENT_DEFINITIONS).find((key) => {
                     const content = AGENT_DEFINITIONS[key];
                     const nameMatch = content.match(/^name:\s+(\S+)/m);
                     return nameMatch && nameMatch[1] === agentName;
@@ -300,27 +296,30 @@ describe('Installer Constants', () => {
                 expect(agentFile).toBeTruthy();
             }
         });
-        it('should have all agent definitions contain role descriptions', () => {
+        it("should have all agent definitions contain role descriptions", () => {
             // Agents that use different description formats (not "You are a..." style)
-            const alternateFormatAgents = ['qa-tester.md'];
+            const alternateFormatAgents = ["qa-tester.md"];
             for (const [filename, content] of Object.entries(AGENT_DEFINITIONS)) {
                 // Skip non-agent files
-                if (filename === 'AGENTS.md')
+                if (filename === "AGENTS.md")
                     continue;
                 // Skip tiered variants and droids with alternate formats
-                if (!filename.includes('-low') && !filename.includes('-medium') && !filename.includes('-high') && !alternateFormatAgents.includes(filename)) {
+                if (!filename.includes("-low") &&
+                    !filename.includes("-medium") &&
+                    !filename.includes("-high") &&
+                    !alternateFormatAgents.includes(filename)) {
                     // Check for either <Role> tags or role description in various forms
-                    const hasRoleSection = content.includes('<Role>') ||
-                        content.includes('You are a') ||
-                        content.includes('You are an') ||
-                        content.includes('You interpret') ||
-                        content.includes('Named after');
+                    const hasRoleSection = content.includes("<Role>") ||
+                        content.includes("You are a") ||
+                        content.includes("You are an") ||
+                        content.includes("You interpret") ||
+                        content.includes("Named after");
                     expect(hasRoleSection).toBe(true);
                 }
             }
         });
-        it('should have read-only droids not include Edit/Write tools', () => {
-            const readOnlyAgents = ['architect.md', 'critic.md', 'analyst.md'];
+        it("should have read-only droids not include Edit/Write tools", () => {
+            const readOnlyAgents = ["architect.md", "critic.md", "analyst.md"];
             for (const agent of readOnlyAgents) {
                 const content = AGENT_DEFINITIONS[agent];
                 // Read-only droids use disallowedTools: to block Edit/Write
@@ -331,12 +330,8 @@ describe('Installer Constants', () => {
                 expect(disallowed).toMatch(/\bWrite\b/);
             }
         });
-        it('should have implementation droids include Edit/Write tools', () => {
-            const implementationAgents = [
-                'executor.md',
-                'designer.md',
-                'writer.md',
-            ];
+        it("should have implementation droids include Edit/Write tools", () => {
+            const implementationAgents = ["executor.md", "designer.md", "writer.md"];
             for (const agent of implementationAgents) {
                 const content = AGENT_DEFINITIONS[agent];
                 // Implementation droids should NOT have Edit/Write in disallowedTools
@@ -352,7 +347,7 @@ describe('Installer Constants', () => {
             }
         });
     });
-    describe('Plugin Detection', () => {
+    describe("Plugin Detection", () => {
         let originalEnv;
         beforeEach(() => {
             // Save original env var
@@ -367,20 +362,21 @@ describe('Installer Constants', () => {
                 delete process.env.factory_PLUGIN_ROOT;
             }
         });
-        it('should return false when DROID_PLUGIN_ROOT is not set', () => {
+        it("should return false when DROID_PLUGIN_ROOT is not set", () => {
             delete process.env.factory_PLUGIN_ROOT;
             expect(isRunningAsPlugin()).toBe(false);
         });
-        it('should return true when DROID_PLUGIN_ROOT is set', () => {
-            process.env.factory_PLUGIN_ROOT = '/home/user/.factory/plugins/marketplaces/oh-my-droid';
+        it("should return true when DROID_PLUGIN_ROOT is set", () => {
+            process.env.factory_PLUGIN_ROOT =
+                "/home/user/.factory/plugins/marketplaces/oh-my-droid";
             expect(isRunningAsPlugin()).toBe(true);
         });
-        it('should detect plugin context from environment variable', () => {
-            process.env.factory_PLUGIN_ROOT = '/any/path';
+        it("should detect plugin context from environment variable", () => {
+            process.env.factory_PLUGIN_ROOT = "/any/path";
             expect(isRunningAsPlugin()).toBe(true);
         });
     });
-    describe('Project-Scoped Plugin Detection', () => {
+    describe("Project-Scoped Plugin Detection", () => {
         let originalEnv;
         beforeEach(() => {
             originalEnv = process.env.factory_PLUGIN_ROOT;
@@ -393,37 +389,41 @@ describe('Installer Constants', () => {
                 delete process.env.factory_PLUGIN_ROOT;
             }
         });
-        it('should return false when DROID_PLUGIN_ROOT is not set', () => {
+        it("should return false when DROID_PLUGIN_ROOT is not set", () => {
             delete process.env.factory_PLUGIN_ROOT;
             expect(isProjectScopedPlugin()).toBe(false);
         });
-        it('should return false for global plugin installation', () => {
+        it("should return false for global plugin installation", () => {
             // Global plugins are under ~/.factory/plugins/
-            process.env.factory_PLUGIN_ROOT = join(homedir(), '.factory', 'plugins', 'cache', 'omd', 'oh-my-droid', '3.9.0');
+            process.env.factory_PLUGIN_ROOT = join(homedir(), ".factory", "plugins", "cache", "omd", "oh-my-droid", "3.9.0");
             expect(isProjectScopedPlugin()).toBe(false);
         });
-        it('should return true for project-scoped plugin installation', () => {
+        it("should return true for project-scoped plugin installation", () => {
             // Project-scoped plugins are in the project's .factory/plugins/ directory
-            process.env.factory_PLUGIN_ROOT = '/home/user/myproject/.factory/plugins/oh-my-droid';
+            process.env.factory_PLUGIN_ROOT =
+                "/home/user/myproject/.factory/plugins/oh-my-droid";
             expect(isProjectScopedPlugin()).toBe(true);
         });
-        it('should return true when plugin is outside global plugin directory', () => {
+        it("should return true when plugin is outside global plugin directory", () => {
             // Any path that's not under ~/.factory/plugins/ is considered project-scoped
-            process.env.factory_PLUGIN_ROOT = '/var/projects/app/.factory/plugins/omd';
+            process.env.factory_PLUGIN_ROOT =
+                "/var/projects/app/.factory/plugins/omd";
             expect(isProjectScopedPlugin()).toBe(true);
         });
-        it('should handle Windows-style paths', () => {
+        it("should handle Windows-style paths", () => {
             // Windows paths with backslashes should be normalized
-            process.env.factory_PLUGIN_ROOT = 'C:\\Users\\user\\project\\.factory\\plugins\\omd';
+            process.env.factory_PLUGIN_ROOT =
+                "C:\\Users\\user\\project\\.factory\\plugins\\omd";
             expect(isProjectScopedPlugin()).toBe(true);
         });
-        it('should handle trailing slashes in paths', () => {
-            process.env.factory_PLUGIN_ROOT = join(homedir(), '.factory', 'plugins', 'cache', 'omd') + '/';
+        it("should handle trailing slashes in paths", () => {
+            process.env.factory_PLUGIN_ROOT =
+                join(homedir(), ".factory", "plugins", "cache", "omd") + "/";
             expect(isProjectScopedPlugin()).toBe(false);
         });
     });
-    describe('Content Quality', () => {
-        it('should not contain unintended placeholder text', () => {
+    describe("Content Quality", () => {
+        it("should not contain unintended placeholder text", () => {
             const allContent = [
                 ...Object.values(AGENT_DEFINITIONS),
                 ...Object.values(COMMAND_DEFINITIONS),
@@ -431,7 +431,7 @@ describe('Installer Constants', () => {
             ];
             // Note: "TODO" appears intentionally in "Todo_Discipline", "TodoWrite" tool, and "TODO OBSESSION"
             // These are legitimate uses, not placeholder text to be filled in later
-            const placeholders = ['FIXME', 'XXX', '[placeholder]'];
+            const placeholders = ["FIXME", "XXX", "[placeholder]"];
             // TBD checked with word boundary to avoid matching "JTBD" (Jobs To Be Done)
             const wordBoundaryPlaceholders = [/\bTBD\b/];
             for (const content of allContent) {
@@ -448,7 +448,7 @@ describe('Installer Constants', () => {
                 expect(hasTodoPlaceholder).toBe(false);
             }
         });
-        it('should not contain excessive blank lines', () => {
+        it("should not contain excessive blank lines", () => {
             const allContent = [
                 ...Object.values(AGENT_DEFINITIONS),
                 ...Object.values(COMMAND_DEFINITIONS),
@@ -458,16 +458,18 @@ describe('Installer Constants', () => {
                 expect(content).not.toMatch(/\n\n\n\n+/);
             }
         });
-        it('should have proper markdown formatting in frontmatter', () => {
+        it("should have proper markdown formatting in frontmatter", () => {
             for (const [filename, content] of Object.entries(AGENT_DEFINITIONS)) {
                 // Skip non-agent files
-                if (filename === 'AGENTS.md')
+                if (filename === "AGENTS.md")
                     continue;
                 const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---/);
                 expect(frontmatterMatch).toBeTruthy();
                 const frontmatter = frontmatterMatch[1];
                 // Each line should be key: value format (allow camelCase keys like disallowedTools)
-                const lines = frontmatter.split('\n').filter((line) => line.trim());
+                const lines = frontmatter
+                    .split("\n")
+                    .filter((line) => line.trim());
                 for (const line of lines) {
                     expect(line).toMatch(/^[a-zA-Z]+:\s+.+/);
                 }

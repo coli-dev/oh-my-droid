@@ -11,7 +11,7 @@ import { renderRalph } from "./elements/ralph.js";
 import {
   renderAgentsByFormat,
   renderAgentsMultiLine,
-} from "./elements/droids.js";
+} from "./elements/agents.js";
 import { renderTodosWithCurrent } from "./elements/todos.js";
 import { renderSkills, renderLastSkill } from "./elements/skills.js";
 import { renderContext, renderContextWithBar } from "./elements/context.js";

@@ -5,7 +5,7 @@ import chalk from "chalk";
 import { statsCommand } from "./commands/stats.js";
 import { costCommand } from "./commands/cost.js";
 import { sessionsCommand } from "./commands/sessions.js";
-import { agentsCommand } from "./commands/droids.js";
+import { agentsCommand } from "./commands/agents.js";
 import { exportCommand } from "./commands/export.js";
 import { cleanupCommand } from "./commands/cleanup.js";
 import {

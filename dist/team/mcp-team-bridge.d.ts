@@ -1,4 +1,4 @@
-import type { BridgeConfig } from './types.js';
+import type { BridgeConfig } from "./types.js";
 /**
  * Sanitize user-controlled content to prevent prompt injection.
  * - Truncates to maxLength

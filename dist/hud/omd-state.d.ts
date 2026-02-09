@@ -4,8 +4,8 @@
  * Read ralph, ultrawork, and PRD state from existing OMD files.
  * These are read-only functions that don't modify the state files.
  */
-import type { RalphStateForHud, UltraworkStateForHud, PrdStateForHud } from './types.js';
-import type { AutopilotStateForHud } from './elements/autopilot.js';
+import type { RalphStateForHud, UltraworkStateForHud, PrdStateForHud } from "./types.js";
+import type { AutopilotStateForHud } from "./elements/autopilot.js";
 /**
  * Read Ralph Loop state for HUD display.
  * Returns null if no state file exists or on error.
@@ -34,5 +34,5 @@ export declare function isAnyModeActive(directory: string): boolean;
  * Get active skill names for display
  */
 export declare function getActiveSkills(directory: string): string[];
-export type { AutopilotStateForHud } from './elements/autopilot.js';
+export type { AutopilotStateForHud } from "./elements/autopilot.js";
 //# sourceMappingURL=omd-state.d.ts.map

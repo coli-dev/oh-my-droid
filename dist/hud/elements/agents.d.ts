@@ -70,4 +70,4 @@ export declare function renderAgentsMultiLine(droids: ActiveAgent[], maxLines?: 
  * Render droids based on format configuration.
  */
 export declare function renderAgentsByFormat(droids: ActiveAgent[], format: AgentsFormat): string | null;
-//# sourceMappingURL=droids.d.ts.map
+//# sourceMappingURL=agents.d.ts.map

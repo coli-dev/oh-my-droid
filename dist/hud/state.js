@@ -4,11 +4,11 @@
  * Manages HUD state file for background task tracking.
  * Follows patterns from ultrawork-state.
  */
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
-import { join } from 'path';
-import { homedir } from 'os';
-import { DEFAULT_HUD_CONFIG, PRESET_CONFIGS } from './types.js';
-import { cleanupStaleBackgroundTasks, markOrphanedTasksAsStale } from './background-cleanup.js';
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
+import { join } from "path";
+import { homedir } from "os";
+import { DEFAULT_HUD_CONFIG, PRESET_CONFIGS } from "./types.js";
+import { cleanupStaleBackgroundTasks, markOrphanedTasksAsStale, } from "./background-cleanup.js";
 // ============================================================================
 // Path Helpers
 // ============================================================================
@@ -17,27 +17,27 @@ import { cleanupStaleBackgroundTasks, markOrphanedTasksAsStale } from './backgro
  */
 function getLocalStateFilePath(directory) {
     const baseDir = directory || process.cwd();
-    const omdStateDir = join(baseDir, '.omd', 'state');
-    return join(omdStateDir, 'hud-state.json');
+    const omdStateDir = join(baseDir, ".omd", "state");
+    return join(omdStateDir, "hud-state.json");
 }
 /**
  * Get Droid settings.json path
  */
 function getSettingsFilePath() {
-    return join(homedir(), '.factory', 'settings.json');
+    return join(homedir(), ".factory", "settings.json");
 }
 /**
  * Get the HUD config file path (legacy)
  */
 function getConfigFilePath() {
-    return join(homedir(), '.factory', '.omd', 'hud-config.json');
+    return join(homedir(), ".factory", ".omd", "hud-config.json");
 }
 /**
  * Ensure the .omd/state directory exists
  */
 function ensureStateDir(directory) {
     const baseDir = directory || process.cwd();
-    const omdStateDir = join(baseDir, '.omd', 'state');
+    const omdStateDir = join(baseDir, ".omd", "state");
     if (!existsSync(omdStateDir)) {
         mkdirSync(omdStateDir, { recursive: true });
     }
@@ -53,7 +53,7 @@ export function readHudState(directory) {
     const localStateFile = getLocalStateFilePath(directory);
     if (existsSync(localStateFile)) {
         try {
-            const content = readFileSync(localStateFile, 'utf-8');
+            const content = readFileSync(localStateFile, "utf-8");
             return JSON.parse(content);
         }
         catch {
@@ -62,10 +62,10 @@ export function readHudState(directory) {
     }
     // Check legacy local state (.omd/hud-state.json)
     const baseDir = directory || process.cwd();
-    const legacyStateFile = join(baseDir, '.omd', 'hud-state.json');
+    const legacyStateFile = join(baseDir, ".omd", "hud-state.json");
     if (existsSync(legacyStateFile)) {
         try {
-            const content = readFileSync(legacyStateFile, 'utf-8');
+            const content = readFileSync(legacyStateFile, "utf-8");
             return JSON.parse(content);
         }
         catch {
@@ -104,7 +104,7 @@ export function createEmptyHudState() {
 export function getRunningTasks(state) {
     if (!state)
         return [];
-    return state.backgroundTasks.filter((task) => task.status === 'running');
+    return state.backgroundTasks.filter((task) => task.status === "running");
 }
 /**
  * Get background task count string (e.g., "3/5")
@@ -112,7 +112,7 @@ export function getRunningTasks(state) {
 export function getBackgroundTaskCount(state) {
     const MAX_CONCURRENT = 5;
     const running = state
-        ? state.backgroundTasks.filter((t) => t.status === 'running').length
+        ? state.backgroundTasks.filter((t) => t.status === "running").length
         : 0;
     return { running, max: MAX_CONCURRENT };
 }
@@ -128,7 +128,7 @@ export function readHudConfig() {
     const settingsFile = getSettingsFilePath();
     if (existsSync(settingsFile)) {
         try {
-            const content = readFileSync(settingsFile, 'utf-8');
+            const content = readFileSync(settingsFile, "utf-8");
             const settings = JSON.parse(content);
             if (settings.omdHud) {
                 const config = settings.omdHud;
@@ -143,7 +143,7 @@ export function readHudConfig() {
     const configFile = getConfigFilePath();
     if (existsSync(configFile)) {
         try {
-            const content = readFileSync(configFile, 'utf-8');
+            const content = readFileSync(configFile, "utf-8");
             const config = JSON.parse(content);
             return mergeWithDefaults(config);
         }
@@ -171,7 +171,8 @@ function mergeWithDefaults(config) {
             ...DEFAULT_HUD_CONFIG.thresholds,
             ...config.thresholds,
         },
-        staleTaskThresholdMinutes: config.staleTaskThresholdMinutes ?? DEFAULT_HUD_CONFIG.staleTaskThresholdMinutes,
+        staleTaskThresholdMinutes: config.staleTaskThresholdMinutes ??
+            DEFAULT_HUD_CONFIG.staleTaskThresholdMinutes,
     };
 }
 /**
@@ -183,7 +184,7 @@ export function writeHudConfig(config) {
         let settings = {};
         // Read existing settings
         if (existsSync(settingsFile)) {
-            const content = readFileSync(settingsFile, 'utf-8');
+            const content = readFileSync(settingsFile, "utf-8");
             settings = JSON.parse(content);
         }
         // Update omdHud key

@@ -4,16 +4,16 @@
  * Defines types for agent configuration and metadata used in dynamic prompt generation.
  * Ported from oh-my-opencode's agent type system.
  */
-export type ModelType = 'sonnet' | 'opus' | 'haiku' | 'inherit';
+export type ModelType = "sonnet" | "opus" | "haiku" | "inherit";
 /**
  * Cost tier for agent usage
  * Used to guide when to invoke expensive vs cheap droids
  */
-export type AgentCost = 'FREE' | 'CHEAP' | 'EXPENSIVE';
+export type AgentCost = "FREE" | "CHEAP" | "EXPENSIVE";
 /**
  * Agent category for routing and grouping
  */
-export type AgentCategory = 'exploration' | 'specialist' | 'advisor' | 'utility' | 'orchestration' | 'planner' | 'reviewer';
+export type AgentCategory = "exploration" | "specialist" | "advisor" | "utility" | "orchestration" | "planner" | "reviewer";
 /**
  * Trigger condition for delegation
  */
@@ -76,7 +76,7 @@ export interface FullAgentConfig extends AgentConfig {
     maxTokens?: number;
     /** Thinking configuration (for Droid models) */
     thinking?: {
-        type: 'enabled' | 'disabled';
+        type: "enabled" | "disabled";
         budgetTokens?: number;
     };
     /** Tool restrictions */

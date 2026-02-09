@@ -3,7 +3,7 @@
  *
  * Handles cleanup of stale and orphaned background tasks on HUD startup.
  */
-import type { BackgroundTask } from './types.js';
+import type { BackgroundTask } from "./types.js";
 /**
  * Clean up stale background tasks from HUD state.
  * Removes tasks that are old and not recently completed.

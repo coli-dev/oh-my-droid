@@ -3,10 +3,18 @@
  *
  * Provides tools for reading and writing project memory.
  */
-import { z } from 'zod';
-import { ToolDefinition } from './types.js';
+import { z } from "zod";
+import { ToolDefinition } from "./types.js";
 export declare const projectMemoryReadTool: ToolDefinition<{
-    section: z.ZodOptional<z.ZodEnum<['all', 'techStack', 'build', 'conventions', 'structure', 'notes', 'directives']>>;
+    section: z.ZodOptional<z.ZodEnum<[
+        "all",
+        "techStack",
+        "build",
+        "conventions",
+        "structure",
+        "notes",
+        "directives"
+    ]>>;
     workingDirectory: z.ZodOptional<z.ZodString>;
 }>;
 export declare const projectMemoryWriteTool: ToolDefinition<{
@@ -22,7 +30,7 @@ export declare const projectMemoryAddNoteTool: ToolDefinition<{
 export declare const projectMemoryAddDirectiveTool: ToolDefinition<{
     directive: z.ZodString;
     context: z.ZodOptional<z.ZodString>;
-    priority: z.ZodOptional<z.ZodEnum<['high', 'normal']>>;
+    priority: z.ZodOptional<z.ZodEnum<["high", "normal"]>>;
     workingDirectory: z.ZodOptional<z.ZodString>;
 }>;
 /**

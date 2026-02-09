@@ -4,14 +4,14 @@
  * Provides SDK-compatible access to slash commands by reading
  * command templates and expanding them with arguments.
  */
-import { readFileSync, existsSync, readdirSync } from 'fs';
-import { join } from 'path';
-import { homedir } from 'os';
+import { readFileSync, existsSync, readdirSync } from "fs";
+import { join } from "path";
+import { homedir } from "os";
 /**
  * Get the commands directory path
  */
 export function getCommandsDir() {
-    return join(homedir(), '.factory', 'commands');
+    return join(homedir(), ".factory", "commands");
 }
 /**
  * Parse command frontmatter and content
@@ -19,13 +19,13 @@ export function getCommandsDir() {
 function parseCommandFile(content) {
     const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
     if (!frontmatterMatch) {
-        return { description: '', template: content };
+        return { description: "", template: content };
     }
     const frontmatter = frontmatterMatch[1];
     const template = frontmatterMatch[2];
     // Extract description from frontmatter
     const descMatch = frontmatter.match(/description:\s*(.+)/);
-    const description = descMatch ? descMatch[1].trim() : '';
+    const description = descMatch ? descMatch[1].trim() : "";
     return { description, template };
 }
 /**
@@ -38,13 +38,13 @@ export function getCommand(name) {
         return null;
     }
     try {
-        const content = readFileSync(filePath, 'utf-8');
+        const content = readFileSync(filePath, "utf-8");
         const { description, template } = parseCommandFile(content);
         return {
             name,
             description,
             template,
-            filePath
+            filePath,
         };
     }
     catch (error) {
@@ -61,10 +61,10 @@ export function getAllCommands() {
         return [];
     }
     try {
-        const files = readdirSync(commandsDir).filter(f => f.endsWith('.md'));
+        const files = readdirSync(commandsDir).filter((f) => f.endsWith(".md"));
         const commands = [];
         for (const file of files) {
-            const name = file.replace('.md', '');
+            const name = file.replace(".md", "");
             const command = getCommand(name);
             if (command) {
                 commands.push(command);
@@ -73,7 +73,7 @@ export function getAllCommands() {
         return commands;
     }
     catch (error) {
-        console.error('Error listing commands:', error);
+        console.error("Error listing commands:", error);
         return [];
     }
 }
@@ -81,7 +81,7 @@ export function getAllCommands() {
  * List available command names
  */
 export function listCommands() {
-    return getAllCommands().map(c => c.name);
+    return getAllCommands().map((c) => c.name);
 }
 /**
  * Expand a command template with arguments
@@ -98,7 +98,7 @@ export function listCommands() {
  * // Returns the full ralph template with "Build a REST API" substituted
  * ```
  */
-export function expandCommand(name, args = '') {
+export function expandCommand(name, args = "") {
     const command = getCommand(name);
     if (!command) {
         return null;
@@ -108,7 +108,7 @@ export function expandCommand(name, args = '') {
     return {
         name,
         prompt: prompt.trim(),
-        description: command.description
+        description: command.description,
     };
 }
 /**
@@ -127,7 +127,7 @@ export function expandCommand(name, args = '') {
  * }
  * ```
  */
-export function expandCommandPrompt(name, args = '') {
+export function expandCommandPrompt(name, args = "") {
     const expanded = expandCommand(name, args);
     return expanded ? expanded.prompt : null;
 }

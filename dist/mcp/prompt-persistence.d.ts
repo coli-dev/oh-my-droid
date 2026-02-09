@@ -22,7 +22,7 @@ export declare function generatePromptId(): string;
  * Options for persisting a prompt
  */
 export interface PersistPromptOptions {
-    provider: 'codex' | 'gemini';
+    provider: "codex" | "gemini";
     agentRole: string;
     model: string;
     files?: string[];
@@ -34,7 +34,7 @@ export interface PersistPromptOptions {
  * Options for persisting a response
  */
 export interface PersistResponseOptions {
-    provider: 'codex' | 'gemini';
+    provider: "codex" | "gemini";
     agentRole: string;
     model: string;
     promptId: string;
@@ -56,10 +56,10 @@ export interface PersistPromptResult {
  * Job status for background execution tracking
  */
 export interface JobStatus {
-    provider: 'codex' | 'gemini';
+    provider: "codex" | "gemini";
     jobId: string;
     slug: string;
-    status: 'spawned' | 'running' | 'completed' | 'failed' | 'timeout';
+    status: "spawned" | "running" | "completed" | "failed" | "timeout";
     pid?: number;
     promptFile: string;
     responseFile: string;
@@ -76,7 +76,7 @@ export interface JobStatus {
  * Metadata passed to background execution functions
  */
 export interface BackgroundJobMeta {
-    provider: 'codex' | 'gemini';
+    provider: "codex" | "gemini";
     jobId: string;
     slug: string;
     agentRole: string;
@@ -105,7 +105,7 @@ export declare function persistPrompt(options: PersistPromptOptions): PersistPro
  * @param workingDirectory - Optional working directory
  * @returns The expected file path for the response
  */
-export declare function getExpectedResponsePath(provider: 'codex' | 'gemini', slug: string, promptId: string, workingDirectory?: string): string;
+export declare function getExpectedResponsePath(provider: "codex" | "gemini", slug: string, promptId: string, workingDirectory?: string): string;
 /**
  * Persist a model response to disk with YAML frontmatter
  *
@@ -116,7 +116,7 @@ export declare function persistResponse(options: PersistResponseOptions): string
 /**
  * Get the status file path for a background job
  */
-export declare function getStatusFilePath(provider: 'codex' | 'gemini', slug: string, promptId: string, workingDirectory?: string): string;
+export declare function getStatusFilePath(provider: "codex" | "gemini", slug: string, promptId: string, workingDirectory?: string): string;
 /**
  * Write job status atomically (temp file + rename)
  */
@@ -125,15 +125,15 @@ export declare function writeJobStatus(status: JobStatus, workingDirectory?: str
  * Look up the working directory that was used when a job was created.
  * Returns undefined if the job was created in the server's CWD (no override).
  */
-export declare function getJobWorkingDir(provider: 'codex' | 'gemini', jobId: string): string | undefined;
+export declare function getJobWorkingDir(provider: "codex" | "gemini", jobId: string): string | undefined;
 /**
  * Read job status from disk
  */
-export declare function readJobStatus(provider: 'codex' | 'gemini', slug: string, promptId: string, workingDirectory?: string): JobStatus | undefined;
+export declare function readJobStatus(provider: "codex" | "gemini", slug: string, promptId: string, workingDirectory?: string): JobStatus | undefined;
 /**
  * Check if a background job's response is ready
  */
-export declare function checkResponseReady(provider: 'codex' | 'gemini', slug: string, promptId: string, workingDirectory?: string): {
+export declare function checkResponseReady(provider: "codex" | "gemini", slug: string, promptId: string, workingDirectory?: string): {
     ready: boolean;
     responsePath: string;
     status?: JobStatus;
@@ -141,14 +141,14 @@ export declare function checkResponseReady(provider: 'codex' | 'gemini', slug: s
 /**
  * Read a completed response, stripping YAML frontmatter
  */
-export declare function readCompletedResponse(provider: 'codex' | 'gemini', slug: string, promptId: string, workingDirectory?: string): {
+export declare function readCompletedResponse(provider: "codex" | "gemini", slug: string, promptId: string, workingDirectory?: string): {
     response: string;
     status: JobStatus;
 } | undefined;
 /**
  * List all active (spawned or running) background jobs
  */
-export declare function listActiveJobs(provider?: 'codex' | 'gemini', workingDirectory?: string): JobStatus[];
+export declare function listActiveJobs(provider?: "codex" | "gemini", workingDirectory?: string): JobStatus[];
 /**
  * Mark stale background jobs (older than maxAgeMs) as timed out
  */

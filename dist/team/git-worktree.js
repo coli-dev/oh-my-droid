@@ -6,14 +6,14 @@
  *   {repoRoot}/.omd/worktrees/{team}/{worker}
  * Branch naming: omd-team/{teamName}/{workerName}
  */
-import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { execFileSync } from 'node:child_process';
-import { atomicWriteJson, ensureDirWithMode, validateResolvedPath } from './fs-utils.js';
-import { sanitizeName } from './tmux-session.js';
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { execFileSync } from "node:child_process";
+import { atomicWriteJson, ensureDirWithMode, validateResolvedPath, } from "./fs-utils.js";
+import { sanitizeName } from "./tmux-session.js";
 /** Get worktree path for a worker */
 function getWorktreePath(repoRoot, teamName, workerName) {
-    return join(repoRoot, '.omd', 'worktrees', sanitizeName(teamName), sanitizeName(workerName));
+    return join(repoRoot, ".omd", "worktrees", sanitizeName(teamName), sanitizeName(workerName));
 }
 /** Get branch name for a worker */
 function getBranchName(teamName, workerName) {
@@ -21,7 +21,7 @@ function getBranchName(teamName, workerName) {
 }
 /** Get worktree metadata path */
 function getMetadataPath(repoRoot, teamName) {
-    return join(repoRoot, '.omd', 'state', 'team-bridge', sanitizeName(teamName), 'worktrees.json');
+    return join(repoRoot, ".omd", "state", "team-bridge", sanitizeName(teamName), "worktrees.json");
 }
 /** Read worktree metadata */
 function readMetadata(repoRoot, teamName) {
@@ -29,7 +29,7 @@ function readMetadata(repoRoot, teamName) {
     if (!existsSync(metaPath))
         return [];
     try {
-        return JSON.parse(readFileSync(metaPath, 'utf-8'));
+        return JSON.parse(readFileSync(metaPath, "utf-8"));
     }
     catch {
         return [];
@@ -39,7 +39,7 @@ function readMetadata(repoRoot, teamName) {
 function writeMetadata(repoRoot, teamName, entries) {
     const metaPath = getMetadataPath(repoRoot, teamName);
     validateResolvedPath(metaPath, repoRoot);
-    const dir = join(repoRoot, '.omd', 'state', 'team-bridge', sanitizeName(teamName));
+    const dir = join(repoRoot, ".omd", "state", "team-bridge", sanitizeName(teamName));
     ensureDirWithMode(dir);
     atomicWriteJson(metaPath, entries);
 }
@@ -54,29 +54,44 @@ export function createWorkerWorktree(teamName, workerName, repoRoot, baseBranch)
     validateResolvedPath(wtPath, repoRoot);
     // Prune stale worktrees first
     try {
-        execFileSync('git', ['worktree', 'prune'], { cwd: repoRoot, stdio: 'pipe' });
+        execFileSync("git", ["worktree", "prune"], {
+            cwd: repoRoot,
+            stdio: "pipe",
+        });
     }
-    catch { /* ignore */ }
+    catch {
+        /* ignore */
+    }
     // Remove stale worktree if it exists
     if (existsSync(wtPath)) {
         try {
-            execFileSync('git', ['worktree', 'remove', '--force', wtPath], { cwd: repoRoot, stdio: 'pipe' });
+            execFileSync("git", ["worktree", "remove", "--force", wtPath], {
+                cwd: repoRoot,
+                stdio: "pipe",
+            });
         }
-        catch { /* ignore */ }
+        catch {
+            /* ignore */
+        }
     }
     // Delete stale branch if it exists
     try {
-        execFileSync('git', ['branch', '-D', branch], { cwd: repoRoot, stdio: 'pipe' });
+        execFileSync("git", ["branch", "-D", branch], {
+            cwd: repoRoot,
+            stdio: "pipe",
+        });
     }
-    catch { /* branch doesn't exist, fine */ }
+    catch {
+        /* branch doesn't exist, fine */
+    }
     // Create worktree directory
-    const wtDir = join(repoRoot, '.omd', 'worktrees', sanitizeName(teamName));
+    const wtDir = join(repoRoot, ".omd", "worktrees", sanitizeName(teamName));
     ensureDirWithMode(wtDir);
     // Create worktree with new branch
-    const args = ['worktree', 'add', '-b', branch, wtPath];
+    const args = ["worktree", "add", "-b", branch, wtPath];
     if (baseBranch)
         args.push(baseBranch);
-    execFileSync('git', args, { cwd: repoRoot, stdio: 'pipe' });
+    execFileSync("git", args, { cwd: repoRoot, stdio: "pipe" });
     const info = {
         path: wtPath,
         branch,
@@ -86,7 +101,7 @@ export function createWorkerWorktree(teamName, workerName, repoRoot, baseBranch)
     };
     // Update metadata
     const existing = readMetadata(repoRoot, teamName);
-    const updated = existing.filter(e => e.workerName !== workerName);
+    const updated = existing.filter((e) => e.workerName !== workerName);
     updated.push(info);
     writeMetadata(repoRoot, teamName, updated);
     return info;
@@ -99,22 +114,37 @@ export function removeWorkerWorktree(teamName, workerName, repoRoot) {
     const branch = getBranchName(teamName, workerName);
     // Remove worktree
     try {
-        execFileSync('git', ['worktree', 'remove', '--force', wtPath], { cwd: repoRoot, stdio: 'pipe' });
+        execFileSync("git", ["worktree", "remove", "--force", wtPath], {
+            cwd: repoRoot,
+            stdio: "pipe",
+        });
     }
-    catch { /* may not exist */ }
+    catch {
+        /* may not exist */
+    }
     // Prune to clean up
     try {
-        execFileSync('git', ['worktree', 'prune'], { cwd: repoRoot, stdio: 'pipe' });
+        execFileSync("git", ["worktree", "prune"], {
+            cwd: repoRoot,
+            stdio: "pipe",
+        });
     }
-    catch { /* ignore */ }
+    catch {
+        /* ignore */
+    }
     // Delete branch
     try {
-        execFileSync('git', ['branch', '-D', branch], { cwd: repoRoot, stdio: 'pipe' });
+        execFileSync("git", ["branch", "-D", branch], {
+            cwd: repoRoot,
+            stdio: "pipe",
+        });
     }
-    catch { /* branch may not exist */ }
+    catch {
+        /* branch may not exist */
+    }
     // Update metadata
     const existing = readMetadata(repoRoot, teamName);
-    const updated = existing.filter(e => e.workerName !== workerName);
+    const updated = existing.filter((e) => e.workerName !== workerName);
     writeMetadata(repoRoot, teamName, updated);
 }
 /**
@@ -132,7 +162,9 @@ export function cleanupTeamWorktrees(teamName, repoRoot) {
         try {
             removeWorkerWorktree(teamName, entry.workerName, repoRoot);
         }
-        catch { /* best effort */ }
+        catch {
+            /* best effort */
+        }
     }
 }
 //# sourceMappingURL=git-worktree.js.map

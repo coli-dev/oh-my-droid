@@ -5,14 +5,14 @@
  * Reads outbox messages (worker -> lead) using byte-offset cursor,
  * mirroring the inbox cursor pattern from inbox-outbox.ts.
  */
-import { readFileSync, openSync, readSync, closeSync, statSync, existsSync, readdirSync } from 'fs';
-import { join } from 'path';
-import { homedir } from 'os';
-import { validateResolvedPath, writeFileWithMode, atomicWriteJson, ensureDirWithMode } from './fs-utils.js';
-import { sanitizeName } from './tmux-session.js';
+import { readFileSync, openSync, readSync, closeSync, statSync, existsSync, readdirSync, } from "fs";
+import { join } from "path";
+import { homedir } from "os";
+import { validateResolvedPath, writeFileWithMode, atomicWriteJson, ensureDirWithMode, } from "./fs-utils.js";
+import { sanitizeName } from "./tmux-session.js";
 const MAX_OUTBOX_READ_SIZE = 10 * 1024 * 1024; // 10MB cap per read
 function teamsDir() {
-    return join(homedir(), '.factory', 'teams');
+    return join(homedir(), ".factory", "teams");
 }
 /**
  * Read new outbox messages for a worker using byte-offset cursor.
@@ -21,8 +21,8 @@ function teamsDir() {
 export function readNewOutboxMessages(teamName, workerName) {
     const safeName = sanitizeName(teamName);
     const safeWorker = sanitizeName(workerName);
-    const outboxPath = join(teamsDir(), safeName, 'outbox', `${safeWorker}.jsonl`);
-    const cursorPath = join(teamsDir(), safeName, 'outbox', `${safeWorker}.outbox-offset`);
+    const outboxPath = join(teamsDir(), safeName, "outbox", `${safeWorker}.jsonl`);
+    const cursorPath = join(teamsDir(), safeName, "outbox", `${safeWorker}.outbox-offset`);
     validateResolvedPath(outboxPath, teamsDir());
     validateResolvedPath(cursorPath, teamsDir());
     if (!existsSync(outboxPath))
@@ -31,7 +31,7 @@ export function readNewOutboxMessages(teamName, workerName) {
     let cursor = { bytesRead: 0 };
     if (existsSync(cursorPath)) {
         try {
-            const raw = readFileSync(cursorPath, 'utf-8');
+            const raw = readFileSync(cursorPath, "utf-8");
             cursor = JSON.parse(raw);
         }
         catch {
@@ -47,24 +47,29 @@ export function readNewOutboxMessages(teamName, workerName) {
     if (bytesToRead <= 0)
         return [];
     const buf = Buffer.alloc(bytesToRead);
-    const fd = openSync(outboxPath, 'r');
+    const fd = openSync(outboxPath, "r");
     try {
         readSync(fd, buf, 0, bytesToRead, cursor.bytesRead);
     }
     finally {
         closeSync(fd);
     }
-    const lines = buf.toString('utf-8').split('\n').filter(l => l.trim());
+    const lines = buf
+        .toString("utf-8")
+        .split("\n")
+        .filter((l) => l.trim());
     const messages = [];
     for (const line of lines) {
         try {
             messages.push(JSON.parse(line));
         }
-        catch { /* skip malformed lines */ }
+        catch {
+            /* skip malformed lines */
+        }
     }
     // Update cursor atomically to prevent corruption on crash
     const newCursor = { bytesRead: cursor.bytesRead + bytesToRead };
-    const cursorDir = join(teamsDir(), safeName, 'outbox');
+    const cursorDir = join(teamsDir(), safeName, "outbox");
     ensureDirWithMode(cursorDir);
     atomicWriteJson(cursorPath, newCursor);
     return messages;
@@ -74,13 +79,13 @@ export function readNewOutboxMessages(teamName, workerName) {
  */
 export function readAllTeamOutboxMessages(teamName) {
     const safeName = sanitizeName(teamName);
-    const outboxDir = join(teamsDir(), safeName, 'outbox');
+    const outboxDir = join(teamsDir(), safeName, "outbox");
     if (!existsSync(outboxDir))
         return [];
-    const files = readdirSync(outboxDir).filter(f => f.endsWith('.jsonl'));
+    const files = readdirSync(outboxDir).filter((f) => f.endsWith(".jsonl"));
     const results = [];
     for (const file of files) {
-        const workerName = file.replace('.jsonl', '');
+        const workerName = file.replace(".jsonl", "");
         const messages = readNewOutboxMessages(teamName, workerName);
         if (messages.length > 0) {
             results.push({ workerName, messages });
@@ -94,9 +99,9 @@ export function readAllTeamOutboxMessages(teamName) {
 export function resetOutboxCursor(teamName, workerName) {
     const safeName = sanitizeName(teamName);
     const safeWorker = sanitizeName(workerName);
-    const cursorPath = join(teamsDir(), safeName, 'outbox', `${safeWorker}.outbox-offset`);
+    const cursorPath = join(teamsDir(), safeName, "outbox", `${safeWorker}.outbox-offset`);
     validateResolvedPath(cursorPath, teamsDir());
-    const cursorDir = join(teamsDir(), safeName, 'outbox');
+    const cursorDir = join(teamsDir(), safeName, "outbox");
     ensureDirWithMode(cursorDir);
     writeFileWithMode(cursorPath, JSON.stringify({ bytesRead: 0 }));
 }

@@ -1,9 +1,9 @@
-import { createHash } from 'crypto';
-import * as fs from 'fs/promises';
-import * as path from 'path';
-import { homedir } from 'os';
-const TOKEN_LOG_FILE = path.join(homedir(), '.omd', 'state', 'token-tracking.jsonl');
-const DEDUP_INDEX_FILE = path.join(homedir(), '.omd', 'state', 'backfill-index.json');
+import { createHash } from "crypto";
+import * as fs from "fs/promises";
+import * as path from "path";
+import { homedir } from "os";
+const TOKEN_LOG_FILE = path.join(homedir(), ".omd", "state", "token-tracking.jsonl");
+const DEDUP_INDEX_FILE = path.join(homedir(), ".omd", "state", "backfill-index.json");
 /**
  * BackfillDedup provides fast deduplication for backfill operations.
  *
@@ -20,7 +20,7 @@ export class BackfillDedup {
     async load() {
         // Load persisted index first
         try {
-            const indexContent = await fs.readFile(DEDUP_INDEX_FILE, 'utf-8');
+            const indexContent = await fs.readFile(DEDUP_INDEX_FILE, "utf-8");
             const index = JSON.parse(indexContent);
             this.processedSet = new Set(index.processedIds);
             this.totalProcessed = index.totalProcessed;
@@ -31,8 +31,11 @@ export class BackfillDedup {
         }
         // Scan token-tracking.jsonl to ensure all existing entries are marked
         try {
-            const logContent = await fs.readFile(TOKEN_LOG_FILE, 'utf-8');
-            const lines = logContent.trim().split('\n').filter(line => line.length > 0);
+            const logContent = await fs.readFile(TOKEN_LOG_FILE, "utf-8");
+            const lines = logContent
+                .trim()
+                .split("\n")
+                .filter((line) => line.length > 0);
             for (const line of lines) {
                 try {
                     const record = JSON.parse(line);
@@ -56,9 +59,9 @@ export class BackfillDedup {
      * Uses SHA256 hash to match transcript-token-extractor.ts format
      */
     generateEntryId(record) {
-        const hash = createHash('sha256');
+        const hash = createHash("sha256");
         hash.update(`${record.sessionId}:${record.timestamp}:${record.modelName}`);
-        return hash.digest('hex');
+        return hash.digest("hex");
     }
     /**
      * Check if an entry ID has already been processed
@@ -84,9 +87,9 @@ export class BackfillDedup {
         const index = {
             processedIds: Array.from(this.processedSet),
             lastBackfillTime: new Date().toISOString(),
-            totalProcessed: this.totalProcessed
+            totalProcessed: this.totalProcessed,
         };
-        await fs.writeFile(DEDUP_INDEX_FILE, JSON.stringify(index, null, 2), 'utf-8');
+        await fs.writeFile(DEDUP_INDEX_FILE, JSON.stringify(index, null, 2), "utf-8");
     }
     /**
      * Clear all processed entries and delete index file
@@ -108,7 +111,7 @@ export class BackfillDedup {
     getStats() {
         return {
             totalProcessed: this.totalProcessed,
-            lastBackfillTime: this.lastBackfillTime
+            lastBackfillTime: this.lastBackfillTime,
         };
     }
 }

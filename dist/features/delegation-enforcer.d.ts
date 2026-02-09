@@ -7,7 +7,7 @@
  * This solves the problem where Droid doesn't automatically apply models
  * from agent definitions - every Task call must explicitly pass the model parameter.
  */
-import type { ModelType } from '../shared/types.js';
+import type { ModelType } from "../shared/types.js";
 /**
  * Agent input structure from Droid Agent SDK
  */
@@ -15,7 +15,7 @@ export interface AgentInput {
     description: string;
     prompt: string;
     subagent_type: string;
-    model?: 'sonnet' | 'opus' | 'haiku';
+    model?: "sonnet" | "opus" | "haiku";
     resume?: string;
     run_in_background?: boolean;
 }

@@ -5,7 +5,7 @@
  *
  * Ported from oh-my-opencode's agent definitions.
  */
-import type { AgentConfig, AgentPromptMetadata } from './types.js';
+import type { AgentConfig, AgentPromptMetadata } from "./types.js";
 export declare const CRITIC_PROMPT_METADATA: AgentPromptMetadata;
 export declare const criticAgent: AgentConfig;
 //# sourceMappingURL=critic.d.ts.map

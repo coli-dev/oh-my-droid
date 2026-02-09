@@ -9,12 +9,12 @@ export interface ChangeMetadata {
     linesChanged: number;
     hasArchitecturalChanges: boolean;
     hasSecurityImplications: boolean;
-    testCoverage: 'none' | 'partial' | 'full';
+    testCoverage: "none" | "partial" | "full";
 }
-export type VerificationTier = 'LIGHT' | 'STANDARD' | 'THOROUGH';
+export type VerificationTier = "LIGHT" | "STANDARD" | "THOROUGH";
 export interface VerificationAgent {
     agent: string;
-    model: 'haiku' | 'sonnet' | 'opus';
+    model: "haiku" | "sonnet" | "opus";
     evidenceRequired: string[];
 }
 /**
@@ -36,5 +36,5 @@ export declare function detectSecurityImplications(files: string[]): boolean;
 /**
  * Build change metadata from a list of changed files and line count.
  */
-export declare function buildChangeMetadata(files: string[], linesChanged: number, testCoverage?: 'none' | 'partial' | 'full'): ChangeMetadata;
+export declare function buildChangeMetadata(files: string[], linesChanged: number, testCoverage?: "none" | "partial" | "full"): ChangeMetadata;
 //# sourceMappingURL=tier-selector.d.ts.map

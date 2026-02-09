@@ -14,7 +14,7 @@
  */
 
 import { loadConfig, findContextFiles, loadContextFromFiles } from './config/loader.js';
-import { getAgentDefinitions, omdSystemPrompt } from './droids/definitions.js';
+import { getAgentDefinitions, omdSystemPrompt } from './agents/definitions.js';
 import { getDefaultMcpServers, toSdkMcpFormat } from './mcp/servers.js';
 import { omdToolsServer, getOmdToolNames } from './mcp/omd-tools-server.js';
 import { codexMcpServer } from './mcp/codex-server.js';
@@ -165,7 +165,7 @@ export {
   // Deprecated (backward compat - will be removed in v4.0.0)
   coordinatorAgent,
   ORCHESTRATOR_SISYPHUS_PROMPT_METADATA
-} from './droids/index.js';
+} from './agents/index.js';
 
 // Command expansion utilities for SDK integration
 export {

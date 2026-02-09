@@ -7,79 +7,98 @@
  * - ~/.factory/droid_desktop_config.json (Desktop app MCP config)
  * - Project-local .factory-plugin/ directories
  */
-import { existsSync, readdirSync, readFileSync, realpathSync } from 'fs';
-import { join, basename, resolve, normalize } from 'path';
-import { homedir } from 'os';
-import Ajv from 'ajv';
+import { existsSync, readdirSync, readFileSync, realpathSync, } from "fs";
+import { join, basename, resolve, normalize } from "path";
+import { homedir } from "os";
+import Ajv from "ajv";
 /**
  * Security Error for discovery operations
  */
 export class DiscoverySecurityError extends Error {
     constructor(message) {
         super(message);
-        this.name = 'DiscoverySecurityError';
+        this.name = "DiscoverySecurityError";
     }
 }
 /**
  * JSON Schema for plugin manifest validation
  */
 const pluginManifestSchema = {
-    type: 'object',
-    required: ['name', 'version'],
+    type: "object",
+    required: ["name", "version"],
     properties: {
-        name: { type: 'string', pattern: '^[a-zA-Z0-9_-]+$', maxLength: 100 },
-        version: { type: 'string', maxLength: 50 },
-        description: { type: 'string', maxLength: 500 },
-        namespace: { type: 'string', pattern: '^[a-zA-Z0-9_-]+$', maxLength: 100 },
+        name: { type: "string", pattern: "^[a-zA-Z0-9_-]+$", maxLength: 100 },
+        version: { type: "string", maxLength: 50 },
+        description: { type: "string", maxLength: 500 },
+        namespace: { type: "string", pattern: "^[a-zA-Z0-9_-]+$", maxLength: 100 },
         skills: {
             oneOf: [
-                { type: 'string', maxLength: 200 },
-                { type: 'array', items: { type: 'string', maxLength: 200 }, maxItems: 50 },
+                { type: "string", maxLength: 200 },
+                {
+                    type: "array",
+                    items: { type: "string", maxLength: 200 },
+                    maxItems: 50,
+                },
             ],
         },
         droids: {
             oneOf: [
-                { type: 'string', maxLength: 200 },
-                { type: 'array', items: { type: 'string', maxLength: 200 }, maxItems: 50 },
+                { type: "string", maxLength: 200 },
+                {
+                    type: "array",
+                    items: { type: "string", maxLength: 200 },
+                    maxItems: 50,
+                },
             ],
         },
         tools: {
-            type: 'array',
+            type: "array",
             maxItems: 100,
             items: {
-                type: 'object',
-                required: ['name'],
+                type: "object",
+                required: ["name"],
                 properties: {
-                    name: { type: 'string', pattern: '^[a-zA-Z0-9_-]+$', maxLength: 100 },
-                    description: { type: 'string', maxLength: 500 },
-                    inputSchema: { type: 'object' },
+                    name: { type: "string", pattern: "^[a-zA-Z0-9_-]+$", maxLength: 100 },
+                    description: { type: "string", maxLength: 500 },
+                    inputSchema: { type: "object" },
                 },
                 additionalProperties: false,
             },
         },
         permissions: {
-            type: 'array',
+            type: "array",
             maxItems: 100,
             items: {
-                type: 'object',
+                type: "object",
                 properties: {
-                    tool: { type: 'string', maxLength: 200 },
-                    scope: { type: 'string', enum: ['read', 'write', 'execute'] },
-                    patterns: { type: 'array', items: { type: 'string', maxLength: 500 }, maxItems: 50 },
-                    reason: { type: 'string', maxLength: 500 },
+                    tool: { type: "string", maxLength: 200 },
+                    scope: { type: "string", enum: ["read", "write", "execute"] },
+                    patterns: {
+                        type: "array",
+                        items: { type: "string", maxLength: 500 },
+                        maxItems: 50,
+                    },
+                    reason: { type: "string", maxLength: 500 },
                 },
             },
         },
         mcpServers: {
-            type: 'object',
+            type: "object",
             additionalProperties: {
-                type: 'object',
-                required: ['command'],
+                type: "object",
+                required: ["command"],
                 properties: {
-                    command: { type: 'string', maxLength: 500 },
-                    args: { type: 'array', items: { type: 'string', maxLength: 500 }, maxItems: 50 },
-                    env: { type: 'object', additionalProperties: { type: 'string', maxLength: 1000 } },
-                    enabled: { type: 'boolean' },
+                    command: { type: "string", maxLength: 500 },
+                    args: {
+                        type: "array",
+                        items: { type: "string", maxLength: 500 },
+                        maxItems: 50,
+                    },
+                    env: {
+                        type: "object",
+                        additionalProperties: { type: "string", maxLength: 1000 },
+                    },
+                    enabled: { type: "boolean" },
                 },
             },
         },
@@ -90,13 +109,20 @@ const pluginManifestSchema = {
  * JSON Schema for MCP server config validation
  */
 const mcpServerConfigSchema = {
-    type: 'object',
-    required: ['command'],
+    type: "object",
+    required: ["command"],
     properties: {
-        command: { type: 'string', minLength: 1, maxLength: 500 },
-        args: { type: 'array', items: { type: 'string', maxLength: 500 }, maxItems: 50 },
-        env: { type: 'object', additionalProperties: { type: 'string', maxLength: 1000 } },
-        enabled: { type: 'boolean' },
+        command: { type: "string", minLength: 1, maxLength: 500 },
+        args: {
+            type: "array",
+            items: { type: "string", maxLength: 500 },
+            maxItems: 50,
+        },
+        env: {
+            type: "object",
+            additionalProperties: { type: "string", maxLength: 1000 },
+        },
+        enabled: { type: "boolean" },
     },
     additionalProperties: false,
 };
@@ -126,7 +152,9 @@ function isPathWithinDirectory(basePath, targetPath) {
         // by checking real path (follows symlinks)
         if (existsSync(normalizedTarget)) {
             const realTarget = realpathSync(normalizedTarget);
-            const realBase = existsSync(normalizedBase) ? realpathSync(normalizedBase) : normalizedBase;
+            const realBase = existsSync(normalizedBase)
+                ? realpathSync(normalizedBase)
+                : normalizedBase;
             if (!realTarget.startsWith(realBase)) {
                 return false;
             }
@@ -141,52 +169,73 @@ function isPathWithinDirectory(basePath, targetPath) {
  * Default paths for discovery
  */
 const DEFAULT_PLUGIN_PATHS = [
-    join(homedir(), '.factory', 'plugins'),
-    join(homedir(), '.factory', 'installed-plugins'),
+    join(homedir(), ".factory", "plugins"),
+    join(homedir(), ".factory", "installed-plugins"),
 ];
-const DEFAULT_MCP_CONFIG_PATH = join(homedir(), '.factory', 'droid_desktop_config.json');
-const DEFAULT_SETTINGS_PATH = join(homedir(), '.factory', 'settings.json');
+const DEFAULT_MCP_CONFIG_PATH = join(homedir(), ".factory", "droid_desktop_config.json");
+const DEFAULT_SETTINGS_PATH = join(homedir(), ".factory", "settings.json");
 /**
  * Infer capabilities from tool name and description
  */
 function inferCapabilities(name, description) {
     const capabilities = [];
-    const text = `${name} ${description || ''}`.toLowerCase();
-    if (text.includes('read') || text.includes('get') || text.includes('fetch') || text.includes('list')) {
-        capabilities.push('read');
+    const text = `${name} ${description || ""}`.toLowerCase();
+    if (text.includes("read") ||
+        text.includes("get") ||
+        text.includes("fetch") ||
+        text.includes("list")) {
+        capabilities.push("read");
     }
-    if (text.includes('write') || text.includes('create') || text.includes('update') || text.includes('edit')) {
-        capabilities.push('write');
+    if (text.includes("write") ||
+        text.includes("create") ||
+        text.includes("update") ||
+        text.includes("edit")) {
+        capabilities.push("write");
     }
-    if (text.includes('exec') || text.includes('run') || text.includes('bash') || text.includes('command')) {
-        capabilities.push('execute');
+    if (text.includes("exec") ||
+        text.includes("run") ||
+        text.includes("bash") ||
+        text.includes("command")) {
+        capabilities.push("execute");
     }
-    if (text.includes('search') || text.includes('find') || text.includes('query') || text.includes('grep')) {
-        capabilities.push('search');
+    if (text.includes("search") ||
+        text.includes("find") ||
+        text.includes("query") ||
+        text.includes("grep")) {
+        capabilities.push("search");
     }
-    if (text.includes('http') || text.includes('fetch') || text.includes('web') || text.includes('api')) {
-        capabilities.push('network');
+    if (text.includes("http") ||
+        text.includes("fetch") ||
+        text.includes("web") ||
+        text.includes("api")) {
+        capabilities.push("network");
     }
-    if (text.includes('analyz') || text.includes('inspect') || text.includes('check') || text.includes('review')) {
-        capabilities.push('analyze');
+    if (text.includes("analyz") ||
+        text.includes("inspect") ||
+        text.includes("check") ||
+        text.includes("review")) {
+        capabilities.push("analyze");
     }
-    if (text.includes('generat') || text.includes('creat') || text.includes('build') || text.includes('make')) {
-        capabilities.push('generate');
+    if (text.includes("generat") ||
+        text.includes("creat") ||
+        text.includes("build") ||
+        text.includes("make")) {
+        capabilities.push("generate");
     }
-    return capabilities.length > 0 ? capabilities : ['unknown'];
+    return capabilities.length > 0 ? capabilities : ["unknown"];
 }
 /**
  * Parse and validate a plugin manifest file
  */
 function parsePluginManifest(manifestPath) {
     try {
-        const content = readFileSync(manifestPath, 'utf-8');
+        const content = readFileSync(manifestPath, "utf-8");
         const parsed = JSON.parse(content);
         // SECURITY: Validate manifest against schema
         if (!validatePluginManifest(parsed)) {
             const errors = validatePluginManifest.errors
                 ?.map((e) => `${e.instancePath}: ${e.message}`)
-                .join(', ');
+                .join(", ");
             console.warn(`[Security] Invalid plugin manifest at ${manifestPath}: ${errors}`);
             return null;
         }
@@ -204,7 +253,7 @@ function discoverPluginSkills(pluginPath, manifest) {
     const namespace = manifest.namespace || manifest.name;
     // Handle skills directory
     let skillsPaths = [];
-    if (typeof manifest.skills === 'string') {
+    if (typeof manifest.skills === "string") {
         // SECURITY: Validate path stays within plugin directory
         if (!isPathWithinDirectory(pluginPath, manifest.skills)) {
             console.warn(`[Security] Path traversal detected in plugin ${manifest.name}: skills path "${manifest.skills}" escapes plugin directory`);
@@ -231,16 +280,16 @@ function discoverPluginSkills(pluginPath, manifest) {
             for (const entry of entries) {
                 if (!entry.isDirectory())
                     continue;
-                const skillMdPath = join(skillsPath, entry.name, 'SKILL.md');
+                const skillMdPath = join(skillsPath, entry.name, "SKILL.md");
                 if (!existsSync(skillMdPath))
                     continue;
                 // Parse skill metadata from SKILL.md frontmatter
-                const skillContent = readFileSync(skillMdPath, 'utf-8');
+                const skillContent = readFileSync(skillMdPath, "utf-8");
                 const frontmatterMatch = skillContent.match(/^---\r?\n([\s\S]*?)\r?\n---/);
                 const metadata = {};
                 if (frontmatterMatch) {
-                    for (const line of frontmatterMatch[1].split('\n')) {
-                        const colonIdx = line.indexOf(':');
+                    for (const line of frontmatterMatch[1].split("\n")) {
+                        const colonIdx = line.indexOf(":");
                         if (colonIdx > 0) {
                             const key = line.slice(0, colonIdx).trim();
                             let value = line.slice(colonIdx + 1).trim();
@@ -255,7 +304,7 @@ function discoverPluginSkills(pluginPath, manifest) {
                 }
                 tools.push({
                     name: `${namespace}:${entry.name}`,
-                    type: 'skill',
+                    type: "skill",
                     source: manifest.name,
                     description: metadata.description || `Skill from ${manifest.name}`,
                     commands: [entry.name],
@@ -279,7 +328,7 @@ function discoverPluginAgents(pluginPath, manifest) {
     const namespace = manifest.namespace || manifest.name;
     // Handle droids directory
     let agentsPaths = [];
-    if (typeof manifest.droids === 'string') {
+    if (typeof manifest.droids === "string") {
         // SECURITY: Validate path stays within plugin directory
         if (!isPathWithinDirectory(pluginPath, manifest.droids)) {
             console.warn(`[Security] Path traversal detected in plugin ${manifest.name}: droids path "${manifest.droids}" escapes plugin directory`);
@@ -304,17 +353,17 @@ function discoverPluginAgents(pluginPath, manifest) {
         try {
             const entries = readdirSync(agentsPath);
             for (const entry of entries) {
-                if (!entry.endsWith('.md'))
+                if (!entry.endsWith(".md"))
                     continue;
                 const agentPath = join(agentsPath, entry);
-                const agentContent = readFileSync(agentPath, 'utf-8');
-                const agentName = basename(entry, '.md');
+                const agentContent = readFileSync(agentPath, "utf-8");
+                const agentName = basename(entry, ".md");
                 // Parse agent metadata from frontmatter
                 const frontmatterMatch = agentContent.match(/^---\r?\n([\s\S]*?)\r?\n---/);
                 const metadata = {};
                 if (frontmatterMatch) {
-                    for (const line of frontmatterMatch[1].split('\n')) {
-                        const colonIdx = line.indexOf(':');
+                    for (const line of frontmatterMatch[1].split("\n")) {
+                        const colonIdx = line.indexOf(":");
                         if (colonIdx > 0) {
                             const key = line.slice(0, colonIdx).trim();
                             let value = line.slice(colonIdx + 1).trim();
@@ -328,10 +377,10 @@ function discoverPluginAgents(pluginPath, manifest) {
                 }
                 tools.push({
                     name: `${namespace}:${agentName}`,
-                    type: 'agent',
+                    type: "agent",
                     source: manifest.name,
                     description: metadata.description || `Agent from ${manifest.name}`,
-                    capabilities: ['analyze', 'generate'],
+                    capabilities: ["analyze", "generate"],
                     enabled: true,
                     priority: 50,
                 });
@@ -348,9 +397,9 @@ function discoverPluginAgents(pluginPath, manifest) {
  */
 function discoverPlugin(pluginPath) {
     // Look for plugin.json in the directory or in .factory-plugin subdirectory
-    let manifestPath = join(pluginPath, 'plugin.json');
+    let manifestPath = join(pluginPath, "plugin.json");
     if (!existsSync(manifestPath)) {
-        manifestPath = join(pluginPath, '.factory-plugin', 'plugin.json');
+        manifestPath = join(pluginPath, ".factory-plugin", "plugin.json");
     }
     if (!existsSync(manifestPath)) {
         return null;
@@ -359,11 +408,11 @@ function discoverPlugin(pluginPath) {
     if (!manifest) {
         return {
             name: basename(pluginPath),
-            version: 'unknown',
+            version: "unknown",
             path: pluginPath,
-            manifest: { name: basename(pluginPath), version: 'unknown' },
+            manifest: { name: basename(pluginPath), version: "unknown" },
             loaded: false,
-            error: 'Failed to parse plugin manifest',
+            error: "Failed to parse plugin manifest",
             tools: [],
         };
     }
@@ -377,7 +426,7 @@ function discoverPlugin(pluginPath) {
         for (const toolDef of manifest.tools) {
             tools.push({
                 name: `${manifest.namespace || manifest.name}:${toolDef.name}`,
-                type: 'plugin',
+                type: "plugin",
                 source: manifest.name,
                 description: toolDef.description,
                 capabilities: inferCapabilities(toolDef.name, toolDef.description),
@@ -411,7 +460,7 @@ export function discoverPlugins(options) {
                 if (!entry.isDirectory())
                     continue;
                 // Skip our own plugin
-                if (entry.name === 'oh-my-droid')
+                if (entry.name === "oh-my-droid")
                     continue;
                 const pluginPath = join(basePath, entry.name);
                 const plugin = discoverPlugin(pluginPath);
@@ -435,7 +484,7 @@ function parseMcpDesktopConfig(configPath) {
         return servers;
     }
     try {
-        const content = readFileSync(configPath, 'utf-8');
+        const content = readFileSync(configPath, "utf-8");
         const config = JSON.parse(content);
         if (!config.mcpServers) {
             return servers;
@@ -445,14 +494,14 @@ function parseMcpDesktopConfig(configPath) {
             if (!validateMcpServerConfig(serverConfig)) {
                 const errors = validateMcpServerConfig.errors
                     ?.map((e) => `${e.instancePath}: ${e.message}`)
-                    .join(', ');
+                    .join(", ");
                 console.warn(`[Security] Invalid MCP server config for "${name}": ${errors}`);
                 continue;
             }
             servers.push({
                 name,
                 config: serverConfig,
-                source: 'droid_desktop_config',
+                source: "droid_desktop_config",
                 connected: false,
                 tools: [], // Tools discovered after connection
             });
@@ -472,7 +521,7 @@ function parseMcpSettings(settingsPath) {
         return servers;
     }
     try {
-        const content = readFileSync(settingsPath, 'utf-8');
+        const content = readFileSync(settingsPath, "utf-8");
         const settings = JSON.parse(content);
         if (!settings.mcpServers) {
             return servers;
@@ -482,14 +531,14 @@ function parseMcpSettings(settingsPath) {
             if (!validateMcpServerConfig(serverConfig)) {
                 const errors = validateMcpServerConfig.errors
                     ?.map((e) => `${e.instancePath}: ${e.message}`)
-                    .join(', ');
+                    .join(", ");
                 console.warn(`[Security] Invalid MCP server config for "${name}": ${errors}`);
                 continue;
             }
             servers.push({
                 name,
                 config: serverConfig,
-                source: 'settings.json',
+                source: "settings.json",
                 connected: false,
                 tools: [],
             });
@@ -558,7 +607,7 @@ export function discoverAll(options) {
     const pluginMcpServers = discoverPluginMcpServers(plugins);
     // Merge MCP servers (config takes priority)
     const mcpServers = [...configMcpServers];
-    const seenServers = new Set(configMcpServers.map(s => s.name));
+    const seenServers = new Set(configMcpServers.map((s) => s.name));
     for (const server of pluginMcpServers) {
         if (!seenServers.has(server.name)) {
             mcpServers.push(server);
@@ -580,7 +629,7 @@ export function discoverAll(options) {
  * Get paths being scanned for plugins
  */
 export function getPluginPaths() {
-    return DEFAULT_PLUGIN_PATHS.filter(p => existsSync(p));
+    return DEFAULT_PLUGIN_PATHS.filter((p) => existsSync(p));
 }
 /**
  * Get path to MCP config file if it exists

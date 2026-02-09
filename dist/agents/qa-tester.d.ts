@@ -10,7 +10,7 @@
  * - Verifying CLI behavior and responses
  * - Clean teardown of test environments
  */
-import type { AgentConfig, AgentPromptMetadata } from './types.js';
+import type { AgentConfig, AgentPromptMetadata } from "./types.js";
 export declare const QA_TESTER_PROMPT_METADATA: AgentPromptMetadata;
 export declare const qaTesterAgent: AgentConfig;
 //# sourceMappingURL=qa-tester.d.ts.map

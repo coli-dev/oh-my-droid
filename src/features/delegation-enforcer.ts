@@ -8,7 +8,7 @@
  * from agent definitions - every Task call must explicitly pass the model parameter.
  */
 
-import { getAgentDefinitions } from "../droids/definitions.js";
+import { getAgentDefinitions } from "../agents/definitions.js";
 import type { ModelType } from "../shared/types.js";
 
 /**

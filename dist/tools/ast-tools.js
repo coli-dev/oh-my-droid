@@ -20,7 +20,7 @@ import { createRequire } from "module";
 // via NODE_PATH set in the bundle's startup banner.
 let sgModule = null;
 let sgLoadFailed = false;
-let sgLoadError = '';
+let sgLoadError = "";
 async function getSgModule() {
     if (sgLoadFailed) {
         return null;
@@ -28,7 +28,7 @@ async function getSgModule() {
     if (!sgModule) {
         try {
             // Use createRequire for CJS-style resolution (respects NODE_PATH)
-            const require = createRequire(import.meta.url || __filename || process.cwd() + '/');
+            const require = createRequire(import.meta.url || __filename || process.cwd() + "/");
             sgModule = require("@ast-grep/napi");
         }
         catch {

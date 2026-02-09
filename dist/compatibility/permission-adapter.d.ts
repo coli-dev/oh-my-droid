@@ -7,7 +7,7 @@
  * - Permission inheritance for known-safe tools
  * - Delegation-aware routing to avoid conflicts
  */
-import type { PermissionCheckResult, SafeCommandPattern, DiscoveredPlugin } from './types.js';
+import type { PermissionCheckResult, SafeCommandPattern, DiscoveredPlugin } from "./types.js";
 /**
  * Security Error for permission adapter operations
  */
@@ -54,7 +54,7 @@ export declare function shouldDelegate(toolName: string): boolean;
  * Get delegation target for a tool
  */
 export declare function getDelegationTarget(toolName: string): {
-    type: 'plugin' | 'mcp' | 'internal';
+    type: "plugin" | "mcp" | "internal";
     target: string;
 } | null;
 /**
@@ -71,7 +71,7 @@ export declare function processExternalToolPermission(toolName: string, toolInpu
     hookSpecificOutput?: {
         hookEventName: string;
         decision: {
-            behavior: 'allow' | 'deny' | 'ask';
+            behavior: "allow" | "deny" | "ask";
             reason?: string;
         };
     };

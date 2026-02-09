@@ -9,7 +9,7 @@
  * - Store version metadata for installed components
  * - Configurable update notifications
  */
-import { TaskTool } from '../hooks/beads-context/types.js';
+import { TaskTool } from "../hooks/beads-context/types.js";
 /** GitHub repository information */
 export declare const REPO_OWNER = "coli-dev";
 export declare const REPO_NAME = "oh-my-droid";
@@ -27,7 +27,7 @@ export interface StopCallbackFileConfig {
     /** File path with placeholders: {session_id}, {date}, {time} */
     path: string;
     /** Output format */
-    format?: 'markdown' | 'json';
+    format?: "markdown" | "json";
 }
 /**
  * Stop hook callback configuration for Telegram
@@ -75,7 +75,7 @@ export interface SisyphusConfig {
         injectInstructions?: boolean;
     };
     /** Preferred execution mode for parallel work (set by omd-setup Step 3.7) */
-    defaultExecutionMode?: 'ultrawork' | 'ecomode';
+    defaultExecutionMode?: "ultrawork" | "ecomode";
     /** Ecomode-specific configuration */
     ecomode?: {
         /** Whether ecomode is enabled (default: true). Set to false to disable ecomode completely. */
@@ -114,7 +114,7 @@ export interface VersionMetadata {
     /** Git commit hash if installed from source */
     commitHash?: string;
     /** Installation method: 'script' | 'npm' | 'source' */
-    installMethod: 'script' | 'npm' | 'source';
+    installMethod: "script" | "npm" | "source";
 }
 /**
  * GitHub release information

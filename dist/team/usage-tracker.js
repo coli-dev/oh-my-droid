@@ -8,21 +8,21 @@
  *
  * Storage: append-only JSONL at .omd/logs/team-usage-{team}.jsonl
  */
-import { existsSync, readFileSync, statSync } from 'node:fs';
-import { join } from 'node:path';
-import { appendFileWithMode, ensureDirWithMode, validateResolvedPath } from './fs-utils.js';
+import { existsSync, readFileSync, statSync } from "node:fs";
+import { join } from "node:path";
+import { appendFileWithMode, ensureDirWithMode, validateResolvedPath, } from "./fs-utils.js";
 function getUsageLogPath(workingDirectory, teamName) {
-    return join(workingDirectory, '.omd', 'logs', `team-usage-${teamName}.jsonl`);
+    return join(workingDirectory, ".omd", "logs", `team-usage-${teamName}.jsonl`);
 }
 /**
  * Record usage for a completed task.
  */
 export function recordTaskUsage(workingDirectory, teamName, record) {
     const logPath = getUsageLogPath(workingDirectory, teamName);
-    const dir = join(workingDirectory, '.omd', 'logs');
+    const dir = join(workingDirectory, ".omd", "logs");
     validateResolvedPath(logPath, workingDirectory);
     ensureDirWithMode(dir);
-    appendFileWithMode(logPath, JSON.stringify(record) + '\n');
+    appendFileWithMode(logPath, JSON.stringify(record) + "\n");
 }
 /**
  * Compute character counts from prompt and output files.
@@ -36,13 +36,17 @@ export function measureCharCounts(promptFilePath, outputFilePath) {
             promptChars = statSync(promptFilePath).size;
         }
     }
-    catch { /* missing file */ }
+    catch {
+        /* missing file */
+    }
     try {
         if (existsSync(outputFilePath)) {
             responseChars = statSync(outputFilePath).size;
         }
     }
-    catch { /* missing file */ }
+    catch {
+        /* missing file */
+    }
     return { promptChars, responseChars };
 }
 /**
@@ -52,14 +56,16 @@ function readUsageRecords(workingDirectory, teamName) {
     const logPath = getUsageLogPath(workingDirectory, teamName);
     if (!existsSync(logPath))
         return [];
-    const content = readFileSync(logPath, 'utf-8');
-    const lines = content.split('\n').filter(l => l.trim());
+    const content = readFileSync(logPath, "utf-8");
+    const lines = content.split("\n").filter((l) => l.trim());
     const records = [];
     for (const line of lines) {
         try {
             records.push(JSON.parse(line));
         }
-        catch { /* skip malformed */ }
+        catch {
+            /* skip malformed */
+        }
     }
     return records;
 }

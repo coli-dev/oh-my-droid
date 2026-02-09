@@ -4,13 +4,13 @@
  * Display components for token tracking and cost analytics in the HUD.
  * Now uses SessionHealth as the source of truth instead of TokenTracker.
  */
-import type { SessionHealth } from './types.js';
+import type { SessionHealth } from "./types.js";
 export interface AnalyticsDisplay {
     sessionCost: string;
     sessionTokens: string;
     topAgents: string;
     cacheEfficiency: string;
-    costColor: 'green' | 'yellow' | 'red';
+    costColor: "green" | "yellow" | "red";
 }
 export interface SessionHealthAnalyticsData {
     costIndicator: string;

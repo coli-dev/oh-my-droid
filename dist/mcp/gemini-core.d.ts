@@ -11,7 +11,7 @@
  * - gemini-server.ts (in-process SDK MCP server)
  * - gemini-standalone-server.ts (stdio-based external process server)
  */
-import type { BackgroundJobMeta } from './prompt-persistence.js';
+import type { BackgroundJobMeta } from "./prompt-persistence.js";
 export declare function isSpawnedPid(pid: number): boolean;
 export declare function clearSpawnedPids(): void;
 export declare const GEMINI_DEFAULT_MODEL: string;
@@ -27,7 +27,7 @@ export declare const MAX_FILE_SIZE: number;
 export declare function isGeminiRetryableError(stdout: string, stderr?: string): {
     isError: boolean;
     message: string;
-    type: 'rate_limit' | 'model' | 'none';
+    type: "rate_limit" | "model" | "none";
 };
 /**
  * Execute Gemini CLI command and return the response
@@ -71,7 +71,7 @@ export declare function handleAskGemini(args: {
     working_directory?: string;
 }): Promise<{
     content: Array<{
-        type: 'text';
+        type: "text";
         text: string;
     }>;
     isError?: boolean;

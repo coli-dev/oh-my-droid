@@ -1,4 +1,4 @@
-import type { BridgeConfig, McpWorkerMember } from './types.js';
+import type { BridgeConfig, McpWorkerMember } from "./types.js";
 export interface RestartPolicy {
     maxRestarts: number;
     backoffBaseMs: number;

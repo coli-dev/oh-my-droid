@@ -482,4 +482,4 @@ export function renderAgentsByFormat(droids, format) {
             return renderAgentsCoded(droids);
     }
 }
-//# sourceMappingURL=droids.js.map
+//# sourceMappingURL=agents.js.map

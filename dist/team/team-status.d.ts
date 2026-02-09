@@ -1,7 +1,7 @@
-import type { HeartbeatData, TaskFile, OutboxMessage } from './types.js';
+import type { HeartbeatData, TaskFile, OutboxMessage } from "./types.js";
 export interface WorkerStatus {
     workerName: string;
-    provider: 'codex' | 'gemini';
+    provider: "codex" | "gemini";
     heartbeat: HeartbeatData | null;
     isAlive: boolean;
     currentTask: TaskFile | null;

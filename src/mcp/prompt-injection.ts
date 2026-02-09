@@ -5,7 +5,7 @@
  * Enables droids to pass their personality/guidelines when consulting external models.
  */
 
-import { loadAgentPrompt } from "../droids/utils.js";
+import { loadAgentPrompt } from "../agents/utils.js";
 
 /**
  * Valid agent roles that can be used with agent_role parameter.

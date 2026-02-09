@@ -28,4 +28,4 @@ export async function agentsCommand(options) {
     console.log(table);
     console.log('');
 }
-//# sourceMappingURL=droids.js.map
+//# sourceMappingURL=agents.js.map

@@ -3,7 +3,7 @@
  *
  * Handles cleanup of stale and orphaned background tasks on HUD startup.
  */
-import { readHudState, writeHudState } from './state.js';
+import { readHudState, writeHudState } from "./state.js";
 const STALE_TASK_THRESHOLD_MS = 30 * 60 * 1000; // 30 minutes default
 /**
  * Clean up stale background tasks from HUD state.
@@ -20,13 +20,13 @@ export async function cleanupStaleBackgroundTasks(thresholdMs = STALE_TASK_THRES
     const now = Date.now();
     const originalCount = state.backgroundTasks.length;
     // Filter out stale tasks
-    state.backgroundTasks = state.backgroundTasks.filter(task => {
+    state.backgroundTasks = state.backgroundTasks.filter((task) => {
         // Use startedAt for age calculation
         const taskAge = now - new Date(task.startedAt).getTime();
         // Keep if:
         // - Task is completed (for history)
         // - Task is recent (within threshold)
-        return task.status === 'completed' || taskAge < thresholdMs;
+        return task.status === "completed" || taskAge < thresholdMs;
     });
     // Limit history to 20 most recent
     if (state.backgroundTasks.length > 20) {
@@ -53,7 +53,7 @@ export async function detectOrphanedTasks() {
     // (e.g., from previous session crashes)
     const orphaned = [];
     for (const task of state.backgroundTasks) {
-        if (task.status === 'running') {
+        if (task.status === "running") {
             // Check if task is from a previous HUD session
             // (simple heuristic: running for more than 2 hours is likely orphaned)
             const taskAge = Date.now() - new Date(task.startedAt).getTime();
@@ -78,9 +78,9 @@ export async function markOrphanedTasksAsStale() {
     const orphaned = await detectOrphanedTasks();
     let marked = 0;
     for (const orphanedTask of orphaned) {
-        const task = state.backgroundTasks.find(t => t.id === orphanedTask.id);
-        if (task && task.status === 'running') {
-            task.status = 'completed'; // Mark as completed to remove from active display
+        const task = state.backgroundTasks.find((t) => t.id === orphanedTask.id);
+        if (task && task.status === "running") {
+            task.status = "completed"; // Mark as completed to remove from active display
             marked++;
         }
     }

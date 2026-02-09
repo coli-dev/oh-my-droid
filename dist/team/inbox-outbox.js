@@ -5,33 +5,33 @@
  * File-based communication channels between team lead and MCP workers.
  * Uses JSONL format with offset cursor for efficient incremental reads.
  */
-import { readFileSync, existsSync, statSync, unlinkSync, renameSync, openSync, readSync, closeSync } from 'fs';
-import { join, dirname } from 'path';
-import { homedir } from 'os';
-import { sanitizeName } from './tmux-session.js';
-import { appendFileWithMode, writeFileWithMode, atomicWriteJson, ensureDirWithMode, validateResolvedPath } from './fs-utils.js';
+import { readFileSync, existsSync, statSync, unlinkSync, renameSync, openSync, readSync, closeSync, } from "fs";
+import { join, dirname } from "path";
+import { homedir } from "os";
+import { sanitizeName } from "./tmux-session.js";
+import { appendFileWithMode, writeFileWithMode, atomicWriteJson, ensureDirWithMode, validateResolvedPath, } from "./fs-utils.js";
 /** Maximum bytes to read from inbox in a single call (10 MB) */
 const MAX_INBOX_READ_SIZE = 10 * 1024 * 1024;
 // --- Path helpers ---
 function teamsDir(teamName) {
-    const result = join(homedir(), '.factory', 'teams', sanitizeName(teamName));
-    validateResolvedPath(result, join(homedir(), '.factory', 'teams'));
+    const result = join(homedir(), ".factory", "teams", sanitizeName(teamName));
+    validateResolvedPath(result, join(homedir(), ".factory", "teams"));
     return result;
 }
 function inboxPath(teamName, workerName) {
-    return join(teamsDir(teamName), 'inbox', `${sanitizeName(workerName)}.jsonl`);
+    return join(teamsDir(teamName), "inbox", `${sanitizeName(workerName)}.jsonl`);
 }
 function inboxCursorPath(teamName, workerName) {
-    return join(teamsDir(teamName), 'inbox', `${sanitizeName(workerName)}.offset`);
+    return join(teamsDir(teamName), "inbox", `${sanitizeName(workerName)}.offset`);
 }
 function outboxPath(teamName, workerName) {
-    return join(teamsDir(teamName), 'outbox', `${sanitizeName(workerName)}.jsonl`);
+    return join(teamsDir(teamName), "outbox", `${sanitizeName(workerName)}.jsonl`);
 }
 function signalPath(teamName, workerName) {
-    return join(teamsDir(teamName), 'signals', `${sanitizeName(workerName)}.shutdown`);
+    return join(teamsDir(teamName), "signals", `${sanitizeName(workerName)}.shutdown`);
 }
 function drainSignalPath(teamName, workerName) {
-    return join(teamsDir(teamName), 'signals', `${sanitizeName(workerName)}.drain`);
+    return join(teamsDir(teamName), "signals", `${sanitizeName(workerName)}.drain`);
 }
 /** Ensure directory exists for a file path */
 function ensureDir(filePath) {
@@ -46,7 +46,7 @@ function ensureDir(filePath) {
 export function appendOutbox(teamName, workerName, message) {
     const filePath = outboxPath(teamName, workerName);
     ensureDir(filePath);
-    appendFileWithMode(filePath, JSON.stringify(message) + '\n');
+    appendFileWithMode(filePath, JSON.stringify(message) + "\n");
 }
 /**
  * Rotate outbox if it exceeds maxLines.
@@ -62,15 +62,15 @@ export function rotateOutboxIfNeeded(teamName, workerName, maxLines) {
     if (!existsSync(filePath))
         return;
     try {
-        const content = readFileSync(filePath, 'utf-8');
-        const lines = content.split('\n').filter(l => l.trim());
+        const content = readFileSync(filePath, "utf-8");
+        const lines = content.split("\n").filter((l) => l.trim());
         if (lines.length <= maxLines)
             return;
         // Keep the most recent half
         const keepCount = Math.floor(maxLines / 2);
         const kept = lines.slice(-keepCount);
         const tmpPath = `${filePath}.tmp.${process.pid}.${Date.now()}`;
-        writeFileWithMode(tmpPath, kept.join('\n') + '\n');
+        writeFileWithMode(tmpPath, kept.join("\n") + "\n");
         renameSync(tmpPath, filePath);
     }
     catch {
@@ -94,13 +94,13 @@ export function rotateInboxIfNeeded(teamName, workerName, maxSizeBytes) {
         const stat = statSync(filePath);
         if (stat.size <= maxSizeBytes)
             return;
-        const content = readFileSync(filePath, 'utf-8');
-        const lines = content.split('\n').filter(l => l.trim());
+        const content = readFileSync(filePath, "utf-8");
+        const lines = content.split("\n").filter((l) => l.trim());
         // Keep the most recent half
         const keepCount = Math.max(1, Math.floor(lines.length / 2));
         const kept = lines.slice(-keepCount);
         const tmpPath = `${filePath}.tmp.${process.pid}.${Date.now()}`;
-        writeFileWithMode(tmpPath, kept.join('\n') + '\n');
+        writeFileWithMode(tmpPath, kept.join("\n") + "\n");
         renameSync(tmpPath, filePath);
         // Reset cursor since file content changed
         const cursorFile = inboxCursorPath(teamName, workerName);
@@ -132,10 +132,12 @@ export function readNewInboxMessages(teamName, workerName) {
     let offset = 0;
     if (existsSync(cursorFile)) {
         try {
-            const cursor = JSON.parse(readFileSync(cursorFile, 'utf-8'));
+            const cursor = JSON.parse(readFileSync(cursorFile, "utf-8"));
             offset = cursor.bytesRead;
         }
-        catch { /* reset to 0 */ }
+        catch {
+            /* reset to 0 */
+        }
     }
     // Check file size
     const stat = statSync(inbox);
@@ -151,7 +153,7 @@ export function readNewInboxMessages(teamName, workerName) {
     if (cappedSize < readSize) {
         console.warn(`[inbox-outbox] Inbox for ${workerName} exceeds ${MAX_INBOX_READ_SIZE} bytes, reading truncated`);
     }
-    const fd = openSync(inbox, 'r');
+    const fd = openSync(inbox, "r");
     const buffer = Buffer.alloc(cappedSize);
     try {
         readSync(fd, buffer, 0, buffer.length, offset);
@@ -159,11 +161,11 @@ export function readNewInboxMessages(teamName, workerName) {
     finally {
         closeSync(fd);
     }
-    const newData = buffer.toString('utf-8');
+    const newData = buffer.toString("utf-8");
     // Find the last newline in the buffer to avoid processing partial trailing lines.
     // This prevents livelock when the capped buffer ends mid-line: we only process
     // up to the last complete line boundary and leave the partial for the next read.
-    const lastNewlineIdx = newData.lastIndexOf('\n');
+    const lastNewlineIdx = newData.lastIndexOf("\n");
     if (lastNewlineIdx === -1) {
         // No complete line in buffer — don't advance cursor, wait for more data
         return [];
@@ -171,22 +173,22 @@ export function readNewInboxMessages(teamName, workerName) {
     const completeData = newData.substring(0, lastNewlineIdx + 1);
     const messages = [];
     let bytesProcessed = 0;
-    const lines = completeData.split('\n');
+    const lines = completeData.split("\n");
     // Remove trailing empty string from split — completeData always ends with '\n',
     // so the last element is always '' and doesn't represent real data.
-    if (lines.length > 0 && lines[lines.length - 1] === '') {
+    if (lines.length > 0 && lines[lines.length - 1] === "") {
         lines.pop();
     }
     for (const line of lines) {
         if (!line.trim()) {
             // Account for the newline separator byte(s). Check for \r\n (CRLF) by
             // looking at whether the line ends with \r (split on \n leaves \r attached).
-            bytesProcessed += Buffer.byteLength(line, 'utf-8') + 1; // +1 for the \n
+            bytesProcessed += Buffer.byteLength(line, "utf-8") + 1; // +1 for the \n
             continue;
         }
         // Strip trailing \r if present (from CRLF line endings)
-        const cleanLine = line.endsWith('\r') ? line.slice(0, -1) : line;
-        const lineBytes = Buffer.byteLength(line, 'utf-8') + 1; // +1 for the \n
+        const cleanLine = line.endsWith("\r") ? line.slice(0, -1) : line;
+        const lineBytes = Buffer.byteLength(line, "utf-8") + 1; // +1 for the \n
         try {
             messages.push(JSON.parse(cleanLine));
             bytesProcessed += lineBytes;
@@ -199,7 +201,9 @@ export function readNewInboxMessages(teamName, workerName) {
     // Advance cursor only through last successfully parsed content
     const newOffset = offset + (bytesProcessed > 0 ? bytesProcessed : 0);
     ensureDir(cursorFile);
-    const newCursor = { bytesRead: newOffset > offset ? newOffset : offset };
+    const newCursor = {
+        bytesRead: newOffset > offset ? newOffset : offset,
+    };
     atomicWriteJson(cursorFile, newCursor);
     return messages;
 }
@@ -209,15 +213,17 @@ export function readAllInboxMessages(teamName, workerName) {
     if (!existsSync(inbox))
         return [];
     try {
-        const content = readFileSync(inbox, 'utf-8');
+        const content = readFileSync(inbox, "utf-8");
         const messages = [];
-        for (const line of content.split('\n')) {
+        for (const line of content.split("\n")) {
             if (!line.trim())
                 continue;
             try {
                 messages.push(JSON.parse(line));
             }
-            catch { /* skip malformed */ }
+            catch {
+                /* skip malformed */
+            }
         }
         return messages;
     }
@@ -231,15 +237,19 @@ export function clearInbox(teamName, workerName) {
     const cursorFile = inboxCursorPath(teamName, workerName);
     if (existsSync(inbox)) {
         try {
-            writeFileWithMode(inbox, '');
+            writeFileWithMode(inbox, "");
         }
-        catch { /* ignore */ }
+        catch {
+            /* ignore */
+        }
     }
     if (existsSync(cursorFile)) {
         try {
             writeFileWithMode(cursorFile, JSON.stringify({ bytesRead: 0 }));
         }
-        catch { /* ignore */ }
+        catch {
+            /* ignore */
+        }
     }
 }
 // --- Shutdown signals ---
@@ -260,7 +270,7 @@ export function checkShutdownSignal(teamName, workerName) {
     if (!existsSync(filePath))
         return null;
     try {
-        const raw = readFileSync(filePath, 'utf-8');
+        const raw = readFileSync(filePath, "utf-8");
         return JSON.parse(raw);
     }
     catch {
@@ -274,7 +284,9 @@ export function deleteShutdownSignal(teamName, workerName) {
         try {
             unlinkSync(filePath);
         }
-        catch { /* ignore */ }
+        catch {
+            /* ignore */
+        }
     }
 }
 // --- Drain signals ---
@@ -295,7 +307,7 @@ export function checkDrainSignal(teamName, workerName) {
     if (!existsSync(filePath))
         return null;
     try {
-        const raw = readFileSync(filePath, 'utf-8');
+        const raw = readFileSync(filePath, "utf-8");
         return JSON.parse(raw);
     }
     catch {
@@ -309,7 +321,9 @@ export function deleteDrainSignal(teamName, workerName) {
         try {
             unlinkSync(filePath);
         }
-        catch { /* ignore */ }
+        catch {
+            /* ignore */
+        }
     }
 }
 // --- Cleanup ---
@@ -327,7 +341,9 @@ export function cleanupWorkerFiles(teamName, workerName) {
             try {
                 unlinkSync(f);
             }
-            catch { /* ignore */ }
+            catch {
+                /* ignore */
+            }
         }
     }
 }

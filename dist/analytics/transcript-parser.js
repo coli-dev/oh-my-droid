@@ -1,5 +1,5 @@
-import * as fs from 'fs';
-import * as readline from 'readline';
+import * as fs from "fs";
+import * as readline from "readline";
 /**
  * Streaming JSONL parser for transcript files.
  * Parses line-by-line without loading the entire file into memory.
@@ -22,10 +22,10 @@ export async function* parseTranscript(filePath, options = {}) {
     if (!fs.existsSync(filePath)) {
         throw new Error(`Transcript file not found: ${filePath}`);
     }
-    const fileStream = fs.createReadStream(filePath, { encoding: 'utf8' });
+    const fileStream = fs.createReadStream(filePath, { encoding: "utf8" });
     const rl = readline.createInterface({
         input: fileStream,
-        crlfDelay: Infinity // Treat \r\n as single line break
+        crlfDelay: Infinity, // Treat \r\n as single line break
     });
     // Handle abort signal
     const abortHandler = () => {
@@ -33,7 +33,7 @@ export async function* parseTranscript(filePath, options = {}) {
         fileStream.destroy();
     };
     if (signal) {
-        signal.addEventListener('abort', abortHandler);
+        signal.addEventListener("abort", abortHandler);
     }
     try {
         for await (const line of rl) {
@@ -65,7 +65,7 @@ export async function* parseTranscript(filePath, options = {}) {
     finally {
         // Clean up
         if (signal) {
-            signal.removeEventListener('abort', abortHandler);
+            signal.removeEventListener("abort", abortHandler);
         }
         rl.close();
         fileStream.destroy();

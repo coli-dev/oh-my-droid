@@ -1,7 +1,7 @@
-import { readdir, stat } from 'fs/promises';
-import { existsSync } from 'fs';
-import { join } from 'path';
-import { homedir } from 'os';
+import { readdir, stat } from "fs/promises";
+import { existsSync } from "fs";
+import { join } from "path";
+import { homedir } from "os";
 /**
  * Check if the encoded path looks like a Windows path (starts with drive letter)
  * Examples: "C--Users-user-project" or "D--work-project"
@@ -15,7 +15,7 @@ function isWindowsEncodedPath(dirName) {
 function normalizePathForOS(decodedPath) {
     // On Windows, convert forward slashes to backslashes for consistency
     // But existsSync works with both, so we normalize to forward slashes for cross-platform
-    return decodedPath.replace(/\\/g, '/');
+    return decodedPath.replace(/\\/g, "/");
 }
 /**
  * UUID regex pattern for session IDs
@@ -46,7 +46,7 @@ export function decodeProjectPath(dirName) {
         return decodeWindowsPath(dirName);
     }
     // Handle Unix encoded paths (e.g., "-home-user-project")
-    if (dirName.startsWith('-')) {
+    if (dirName.startsWith("-")) {
         return decodeUnixPath(dirName);
     }
     // Not an encoded path, return as-is
@@ -58,19 +58,19 @@ export function decodeProjectPath(dirName) {
  */
 function splitPreservingConsecutiveHyphens(str) {
     const result = [];
-    let current = '';
+    let current = "";
     let i = 0;
     while (i < str.length) {
-        if (str[i] === '-') {
+        if (str[i] === "-") {
             if (current) {
                 result.push(current);
-                current = '';
+                current = "";
             }
             // Check for consecutive hyphens
-            if (i + 1 < str.length && str[i + 1] === '-') {
+            if (i + 1 < str.length && str[i + 1] === "-") {
                 // Consecutive hyphens - this means the original had a hyphen
                 // Push empty string as marker, will be joined with hyphen later
-                result.push('');
+                result.push("");
                 i++; // Skip the second hyphen
             }
             i++;
@@ -92,9 +92,9 @@ function decodeWindowsPath(dirName) {
     const driveLetter = dirName[0];
     const rest = dirName.slice(2); // Skip "X-"
     // Simple decode: drive letter + colon + rest with dashes as slashes
-    const simplePath = `${driveLetter}:/${rest.replace(/-/g, '/')}`;
+    const simplePath = `${driveLetter}:/${rest.replace(/-/g, "/")}`;
     // Normalize double slashes that might occur from empty segments
-    const normalizedSimple = simplePath.replace(/\/+/g, '/');
+    const normalizedSimple = simplePath.replace(/\/+/g, "/");
     // If simple decode exists, we're done
     if (existsSync(normalizedSimple)) {
         return normalizedSimple;
@@ -114,21 +114,21 @@ function decodeWindowsPath(dirName) {
         }
         const part = parts[index];
         // Empty string means this was a consecutive hyphen - must join with previous
-        if (part === '' && currentPath) {
-            const pathParts = currentPath.split('/');
-            const lastPart = pathParts.pop() || '';
-            const newPath = pathParts.join('/') + '/' + lastPart + '-';
+        if (part === "" && currentPath) {
+            const pathParts = currentPath.split("/");
+            const lastPart = pathParts.pop() || "";
+            const newPath = pathParts.join("/") + "/" + lastPart + "-";
             generatePaths(parts, index + 1, newPath);
             return;
         }
         // Try adding next segment as a new directory
-        const newDir = currentPath + '/' + part;
+        const newDir = currentPath + "/" + part;
         generatePaths(parts, index + 1, newDir);
         // Try combining with previous segment using hyphen (if not first segment)
         if (index > 0 && currentPath) {
-            const pathParts = currentPath.split('/');
-            const lastPart = pathParts.pop() || '';
-            const newPath = pathParts.join('/') + '/' + lastPart + '-' + part;
+            const pathParts = currentPath.split("/");
+            const lastPart = pathParts.pop() || "";
+            const newPath = pathParts.join("/") + "/" + lastPart + "-" + part;
             generatePaths(parts, index + 1, newPath);
         }
     }
@@ -147,9 +147,9 @@ function decodeWindowsPath(dirName) {
  */
 function decodeUnixPath(dirName) {
     // Simple decode: replace all dashes with slashes
-    const simplePath = '/' + dirName.slice(1).replace(/-/g, '/');
+    const simplePath = "/" + dirName.slice(1).replace(/-/g, "/");
     // Normalize double slashes
-    const normalizedSimple = simplePath.replace(/\/+/g, '/');
+    const normalizedSimple = simplePath.replace(/\/+/g, "/");
     // If simple decode exists, we're done
     if (existsSync(normalizedSimple)) {
         return normalizedSimple;
@@ -166,24 +166,24 @@ function decodeUnixPath(dirName) {
         }
         const part = parts[index];
         // Empty string means this was a consecutive hyphen - must join with previous
-        if (part === '' && currentPath) {
-            const pathParts = currentPath.split('/');
-            const lastPart = pathParts.pop() || '';
-            const newPath = pathParts.join('/') + '/' + lastPart + '-';
+        if (part === "" && currentPath) {
+            const pathParts = currentPath.split("/");
+            const lastPart = pathParts.pop() || "";
+            const newPath = pathParts.join("/") + "/" + lastPart + "-";
             generatePaths(parts, index + 1, newPath);
             return;
         }
         // Try adding next segment as a new directory
-        generatePaths(parts, index + 1, currentPath + '/' + part);
+        generatePaths(parts, index + 1, currentPath + "/" + part);
         // Try combining with previous segment using hyphen (if not first segment)
         if (index > 0 && currentPath) {
-            const pathParts = currentPath.split('/');
-            const lastPart = pathParts.pop() || '';
-            const newPath = pathParts.join('/') + '/' + lastPart + '-' + part;
+            const pathParts = currentPath.split("/");
+            const lastPart = pathParts.pop() || "";
+            const newPath = pathParts.join("/") + "/" + lastPart + "-" + part;
             generatePaths(parts, index + 1, newPath);
         }
     }
-    generatePaths(segments, 0, '');
+    generatePaths(segments, 0, "");
     // Find the first path that exists on filesystem
     for (const path of possiblePaths) {
         if (existsSync(path)) {
@@ -201,9 +201,9 @@ function matchesPattern(path, pattern) {
         return true;
     // Convert glob pattern to regex
     const regexPattern = pattern
-        .replace(/\./g, '\\.')
-        .replace(/\*/g, '.*')
-        .replace(/\?/g, '.');
+        .replace(/\./g, "\\.")
+        .replace(/\*/g, ".*")
+        .replace(/\?/g, ".");
     const regex = new RegExp(`^${regexPattern}$`);
     return regex.test(path);
 }
@@ -211,7 +211,7 @@ function matchesPattern(path, pattern) {
  * Scan for all transcript files in ~/.factory/projects/
  */
 export async function scanTranscripts(options = {}) {
-    const projectsDir = join(homedir(), '.factory', 'projects');
+    const projectsDir = join(homedir(), ".factory", "projects");
     const transcripts = [];
     const projectDirs = new Set();
     try {
@@ -231,11 +231,12 @@ export async function scanTranscripts(options = {}) {
             const projectFiles = await readdir(fullProjectPath);
             for (const fileName of projectFiles) {
                 // Skip sessions-index.json and any non-.jsonl files
-                if (fileName === 'sessions-index.json' || !fileName.endsWith('.jsonl')) {
+                if (fileName === "sessions-index.json" ||
+                    !fileName.endsWith(".jsonl")) {
                     continue;
                 }
                 // Extract session ID from filename
-                const sessionId = fileName.replace('.jsonl', '');
+                const sessionId = fileName.replace(".jsonl", "");
                 // Validate session ID format (must be UUID)
                 if (!UUID_REGEX.test(sessionId)) {
                     continue;
@@ -252,7 +253,7 @@ export async function scanTranscripts(options = {}) {
                     sessionId,
                     filePath,
                     fileSize: fileStats.size,
-                    modifiedTime: fileStats.mtime
+                    modifiedTime: fileStats.mtime,
                 });
                 projectDirs.add(projectDir);
             }
@@ -260,11 +261,11 @@ export async function scanTranscripts(options = {}) {
     }
     catch (error) {
         // If projects directory doesn't exist, return empty result
-        if (error.code === 'ENOENT') {
+        if (error.code === "ENOENT") {
             return {
                 transcripts: [],
                 totalSize: 0,
-                projectCount: 0
+                projectCount: 0,
             };
         }
         throw error;
@@ -273,7 +274,7 @@ export async function scanTranscripts(options = {}) {
     return {
         transcripts,
         totalSize,
-        projectCount: projectDirs.size
+        projectCount: projectDirs.size,
     };
 }
 //# sourceMappingURL=transcript-scanner.js.map

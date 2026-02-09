@@ -4,8 +4,8 @@
  * Maps worker backends to default capabilities and provides
  * scoring functions for task-worker matching.
  */
-import type { WorkerBackend, WorkerCapability } from './types.js';
-import type { UnifiedTeamMember } from './unified-team.js';
+import type { WorkerBackend, WorkerCapability } from "./types.js";
+import type { UnifiedTeamMember } from "./unified-team.js";
 /**
  * Get default capabilities for a worker backend.
  */

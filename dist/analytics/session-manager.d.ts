@@ -1,4 +1,4 @@
-import { SessionMetadata, SessionAnalytics, SessionHistory, SessionSummary, SessionTag } from './session-types.js';
+import { SessionMetadata, SessionAnalytics, SessionHistory, SessionSummary, SessionTag } from "./session-types.js";
 /**
  * Session activity tracker for tasks and errors
  */
@@ -26,7 +26,7 @@ export declare class SessionManager {
     private currentSession;
     private history;
     startSession(goals: string[], tags?: SessionTag[], notes?: string): Promise<SessionMetadata>;
-    endSession(outcomes: string[], status?: 'completed' | 'abandoned'): Promise<SessionMetadata>;
+    endSession(outcomes: string[], status?: "completed" | "abandoned"): Promise<SessionMetadata>;
     getCurrentSession(): Promise<SessionMetadata | null>;
     resumeSession(sessionId: string): Promise<SessionMetadata>;
     getSessionAnalytics(sessionId: string): Promise<SessionAnalytics>;
@@ -36,7 +36,7 @@ export declare class SessionManager {
         tags?: SessionTag[];
         startDate?: string;
         endDate?: string;
-        status?: SessionMetadata['status'];
+        status?: SessionMetadata["status"];
         projectPath?: string;
     }): Promise<SessionMetadata[]>;
     private saveCurrentSession;

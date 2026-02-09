@@ -6,7 +6,7 @@
  * - Project config: .factory/sisyphus.jsonc
  * - Environment variables
  */
-import type { PluginConfig } from '../shared/types.js';
+import type { PluginConfig } from "../shared/types.js";
 /**
  * Default configuration
  */

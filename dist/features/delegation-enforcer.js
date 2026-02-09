@@ -7,7 +7,7 @@
  * This solves the problem where Droid doesn't automatically apply models
  * from agent definitions - every Task call must explicitly pass the model parameter.
  */
-import { getAgentDefinitions } from '../droids/definitions.js';
+import { getAgentDefinitions } from "../agents/definitions.js";
 /**
  * Enforce model parameter for an agent delegation call
  *
@@ -29,7 +29,7 @@ export function enforceModel(agentInput) {
         };
     }
     // Extract agent type (strip oh-my-droid: prefix if present)
-    const agentType = agentInput.subagent_type.replace(/^oh-my-droid:/, '');
+    const agentType = agentInput.subagent_type.replace(/^oh-my-droid:/, "");
     // Get agent definition
     const agentDefs = getAgentDefinitions();
     const agentDef = agentDefs[agentType];
@@ -48,7 +48,7 @@ export function enforceModel(agentInput) {
     };
     // Create warning message (only shown if OMD_DEBUG=true)
     let warning;
-    if (process.env.OMD_DEBUG === 'true') {
+    if (process.env.OMD_DEBUG === "true") {
         warning = `[OMD] Auto-injecting model: ${sdkModel} for ${agentType}`;
     }
     return {
@@ -63,8 +63,8 @@ export function enforceModel(agentInput) {
  * Convert ModelType to SDK model format
  */
 function convertToSdkModel(model) {
-    if (model === 'inherit') {
-        return 'sonnet'; // Default fallback
+    if (model === "inherit") {
+        return "sonnet"; // Default fallback
     }
     return model;
 }
@@ -72,16 +72,16 @@ function convertToSdkModel(model) {
  * Check if tool input is an agent delegation call
  */
 export function isAgentCall(toolName, toolInput) {
-    if (toolName !== 'Agent' && toolName !== 'Task') {
+    if (toolName !== "Agent" && toolName !== "Task") {
         return false;
     }
-    if (!toolInput || typeof toolInput !== 'object') {
+    if (!toolInput || typeof toolInput !== "object") {
         return false;
     }
     const input = toolInput;
-    return (typeof input.subagent_type === 'string' &&
-        typeof input.prompt === 'string' &&
-        typeof input.description === 'string');
+    return (typeof input.subagent_type === "string" &&
+        typeof input.prompt === "string" &&
+        typeof input.description === "string");
 }
 /**
  * Process a pre-tool-use hook for model enforcement
@@ -114,7 +114,7 @@ export function processPreToolUse(toolName, toolInput) {
  * @throws Error if agent type not found or has no model
  */
 export function getModelForAgent(agentType) {
-    const normalizedType = agentType.replace(/^oh-my-droid:/, '');
+    const normalizedType = agentType.replace(/^oh-my-droid:/, "");
     const agentDefs = getAgentDefinitions();
     const agentDef = agentDefs[normalizedType];
     if (!agentDef) {

@@ -4,7 +4,7 @@ export interface ActivityEntry {
     action: string;
     target?: string;
     details?: string;
-    category: 'task' | 'file' | 'message' | 'lifecycle' | 'error';
+    category: "task" | "file" | "message" | "lifecycle" | "error";
 }
 /**
  * Get structured activity log from audit events.
@@ -13,7 +13,7 @@ export interface ActivityEntry {
 export declare function getActivityLog(workingDirectory: string, teamName: string, options?: {
     since?: string;
     limit?: number;
-    category?: ActivityEntry['category'];
+    category?: ActivityEntry["category"];
     actor?: string;
 }): ActivityEntry[];
 /**

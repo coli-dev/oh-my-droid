@@ -4,11 +4,11 @@
  * Writes assembled prompts and model responses to .omd/prompts/ before/after
  * sending to Codex/Gemini, providing visibility, debugging, and compliance audit trail.
  */
-import { mkdirSync, writeFileSync, readFileSync, existsSync, renameSync, readdirSync, unlinkSync } from 'fs';
-import { join } from 'path';
-import { randomBytes } from 'crypto';
-import { getWorktreeRoot } from '../lib/worktree-paths.js';
-import { initJobDb, isJobDbInitialized, upsertJob, getJob, getActiveJobs as getActiveJobsFromDb, cleanupOldJobs as cleanupOldJobsInDb } from './job-state-db.js';
+import { mkdirSync, writeFileSync, readFileSync, existsSync, renameSync, readdirSync, unlinkSync, } from "fs";
+import { join } from "path";
+import { randomBytes } from "crypto";
+import { getWorktreeRoot } from "../lib/worktree-paths.js";
+import { initJobDb, isJobDbInitialized, upsertJob, getJob, getActiveJobs as getActiveJobsFromDb, cleanupOldJobs as cleanupOldJobsInDb, } from "./job-state-db.js";
 // Lazy-init guard: fires initJobDb at most once per process.
 // initJobDb is async (dynamic import of better-sqlite3). If it hasn't resolved
 // yet, isJobDbInitialized() returns false and callers use JSON fallback.
@@ -23,7 +23,9 @@ function ensureJobDb(workingDirectory) {
         return;
     _dbInitAttempted = true;
     const root = getWorktreeRoot(workingDirectory) || workingDirectory || process.cwd();
-    initJobDb(root).catch(() => { });
+    initJobDb(root).catch(() => {
+        /* graceful fallback to JSON */
+    });
 }
 function yamlString(value) {
     // JSON strings are valid YAML scalars and safely escape quotes/newlines.
@@ -56,23 +58,23 @@ function renameOverwritingSync(fromPath, toPath) {
  * @returns A filesystem-safe slug
  */
 export function slugify(text, maxWords = 4) {
-    if (!text || typeof text !== 'string') {
-        return 'prompt';
+    if (!text || typeof text !== "string") {
+        return "prompt";
     }
     // Take first maxWords words
     const words = text.trim().split(/\s+/).slice(0, maxWords);
     // Join, lowercase, replace non-alphanumeric with hyphens
     let slug = words
-        .join('-')
+        .join("-")
         .toLowerCase()
-        .replace(/[^a-z0-9-]/g, '-')
-        .replace(/-+/g, '-') // Collapse multiple hyphens
-        .replace(/^-|-$/g, ''); // Trim leading/trailing hyphens
+        .replace(/[^a-z0-9-]/g, "-")
+        .replace(/-+/g, "-") // Collapse multiple hyphens
+        .replace(/^-|-$/g, ""); // Trim leading/trailing hyphens
     // Truncate to 40 chars max
     if (slug.length > 40) {
-        slug = slug.substring(0, 40).replace(/-$/, '');
+        slug = slug.substring(0, 40).replace(/-$/, "");
     }
-    return slug || 'prompt';
+    return slug || "prompt";
 }
 /**
  * Generate a short unique identifier
@@ -80,41 +82,41 @@ export function slugify(text, maxWords = 4) {
  * @returns 8-character hex string
  */
 export function generatePromptId() {
-    return randomBytes(4).toString('hex');
+    return randomBytes(4).toString("hex");
 }
 /**
  * Get the prompts directory path under the worktree
  */
 export function getPromptsDir(workingDirectory) {
     const root = getWorktreeRoot(workingDirectory) || workingDirectory || process.cwd();
-    return join(root, '.omd', 'prompts');
+    return join(root, ".omd", "prompts");
 }
 /**
  * Build YAML frontmatter for a prompt file
  */
 function buildPromptFrontmatter(options) {
     const lines = [
-        '---',
+        "---",
         `provider: ${yamlString(options.provider)}`,
         `agent_role: ${yamlString(options.agentRole)}`,
         `model: ${yamlString(options.model)}`,
     ];
     if (options.files && options.files.length > 0) {
-        lines.push('files:');
+        lines.push("files:");
         for (const file of options.files) {
             lines.push(`  - ${yamlString(file)}`);
         }
     }
     lines.push(`timestamp: ${yamlString(new Date().toISOString())}`);
-    lines.push('---');
-    return lines.join('\n');
+    lines.push("---");
+    return lines.join("\n");
 }
 /**
  * Build YAML frontmatter for a response file
  */
 function buildResponseFrontmatter(options) {
     const lines = [
-        '---',
+        "---",
         `provider: ${yamlString(options.provider)}`,
         `agent_role: ${yamlString(options.agentRole)}`,
         `model: ${yamlString(options.model)}`,
@@ -125,8 +127,8 @@ function buildResponseFrontmatter(options) {
         lines.push(`fallback_model: ${yamlString(options.fallbackModel)}`);
     }
     lines.push(`timestamp: ${yamlString(new Date().toISOString())}`);
-    lines.push('---');
-    return lines.join('\n');
+    lines.push("---");
+    return lines.join("\n");
 }
 /**
  * Persist a prompt to disk with YAML frontmatter
@@ -144,7 +146,7 @@ export function persistPrompt(options) {
         const filePath = join(promptsDir, filename);
         const frontmatter = buildPromptFrontmatter(options);
         const content = `${frontmatter}\n\n${options.fullPrompt}`;
-        writeFileSync(filePath, content, 'utf-8');
+        writeFileSync(filePath, content, "utf-8");
         return { filePath, id, slug };
     }
     catch (err) {
@@ -181,7 +183,7 @@ export function persistResponse(options) {
         const filePath = join(promptsDir, filename);
         const frontmatter = buildResponseFrontmatter(options);
         const content = `${frontmatter}\n\n${options.response}`;
-        writeFileSync(filePath, content, 'utf-8');
+        writeFileSync(filePath, content, "utf-8");
         return filePath;
     }
     catch (err) {
@@ -204,19 +206,21 @@ export function writeJobStatus(status, workingDirectory) {
     ensureJobDb(workingDirectory);
     // Track the working directory for this job on initial creation
     const mapKey = `${status.provider}:${status.jobId}`;
-    if (status.status === 'spawned' && workingDirectory) {
+    if (status.status === "spawned" && workingDirectory) {
         jobWorkingDirs.set(mapKey, workingDirectory);
     }
     // Clean up map entry on terminal states to prevent unbounded growth
-    if (status.status === 'completed' || status.status === 'failed' || status.status === 'timeout') {
+    if (status.status === "completed" ||
+        status.status === "failed" ||
+        status.status === "timeout") {
         jobWorkingDirs.delete(mapKey);
     }
     try {
         const promptsDir = getPromptsDir(workingDirectory);
         mkdirSync(promptsDir, { recursive: true });
         const statusPath = getStatusFilePath(status.provider, status.slug, status.jobId, workingDirectory);
-        const tempPath = statusPath + '.tmp';
-        writeFileSync(tempPath, JSON.stringify(status, null, 2), 'utf-8');
+        const tempPath = statusPath + ".tmp";
+        writeFileSync(tempPath, JSON.stringify(status, null, 2), "utf-8");
         renameOverwritingSync(tempPath, statusPath);
         // SQLite write-through: also persist to jobs.db if available
         if (isJobDbInitialized()) {
@@ -251,7 +255,7 @@ export function readJobStatus(provider, slug, promptId, workingDirectory) {
         return undefined;
     }
     try {
-        const content = readFileSync(statusPath, 'utf-8');
+        const content = readFileSync(statusPath, "utf-8");
         return JSON.parse(content);
     }
     catch {
@@ -280,7 +284,7 @@ export function readCompletedResponse(provider, slug, promptId, workingDirectory
         return undefined;
     }
     try {
-        const content = readFileSync(responsePath, 'utf-8');
+        const content = readFileSync(responsePath, "utf-8");
         const frontmatterMatch = content.match(/^---\n[\s\S]*?\n---\n\n/);
         const response = frontmatterMatch
             ? content.slice(frontmatterMatch[0].length)
@@ -307,19 +311,19 @@ export function listActiveJobs(provider, workingDirectory) {
     try {
         const files = readdirSync(promptsDir);
         const statusFiles = files.filter((f) => {
-            if (!f.endsWith('.json'))
+            if (!f.endsWith(".json"))
                 return false;
             if (provider) {
                 return f.startsWith(`${provider}-status-`);
             }
-            return f.includes('-status-');
+            return f.includes("-status-");
         });
         const activeJobs = [];
         for (const file of statusFiles) {
             try {
-                const content = readFileSync(join(promptsDir, file), 'utf-8');
+                const content = readFileSync(join(promptsDir, file), "utf-8");
                 const status = JSON.parse(content);
-                if (status.status === 'spawned' || status.status === 'running') {
+                if (status.status === "spawned" || status.status === "running") {
                     activeJobs.push(status);
                 }
             }
@@ -348,20 +352,20 @@ export function cleanupStaleJobs(maxAgeMs, workingDirectory) {
     }
     try {
         const files = readdirSync(promptsDir);
-        const statusFiles = files.filter((f) => f.includes('-status-') && f.endsWith('.json'));
+        const statusFiles = files.filter((f) => f.includes("-status-") && f.endsWith(".json"));
         let cleanedCount = 0;
         const now = Date.now();
         for (const file of statusFiles) {
             try {
                 const filePath = join(promptsDir, file);
-                const content = readFileSync(filePath, 'utf-8');
+                const content = readFileSync(filePath, "utf-8");
                 const status = JSON.parse(content);
-                if (status.status === 'spawned' || status.status === 'running') {
+                if (status.status === "spawned" || status.status === "running") {
                     const spawnedAt = new Date(status.spawnedAt).getTime();
                     if (now - spawnedAt > maxAgeMs) {
-                        status.status = 'timeout';
+                        status.status = "timeout";
                         status.completedAt = new Date().toISOString();
-                        status.error = 'Job exceeded maximum age and was marked stale';
+                        status.error = "Job exceeded maximum age and was marked stale";
                         writeJobStatus(status, workingDirectory);
                         cleanedCount++;
                     }

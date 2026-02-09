@@ -1,4 +1,4 @@
-import type { TranscriptEntry } from './types.js';
+import type { TranscriptEntry } from "./types.js";
 /**
  * Options for transcript parsing.
  */

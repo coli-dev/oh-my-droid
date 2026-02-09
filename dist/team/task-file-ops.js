@@ -5,11 +5,11 @@
  * Read/write/scan task JSON files with atomic writes (temp + rename).
  * Tasks live at ~/.factory/tasks/{teamName}/{id}.json
  */
-import { readFileSync, readdirSync, existsSync, openSync, closeSync, unlinkSync, writeSync, statSync, constants as fsConstants } from 'fs';
-import { join } from 'path';
-import { homedir } from 'os';
-import { sanitizeName } from './tmux-session.js';
-import { atomicWriteJson, validateResolvedPath, ensureDirWithMode } from './fs-utils.js';
+import { readFileSync, readdirSync, existsSync, openSync, closeSync, unlinkSync, writeSync, statSync, constants as fsConstants, } from "fs";
+import { join } from "path";
+import { homedir } from "os";
+import { sanitizeName } from "./tmux-session.js";
+import { atomicWriteJson, validateResolvedPath, ensureDirWithMode, } from "./fs-utils.js";
 /** Default age (ms) after which a lock file is considered stale. */
 const DEFAULT_STALE_LOCK_MS = 30_000;
 /**
@@ -25,7 +25,10 @@ function isPidAlive(pid) {
     }
     catch (e) {
         // EPERM means the process exists but we don't have permission — still alive
-        if (e && typeof e === 'object' && 'code' in e && e.code === 'EPERM')
+        if (e &&
+            typeof e === "object" &&
+            "code" in e &&
+            e.code === "EPERM")
             return true;
         return false;
     }
@@ -52,20 +55,25 @@ export function acquireTaskLock(teamName, taskId, opts) {
             // Write payload so stale-detection can read PID + timestamp
             const payload = JSON.stringify({
                 pid: process.pid,
-                workerName: opts?.workerName ?? '',
+                workerName: opts?.workerName ?? "",
                 timestamp: Date.now(),
             });
-            writeSync(fd, payload, null, 'utf-8');
+            writeSync(fd, payload, null, "utf-8");
             return { fd, path: lockPath };
         }
         catch (err) {
-            if (err && typeof err === 'object' && 'code' in err && err.code === 'EEXIST') {
+            if (err &&
+                typeof err === "object" &&
+                "code" in err &&
+                err.code === "EEXIST") {
                 // Lock file exists — check if stale
                 if (attempt === 0 && isLockStale(lockPath, staleLockMs)) {
                     try {
                         unlinkSync(lockPath);
                     }
-                    catch { /* another worker reaped it */ }
+                    catch {
+                        /* another worker reaped it */
+                    }
                     continue; // retry once
                 }
                 return null; // held by a live worker
@@ -83,11 +91,15 @@ export function releaseTaskLock(handle) {
     try {
         closeSync(handle.fd);
     }
-    catch { /* already closed */ }
+    catch {
+        /* already closed */
+    }
     try {
         unlinkSync(handle.path);
     }
-    catch { /* already removed */ }
+    catch {
+        /* already removed */
+    }
 }
 /**
  * Execute a function while holding an exclusive task lock.
@@ -116,7 +128,7 @@ function isLockStale(lockPath, staleLockMs) {
             return false;
         // Try to read PID from the lock payload
         try {
-            const raw = readFileSync(lockPath, 'utf-8');
+            const raw = readFileSync(lockPath, "utf-8");
             const payload = JSON.parse(raw);
             if (payload.pid && isPidAlive(payload.pid))
                 return false;
@@ -141,8 +153,8 @@ function sanitizeTaskId(taskId) {
 }
 /** Paths helper */
 function tasksDir(teamName) {
-    const result = join(homedir(), '.factory', 'tasks', sanitizeName(teamName));
-    validateResolvedPath(result, join(homedir(), '.factory', 'tasks'));
+    const result = join(homedir(), ".factory", "tasks", sanitizeName(teamName));
+    validateResolvedPath(result, join(homedir(), ".factory", "tasks"));
     return result;
 }
 function taskPath(teamName, taskId) {
@@ -157,7 +169,7 @@ export function readTask(teamName, taskId) {
     if (!existsSync(filePath))
         return null;
     try {
-        const raw = readFileSync(filePath, 'utf-8');
+        const raw = readFileSync(filePath, "utf-8");
         return JSON.parse(raw);
     }
     catch {
@@ -179,7 +191,7 @@ export function updateTask(teamName, taskId, updates, opts) {
         const filePath = taskPath(teamName, taskId);
         let task;
         try {
-            const raw = readFileSync(filePath, 'utf-8');
+            const raw = readFileSync(filePath, "utf-8");
             task = JSON.parse(raw);
         }
         catch {
@@ -200,7 +212,7 @@ export function updateTask(teamName, taskId, updates, opts) {
     if (!handle) {
         // Fallback: another worker holds the lock — proceed without lock + warn
         // This maintains backward compatibility while logging the degradation
-        if (typeof process !== 'undefined' && process.stderr) {
+        if (typeof process !== "undefined" && process.stderr) {
             process.stderr.write(`[task-file-ops] WARN: could not acquire lock for task ${taskId}, updating without lock\n`);
         }
         doUpdate();
@@ -234,7 +246,7 @@ export async function findNextTask(teamName, workerName) {
         const task = readTask(teamName, id);
         if (!task)
             continue;
-        if (task.status !== 'pending')
+        if (task.status !== "pending")
             continue;
         if (task.owner !== workerName)
             continue;
@@ -248,7 +260,7 @@ export async function findNextTask(teamName, workerName) {
             // Re-read under lock to verify state hasn't changed
             const freshTask = readTask(teamName, id);
             if (!freshTask ||
-                freshTask.status !== 'pending' ||
+                freshTask.status !== "pending" ||
                 freshTask.owner !== workerName ||
                 !areBlockersResolved(teamName, freshTask.blockedBy)) {
                 continue; // state changed between pre-check and lock acquisition
@@ -257,7 +269,7 @@ export async function findNextTask(teamName, workerName) {
             const filePath = join(tasksDir(teamName), `${sanitizeTaskId(id)}.json`);
             let taskData;
             try {
-                const raw = readFileSync(filePath, 'utf-8');
+                const raw = readFileSync(filePath, "utf-8");
                 taskData = JSON.parse(raw);
             }
             catch {
@@ -266,9 +278,15 @@ export async function findNextTask(teamName, workerName) {
             taskData.claimedBy = workerName;
             taskData.claimedAt = Date.now();
             taskData.claimPid = process.pid;
-            taskData.status = 'in_progress';
+            taskData.status = "in_progress";
             atomicWriteJson(filePath, taskData);
-            return { ...freshTask, claimedBy: workerName, claimedAt: taskData.claimedAt, claimPid: process.pid, status: 'in_progress' };
+            return {
+                ...freshTask,
+                claimedBy: workerName,
+                claimedAt: taskData.claimedAt,
+                claimPid: process.pid,
+                status: "in_progress",
+            };
         }
         finally {
             releaseTaskLock(handle);
@@ -282,7 +300,7 @@ export function areBlockersResolved(teamName, blockedBy) {
         return true;
     for (const blockerId of blockedBy) {
         const blocker = readTask(teamName, blockerId);
-        if (!blocker || blocker.status !== 'completed')
+        if (!blocker || blocker.status !== "completed")
             return false;
     }
     return true;
@@ -308,7 +326,7 @@ export function readTaskFailure(teamName, taskId) {
     if (!existsSync(filePath))
         return null;
     try {
-        const raw = readFileSync(filePath, 'utf-8');
+        const raw = readFileSync(filePath, "utf-8");
         return JSON.parse(raw);
     }
     catch {
@@ -331,8 +349,10 @@ export function listTaskIds(teamName) {
         return [];
     try {
         return readdirSync(dir)
-            .filter(f => f.endsWith('.json') && !f.includes('.tmp.') && !f.includes('.failure.'))
-            .map(f => f.replace('.json', ''))
+            .filter((f) => f.endsWith(".json") &&
+            !f.includes(".tmp.") &&
+            !f.includes(".failure."))
+            .map((f) => f.replace(".json", ""))
             .sort((a, b) => {
             const numA = parseInt(a, 10);
             const numB = parseInt(b, 10);

@@ -6,7 +6,7 @@
  * and cannot be mechanically restricted. Permissions are injected into
  * prompts as instructions for the LLM to follow.
  */
-import { relative, resolve } from 'node:path';
+import { relative, resolve } from "node:path";
 /**
  * Simple glob matching for path patterns.
  * Supports: * (any non-/ chars), ** (any depth including /), ? (single non-/ char), exact match.
@@ -20,25 +20,27 @@ function matchGlob(pattern, path) {
     let starSi = -1; // string index at last '*' fallback point
     while (si < path.length) {
         // Check for '**' (matches anything including '/')
-        if (pi < pattern.length - 1 && pattern[pi] === '*' && pattern[pi + 1] === '*') {
+        if (pi < pattern.length - 1 &&
+            pattern[pi] === "*" &&
+            pattern[pi + 1] === "*") {
             // Consume the '**'
             pi += 2;
             // Skip trailing '/' after '**' if present
-            if (pi < pattern.length && pattern[pi] === '/')
+            if (pi < pattern.length && pattern[pi] === "/")
                 pi++;
             starPi = pi;
             starSi = si;
             continue;
         }
         // Check for single '*' (matches any non-/ chars)
-        if (pi < pattern.length && pattern[pi] === '*') {
+        if (pi < pattern.length && pattern[pi] === "*") {
             pi++;
             starPi = pi;
             starSi = si;
             continue;
         }
         // Check for '?' (matches single non-/ char)
-        if (pi < pattern.length && pattern[pi] === '?' && path[si] !== '/') {
+        if (pi < pattern.length && pattern[pi] === "?" && path[si] !== "/") {
             pi++;
             si++;
             continue;
@@ -58,9 +60,14 @@ function matchGlob(pattern, path) {
             // We detect this by checking if the star was a '**' or '*'
             // If we got here from '**', slashes are OK; from '*', skip if slash
             // Re-check: was the star a '**'?
-            const wasSingleStar = starPi >= 2 && pattern[starPi - 2] === '*' && pattern[starPi - 1] === '*' ? false :
-                starPi >= 1 && pattern[starPi - 1] === '*' ? true : false;
-            if (wasSingleStar && si > 0 && path[si - 1] === '/') {
+            const wasSingleStar = starPi >= 2 &&
+                pattern[starPi - 2] === "*" &&
+                pattern[starPi - 1] === "*"
+                ? false
+                : starPi >= 1 && pattern[starPi - 1] === "*"
+                    ? true
+                    : false;
+            if (wasSingleStar && si > 0 && path[si - 1] === "/") {
                 return false;
             }
             continue;
@@ -69,10 +76,10 @@ function matchGlob(pattern, path) {
     }
     // Consume remaining pattern characters (trailing '*' or '**')
     while (pi < pattern.length) {
-        if (pattern[pi] === '*') {
+        if (pattern[pi] === "*") {
             pi++;
         }
-        else if (pattern[pi] === '/') {
+        else if (pattern[pi] === "/") {
             // Allow trailing slash in pattern after '**'
             pi++;
         }
@@ -91,7 +98,7 @@ export function isPathAllowed(permissions, filePath, workingDirectory) {
     const absPath = resolve(workingDirectory, filePath);
     const relPath = relative(workingDirectory, absPath);
     // If path escapes working directory, always deny
-    if (relPath.startsWith('..'))
+    if (relPath.startsWith(".."))
         return false;
     // Check denied paths first (they override)
     for (const pattern of permissions.deniedPaths) {
@@ -116,30 +123,30 @@ export function isCommandAllowed(permissions, command) {
     if (permissions.allowedCommands.length === 0)
         return true;
     const trimmed = command.trim();
-    return permissions.allowedCommands.some(prefix => trimmed.startsWith(prefix));
+    return permissions.allowedCommands.some((prefix) => trimmed.startsWith(prefix));
 }
 /**
  * Generate permission instructions for inclusion in worker prompt.
  */
 export function formatPermissionInstructions(permissions) {
     const lines = [];
-    lines.push('PERMISSION CONSTRAINTS:');
+    lines.push("PERMISSION CONSTRAINTS:");
     if (permissions.allowedPaths.length > 0) {
-        lines.push(`- You may ONLY modify files matching: ${permissions.allowedPaths.join(', ')}`);
+        lines.push(`- You may ONLY modify files matching: ${permissions.allowedPaths.join(", ")}`);
     }
     if (permissions.deniedPaths.length > 0) {
-        lines.push(`- You must NOT modify files matching: ${permissions.deniedPaths.join(', ')}`);
+        lines.push(`- You must NOT modify files matching: ${permissions.deniedPaths.join(", ")}`);
     }
     if (permissions.allowedCommands.length > 0) {
-        lines.push(`- You may ONLY run commands starting with: ${permissions.allowedCommands.join(', ')}`);
+        lines.push(`- You may ONLY run commands starting with: ${permissions.allowedCommands.join(", ")}`);
     }
     if (Number.isFinite(permissions.maxFileSize)) {
         lines.push(`- Maximum file size: ${Math.round(permissions.maxFileSize / 1024)}KB per file`);
     }
     if (lines.length === 1) {
-        lines.push('- No restrictions (full access within working directory)');
+        lines.push("- No restrictions (full access within working directory)");
     }
-    return lines.join('\n');
+    return lines.join("\n");
 }
 /**
  * Default permissions (allow all within working directory).
@@ -158,12 +165,12 @@ export function getDefaultPermissions(workerName) {
  * These protect sensitive files from being modified by any worker.
  */
 const SECURE_DENY_DEFAULTS = [
-    '.git/**',
-    '.env*',
-    '**/.env*',
-    '**/secrets/**',
-    '**/.ssh/**',
-    '**/node_modules/.cache/**',
+    ".git/**",
+    ".env*",
+    "**/.env*",
+    "**/secrets/**",
+    "**/.ssh/**",
+    "**/node_modules/.cache/**",
 ];
 /**
  * Merge caller-provided permissions with secure deny-defaults.
@@ -172,11 +179,11 @@ const SECURE_DENY_DEFAULTS = [
 export function getEffectivePermissions(base) {
     const perms = base
         ? { ...getDefaultPermissions(base.workerName), ...base }
-        : getDefaultPermissions('default');
+        : getDefaultPermissions("default");
     // Prepend secure defaults (deduplicating against existing deniedPaths)
     const existingSet = new Set(perms.deniedPaths);
     const merged = [
-        ...SECURE_DENY_DEFAULTS.filter(p => !existingSet.has(p)),
+        ...SECURE_DENY_DEFAULTS.filter((p) => !existingSet.has(p)),
         ...perms.deniedPaths,
     ];
     perms.deniedPaths = merged;
@@ -198,17 +205,17 @@ export function findPermissionViolations(changedPaths, permissions, cwd) {
             const absPath = resolve(cwd, filePath);
             const relPath = relative(cwd, absPath);
             let reason;
-            if (relPath.startsWith('..')) {
+            if (relPath.startsWith("..")) {
                 reason = `Path escapes working directory: ${relPath}`;
             }
             else {
                 // Find which deny pattern matched
-                const matchedDeny = permissions.deniedPaths.find(p => matchGlob(p, relPath));
+                const matchedDeny = permissions.deniedPaths.find((p) => matchGlob(p, relPath));
                 if (matchedDeny) {
                     reason = `Matches denied pattern: ${matchedDeny}`;
                 }
                 else {
-                    reason = `Not in allowed paths: ${permissions.allowedPaths.join(', ') || '(none configured)'}`;
+                    reason = `Not in allowed paths: ${permissions.allowedPaths.join(", ") || "(none configured)"}`;
                 }
             }
             violations.push({ path: relPath, reason });

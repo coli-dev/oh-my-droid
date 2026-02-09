@@ -14,8 +14,8 @@
 export async function getAnalyticsDisplay() {
     try {
         // Dynamic imports to avoid circular dependencies and handle missing modules
-        const { getTokenTracker } = await import('../analytics/token-tracker.js');
-        const { calculateCost, formatCost, getCostColor } = await import('../analytics/cost-estimator.js');
+        const { getTokenTracker } = await import("../analytics/token-tracker.js");
+        const { calculateCost, formatCost, getCostColor } = await import("../analytics/cost-estimator.js");
         const tracker = getTokenTracker();
         const stats = tracker.getSessionStats();
         // Calculate total cost
@@ -27,7 +27,7 @@ export async function getAnalyticsDisplay() {
                     inputTokens: usage.inputTokens,
                     outputTokens: usage.outputTokens,
                     cacheCreationTokens: usage.cacheCreationTokens,
-                    cacheReadTokens: usage.cacheReadTokens
+                    cacheReadTokens: usage.cacheReadTokens,
                 });
                 totalCost += cost.totalCost;
             }
@@ -35,8 +35,8 @@ export async function getAnalyticsDisplay() {
         // Get top droids
         const topAgents = await tracker.getTopAgents(3);
         const topAgentsStr = topAgents.length > 0
-            ? topAgents.map(a => `${a.agent}:${formatCost(a.cost)}`).join(' ')
-            : 'none';
+            ? topAgents.map((a) => `${a.agent}:${formatCost(a.cost)}`).join(" ")
+            : "none";
         // Calculate cache efficiency
         const totalCacheRead = stats.totalCacheRead;
         const totalInput = stats.totalInputTokens + stats.totalCacheCreation + stats.totalCacheRead;
@@ -52,17 +52,17 @@ export async function getAnalyticsDisplay() {
             sessionTokens,
             topAgents: topAgentsStr,
             cacheEfficiency,
-            costColor
+            costColor,
         };
     }
     catch (error) {
         // Return safe defaults if analytics not yet initialized
         return {
-            sessionCost: '$0.00',
-            sessionTokens: '0',
-            topAgents: 'none',
-            cacheEfficiency: '0%',
-            costColor: 'green'
+            sessionCost: "$0.00",
+            sessionTokens: "0",
+            topAgents: "none",
+            cacheEfficiency: "0%",
+            costColor: "green",
         };
     }
 }
@@ -81,9 +81,12 @@ function formatTokenCount(tokens) {
  */
 function getCostColorIndicator(color) {
     switch (color) {
-        case 'green': return '🟢';
-        case 'yellow': return '🟡';
-        case 'red': return '🔴';
+        case "green":
+            return "🟢";
+        case "yellow":
+            return "🟡";
+        case "red":
+            return "🔴";
     }
 }
 /**
@@ -91,9 +94,12 @@ function getCostColorIndicator(color) {
  */
 function getHealthIndicator(health) {
     switch (health) {
-        case 'healthy': return '🟢';
-        case 'warning': return '🟡';
-        case 'critical': return '🔴';
+        case "healthy":
+            return "🟢";
+        case "warning":
+            return "🟡";
+        case "critical":
+            return "🔴";
     }
 }
 /**
@@ -117,26 +123,26 @@ export function renderAnalyticsLineWithConfig(analytics, showCost, showCache) {
         parts.push(`Cache: ${analytics.cacheEfficiency}`);
     }
     parts.push(`Top: ${analytics.topAgents}`);
-    return parts.join(' | ');
+    return parts.join(" | ");
 }
 /**
  * Get current session info for HUD display.
  */
 export async function getSessionInfo() {
     try {
-        const { getSessionManager } = await import('../analytics/session-manager.js');
+        const { getSessionManager } = await import("../analytics/session-manager.js");
         const manager = getSessionManager();
         const session = await manager.getCurrentSession();
         if (!session) {
-            return 'No active session';
+            return "No active session";
         }
         const duration = Date.now() - new Date(session.startTime).getTime();
         const durationMinutes = Math.floor(duration / 60000);
-        const tags = session.tags.join(',');
+        const tags = session.tags.join(",");
         return `Session: ${session.id.slice(-8)} | ${durationMinutes}m | Tags: ${tags}`;
     }
     catch (error) {
-        return 'Session info unavailable';
+        return "Session info unavailable";
     }
 }
 /**
@@ -144,11 +150,13 @@ export async function getSessionInfo() {
  */
 export function getSessionHealthAnalyticsData(sessionHealth) {
     const costIndicator = getHealthIndicator(sessionHealth.health);
-    const costPrefix = sessionHealth.isEstimated ? '~' : '';
+    const costPrefix = sessionHealth.isEstimated ? "~" : "";
     const cost = `${costPrefix}$${(sessionHealth.sessionCost ?? 0).toFixed(4)}`;
     const tokens = formatTokenCount(sessionHealth.totalTokens ?? 0);
     const cache = `${(sessionHealth.cacheHitRate ?? 0).toFixed(1)}%`;
-    const costHour = sessionHealth.costPerHour ? `$${sessionHealth.costPerHour.toFixed(2)}/h` : '';
+    const costHour = sessionHealth.costPerHour
+        ? `$${sessionHealth.costPerHour.toFixed(2)}/h`
+        : "";
     return { costIndicator, cost, tokens, cache, costHour };
 }
 /**
@@ -157,10 +165,15 @@ export function getSessionHealthAnalyticsData(sessionHealth) {
  */
 export function renderSessionHealthAnalytics(sessionHealth) {
     const data = getSessionHealthAnalyticsData(sessionHealth);
-    const parts = [data.costIndicator, data.cost, data.tokens, `Cache: ${data.cache}`];
+    const parts = [
+        data.costIndicator,
+        data.cost,
+        data.tokens,
+        `Cache: ${data.cache}`,
+    ];
     if (data.costHour)
         parts.push(data.costHour);
-    return parts.join(' | ');
+    return parts.join(" | ");
 }
 /**
  * Render budget warning if cost exceeds thresholds
@@ -173,7 +186,7 @@ export function renderBudgetWarning(sessionHealth) {
     else if (cost > 2.0) {
         return `⚡ Budget notice: Session cost ${cost.toFixed(2)} approaching limit`;
     }
-    return '';
+    return "";
 }
 /**
  * Render cache efficiency meter
@@ -182,7 +195,7 @@ export function renderCacheEfficiency(sessionHealth) {
     const rate = sessionHealth.cacheHitRate ?? 0;
     const barLength = 20;
     const filled = Math.round((rate / 100) * barLength);
-    const bar = '█'.repeat(filled) + '░'.repeat(barLength - filled);
+    const bar = "█".repeat(filled) + "░".repeat(barLength - filled);
     return `Cache: ${bar} ${rate.toFixed(1)}%`;
 }
 //# sourceMappingURL=analytics-display.js.map

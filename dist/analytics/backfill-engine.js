@@ -1,11 +1,11 @@
-import { EventEmitter } from 'events';
-import * as path from 'path';
-import { scanTranscripts } from './transcript-scanner.js';
-import { parseTranscript } from './transcript-parser.js';
-import { BackfillDedup } from './backfill-dedup.js';
-import { getTokenTracker } from './token-tracker.js';
-import { calculateCost } from './cost-estimator.js';
-import { extractTokenUsage, extractTaskSpawns } from './transcript-token-extractor.js';
+import { EventEmitter } from "events";
+import * as path from "path";
+import { scanTranscripts } from "./transcript-scanner.js";
+import { parseTranscript } from "./transcript-parser.js";
+import { BackfillDedup } from "./backfill-dedup.js";
+import { getTokenTracker } from "./token-tracker.js";
+import { calculateCost } from "./cost-estimator.js";
+import { extractTokenUsage, extractTaskSpawns, } from "./transcript-token-extractor.js";
 /**
  * BackfillEngine orchestrates the offline transcript analysis pipeline.
  *
@@ -92,7 +92,7 @@ export class BackfillEngine extends EventEmitter {
         // This is populated as we encounter assistant entries with Task tool calls
         const agentLookup = new Map();
         // Emit progress
-        this.emit('progress', {
+        this.emit("progress", {
             currentFile: path.basename(transcript.filePath),
             filesProcessed: result.filesProcessed,
             totalFiles,

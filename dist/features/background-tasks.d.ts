@@ -15,7 +15,7 @@
  * - Concurrency limit enforcement
  * - System prompt guidance for droids
  */
-import type { BackgroundTask, SessionState, PluginConfig } from '../shared/types.js';
+import type { BackgroundTask, SessionState, PluginConfig } from "../shared/types.js";
 /**
  * Default maximum concurrent background tasks
  */
@@ -39,9 +39,9 @@ export interface TaskExecutionDecision {
     /** Human-readable reason for the decision */
     reason: string;
     /** Estimated duration category */
-    estimatedDuration: 'quick' | 'medium' | 'long' | 'unknown';
+    estimatedDuration: "quick" | "medium" | "long" | "unknown";
     /** Confidence level of the decision */
-    confidence: 'high' | 'medium' | 'low';
+    confidence: "high" | "medium" | "low";
 }
 /**
  * Determine if a command should run in background
@@ -67,13 +67,13 @@ export interface BackgroundTaskManager {
     /** Get all background tasks */
     getTasks(): BackgroundTask[];
     /** Get tasks by status */
-    getTasksByStatus(status: BackgroundTask['status']): BackgroundTask[];
+    getTasksByStatus(status: BackgroundTask["status"]): BackgroundTask[];
     /** Get count of running tasks */
     getRunningCount(): number;
     /** Check if we can start a new background task */
     canStartNewTask(): boolean;
     /** Update task status */
-    updateTaskStatus(taskId: string, status: BackgroundTask['status'], result?: string, error?: string): void;
+    updateTaskStatus(taskId: string, status: BackgroundTask["status"], result?: string, error?: string): void;
     /** Mark task as completed */
     completeTask(taskId: string, result: string): void;
     /** Mark task as failed */

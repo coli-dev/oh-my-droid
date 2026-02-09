@@ -4,31 +4,31 @@
  * This module exports all custom tools and provides helpers
  * for creating MCP servers with the Droid Agent SDK.
  */
-import { z } from 'zod';
-import { lspTools } from './lsp-tools.js';
-import { astTools } from './ast-tools.js';
-import { pythonReplTool } from './python-repl/index.js';
-export { lspTools } from './lsp-tools.js';
-export { astTools } from './ast-tools.js';
-export { pythonReplTool } from './python-repl/index.js';
+import { z } from "zod";
+import { lspTools } from "./lsp-tools.js";
+import { astTools } from "./ast-tools.js";
+import { pythonReplTool } from "./python-repl/index.js";
+export { lspTools } from "./lsp-tools.js";
+export { astTools } from "./ast-tools.js";
+export { pythonReplTool } from "./python-repl/index.js";
 /**
  * All custom tools available in the system
  */
 export const allCustomTools = [
     ...lspTools,
     ...astTools,
-    pythonReplTool
+    pythonReplTool,
 ];
 /**
  * Get tools by category
  */
 export function getToolsByCategory(category) {
     switch (category) {
-        case 'lsp':
+        case "lsp":
             return lspTools;
-        case 'ast':
+        case "ast":
             return astTools;
-        case 'all':
+        case "all":
             return allCustomTools;
     }
 }
@@ -47,7 +47,7 @@ export function toSdkToolFormat(tool) {
     return {
         name: tool.name,
         description: tool.description,
-        inputSchema: jsonSchema
+        inputSchema: jsonSchema,
     };
 }
 /**
@@ -66,9 +66,9 @@ function zodToJsonSchema(schema) {
         }
     }
     return {
-        type: 'object',
+        type: "object",
         properties,
-        required
+        required,
     };
 }
 /**
@@ -93,22 +93,22 @@ function zodTypeToJsonSchema(zodType) {
     }
     // Handle basic types
     if (zodType instanceof z.ZodString) {
-        result.type = 'string';
+        result.type = "string";
     }
     else if (zodType instanceof z.ZodNumber) {
-        result.type = zodType._def.checks?.some((c) => c.kind === 'int')
-            ? 'integer'
-            : 'number';
+        result.type = zodType._def.checks?.some((c) => c.kind === "int")
+            ? "integer"
+            : "number";
     }
     else if (zodType instanceof z.ZodBoolean) {
-        result.type = 'boolean';
+        result.type = "boolean";
     }
     else if (zodType instanceof z.ZodArray) {
-        result.type = 'array';
+        result.type = "array";
         result.items = zodTypeToJsonSchema(zodType._def.type);
     }
     else if (zodType instanceof z.ZodEnum) {
-        result.type = 'string';
+        result.type = "string";
         result.enum = zodType._def.values;
     }
     else if (zodType instanceof z.ZodObject) {
@@ -116,7 +116,7 @@ function zodTypeToJsonSchema(zodType) {
     }
     else {
         // Fallback for unknown types
-        result.type = 'string';
+        result.type = "string";
     }
     return result;
 }

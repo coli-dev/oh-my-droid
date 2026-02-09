@@ -13,7 +13,7 @@
  * - Magic keywords: Special triggers for enhanced behaviors
  */
 import { loadConfig, findContextFiles, loadContextFromFiles } from './config/loader.js';
-import { getAgentDefinitions, omdSystemPrompt } from './droids/definitions.js';
+import { getAgentDefinitions, omdSystemPrompt } from './agents/definitions.js';
 import { getDefaultMcpServers, toSdkMcpFormat } from './mcp/servers.js';
 import { omdToolsServer, getOmdToolNames } from './mcp/omd-tools-server.js';
 import { codexMcpServer } from './mcp/codex-server.js';
@@ -46,7 +46,7 @@ createAgentToolRestrictions, mergeAgentConfig, buildDelegationTable, buildUseAvo
 // Individual droids with metadata (rebranded intuitive names)
 architectAgent, ARCHITECT_PROMPT_METADATA, exploreAgent, EXPLORE_PROMPT_METADATA, researcherAgent, RESEARCHER_PROMPT_METADATA, executorAgent, SISYPHUS_JUNIOR_PROMPT_METADATA, designerAgent, FRONTEND_ENGINEER_PROMPT_METADATA, writerAgent, DOCUMENT_WRITER_PROMPT_METADATA, visionAgent, MULTIMODAL_LOOKER_PROMPT_METADATA, criticAgent, CRITIC_PROMPT_METADATA, analystAgent, ANALYST_PROMPT_METADATA, plannerAgent, PLANNER_PROMPT_METADATA, 
 // Deprecated (backward compat - will be removed in v4.0.0)
-coordinatorAgent, ORCHESTRATOR_SISYPHUS_PROMPT_METADATA } from './droids/index.js';
+coordinatorAgent, ORCHESTRATOR_SISYPHUS_PROMPT_METADATA } from './agents/index.js';
 // Command expansion utilities for SDK integration
 export { expandCommand, expandCommandPrompt, getCommand, getAllCommands, listCommands, commandExists, expandCommands, getCommandsDir } from './commands/index.js';
 // Installer exports

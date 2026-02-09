@@ -4,24 +4,24 @@
  * Provides strict path validation and resolution for .omd/ paths,
  * ensuring all operations stay within the worktree boundary.
  */
-import { execSync } from 'child_process';
-import { existsSync, mkdirSync, realpathSync, readdirSync } from 'fs';
-import { resolve, normalize, relative, sep, join, isAbsolute } from 'path';
+import { execSync } from "child_process";
+import { existsSync, mkdirSync, realpathSync, readdirSync } from "fs";
+import { resolve, normalize, relative, sep, join, isAbsolute } from "path";
 /** Standard .omd subdirectories */
 export const OmdPaths = {
-    ROOT: '.omd',
-    STATE: '.omd/state',
-    SESSIONS: '.omd/state/sessions',
-    PLANS: '.omd/plans',
-    RESEARCH: '.omd/research',
-    NOTEPAD: '.omd/notepad.md',
-    PROJECT_MEMORY: '.omd/project-memory.json',
-    DRAFTS: '.omd/drafts',
-    NOTEPADS: '.omd/notepads',
-    LOGS: '.omd/logs',
-    SCIENTIST: '.omd/scientist',
-    AUTOPILOT: '.omd/autopilot',
-    SKILLS: '.omd/skills',
+    ROOT: ".omd",
+    STATE: ".omd/state",
+    SESSIONS: ".omd/state/sessions",
+    PLANS: ".omd/plans",
+    RESEARCH: ".omd/research",
+    NOTEPAD: ".omd/notepad.md",
+    PROJECT_MEMORY: ".omd/project-memory.json",
+    DRAFTS: ".omd/drafts",
+    NOTEPADS: ".omd/notepads",
+    LOGS: ".omd/logs",
+    SCIENTIST: ".omd/scientist",
+    AUTOPILOT: ".omd/autopilot",
+    SKILLS: ".omd/skills",
 };
 /** Cache for worktree root to avoid repeated git calls */
 let worktreeCache = null;
@@ -36,10 +36,10 @@ export function getWorktreeRoot(cwd) {
         return worktreeCache.root || null;
     }
     try {
-        const root = execSync('git rev-parse --show-toplevel', {
+        const root = execSync("git rev-parse --show-toplevel", {
             cwd: effectiveCwd,
-            encoding: 'utf-8',
-            stdio: ['pipe', 'pipe', 'pipe'],
+            encoding: "utf-8",
+            stdio: ["pipe", "pipe", "pipe"],
         }).trim();
         // Only cache actual git worktree roots
         worktreeCache = { cwd: effectiveCwd, root };
@@ -58,12 +58,12 @@ export function getWorktreeRoot(cwd) {
  */
 export function validatePath(inputPath) {
     // Reject explicit path traversal
-    if (inputPath.includes('..')) {
+    if (inputPath.includes("..")) {
         throw new Error(`Invalid path: path traversal not allowed (${inputPath})`);
     }
     // Reject absolute paths - use isAbsolute() for cross-platform coverage
     // Covers: /unix, ~/home, C:\windows, D:/windows, \\UNC
-    if (inputPath.startsWith('~') || isAbsolute(inputPath)) {
+    if (inputPath.startsWith("~") || isAbsolute(inputPath)) {
         throw new Error(`Invalid path: absolute paths not allowed (${inputPath})`);
     }
 }
@@ -83,7 +83,8 @@ export function resolveOmdPath(relativePath, worktreeRoot) {
     const fullPath = normalize(resolve(omdDir, relativePath));
     // Verify resolved path is still under worktree
     const relativeToRoot = relative(root, fullPath);
-    if (relativeToRoot.startsWith('..') || relativeToRoot.startsWith(sep + '..')) {
+    if (relativeToRoot.startsWith("..") ||
+        relativeToRoot.startsWith(sep + "..")) {
         throw new Error(`Path escapes worktree boundary: ${relativePath}`);
     }
     return fullPath;
@@ -103,11 +104,13 @@ export function resolveOmdPath(relativePath, worktreeRoot) {
  */
 export function resolveStatePath(stateName, worktreeRoot) {
     // Special case: swarm uses swarm.db, not swarm-state.json
-    if (stateName === 'swarm' || stateName === 'swarm-state') {
-        throw new Error('Swarm uses SQLite (swarm.db), not JSON state. Use getStateFilePath from mode-registry instead.');
+    if (stateName === "swarm" || stateName === "swarm-state") {
+        throw new Error("Swarm uses SQLite (swarm.db), not JSON state. Use getStateFilePath from mode-registry instead.");
     }
     // Normalize: ensure -state suffix is present, then add .json
-    const normalizedName = stateName.endsWith('-state') ? stateName : `${stateName}-state`;
+    const normalizedName = stateName.endsWith("-state")
+        ? stateName
+        : `${stateName}-state`;
     return resolveOmdPath(`state/${normalizedName}.json`, worktreeRoot);
 }
 /**
@@ -191,7 +194,8 @@ export function isPathUnderOmd(absolutePath, worktreeRoot) {
     const omdRoot = join(root, OmdPaths.ROOT);
     const normalizedPath = normalize(absolutePath);
     const normalizedOmd = normalize(omdRoot);
-    return normalizedPath.startsWith(normalizedOmd + sep) || normalizedPath === normalizedOmd;
+    return (normalizedPath.startsWith(normalizedOmd + sep) ||
+        normalizedPath === normalizedOmd);
 }
 /**
  * Ensure all standard .omd subdirectories exist.
@@ -271,9 +275,11 @@ export function resetProcessSessionId() {
  */
 export function validateSessionId(sessionId) {
     if (!sessionId) {
-        throw new Error('Session ID cannot be empty');
+        throw new Error("Session ID cannot be empty");
     }
-    if (sessionId.includes('..') || sessionId.includes('/') || sessionId.includes('\\')) {
+    if (sessionId.includes("..") ||
+        sessionId.includes("/") ||
+        sessionId.includes("\\")) {
         throw new Error(`Invalid session ID: path traversal not allowed (${sessionId})`);
     }
     if (!SESSION_ID_REGEX.test(sessionId)) {
@@ -292,10 +298,12 @@ export function validateSessionId(sessionId) {
 export function resolveSessionStatePath(stateName, sessionId, worktreeRoot) {
     validateSessionId(sessionId);
     // Special case: swarm uses SQLite, not session-scoped JSON
-    if (stateName === 'swarm' || stateName === 'swarm-state') {
-        throw new Error('Swarm uses SQLite (swarm.db), not session-scoped JSON state.');
+    if (stateName === "swarm" || stateName === "swarm-state") {
+        throw new Error("Swarm uses SQLite (swarm.db), not session-scoped JSON state.");
     }
-    const normalizedName = stateName.endsWith('-state') ? stateName : `${stateName}-state`;
+    const normalizedName = stateName.endsWith("-state")
+        ? stateName
+        : `${stateName}-state`;
     return resolveOmdPath(`state/sessions/${sessionId}/${normalizedName}.json`, worktreeRoot);
 }
 /**
@@ -326,8 +334,8 @@ export function listSessionIds(worktreeRoot) {
     try {
         const entries = readdirSync(sessionsDir, { withFileTypes: true });
         return entries
-            .filter(entry => entry.isDirectory() && SESSION_ID_REGEX.test(entry.name))
-            .map(entry => entry.name);
+            .filter((entry) => entry.isDirectory() && SESSION_ID_REGEX.test(entry.name))
+            .map((entry) => entry.name);
     }
     catch {
         return [];
@@ -380,7 +388,7 @@ export function validateWorkingDirectory(workingDirectory) {
         throw new Error(`workingDirectory '${workingDirectory}' does not exist or is not accessible.`);
     }
     const rel = relative(trustedRootReal, providedRootReal);
-    if (rel.startsWith('..') || isAbsolute(rel)) {
+    if (rel.startsWith("..") || isAbsolute(rel)) {
         throw new Error(`workingDirectory '${workingDirectory}' is outside the trusted worktree root '${trustedRoot}'.`);
     }
     return providedRoot;

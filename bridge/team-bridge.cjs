@@ -51,14 +51,21 @@ function atomicWriteJson(filePath, data, mode = 384) {
   const dir = (0, import_path.dirname)(filePath);
   if (!(0, import_fs.existsSync)(dir)) (0, import_fs.mkdirSync)(dir, { recursive: true, mode: 448 });
   const tmpPath = `${filePath}.tmp.${process.pid}.${Date.now()}`;
-  (0, import_fs.writeFileSync)(tmpPath, JSON.stringify(data, null, 2) + "\n", { encoding: "utf-8", mode });
+  (0, import_fs.writeFileSync)(tmpPath, JSON.stringify(data, null, 2) + "\n", {
+    encoding: "utf-8",
+    mode
+  });
   (0, import_fs.renameSync)(tmpPath, filePath);
 }
 function writeFileWithMode(filePath, data, mode = 384) {
   (0, import_fs.writeFileSync)(filePath, data, { encoding: "utf-8", mode });
 }
 function appendFileWithMode(filePath, data, mode = 384) {
-  const fd = (0, import_fs.openSync)(filePath, import_fs.constants.O_WRONLY | import_fs.constants.O_APPEND | import_fs.constants.O_CREAT, mode);
+  const fd = (0, import_fs.openSync)(
+    filePath,
+    import_fs.constants.O_WRONLY | import_fs.constants.O_APPEND | import_fs.constants.O_CREAT,
+    mode
+  );
   try {
     (0, import_fs.writeSync)(fd, data, null, "utf-8");
   } finally {
@@ -86,7 +93,9 @@ function validateResolvedPath(resolvedPath, expectedBase) {
   const absBase = safeRealpath(expectedBase);
   const rel = (0, import_path.relative)(absBase, absResolved);
   if (rel.startsWith("..") || (0, import_path.resolve)(absBase, rel) !== absResolved) {
-    throw new Error(`Path traversal detected: "${resolvedPath}" escapes base "${expectedBase}"`);
+    throw new Error(
+      `Path traversal detected: "${resolvedPath}" escapes base "${expectedBase}"`
+    );
   }
 }
 
@@ -101,10 +110,14 @@ var TMUX_SESSION_PREFIX = "omd-team";
 function sanitizeName(name) {
   const sanitized = name.replace(/[^a-zA-Z0-9-]/g, "");
   if (sanitized.length === 0) {
-    throw new Error(`Invalid name: "${name}" contains no valid characters (alphanumeric or hyphen)`);
+    throw new Error(
+      `Invalid name: "${name}" contains no valid characters (alphanumeric or hyphen)`
+    );
   }
   if (sanitized.length < 2) {
-    throw new Error(`Invalid name: "${name}" too short after sanitization (minimum 2 characters)`);
+    throw new Error(
+      `Invalid name: "${name}" too short after sanitization (minimum 2 characters)`
+    );
   }
   return sanitized.slice(0, 50);
 }
@@ -114,7 +127,10 @@ function sessionName(teamName, workerName) {
 function killSession(teamName, workerName) {
   const name = sessionName(teamName, workerName);
   try {
-    (0, import_child_process.execFileSync)("tmux", ["kill-session", "-t", name], { stdio: "pipe", timeout: 5e3 });
+    (0, import_child_process.execFileSync)("tmux", ["kill-session", "-t", name], {
+      stdio: "pipe",
+      timeout: 5e3
+    });
   } catch {
   }
 }
@@ -127,7 +143,8 @@ function isPidAlive(pid) {
     process.kill(pid, 0);
     return true;
   } catch (e) {
-    if (e && typeof e === "object" && "code" in e && e.code === "EPERM") return true;
+    if (e && typeof e === "object" && "code" in e && e.code === "EPERM")
+      return true;
     return false;
   }
 }
@@ -138,7 +155,11 @@ function acquireTaskLock(teamName, taskId, opts) {
   const lockPath = (0, import_path2.join)(dir, `${sanitizeTaskId(taskId)}.lock`);
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
-      const fd = (0, import_fs2.openSync)(lockPath, import_fs2.constants.O_CREAT | import_fs2.constants.O_EXCL | import_fs2.constants.O_WRONLY, 384);
+      const fd = (0, import_fs2.openSync)(
+        lockPath,
+        import_fs2.constants.O_CREAT | import_fs2.constants.O_EXCL | import_fs2.constants.O_WRONLY,
+        384
+      );
       const payload = JSON.stringify({
         pid: process.pid,
         workerName: opts?.workerName ?? "",
@@ -240,8 +261,10 @@ function updateTask(teamName, taskId, updates, opts) {
   const handle = acquireTaskLock(teamName, taskId);
   if (!handle) {
     if (typeof process !== "undefined" && process.stderr) {
-      process.stderr.write(`[task-file-ops] WARN: could not acquire lock for task ${taskId}, updating without lock
-`);
+      process.stderr.write(
+        `[task-file-ops] WARN: could not acquire lock for task ${taskId}, updating without lock
+`
+      );
     }
     doUpdate();
     return;
@@ -282,7 +305,13 @@ async function findNextTask(teamName, workerName) {
       taskData.claimPid = process.pid;
       taskData.status = "in_progress";
       atomicWriteJson(filePath, taskData);
-      return { ...freshTask, claimedBy: workerName, claimedAt: taskData.claimedAt, claimPid: process.pid, status: "in_progress" };
+      return {
+        ...freshTask,
+        claimedBy: workerName,
+        claimedAt: taskData.claimedAt,
+        claimPid: process.pid,
+        status: "in_progress"
+      };
     } finally {
       releaseTaskLock(handle);
     }
@@ -328,7 +357,9 @@ function listTaskIds(teamName) {
   const dir = tasksDir(teamName);
   if (!(0, import_fs2.existsSync)(dir)) return [];
   try {
-    return (0, import_fs2.readdirSync)(dir).filter((f) => f.endsWith(".json") && !f.includes(".tmp.") && !f.includes(".failure.")).map((f) => f.replace(".json", "")).sort((a, b) => {
+    return (0, import_fs2.readdirSync)(dir).filter(
+      (f) => f.endsWith(".json") && !f.includes(".tmp.") && !f.includes(".failure.")
+    ).map((f) => f.replace(".json", "")).sort((a, b) => {
       const numA = parseInt(a, 10);
       const numB = parseInt(b, 10);
       if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
@@ -353,16 +384,32 @@ function inboxPath(teamName, workerName) {
   return (0, import_path3.join)(teamsDir(teamName), "inbox", `${sanitizeName(workerName)}.jsonl`);
 }
 function inboxCursorPath(teamName, workerName) {
-  return (0, import_path3.join)(teamsDir(teamName), "inbox", `${sanitizeName(workerName)}.offset`);
+  return (0, import_path3.join)(
+    teamsDir(teamName),
+    "inbox",
+    `${sanitizeName(workerName)}.offset`
+  );
 }
 function outboxPath(teamName, workerName) {
-  return (0, import_path3.join)(teamsDir(teamName), "outbox", `${sanitizeName(workerName)}.jsonl`);
+  return (0, import_path3.join)(
+    teamsDir(teamName),
+    "outbox",
+    `${sanitizeName(workerName)}.jsonl`
+  );
 }
 function signalPath(teamName, workerName) {
-  return (0, import_path3.join)(teamsDir(teamName), "signals", `${sanitizeName(workerName)}.shutdown`);
+  return (0, import_path3.join)(
+    teamsDir(teamName),
+    "signals",
+    `${sanitizeName(workerName)}.shutdown`
+  );
 }
 function drainSignalPath(teamName, workerName) {
-  return (0, import_path3.join)(teamsDir(teamName), "signals", `${sanitizeName(workerName)}.drain`);
+  return (0, import_path3.join)(
+    teamsDir(teamName),
+    "signals",
+    `${sanitizeName(workerName)}.drain`
+  );
 }
 function ensureDir(filePath) {
   const dir = (0, import_path3.dirname)(filePath);
@@ -426,7 +473,9 @@ function readNewInboxMessages(teamName, workerName) {
   const readSize = stat.size - offset;
   const cappedSize = Math.min(readSize, MAX_INBOX_READ_SIZE);
   if (cappedSize < readSize) {
-    console.warn(`[inbox-outbox] Inbox for ${workerName} exceeds ${MAX_INBOX_READ_SIZE} bytes, reading truncated`);
+    console.warn(
+      `[inbox-outbox] Inbox for ${workerName} exceeds ${MAX_INBOX_READ_SIZE} bytes, reading truncated`
+    );
   }
   const fd = (0, import_fs3.openSync)(inbox, "r");
   const buffer = Buffer.alloc(cappedSize);
@@ -463,7 +512,9 @@ function readNewInboxMessages(teamName, workerName) {
   }
   const newOffset = offset + (bytesProcessed > 0 ? bytesProcessed : 0);
   ensureDir(cursorFile);
-  const newCursor = { bytesRead: newOffset > offset ? newOffset : offset };
+  const newCursor = {
+    bytesRead: newOffset > offset ? newOffset : offset
+  };
   atomicWriteJson(cursorFile, newCursor);
   return messages;
 }
@@ -511,12 +562,23 @@ var import_fs4 = require("fs");
 var import_path4 = require("path");
 var import_os3 = require("os");
 function configPath(teamName) {
-  const result = (0, import_path4.join)((0, import_os3.homedir)(), ".factory", "teams", sanitizeName(teamName), "config.json");
+  const result = (0, import_path4.join)(
+    (0, import_os3.homedir)(),
+    ".factory",
+    "teams",
+    sanitizeName(teamName),
+    "config.json"
+  );
   validateResolvedPath(result, (0, import_path4.join)((0, import_os3.homedir)(), ".factory", "teams"));
   return result;
 }
 function shadowRegistryPath(workingDirectory) {
-  const result = (0, import_path4.join)(workingDirectory, ".omd", "state", "team-mcp-workers.json");
+  const result = (0, import_path4.join)(
+    workingDirectory,
+    ".omd",
+    "state",
+    "team-mcp-workers.json"
+  );
   validateResolvedPath(result, (0, import_path4.join)(workingDirectory, ".omd", "state"));
   return result;
 }
@@ -536,7 +598,9 @@ function unregisterMcpWorker(teamName, workerName, workingDirectory) {
   if ((0, import_fs4.existsSync)(shadowFile)) {
     try {
       const registry = JSON.parse((0, import_fs4.readFileSync)(shadowFile, "utf-8"));
-      registry.workers = (registry.workers || []).filter((w) => w.name !== workerName);
+      registry.workers = (registry.workers || []).filter(
+        (w) => w.name !== workerName
+      );
       atomicWriteJson(shadowFile, registry);
     } catch {
     }
@@ -547,10 +611,21 @@ function unregisterMcpWorker(teamName, workerName, workingDirectory) {
 var import_fs5 = require("fs");
 var import_path5 = require("path");
 function heartbeatPath(workingDirectory, teamName, workerName) {
-  return (0, import_path5.join)(workingDirectory, ".omd", "state", "team-bridge", sanitizeName(teamName), `${sanitizeName(workerName)}.heartbeat.json`);
+  return (0, import_path5.join)(
+    workingDirectory,
+    ".omd",
+    "state",
+    "team-bridge",
+    sanitizeName(teamName),
+    `${sanitizeName(workerName)}.heartbeat.json`
+  );
 }
 function writeHeartbeat(workingDirectory, data) {
-  const filePath = heartbeatPath(workingDirectory, data.teamName, data.workerName);
+  const filePath = heartbeatPath(
+    workingDirectory,
+    data.teamName,
+    data.workerName
+  );
   atomicWriteJson(filePath, data);
 }
 function deleteHeartbeat(workingDirectory, teamName, workerName) {
@@ -567,7 +642,12 @@ function deleteHeartbeat(workingDirectory, teamName, workerName) {
 var import_node_path = require("node:path");
 var DEFAULT_MAX_LOG_SIZE = 5 * 1024 * 1024;
 function getLogPath(workingDirectory, teamName) {
-  return (0, import_node_path.join)(workingDirectory, ".omd", "logs", `team-bridge-${teamName}.jsonl`);
+  return (0, import_node_path.join)(
+    workingDirectory,
+    ".omd",
+    "logs",
+    `team-bridge-${teamName}.jsonl`
+  );
 }
 function logAuditEvent(workingDirectory, event) {
   const logPath = getLogPath(workingDirectory, event.teamName);
@@ -684,7 +764,9 @@ function findPermissionViolations(changedPaths, permissions, cwd) {
       if (relPath.startsWith("..")) {
         reason = `Path escapes working directory: ${relPath}`;
       } else {
-        const matchedDeny = permissions.deniedPaths.find((p) => matchGlob(p, relPath));
+        const matchedDeny = permissions.deniedPaths.find(
+          (p) => matchGlob(p, relPath)
+        );
         if (matchedDeny) {
           reason = `Matches denied pattern: ${matchedDeny}`;
         } else {
@@ -722,7 +804,11 @@ function captureFileSnapshot(cwd) {
   const { execSync: execSync3 } = require("child_process");
   const files = /* @__PURE__ */ new Set();
   try {
-    const statusOutput = execSync3("git status --porcelain", { cwd, encoding: "utf-8", timeout: 1e4 });
+    const statusOutput = execSync3("git status --porcelain", {
+      cwd,
+      encoding: "utf-8",
+      timeout: 1e4
+    });
     for (const line of statusOutput.split("\n")) {
       if (!line.trim()) continue;
       const filePart = line.slice(3);
@@ -730,7 +816,10 @@ function captureFileSnapshot(cwd) {
       const fileName = arrowIdx !== -1 ? filePart.slice(arrowIdx + 4) : filePart;
       files.add(fileName.trim());
     }
-    const untrackedOutput = execSync3("git ls-files --others --exclude-standard", { cwd, encoding: "utf-8", timeout: 1e4 });
+    const untrackedOutput = execSync3(
+      "git ls-files --others --exclude-standard",
+      { cwd, encoding: "utf-8", timeout: 1e4 }
+    );
     for (const line of untrackedOutput.split("\n")) {
       if (line.trim()) files.add(line.trim());
     }
@@ -836,15 +925,36 @@ function buildTaskPrompt(task, messages, config) {
     }
     inboxContext = "\nCONTEXT FROM TEAM LEAD:\n" + inboxParts.join("\n") + "\n";
   }
-  let result = formatPromptTemplate(sanitizedSubject, sanitizedDescription, config.workingDirectory, inboxContext);
+  let result = formatPromptTemplate(
+    sanitizedSubject,
+    sanitizedDescription,
+    config.workingDirectory,
+    inboxContext
+  );
   if (result.length > MAX_PROMPT_SIZE) {
     const overBy = result.length - MAX_PROMPT_SIZE;
-    sanitizedDescription = sanitizedDescription.slice(0, Math.max(0, sanitizedDescription.length - overBy));
-    result = formatPromptTemplate(sanitizedSubject, sanitizedDescription, config.workingDirectory, inboxContext);
+    sanitizedDescription = sanitizedDescription.slice(
+      0,
+      Math.max(0, sanitizedDescription.length - overBy)
+    );
+    result = formatPromptTemplate(
+      sanitizedSubject,
+      sanitizedDescription,
+      config.workingDirectory,
+      inboxContext
+    );
     if (result.length > MAX_PROMPT_SIZE) {
       const stillOverBy = result.length - MAX_PROMPT_SIZE;
-      sanitizedDescription = sanitizedDescription.slice(0, Math.max(0, sanitizedDescription.length - stillOverBy));
-      result = formatPromptTemplate(sanitizedSubject, sanitizedDescription, config.workingDirectory, inboxContext);
+      sanitizedDescription = sanitizedDescription.slice(
+        0,
+        Math.max(0, sanitizedDescription.length - stillOverBy)
+      );
+      result = formatPromptTemplate(
+        sanitizedSubject,
+        sanitizedDescription,
+        config.workingDirectory,
+        inboxContext
+      );
     }
   }
   return result;
@@ -861,7 +971,10 @@ function getOutputPath(config, taskId) {
   const dir = (0, import_path6.join)(config.workingDirectory, ".omd", "outputs");
   ensureDirWithMode(dir);
   const suffix = Math.random().toString(36).slice(2, 8);
-  return (0, import_path6.join)(dir, `team-${config.teamName}-task-${taskId}-${Date.now()}-${suffix}.md`);
+  return (0, import_path6.join)(
+    dir,
+    `team-${config.teamName}-task-${taskId}-${Date.now()}-${suffix}.md`
+  );
 }
 function readOutputSummary(outputFile) {
   try {
@@ -1034,21 +1147,32 @@ async function runBridge(config) {
     try {
       const shutdown = checkShutdownSignal(teamName, workerName);
       if (shutdown) {
-        audit(config, "shutdown_received", void 0, { requestId: shutdown.requestId, reason: shutdown.reason });
+        audit(config, "shutdown_received", void 0, {
+          requestId: shutdown.requestId,
+          reason: shutdown.reason
+        });
         await handleShutdown(config, shutdown, activeChild);
         break;
       }
       const drain = checkDrainSignal(teamName, workerName);
       if (drain) {
         log(`[bridge] Drain signal received: ${drain.reason}`);
-        audit(config, "shutdown_received", void 0, { requestId: drain.requestId, reason: drain.reason, type: "drain" });
+        audit(config, "shutdown_received", void 0, {
+          requestId: drain.requestId,
+          reason: drain.reason,
+          type: "drain"
+        });
         appendOutbox(teamName, workerName, {
           type: "shutdown_ack",
           requestId: drain.requestId,
           timestamp: (/* @__PURE__ */ new Date()).toISOString()
         });
         deleteDrainSignal(teamName, workerName);
-        await handleShutdown(config, { requestId: drain.requestId, reason: `drain: ${drain.reason}` }, null);
+        await handleShutdown(
+          config,
+          { requestId: drain.requestId, reason: `drain: ${drain.reason}` },
+          null
+        );
         break;
       }
       if (consecutiveErrors >= config.maxConsecutiveErrors) {
@@ -1061,11 +1185,17 @@ async function runBridge(config) {
           audit(config, "worker_quarantined", void 0, { consecutiveErrors });
           quarantineNotified = true;
         }
-        writeHeartbeat(workingDirectory, buildHeartbeat(config, "quarantined", null, consecutiveErrors));
+        writeHeartbeat(
+          workingDirectory,
+          buildHeartbeat(config, "quarantined", null, consecutiveErrors)
+        );
         await sleep(config.pollIntervalMs * 3);
         continue;
       }
-      writeHeartbeat(workingDirectory, buildHeartbeat(config, "polling", null, consecutiveErrors));
+      writeHeartbeat(
+        workingDirectory,
+        buildHeartbeat(config, "polling", null, consecutiveErrors)
+      );
       const messages = readNewInboxMessages(teamName, workerName);
       const task = await findNextTask(teamName, workerName);
       if (task) {
@@ -1073,10 +1203,16 @@ async function runBridge(config) {
         updateTask(teamName, task.id, { status: "in_progress" });
         audit(config, "task_claimed", task.id);
         audit(config, "task_started", task.id);
-        writeHeartbeat(workingDirectory, buildHeartbeat(config, "executing", task.id, consecutiveErrors));
+        writeHeartbeat(
+          workingDirectory,
+          buildHeartbeat(config, "executing", task.id, consecutiveErrors)
+        );
         const shutdownBeforeSpawn = checkShutdownSignal(teamName, workerName);
         if (shutdownBeforeSpawn) {
-          audit(config, "shutdown_received", task.id, { requestId: shutdownBeforeSpawn.requestId, reason: shutdownBeforeSpawn.reason });
+          audit(config, "shutdown_received", task.id, {
+            requestId: shutdownBeforeSpawn.requestId,
+            reason: shutdownBeforeSpawn.reason
+          });
           updateTask(teamName, task.id, { status: "pending" });
           await handleShutdown(config, shutdownBeforeSpawn, null);
           return;
@@ -1099,7 +1235,10 @@ async function runBridge(config) {
             config.taskTimeoutMs
           );
           activeChild = child;
-          audit(config, "cli_spawned", task.id, { provider, model: config.model });
+          audit(config, "cli_spawned", task.id, {
+            provider,
+            model: config.model
+          });
           const response = await result;
           activeChild = null;
           writeFileWithMode(outputFile, response);
@@ -1109,14 +1248,21 @@ async function runBridge(config) {
             const changedPaths = diffSnapshots(preSnapshot, postSnapshot);
             if (changedPaths.length > 0) {
               const effectivePerms = buildEffectivePermissions(config);
-              violations = findPermissionViolations(changedPaths, effectivePerms, workingDirectory);
+              violations = findPermissionViolations(
+                changedPaths,
+                effectivePerms,
+                workingDirectory
+              );
             }
           }
           if (violations.length > 0) {
             const violationSummary = violations.map((v) => `  - ${v.path}: ${v.reason}`).join("\n");
             if (enforcementMode === "enforce") {
               audit(config, "permission_violation", task.id, {
-                violations: violations.map((v) => ({ path: v.path, reason: v.reason })),
+                violations: violations.map((v) => ({
+                  path: v.path,
+                  reason: v.reason
+                })),
                 mode: "enforce"
               });
               updateTask(teamName, task.id, {
@@ -1135,15 +1281,22 @@ async function runBridge(config) {
 ${violationSummary}`,
                 timestamp: (/* @__PURE__ */ new Date()).toISOString()
               });
-              log(`[bridge] Task ${task.id} failed: permission violations (enforce mode)`);
+              log(
+                `[bridge] Task ${task.id} failed: permission violations (enforce mode)`
+              );
               consecutiveErrors = 0;
             } else {
               audit(config, "permission_audit", task.id, {
-                violations: violations.map((v) => ({ path: v.path, reason: v.reason })),
+                violations: violations.map((v) => ({
+                  path: v.path,
+                  reason: v.reason
+                })),
                 mode: "audit"
               });
-              log(`[bridge] Permission audit warning for task ${task.id}:
-${violationSummary}`);
+              log(
+                `[bridge] Permission audit warning for task ${task.id}:
+${violationSummary}`
+              );
               updateTask(teamName, task.id, { status: "completed" });
               audit(config, "task_completed", task.id);
               consecutiveErrors = 0;
@@ -1155,7 +1308,9 @@ ${violationSummary}`);
 [AUDIT WARNING: ${violations.length} permission violation(s) detected]`,
                 timestamp: (/* @__PURE__ */ new Date()).toISOString()
               });
-              log(`[bridge] Task ${task.id} completed (with ${violations.length} audit warning(s))`);
+              log(
+                `[bridge] Task ${task.id} completed (with ${violations.length} audit warning(s))`
+              );
             }
           } else {
             updateTask(teamName, task.id, { status: "completed" });
@@ -1192,14 +1347,19 @@ ${violationSummary}`);
                 failedAttempts: attempt
               }
             });
-            audit(config, "task_permanently_failed", task.id, { error: errorMsg, attempts: attempt });
+            audit(config, "task_permanently_failed", task.id, {
+              error: errorMsg,
+              attempts: attempt
+            });
             appendOutbox(teamName, workerName, {
               type: "error",
               taskId: task.id,
               error: `Task permanently failed after ${attempt} attempts: ${errorMsg}`,
               timestamp: (/* @__PURE__ */ new Date()).toISOString()
             });
-            log(`[bridge] Task ${task.id} permanently failed after ${attempt} attempts`);
+            log(
+              `[bridge] Task ${task.id} permanently failed after ${attempt} attempts`
+            );
           } else {
             updateTask(teamName, task.id, { status: "pending" });
             audit(config, "task_failed", task.id, { error: errorMsg, attempt });
@@ -1209,7 +1369,9 @@ ${violationSummary}`);
               error: `${errorMsg} (attempt ${attempt})`,
               timestamp: (/* @__PURE__ */ new Date()).toISOString()
             });
-            log(`[bridge] Task ${task.id} failed (attempt ${attempt}): ${errorMsg}`);
+            log(
+              `[bridge] Task ${task.id} failed (attempt ${attempt}): ${errorMsg}`
+            );
           }
         }
       } else {
@@ -1290,7 +1452,9 @@ function validateBridgeWorkingDirectory(workingDirectory) {
   }
   const root = getWorktreeRoot(workingDirectory);
   if (!root) {
-    throw new Error(`workingDirectory is not inside a git worktree: ${workingDirectory}`);
+    throw new Error(
+      `workingDirectory is not inside a git worktree: ${workingDirectory}`
+    );
   }
 }
 function main() {
@@ -1302,7 +1466,9 @@ function main() {
   const configPath2 = (0, import_path8.resolve)(process.argv[configIdx + 1]);
   const home = (0, import_os4.homedir)();
   if (!validateConfigPath(configPath2, home)) {
-    console.error(`Config path must be under ~/ with .factory/ or .omd/ subpath: ${configPath2}`);
+    console.error(
+      `Config path must be under ~/ with .factory/ or .omd/ subpath: ${configPath2}`
+    );
     process.exit(1);
   }
   let config;
@@ -1310,10 +1476,17 @@ function main() {
     const raw = (0, import_fs8.readFileSync)(configPath2, "utf-8");
     config = JSON.parse(raw);
   } catch (err) {
-    console.error(`Failed to read config from ${configPath2}: ${err.message}`);
+    console.error(
+      `Failed to read config from ${configPath2}: ${err.message}`
+    );
     process.exit(1);
   }
-  const required = ["teamName", "workerName", "provider", "workingDirectory"];
+  const required = [
+    "teamName",
+    "workerName",
+    "provider",
+    "workingDirectory"
+  ];
   for (const field of required) {
     if (!config[field]) {
       console.error(`Missing required config field: ${field}`);
@@ -1323,19 +1496,25 @@ function main() {
   config.teamName = sanitizeName(config.teamName);
   config.workerName = sanitizeName(config.workerName);
   if (config.provider !== "codex" && config.provider !== "gemini") {
-    console.error(`Invalid provider: ${config.provider}. Must be 'codex' or 'gemini'.`);
+    console.error(
+      `Invalid provider: ${config.provider}. Must be 'codex' or 'gemini'.`
+    );
     process.exit(1);
   }
   try {
     validateBridgeWorkingDirectory(config.workingDirectory);
   } catch (err) {
-    console.error(`[bridge] Invalid workingDirectory: ${err.message}`);
+    console.error(
+      `[bridge] Invalid workingDirectory: ${err.message}`
+    );
     process.exit(1);
   }
   if (config.permissionEnforcement) {
     const validModes = ["off", "audit", "enforce"];
     if (!validModes.includes(config.permissionEnforcement)) {
-      console.error(`Invalid permissionEnforcement: ${config.permissionEnforcement}. Must be 'off', 'audit', or 'enforce'.`);
+      console.error(
+        `Invalid permissionEnforcement: ${config.permissionEnforcement}. Must be 'off', 'audit', or 'enforce'.`
+      );
       process.exit(1);
     }
     if (config.permissionEnforcement !== "off" && config.permissions) {
@@ -1349,13 +1528,17 @@ function main() {
         process.exit(1);
       }
       if (p.allowedCommands && !Array.isArray(p.allowedCommands)) {
-        console.error("permissions.allowedCommands must be an array of strings");
+        console.error(
+          "permissions.allowedCommands must be an array of strings"
+        );
         process.exit(1);
       }
       const dangerousPatterns = ["**", "*", "!.git/**", "!.env*", "!**/.env*"];
       for (const pattern of p.allowedPaths || []) {
         if (dangerousPatterns.includes(pattern)) {
-          console.error(`Dangerous allowedPaths pattern rejected: "${pattern}"`);
+          console.error(
+            `Dangerous allowedPaths pattern rejected: "${pattern}"`
+          );
           process.exit(1);
         }
       }
@@ -1371,8 +1554,16 @@ function main() {
     process.on(sig, () => {
       console.error(`[bridge] Received ${sig}, shutting down...`);
       try {
-        deleteHeartbeat(config.workingDirectory, config.teamName, config.workerName);
-        unregisterMcpWorker(config.teamName, config.workerName, config.workingDirectory);
+        deleteHeartbeat(
+          config.workingDirectory,
+          config.teamName,
+          config.workerName
+        );
+        unregisterMcpWorker(
+          config.teamName,
+          config.workerName,
+          config.workingDirectory
+        );
       } catch {
       }
       process.exit(0);

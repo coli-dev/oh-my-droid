@@ -5,19 +5,19 @@
  * Based on droid-hud reference implementation.
  */
 // ANSI escape codes
-export const RESET = '\x1b[0m';
-const DIM = '\x1b[2m';
-const BOLD = '\x1b[1m';
-const RED = '\x1b[31m';
-const GREEN = '\x1b[32m';
-const YELLOW = '\x1b[33m';
-const BLUE = '\x1b[34m';
-const MAGENTA = '\x1b[35m';
-const CYAN = '\x1b[36m';
-const WHITE = '\x1b[37m';
-const BRIGHT_BLUE = '\x1b[94m';
-const BRIGHT_MAGENTA = '\x1b[95m';
-const BRIGHT_CYAN = '\x1b[96m';
+export const RESET = "\x1b[0m";
+const DIM = "\x1b[2m";
+const BOLD = "\x1b[1m";
+const RED = "\x1b[31m";
+const GREEN = "\x1b[32m";
+const YELLOW = "\x1b[33m";
+const BLUE = "\x1b[34m";
+const MAGENTA = "\x1b[35m";
+const CYAN = "\x1b[36m";
+const WHITE = "\x1b[37m";
+const BRIGHT_BLUE = "\x1b[94m";
+const BRIGHT_MAGENTA = "\x1b[95m";
+const BRIGHT_CYAN = "\x1b[96m";
 // ============================================================================
 // Color Functions
 // ============================================================================
@@ -108,11 +108,11 @@ export function getModelTierColor(model) {
     if (!model)
         return CYAN; // Default/unknown
     const tier = model.toLowerCase();
-    if (tier.includes('opus'))
+    if (tier.includes("opus"))
         return MAGENTA;
-    if (tier.includes('sonnet'))
+    if (tier.includes("sonnet"))
         return YELLOW;
-    if (tier.includes('haiku'))
+    if (tier.includes("haiku"))
         return GREEN;
     return CYAN; // Unknown model
 }
@@ -144,7 +144,7 @@ export function coloredBar(percent, width = 10) {
     const filled = Math.round((safePercent / 100) * safeWidth);
     const empty = safeWidth - filled;
     const color = getContextColor(safePercent);
-    return `${color}${'█'.repeat(filled)}${DIM}${'░'.repeat(empty)}${RESET}`;
+    return `${color}${"█".repeat(filled)}${DIM}${"░".repeat(empty)}${RESET}`;
 }
 /**
  * Create a simple numeric display with color.

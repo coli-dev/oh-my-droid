@@ -41,9 +41,9 @@ const SIMPLE_ESC_REGEX = /\x1b[^[\]]/g;
  */
 export function stripAnsi(text) {
     return text
-        .replace(CSI_NON_SGR_REGEX, '') // Strip non-SGR CSI sequences
-        .replace(OSC_REGEX, '') // Strip OSC sequences
-        .replace(SIMPLE_ESC_REGEX, ''); // Strip simple escape sequences
+        .replace(CSI_NON_SGR_REGEX, "") // Strip non-SGR CSI sequences
+        .replace(OSC_REGEX, "") // Strip OSC sequences
+        .replace(SIMPLE_ESC_REGEX, ""); // Strip simple escape sequences
 }
 /**
  * Replace variable-width Unicode block characters with fixed-width ASCII equivalents.
@@ -52,10 +52,10 @@ export function stripAnsi(text) {
  */
 export function replaceUnicodeBlocks(text) {
     return text
-        .replace(/█/g, '#')
-        .replace(/░/g, '-')
-        .replace(/▓/g, '=')
-        .replace(/▒/g, '-');
+        .replace(/█/g, "#")
+        .replace(/░/g, "-")
+        .replace(/▓/g, "=")
+        .replace(/▒/g, "-");
 }
 /**
  * Sanitize HUD output for safe terminal rendering.
@@ -79,10 +79,10 @@ export function sanitizeOutput(output) {
     sanitized = replaceUnicodeBlocks(sanitized);
     // Step 3: Preserve multi-line output, just trim each line
     // Do NOT collapse to single line - HUD needs proper line breaks for tree display
-    const lines = sanitized.split('\n').map(line => line.trimEnd());
-    sanitized = lines.join('\n');
+    const lines = sanitized.split("\n").map((line) => line.trimEnd());
+    sanitized = lines.join("\n");
     // Step 4: Remove leading/trailing empty lines
-    sanitized = sanitized.replace(/^\n+|\n+$/g, '');
+    sanitized = sanitized.replace(/^\n+|\n+$/g, "");
     return sanitized;
 }
 //# sourceMappingURL=sanitize.js.map

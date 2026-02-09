@@ -1,4 +1,4 @@
-import { estimateOutputTokens } from './output-estimator.js';
+import { estimateOutputTokens } from "./output-estimator.js";
 /**
  * Extract token usage from StatuslineStdin and calculate delta from previous snapshot.
  */
@@ -12,7 +12,8 @@ export function extractTokens(stdin, previousSnapshot, modelName, agentName) {
         ? currentUsage.input_tokens - previousSnapshot.inputTokens
         : currentUsage.input_tokens;
     const cacheDelta = previousSnapshot
-        ? currentUsage.cache_creation_input_tokens - previousSnapshot.cacheCreationTokens
+        ? currentUsage.cache_creation_input_tokens -
+            previousSnapshot.cacheCreationTokens
         : currentUsage.cache_creation_input_tokens;
     const cacheReadDelta = previousSnapshot
         ? currentUsage.cache_read_input_tokens - previousSnapshot.cacheReadTokens
@@ -27,7 +28,7 @@ export function extractTokens(stdin, previousSnapshot, modelName, agentName) {
         modelName,
         agentName,
         isEstimated: true,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
     };
 }
 /**
@@ -39,7 +40,7 @@ export function createSnapshot(stdin) {
         inputTokens: usage?.input_tokens ?? 0,
         cacheCreationTokens: usage?.cache_creation_input_tokens ?? 0,
         cacheReadTokens: usage?.cache_read_input_tokens ?? 0,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
     };
 }
 function createEmptyExtraction(modelName, agentName) {
@@ -51,7 +52,7 @@ function createEmptyExtraction(modelName, agentName) {
         modelName,
         agentName,
         isEstimated: true,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
     };
 }
 //# sourceMappingURL=token-extractor.js.map

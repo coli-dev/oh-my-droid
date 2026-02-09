@@ -12,5 +12,5 @@ export declare function isUnix(): boolean;
  * Works on both Unix (/) and Windows (C:\)
  */
 export declare function isPathRoot(filepath: string): boolean;
-export * from './process-utils.js';
+export * from "./process-utils.js";
 //# sourceMappingURL=index.d.ts.map

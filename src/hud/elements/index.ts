@@ -5,7 +5,7 @@
  */
 
 export { renderRalph } from './ralph.js';
-export { renderAgents } from './droids.js';
+export { renderAgents } from './agents.js';
 export { renderTodos } from './todos.js';
 export { renderSkills, renderLastSkill } from './skills.js';
 export { renderContext } from './context.js';

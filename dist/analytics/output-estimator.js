@@ -6,13 +6,13 @@
  * - Sonnet: 40% (balanced responses)
  * - Opus: 50% (detailed reasoning)
  */
-import * as crypto from 'crypto';
+import * as crypto from "crypto";
 const MODEL_OUTPUT_RATIOS = {
-    'haiku': 0.30,
-    'sonnet': 0.40,
-    'opus': 0.50
+    haiku: 0.3,
+    sonnet: 0.4,
+    opus: 0.5,
 };
-const DEFAULT_RATIO = 0.40; // Sonnet baseline
+const DEFAULT_RATIO = 0.4; // Sonnet baseline
 /**
  * Estimate output tokens from input tokens using model-specific ratios.
  *
@@ -37,7 +37,11 @@ export function estimateOutputTokens(inputTokens, modelName) {
 export function extractSessionId(transcriptPath) {
     // Guard against null/undefined/empty
     if (!transcriptPath) {
-        return crypto.createHash('md5').update('unknown').digest('hex').slice(0, 16);
+        return crypto
+            .createHash("md5")
+            .update("unknown")
+            .digest("hex")
+            .slice(0, 16);
     }
     // Try to extract from path pattern
     const match = transcriptPath.match(/projects\/([a-f0-9]{8,})/i);
@@ -45,9 +49,10 @@ export function extractSessionId(transcriptPath) {
         return match[1];
     }
     // Fallback: hash the path
-    return crypto.createHash('md5')
+    return crypto
+        .createHash("md5")
         .update(transcriptPath)
-        .digest('hex')
+        .digest("hex")
         .slice(0, 16);
 }
 /**

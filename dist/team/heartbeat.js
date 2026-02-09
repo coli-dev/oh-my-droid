@@ -6,17 +6,17 @@
  * The lead checks freshness to detect dead workers.
  * Files stored at: .omd/state/team-bridge/{team}/{worker}.heartbeat.json
  */
-import { readFileSync, existsSync, readdirSync, unlinkSync, rmdirSync } from 'fs';
-import { join } from 'path';
-import { sanitizeName } from './tmux-session.js';
-import { atomicWriteJson } from './fs-utils.js';
+import { readFileSync, existsSync, readdirSync, unlinkSync, rmdirSync, } from "fs";
+import { join } from "path";
+import { sanitizeName } from "./tmux-session.js";
+import { atomicWriteJson } from "./fs-utils.js";
 /** Heartbeat file path */
 function heartbeatPath(workingDirectory, teamName, workerName) {
-    return join(workingDirectory, '.omd', 'state', 'team-bridge', sanitizeName(teamName), `${sanitizeName(workerName)}.heartbeat.json`);
+    return join(workingDirectory, ".omd", "state", "team-bridge", sanitizeName(teamName), `${sanitizeName(workerName)}.heartbeat.json`);
 }
 /** Heartbeat directory for a team */
 function heartbeatDir(workingDirectory, teamName) {
-    return join(workingDirectory, '.omd', 'state', 'team-bridge', sanitizeName(teamName));
+    return join(workingDirectory, ".omd", "state", "team-bridge", sanitizeName(teamName));
 }
 /** Write/update heartbeat. Called every poll cycle by the bridge. */
 export function writeHeartbeat(workingDirectory, data) {
@@ -29,7 +29,7 @@ export function readHeartbeat(workingDirectory, teamName, workerName) {
     if (!existsSync(filePath))
         return null;
     try {
-        const raw = readFileSync(filePath, 'utf-8');
+        const raw = readFileSync(filePath, "utf-8");
         return JSON.parse(raw);
     }
     catch {
@@ -42,14 +42,16 @@ export function listHeartbeats(workingDirectory, teamName) {
     if (!existsSync(dir))
         return [];
     try {
-        const files = readdirSync(dir).filter(f => f.endsWith('.heartbeat.json'));
+        const files = readdirSync(dir).filter((f) => f.endsWith(".heartbeat.json"));
         const heartbeats = [];
         for (const file of files) {
             try {
-                const raw = readFileSync(join(dir, file), 'utf-8');
+                const raw = readFileSync(join(dir, file), "utf-8");
                 heartbeats.push(JSON.parse(raw));
             }
-            catch { /* skip malformed */ }
+            catch {
+                /* skip malformed */
+            }
         }
         return heartbeats;
     }
@@ -70,7 +72,7 @@ export function isWorkerAlive(workingDirectory, teamName, workerName, maxAgeMs) 
         const lastPoll = new Date(heartbeat.lastPollAt).getTime();
         if (isNaN(lastPoll))
             return false; // Invalid date = dead
-        return (Date.now() - lastPoll) < maxAgeMs;
+        return Date.now() - lastPoll < maxAgeMs;
     }
     catch {
         return false;
@@ -83,7 +85,9 @@ export function deleteHeartbeat(workingDirectory, teamName, workerName) {
         try {
             unlinkSync(filePath);
         }
-        catch { /* ignore */ }
+        catch {
+            /* ignore */
+        }
     }
 }
 /** Delete all heartbeat files for a team */
@@ -97,14 +101,20 @@ export function cleanupTeamHeartbeats(workingDirectory, teamName) {
             try {
                 unlinkSync(join(dir, file));
             }
-            catch { /* ignore */ }
+            catch {
+                /* ignore */
+            }
         }
         // Try to remove the directory itself
         try {
             rmdirSync(dir);
         }
-        catch { /* ignore - may not be empty */ }
+        catch {
+            /* ignore - may not be empty */
+        }
     }
-    catch { /* ignore */ }
+    catch {
+        /* ignore */
+    }
 }
 //# sourceMappingURL=heartbeat.js.map

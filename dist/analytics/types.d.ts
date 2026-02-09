@@ -108,7 +108,7 @@ export interface TokscalePricingResult {
     cacheWritePerMillion?: number;
     cacheWriteMarkup: number;
     cacheReadDiscount: number;
-    source: 'tokscale' | 'fallback';
+    source: "tokscale" | "fallback";
 }
 /**
  * Fallback pricing when @tokscale/core is unavailable.

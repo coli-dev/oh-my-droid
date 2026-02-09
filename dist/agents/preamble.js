@@ -66,9 +66,9 @@ TASK:
  * @returns The task description wrapped with team worker preamble
  */
 export function wrapWithTeamPreamble(taskDescription, teamName, workerName) {
-    const teamContext = teamName ? `TEAM: ${teamName}\n` : '';
-    const workerContext = workerName ? `YOUR NAME: ${workerName}\n` : '';
-    const context = teamContext || workerContext ? teamContext + workerContext + '\n' : '';
+    const teamContext = teamName ? `TEAM: ${teamName}\n` : "";
+    const workerContext = workerName ? `YOUR NAME: ${workerName}\n` : "";
+    const context = teamContext || workerContext ? teamContext + workerContext + "\n" : "";
     return context + TEAM_WORKER_PREAMBLE + taskDescription;
 }
 /**
@@ -108,15 +108,16 @@ OUTPUT EXPECTATIONS:
  * Build a concrete prompt from the template for an MCP worker task.
  */
 export function buildMcpWorkerPrompt(taskSubject, taskDescription, workingDirectory, inboxMessages) {
-    let inboxContext = '';
+    let inboxContext = "";
     if (inboxMessages && inboxMessages.length > 0) {
-        inboxContext = 'CONTEXT FROM TEAM LEAD:\n' +
-            inboxMessages.map(m => `[${m.timestamp}] ${m.content}`).join('\n') + '\n';
+        inboxContext =
+            "CONTEXT FROM TEAM LEAD:\n" +
+                inboxMessages.map((m) => `[${m.timestamp}] ${m.content}`).join("\n") +
+                "\n";
     }
-    return MCP_WORKER_PROMPT_TEMPLATE
-        .replace('{task_subject}', taskSubject)
-        .replace('{task_description}', taskDescription)
-        .replace('{working_directory}', workingDirectory)
-        .replace('{inbox_context}', inboxContext);
+    return MCP_WORKER_PROMPT_TEMPLATE.replace("{task_subject}", taskSubject)
+        .replace("{task_description}", taskDescription)
+        .replace("{working_directory}", workingDirectory)
+        .replace("{inbox_context}", inboxContext);
 }
 //# sourceMappingURL=preamble.js.map

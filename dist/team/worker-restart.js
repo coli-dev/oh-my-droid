@@ -5,9 +5,9 @@
  * Tracks restart attempts per worker in sidecar JSON files.
  * Uses exponential backoff to prevent rapid restart loops.
  */
-import { existsSync, readFileSync, unlinkSync } from 'node:fs';
-import { join } from 'node:path';
-import { atomicWriteJson, ensureDirWithMode, validateResolvedPath } from './fs-utils.js';
+import { existsSync, readFileSync, unlinkSync } from "node:fs";
+import { join } from "node:path";
+import { atomicWriteJson, ensureDirWithMode, validateResolvedPath, } from "./fs-utils.js";
 const DEFAULT_POLICY = {
     maxRestarts: 3,
     backoffBaseMs: 5000,
@@ -15,7 +15,7 @@ const DEFAULT_POLICY = {
     backoffMultiplier: 2,
 };
 function getRestartStatePath(workingDirectory, teamName, workerName) {
-    return join(workingDirectory, '.omd', 'state', 'team-bridge', teamName, `${workerName}.restart.json`);
+    return join(workingDirectory, ".omd", "state", "team-bridge", teamName, `${workerName}.restart.json`);
 }
 /**
  * Read the current restart state for a worker.
@@ -26,7 +26,7 @@ export function readRestartState(workingDirectory, teamName, workerName) {
     if (!existsSync(statePath))
         return null;
     try {
-        return JSON.parse(readFileSync(statePath, 'utf-8'));
+        return JSON.parse(readFileSync(statePath, "utf-8"));
     }
     catch {
         return null;
@@ -47,7 +47,8 @@ export function shouldRestart(workingDirectory, teamName, workerName, policy = D
         return null; // Exhausted
     }
     // Calculate exponential backoff
-    const backoff = Math.min(policy.backoffBaseMs * Math.pow(policy.backoffMultiplier, state.restartCount), policy.backoffMaxMs);
+    const backoff = Math.min(policy.backoffBaseMs *
+        Math.pow(policy.backoffMultiplier, state.restartCount), policy.backoffMaxMs);
     return backoff;
 }
 /**
@@ -56,14 +57,15 @@ export function shouldRestart(workingDirectory, teamName, workerName, policy = D
 export function recordRestart(workingDirectory, teamName, workerName, policy = DEFAULT_POLICY) {
     const statePath = getRestartStatePath(workingDirectory, teamName, workerName);
     validateResolvedPath(statePath, workingDirectory);
-    const dir = join(workingDirectory, '.omd', 'state', 'team-bridge', teamName);
+    const dir = join(workingDirectory, ".omd", "state", "team-bridge", teamName);
     ensureDirWithMode(dir);
     const existing = readRestartState(workingDirectory, teamName, workerName);
     const newState = {
         workerName,
         restartCount: (existing?.restartCount ?? 0) + 1,
         lastRestartAt: new Date().toISOString(),
-        nextBackoffMs: Math.min(policy.backoffBaseMs * Math.pow(policy.backoffMultiplier, (existing?.restartCount ?? 0) + 1), policy.backoffMaxMs),
+        nextBackoffMs: Math.min(policy.backoffBaseMs *
+            Math.pow(policy.backoffMultiplier, (existing?.restartCount ?? 0) + 1), policy.backoffMaxMs),
     };
     atomicWriteJson(statePath, newState);
 }
@@ -77,7 +79,9 @@ export function clearRestartState(workingDirectory, teamName, workerName) {
             unlinkSync(statePath);
         }
     }
-    catch { /* ignore */ }
+    catch {
+        /* ignore */
+    }
 }
 /**
  * Synthesize a BridgeConfig from an McpWorkerMember record + sensible defaults.
@@ -88,7 +92,7 @@ export function synthesizeBridgeConfig(worker, teamName) {
         workerName: worker.name,
         teamName,
         workingDirectory: worker.cwd,
-        provider: worker.agentType.replace('mcp-', ''),
+        provider: worker.agentType.replace("mcp-", ""),
         model: worker.model,
         pollIntervalMs: 3000,
         taskTimeoutMs: 600000,

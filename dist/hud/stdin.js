@@ -15,11 +15,11 @@ export async function readStdin() {
     }
     const chunks = [];
     try {
-        process.stdin.setEncoding('utf8');
+        process.stdin.setEncoding("utf8");
         for await (const chunk of process.stdin) {
             chunks.push(chunk);
         }
-        const raw = chunks.join('');
+        const raw = chunks.join("");
         if (!raw.trim()) {
             return null;
         }
@@ -45,7 +45,7 @@ function getTotalTokens(stdin) {
 export function getContextPercent(stdin) {
     // Prefer native percentage (v2.1.6+) - accurate and matches /context
     const nativePercent = stdin.context_window?.used_percentage;
-    if (typeof nativePercent === 'number' && !Number.isNaN(nativePercent)) {
+    if (typeof nativePercent === "number" && !Number.isNaN(nativePercent)) {
         return Math.min(100, Math.max(0, Math.round(nativePercent)));
     }
     // Fallback: manual calculation
@@ -60,6 +60,6 @@ export function getContextPercent(stdin) {
  * Get model display name from stdin.
  */
 export function getModelName(stdin) {
-    return stdin.model?.display_name ?? stdin.model?.id ?? 'Unknown';
+    return stdin.model?.display_name ?? stdin.model?.id ?? "Unknown";
 }
 //# sourceMappingURL=stdin.js.map

@@ -5,22 +5,22 @@
  * These utilities ensure paths in configuration files use forward slashes
  * (which work universally) and handle platform-specific directory conventions.
  */
-import { join } from 'path';
-import { existsSync, unlinkSync, rmSync } from 'fs';
-import { homedir } from 'os';
+import { join } from "path";
+import { existsSync, unlinkSync, rmSync } from "fs";
+import { homedir } from "os";
 /**
  * Convert a path to use forward slashes (for JSON/config files)
  * This is necessary because settings.json commands are executed
  * by shells that expect forward slashes even on Windows
  */
 export function toForwardSlash(path) {
-    return path.replace(/\\/g, '/');
+    return path.replace(/\\/g, "/");
 }
 /**
  * Get Droid config directory path
  */
 export function getDroidConfigDir() {
-    return join(homedir(), '.factory');
+    return join(homedir(), ".factory");
 }
 /**
  * Get a path suitable for use in shell commands
@@ -29,7 +29,7 @@ export function getDroidConfigDir() {
 export function toShellPath(path) {
     const normalized = toForwardSlash(path);
     // Windows paths with spaces need quoting
-    if (normalized.includes(' ')) {
+    if (normalized.includes(" ")) {
         return `"${normalized}"`;
     }
     return normalized;
@@ -39,19 +39,19 @@ export function toShellPath(path) {
  * Falls back to sensible locations instead of XDG paths
  */
 export function getDataDir() {
-    if (process.platform === 'win32') {
-        return process.env.LOCALAPPDATA || join(homedir(), 'AppData', 'Local');
+    if (process.platform === "win32") {
+        return process.env.LOCALAPPDATA || join(homedir(), "AppData", "Local");
     }
-    return process.env.XDG_DATA_HOME || join(homedir(), '.local', 'share');
+    return process.env.XDG_DATA_HOME || join(homedir(), ".local", "share");
 }
 /**
  * Get Windows-appropriate config directory
  */
 export function getConfigDir() {
-    if (process.platform === 'win32') {
-        return process.env.APPDATA || join(homedir(), 'AppData', 'Roaming');
+    if (process.platform === "win32") {
+        return process.env.APPDATA || join(homedir(), "AppData", "Roaming");
     }
-    return process.env.XDG_CONFIG_HOME || join(homedir(), '.config');
+    return process.env.XDG_CONFIG_HOME || join(homedir(), ".config");
 }
 /**
  * Safely delete a file, ignoring ENOENT errors.

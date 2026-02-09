@@ -3,24 +3,24 @@
  *
  * Composes statusline output from render context.
  */
-import { DEFAULT_HUD_CONFIG } from './types.js';
-import { bold, dim } from './colors.js';
-import { renderRalph } from './elements/ralph.js';
-import { renderAgentsByFormat, renderAgentsMultiLine } from './elements/droids.js';
-import { renderTodosWithCurrent } from './elements/todos.js';
-import { renderSkills, renderLastSkill } from './elements/skills.js';
-import { renderContext, renderContextWithBar } from './elements/context.js';
-import { renderBackground } from './elements/background.js';
-import { renderPrd } from './elements/prd.js';
-import { renderRateLimits, renderRateLimitsWithBar } from './elements/limits.js';
-import { renderPermission } from './elements/permission.js';
-import { renderThinking } from './elements/thinking.js';
-import { renderSession } from './elements/session.js';
-import { renderAutopilot } from './elements/autopilot.js';
-import { renderCwd } from './elements/cwd.js';
-import { renderGitRepo, renderGitBranch } from './elements/git.js';
-import { renderModel } from './elements/model.js';
-import { getAnalyticsDisplay, renderAnalyticsLineWithConfig, getSessionInfo, getSessionHealthAnalyticsData, renderBudgetWarning, renderCacheEfficiency } from './analytics-display.js';
+import { DEFAULT_HUD_CONFIG } from "./types.js";
+import { bold, dim } from "./colors.js";
+import { renderRalph } from "./elements/ralph.js";
+import { renderAgentsByFormat, renderAgentsMultiLine, } from "./elements/agents.js";
+import { renderTodosWithCurrent } from "./elements/todos.js";
+import { renderSkills, renderLastSkill } from "./elements/skills.js";
+import { renderContext, renderContextWithBar } from "./elements/context.js";
+import { renderBackground } from "./elements/background.js";
+import { renderPrd } from "./elements/prd.js";
+import { renderRateLimits, renderRateLimitsWithBar, } from "./elements/limits.js";
+import { renderPermission } from "./elements/permission.js";
+import { renderThinking } from "./elements/thinking.js";
+import { renderSession } from "./elements/session.js";
+import { renderAutopilot } from "./elements/autopilot.js";
+import { renderCwd } from "./elements/cwd.js";
+import { renderGitRepo, renderGitBranch } from "./elements/git.js";
+import { renderModel } from "./elements/model.js";
+import { getAnalyticsDisplay, renderAnalyticsLineWithConfig, getSessionInfo, getSessionHealthAnalyticsData, renderBudgetWarning, renderCacheEfficiency, } from "./analytics-display.js";
 /**
  * Limit output lines to prevent input field shrinkage (Issue #222).
  * Trims lines from the end while preserving the first (header) line.
@@ -74,7 +74,7 @@ function renderSessionHealthAnalyticsWithConfig(sessionHealth, enabledElements) 
     if (showCostHour && enabledElements.showCost && data.costHour) {
         parts.push(data.costHour);
     }
-    return parts.join(' | ');
+    return parts.join(" | ");
 }
 /**
  * Render the complete statusline (single or multi-line)
@@ -84,11 +84,14 @@ export async function render(context, config) {
     const detailLines = [];
     const { elements: enabledElements } = config;
     // Check if analytics preset is active
-    if (config.preset === 'analytics') {
+    if (config.preset === "analytics") {
         const analytics = await getAnalyticsDisplay();
         const sessionInfo = await getSessionInfo();
         // Render analytics-focused layout
-        const lines = [sessionInfo, renderAnalyticsLineWithConfig(analytics, enabledElements.showCost, enabledElements.showCache)];
+        const lines = [
+            sessionInfo,
+            renderAnalyticsLineWithConfig(analytics, enabledElements.showCost, enabledElements.showCache),
+        ];
         // Add SessionHealth analytics if available
         if (context.sessionHealth) {
             const healthAnalytics = renderSessionHealthAnalyticsWithConfig(context.sessionHealth, enabledElements);
@@ -111,7 +114,7 @@ export async function render(context, config) {
         }
         // Add droids if available
         if (context.activeAgents.length > 0) {
-            const droids = renderAgentsByFormat(context.activeAgents, enabledElements.agentsFormat || 'codes');
+            const droids = renderAgentsByFormat(context.activeAgents, enabledElements.agentsFormat || "codes");
             if (droids)
                 lines.push(droids);
         }
@@ -121,13 +124,13 @@ export async function render(context, config) {
             if (todos)
                 lines.push(todos);
         }
-        return limitOutputLines(lines, config.elements.maxOutputLines).join('\n');
+        return limitOutputLines(lines, config.elements.maxOutputLines).join("\n");
     }
     // Git info line (separate line above HUD)
     const gitElements = [];
     // Working directory
     if (enabledElements.cwd) {
-        const cwdElement = renderCwd(context.cwd, enabledElements.cwdFormat || 'relative');
+        const cwdElement = renderCwd(context.cwd, enabledElements.cwdFormat || "relative");
         if (cwdElement)
             gitElements.push(cwdElement);
     }
@@ -151,7 +154,7 @@ export async function render(context, config) {
     }
     // [OMD] label
     if (enabledElements.omdLabel) {
-        elements.push(bold('[OMD]'));
+        elements.push(bold("[OMD]"));
     }
     // Rate limits (5h and weekly)
     if (enabledElements.rateLimits && context.rateLimits) {
@@ -169,7 +172,7 @@ export async function render(context, config) {
     }
     // Extended thinking indicator
     if (enabledElements.thinking && context.thinkingState) {
-        const thinking = renderThinking(context.thinkingState, enabledElements.thinkingFormat || 'text');
+        const thinking = renderThinking(context.thinkingState, enabledElements.thinkingFormat || "text");
         if (thinking)
             elements.push(thinking);
     }
@@ -236,8 +239,8 @@ export async function render(context, config) {
     }
     // Active droids - handle multi-line format specially
     if (enabledElements.droids) {
-        const format = enabledElements.agentsFormat || 'codes';
-        if (format === 'multiline') {
+        const format = enabledElements.agentsFormat || "codes";
+        if (format === "multiline") {
             // Multi-line mode: get header part and detail lines
             const maxLines = enabledElements.agentsMaxLines || 5;
             const result = renderAgentsMultiLine(context.activeAgents, maxLines);
@@ -262,10 +265,10 @@ export async function render(context, config) {
     const outputLines = [];
     // Git info line (separate line above HUD header)
     if (gitElements.length > 0) {
-        outputLines.push(gitElements.join(dim(' | ')));
+        outputLines.push(gitElements.join(dim(" | ")));
     }
     // HUD header line
-    const headerLine = elements.join(dim(' | '));
+    const headerLine = elements.join(dim(" | "));
     outputLines.push(headerLine);
     // Todos on next line (if available)
     if (enabledElements.todos) {
@@ -274,12 +277,13 @@ export async function render(context, config) {
             detailLines.push(todos);
     }
     // Optionally add analytics line for full/dense presets
-    if (config.preset === 'full' || config.preset === 'dense') {
+    if (config.preset === "full" || config.preset === "dense") {
         try {
             const analytics = await getAnalyticsDisplay();
             detailLines.push(renderAnalyticsLineWithConfig(analytics, enabledElements.showCost, enabledElements.showCache));
             // Also add cache efficiency if SessionHealth available (respects showCache)
-            if (enabledElements.showCache && context.sessionHealth?.cacheHitRate !== undefined) {
+            if (enabledElements.showCache &&
+                context.sessionHealth?.cacheHitRate !== undefined) {
                 const cacheEfficiency = renderCacheEfficiency(context.sessionHealth);
                 if (cacheEfficiency)
                     detailLines.push(cacheEfficiency);
@@ -289,6 +293,6 @@ export async function render(context, config) {
             // Analytics not available, skip
         }
     }
-    return limitOutputLines([...outputLines, ...detailLines], config.elements.maxOutputLines).join('\n');
+    return limitOutputLines([...outputLines, ...detailLines], config.elements.maxOutputLines).join("\n");
 }
 //# sourceMappingURL=render.js.map

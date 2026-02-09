@@ -1,4 +1,4 @@
-import type { OutboxMessage } from './types.js';
+import type { OutboxMessage } from "./types.js";
 /** Outbox cursor stored alongside outbox files */
 export interface OutboxCursor {
     bytesRead: number;

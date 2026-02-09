@@ -14,9 +14,9 @@
  */
 export function createExaServer(apiKey) {
     return {
-        command: 'npx',
-        args: ['-y', 'exa-mcp-server'],
-        env: apiKey ? { EXA_API_KEY: apiKey } : undefined
+        command: "npx",
+        args: ["-y", "exa-mcp-server"],
+        env: apiKey ? { EXA_API_KEY: apiKey } : undefined,
     };
 }
 /**
@@ -25,8 +25,8 @@ export function createExaServer(apiKey) {
  */
 export function createContext7Server() {
     return {
-        command: 'npx',
-        args: ['-y', '@upstash/context7-mcp']
+        command: "npx",
+        args: ["-y", "@upstash/context7-mcp"],
     };
 }
 /**
@@ -35,8 +35,8 @@ export function createContext7Server() {
  */
 export function createPlaywrightServer() {
     return {
-        command: 'npx',
-        args: ['-y', '@playwright/mcp@latest']
+        command: "npx",
+        args: ["-y", "@playwright/mcp@latest"],
     };
 }
 /**
@@ -45,8 +45,8 @@ export function createPlaywrightServer() {
  */
 export function createFilesystemServer(allowedPaths) {
     return {
-        command: 'npx',
-        args: ['-y', '@modelcontextprotocol/server-filesystem', ...allowedPaths]
+        command: "npx",
+        args: ["-y", "@modelcontextprotocol/server-filesystem", ...allowedPaths],
     };
 }
 /**
@@ -55,8 +55,8 @@ export function createFilesystemServer(allowedPaths) {
  */
 export function createMemoryServer() {
     return {
-        command: 'npx',
-        args: ['-y', '@modelcontextprotocol/server-memory']
+        command: "npx",
+        args: ["-y", "@modelcontextprotocol/server-memory"],
     };
 }
 export function getDefaultMcpServers(options) {

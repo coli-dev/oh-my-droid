@@ -21,12 +21,12 @@
  *   const bridge = getMcpBridge();
  *   const result = await bridge.invokeTool('filesystem', 'read_file', { path: '/etc/hosts' });
  */
-export type { ExternalTool, ExternalToolType, ToolCapability, PluginManifest, McpServerEntry, PluginPermission, PluginToolDefinition, DiscoveredPlugin, DiscoveredMcpServer, ToolRoute, ToolConflict, RegistryState, DiscoveryOptions, PermissionCheckResult, McpToolResult, RegistryEvent, RegistryEventListener, SafeCommandPattern, } from './types.js';
-export { discoverAll, discoverPlugins, discoverMcpServers, discoverPluginMcpServers, getPluginPaths, getMcpConfigPath, isPluginInstalled, getPluginInfo, type DiscoveryResult, } from './discovery.js';
-export { ToolRegistry, getRegistry, initializeRegistry, routeCommand, getExternalTool, listExternalTools, hasExternalPlugins, hasMcpServers, } from './registry.js';
-export { checkPermission, grantPermission, denyPermission, clearPermissionCache, registerPluginSafePatterns, getSafePatterns, addSafePattern, removeSafePatternsFromSource, shouldDelegate, getDelegationTarget, integrateWithPermissionSystem, processExternalToolPermission, } from './permission-adapter.js';
-export { McpBridge, getMcpBridge, resetMcpBridge, invokeMcpTool, readMcpResource, } from './mcp-bridge.js';
-import type { DiscoveryOptions } from './types.js';
+export type { ExternalTool, ExternalToolType, ToolCapability, PluginManifest, McpServerEntry, PluginPermission, PluginToolDefinition, DiscoveredPlugin, DiscoveredMcpServer, ToolRoute, ToolConflict, RegistryState, DiscoveryOptions, PermissionCheckResult, McpToolResult, RegistryEvent, RegistryEventListener, SafeCommandPattern, } from "./types.js";
+export { discoverAll, discoverPlugins, discoverMcpServers, discoverPluginMcpServers, getPluginPaths, getMcpConfigPath, isPluginInstalled, getPluginInfo, type DiscoveryResult, } from "./discovery.js";
+export { ToolRegistry, getRegistry, initializeRegistry, routeCommand, getExternalTool, listExternalTools, hasExternalPlugins, hasMcpServers, } from "./registry.js";
+export { checkPermission, grantPermission, denyPermission, clearPermissionCache, registerPluginSafePatterns, getSafePatterns, addSafePattern, removeSafePatternsFromSource, shouldDelegate, getDelegationTarget, integrateWithPermissionSystem, processExternalToolPermission, } from "./permission-adapter.js";
+export { McpBridge, getMcpBridge, resetMcpBridge, invokeMcpTool, readMcpResource, } from "./mcp-bridge.js";
+import type { DiscoveryOptions } from "./types.js";
 /**
  * Initialize the complete compatibility layer
  *

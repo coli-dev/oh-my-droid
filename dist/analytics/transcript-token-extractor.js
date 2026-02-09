@@ -1,17 +1,17 @@
-import { createHash } from 'crypto';
+import { createHash } from "crypto";
 /**
  * Normalize model name to pricing tier
  */
 function normalizeModelName(model) {
     const lower = model.toLowerCase();
-    if (lower.includes('opus')) {
-        return 'claude-opus-4.6';
+    if (lower.includes("opus")) {
+        return "claude-opus-4.6";
     }
-    else if (lower.includes('sonnet')) {
-        return 'claude-sonnet-4.5';
+    else if (lower.includes("sonnet")) {
+        return "claude-sonnet-4.5";
     }
-    else if (lower.includes('haiku')) {
-        return 'claude-haiku-4';
+    else if (lower.includes("haiku")) {
+        return "claude-haiku-4";
     }
     // Fallback to original if no match
     return model;
@@ -25,17 +25,17 @@ function normalizeModelName(model) {
  */
 export function extractTaskSpawns(entry) {
     const spawns = [];
-    if (entry.type !== 'assistant' || !entry.message?.content) {
+    if (entry.type !== "assistant" || !entry.message?.content) {
         return spawns;
     }
     for (const block of entry.message.content) {
-        if (block.type === 'tool_use' && block.name === 'Task') {
+        if (block.type === "tool_use" && block.name === "Task") {
             const toolUseId = block.id;
             const input = block.input;
             if (toolUseId && input?.subagent_type) {
                 spawns.push({
                     toolUseId,
-                    agentType: input.subagent_type
+                    agentType: input.subagent_type,
                 });
             }
         }
@@ -53,13 +53,13 @@ export function extractTaskSpawns(entry) {
  */
 function detectAgentName(entry, agentLookup) {
     // For progress entries, look up agent from parentToolUseID
-    if (entry.type === 'progress') {
+    if (entry.type === "progress") {
         const parentToolUseID = entry.parentToolUseID;
         if (parentToolUseID && agentLookup) {
             return agentLookup.get(parentToolUseID);
         }
         // Fallback to agentId if it looks like an agent type
-        if (entry.agentId && entry.agentId.includes(':')) {
+        if (entry.agentId && entry.agentId.includes(":")) {
             return entry.agentId;
         }
         return undefined;
@@ -73,9 +73,9 @@ function detectAgentName(entry, agentLookup) {
  * Generate unique entry ID for deduplication
  */
 function generateEntryId(sessionId, timestamp, model) {
-    const hash = createHash('sha256');
+    const hash = createHash("sha256");
     hash.update(`${sessionId}:${timestamp}:${model}`);
-    return hash.digest('hex');
+    return hash.digest("hex");
 }
 /**
  * Extract token usage from transcript entry
@@ -90,12 +90,12 @@ export function extractTokenUsage(entry, sessionId, sourceFile, agentLookup) {
     let usage;
     let model;
     // Handle assistant entries
-    if (entry.type === 'assistant' && entry.message?.usage) {
+    if (entry.type === "assistant" && entry.message?.usage) {
         usage = entry.message.usage;
         model = entry.message.model;
     }
     // Handle progress entries from agent responses
-    else if (entry.type === 'progress' && entry.data?.message?.message?.usage) {
+    else if (entry.type === "progress" && entry.data?.message?.message?.usage) {
         usage = entry.data.message.message.usage;
         model = entry.data.message.message.model;
     }
@@ -107,7 +107,7 @@ export function extractTokenUsage(entry, sessionId, sourceFile, agentLookup) {
         return null;
     }
     // Skip synthetic model entries
-    if (model === '<synthetic>') {
+    if (model === "<synthetic>") {
         return null;
     }
     // Use ACTUAL output_tokens from transcript (not estimates!)
@@ -124,13 +124,13 @@ export function extractTokenUsage(entry, sessionId, sourceFile, agentLookup) {
         inputTokens,
         outputTokens,
         cacheCreationTokens,
-        cacheReadTokens
+        cacheReadTokens,
     };
     const entryId = generateEntryId(tokenUsage.sessionId, tokenUsage.timestamp, tokenUsage.modelName);
     return {
         usage: tokenUsage,
         entryId,
-        sourceFile
+        sourceFile,
     };
 }
 //# sourceMappingURL=transcript-token-extractor.js.map

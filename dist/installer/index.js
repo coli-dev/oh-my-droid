@@ -7,21 +7,21 @@
  * Cross-platform support via Node.js-based hook scripts (.mjs).
  * Bash hook scripts were removed in v3.9.0.
  */
-import { existsSync, mkdirSync, writeFileSync, readFileSync, chmodSync, readdirSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { homedir } from 'os';
-import { execSync } from 'child_process';
-import { getHookScripts, getHooksSettingsConfig, isWindows, MIN_NODE_VERSION } from './hooks.js';
+import { existsSync, mkdirSync, writeFileSync, readFileSync, chmodSync, readdirSync, } from "fs";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+import { homedir } from "os";
+import { execSync } from "child_process";
+import { getHookScripts, getHooksSettingsConfig, isWindows, MIN_NODE_VERSION, } from "./hooks.js";
 /** Droid configuration directory */
-export const DROID_CONFIG_DIR = join(homedir(), '.factory');
-export const AGENTS_DIR = join(DROID_CONFIG_DIR, 'droids');
-export const COMMANDS_DIR = join(DROID_CONFIG_DIR, 'commands');
-export const SKILLS_DIR = join(DROID_CONFIG_DIR, 'skills');
-export const HOOKS_DIR = join(DROID_CONFIG_DIR, 'hooks');
-export const HUD_DIR = join(DROID_CONFIG_DIR, 'hud');
-export const SETTINGS_FILE = join(DROID_CONFIG_DIR, 'settings.json');
-export const VERSION_FILE = join(DROID_CONFIG_DIR, '.omd-version.json');
+export const DROID_CONFIG_DIR = join(homedir(), ".factory");
+export const AGENTS_DIR = join(DROID_CONFIG_DIR, "droids");
+export const COMMANDS_DIR = join(DROID_CONFIG_DIR, "commands");
+export const SKILLS_DIR = join(DROID_CONFIG_DIR, "skills");
+export const HOOKS_DIR = join(DROID_CONFIG_DIR, "hooks");
+export const HUD_DIR = join(DROID_CONFIG_DIR, "hud");
+export const SETTINGS_FILE = join(DROID_CONFIG_DIR, "settings.json");
+export const VERSION_FILE = join(DROID_CONFIG_DIR, ".omd-version.json");
 /**
  * Core commands - DISABLED for v3.0+
  * All commands are now plugin-scoped skills managed by Droid.
@@ -29,7 +29,7 @@ export const VERSION_FILE = join(DROID_CONFIG_DIR, '.omd-version.json');
  */
 export const CORE_COMMANDS = [];
 /** Current version */
-export const VERSION = '0.0.1';
+export const VERSION = "0.0.1";
 /**
  * Find a marker that appears at the start of a line (line-anchored).
  * This prevents matching markers inside code blocks.
@@ -40,8 +40,8 @@ export const VERSION = '0.0.1';
  */
 function findLineAnchoredMarker(content, marker, fromEnd = false) {
     // Escape special regex characters in marker
-    const escapedMarker = marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const regex = new RegExp(`^${escapedMarker}$`, 'gm');
+    const escapedMarker = marker.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(`^${escapedMarker}$`, "gm");
     if (fromEnd) {
         // Find the last occurrence
         let lastIndex = -1;
@@ -82,11 +82,11 @@ export function isOmdHook(command) {
  * Check if the current Node.js version meets the minimum requirement
  */
 export function checkNodeVersion() {
-    const current = parseInt(process.versions.node.split('.')[0], 10);
+    const current = parseInt(process.versions.node.split(".")[0], 10);
     return {
         valid: current >= MIN_NODE_VERSION,
         current,
-        required: MIN_NODE_VERSION
+        required: MIN_NODE_VERSION,
     };
 }
 /**
@@ -95,8 +95,8 @@ export function checkNodeVersion() {
  */
 export function isDroidInstalled() {
     try {
-        const command = isWindows() ? 'where droid' : 'which droid';
-        execSync(command, { encoding: 'utf-8', stdio: 'pipe' });
+        const command = isWindows() ? "where droid" : "which droid";
+        execSync(command, { encoding: "utf-8", stdio: "pipe" });
         return true;
     }
     catch {
@@ -137,11 +137,15 @@ export function isProjectScopedPlugin() {
         return false;
     }
     // Global plugins are installed under ~/.factory/plugins/
-    const globalPluginBase = join(homedir(), '.factory', 'plugins');
+    const globalPluginBase = join(homedir(), ".factory", "plugins");
     // If the plugin root is NOT under the global plugin directory, it's project-scoped
     // Normalize paths for comparison (resolve symlinks, trailing slashes, etc.)
-    const normalizedPluginRoot = pluginRoot.replace(/\\/g, '/').replace(/\/$/, '');
-    const normalizedGlobalBase = globalPluginBase.replace(/\\/g, '/').replace(/\/$/, '');
+    const normalizedPluginRoot = pluginRoot
+        .replace(/\\/g, "/")
+        .replace(/\/$/, "");
+    const normalizedGlobalBase = globalPluginBase
+        .replace(/\\/g, "/")
+        .replace(/\/$/, "");
     return !normalizedPluginRoot.startsWith(normalizedGlobalBase);
 }
 /**
@@ -152,21 +156,21 @@ function getPackageDir() {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = dirname(__filename);
     // From dist/installer/index.js, go up to package root
-    return join(__dirname, '..', '..');
+    return join(__dirname, "..", "..");
 }
 /**
  * Load agent definitions from /droids/*.md files
  */
 function loadAgentDefinitions() {
-    const agentsDir = join(getPackageDir(), 'droids');
+    const agentsDir = join(getPackageDir(), "droids");
     const definitions = {};
     if (!existsSync(agentsDir)) {
         console.error(`FATAL: droids directory not found: ${agentsDir}`);
         process.exit(1);
     }
     for (const file of readdirSync(agentsDir)) {
-        if (file.endsWith('.md')) {
-            definitions[file] = readFileSync(join(agentsDir, file), 'utf-8');
+        if (file.endsWith(".md")) {
+            definitions[file] = readFileSync(join(agentsDir, file), "utf-8");
         }
     }
     return definitions;
@@ -175,15 +179,15 @@ function loadAgentDefinitions() {
  * Load command definitions from /commands/*.md files
  */
 function loadCommandDefinitions() {
-    const commandsDir = join(getPackageDir(), 'commands');
+    const commandsDir = join(getPackageDir(), "commands");
     const definitions = {};
     if (!existsSync(commandsDir)) {
         console.error(`FATAL: commands directory not found: ${commandsDir}`);
         process.exit(1);
     }
     for (const file of readdirSync(commandsDir)) {
-        if (file.endsWith('.md')) {
-            definitions[file] = readFileSync(join(commandsDir, file), 'utf-8');
+        if (file.endsWith(".md")) {
+            definitions[file] = readFileSync(join(commandsDir, file), "utf-8");
         }
     }
     return definitions;
@@ -192,12 +196,12 @@ function loadCommandDefinitions() {
  * Load AGENTS.md content from /docs/AGENTS.md
  */
 function loadDroidMdContent() {
-    const droidMdPath = join(getPackageDir(), 'docs', 'AGENTS.md');
+    const droidMdPath = join(getPackageDir(), "docs", "AGENTS.md");
     if (!existsSync(droidMdPath)) {
         console.error(`FATAL: AGENTS.md not found: ${droidMdPath}`);
         process.exit(1);
     }
-    return readFileSync(droidMdPath, 'utf-8');
+    return readFileSync(droidMdPath, "utf-8");
 }
 /**
  * Merge OMD content into existing AGENTS.md using markers
@@ -206,9 +210,9 @@ function loadDroidMdContent() {
  * @returns Merged content with markers
  */
 export function mergeDroidMd(existingContent, omdContent, version) {
-    const START_MARKER = '<!-- OMD:START -->';
-    const END_MARKER = '<!-- OMD:END -->';
-    const USER_CUSTOMIZATIONS = '<!-- User customizations -->';
+    const START_MARKER = "<!-- OMD:START -->";
+    const END_MARKER = "<!-- OMD:END -->";
+    const USER_CUSTOMIZATIONS = "<!-- User customizations -->";
     // Idempotency guard: strip markers from omdContent if already present
     // This handles the case where docs/AGENTS.md ships with markers
     let cleanOmdContent = omdContent;
@@ -221,8 +225,8 @@ export function mergeDroidMd(existingContent, omdContent, version) {
             .trim();
     }
     // Strip any existing version marker from content and inject current version
-    cleanOmdContent = cleanOmdContent.replace(/<!-- OMD:VERSION:[^\s]*? -->\n?/, '');
-    const versionMarker = version ? `<!-- OMD:VERSION:${version} -->\n` : '';
+    cleanOmdContent = cleanOmdContent.replace(/<!-- OMD:VERSION:[^\s]*? -->\n?/, "");
+    const versionMarker = version ? `<!-- OMD:VERSION:${version} -->\n` : "";
     // Case 1: No existing content - wrap omdContent in markers
     if (!existingContent) {
         return `${START_MARKER}\n${versionMarker}${cleanOmdContent}\n${END_MARKER}\n`;
@@ -251,13 +255,13 @@ export function mergeDroidMd(existingContent, omdContent, version) {
 export function install(options = {}) {
     const result = {
         success: false,
-        message: '',
+        message: "",
         installedAgents: [],
         installedCommands: [],
         installedSkills: [],
         hooksConfigured: false,
         hookConflicts: [],
-        errors: []
+        errors: [],
     };
     const log = (msg) => {
         if (options.verbose) {
@@ -277,24 +281,24 @@ export function install(options = {}) {
     const runningAsPlugin = isRunningAsPlugin();
     const projectScoped = isProjectScopedPlugin();
     if (runningAsPlugin) {
-        log('Detected Droid plugin context - skipping agent/command file installation');
-        log('Plugin files are managed by Droid plugin system');
+        log("Detected Droid plugin context - skipping agent/command file installation");
+        log("Plugin files are managed by Droid plugin system");
         if (projectScoped) {
-            log('Detected project-scoped plugin - skipping global HUD/settings modifications');
+            log("Detected project-scoped plugin - skipping global HUD/settings modifications");
         }
         else {
-            log('Will still install HUD statusline...');
+            log("Will still install HUD statusline...");
         }
         // Don't return early - continue to install HUD (unless project-scoped)
     }
     // Check Droid installation (optional)
     if (!options.skipDroidCheck && !isDroidInstalled()) {
-        log('Warning: Droid not found. Install it first:');
+        log("Warning: Droid not found. Install it first:");
         if (isWindows()) {
-            log('  Visit https://docs.anthropic.com/droid-code for Windows installation');
+            log("  Visit https://docs.anthropic.com/droid-code for Windows installation");
         }
         else {
-            log('  curl -fsSL https://droid.ai/install.sh | bash');
+            log("  curl -fsSL https://droid.ai/install.sh | bash");
         }
         // Continue anyway - user might be installing ahead of time
     }
@@ -307,7 +311,7 @@ export function install(options = {}) {
         // Plugin system handles these via ${DROID_PLUGIN_ROOT}
         if (!runningAsPlugin) {
             // Create directories
-            log('Creating directories...');
+            log("Creating directories...");
             if (!existsSync(AGENTS_DIR)) {
                 mkdirSync(AGENTS_DIR, { recursive: true });
             }
@@ -321,7 +325,7 @@ export function install(options = {}) {
                 mkdirSync(HOOKS_DIR, { recursive: true });
             }
             // Install droids
-            log('Installing agent definitions...');
+            log("Installing agent definitions...");
             for (const [filename, content] of Object.entries(loadAgentDefinitions())) {
                 const filepath = join(AGENTS_DIR, filename);
                 if (existsSync(filepath) && !options.force) {
@@ -336,7 +340,7 @@ export function install(options = {}) {
             // Skip command installation - all commands are now plugin-scoped skills
             // Commands are accessible via the plugin system (${DROID_PLUGIN_ROOT}/commands/)
             // and are managed by Droid's skill discovery mechanism.
-            log('Skipping slash command installation (all commands are now plugin-scoped skills)');
+            log("Skipping slash command installation (all commands are now plugin-scoped skills)");
             // The command installation loop is disabled - CORE_COMMANDS is empty
             for (const [filename, content] of Object.entries(loadCommandDefinitions())) {
                 // All commands are skipped - they're managed by the plugin system
@@ -347,7 +351,7 @@ export function install(options = {}) {
                 const filepath = join(COMMANDS_DIR, filename);
                 // Create command directory if needed (only for nested paths like 'ultrawork/skill.md')
                 // Handle both Unix (/) and Windows (\) path separators
-                if (filename.includes('/') || filename.includes('\\')) {
+                if (filename.includes("/") || filename.includes("\\")) {
                     const segments = filename.split(/[/\\]/);
                     const commandDir = join(COMMANDS_DIR, segments[0]);
                     if (!existsSync(commandDir)) {
@@ -366,18 +370,21 @@ export function install(options = {}) {
             // NOTE: SKILL_DEFINITIONS removed - skills now only installed via COMMAND_DEFINITIONS
             // to avoid duplicate entries in Droid's available skills list
             // Install AGENTS.md with merge support
-            const droidMdPath = join(DROID_CONFIG_DIR, 'AGENTS.md');
-            const homeMdPath = join(homedir(), 'AGENTS.md');
+            const droidMdPath = join(DROID_CONFIG_DIR, "AGENTS.md");
+            const homeMdPath = join(homedir(), "AGENTS.md");
             if (!existsSync(homeMdPath)) {
                 const omdContent = loadDroidMdContent();
                 // Read existing content if it exists
                 let existingContent = null;
                 if (existsSync(droidMdPath)) {
-                    existingContent = readFileSync(droidMdPath, 'utf-8');
+                    existingContent = readFileSync(droidMdPath, "utf-8");
                 }
                 // Always create backup before modification (if file exists)
                 if (existingContent !== null) {
-                    const timestamp = new Date().toISOString().replace(/:/g, '-').split('.')[0]; // YYYY-MM-DDTHH-MM-SS
+                    const timestamp = new Date()
+                        .toISOString()
+                        .replace(/:/g, "-")
+                        .split(".")[0]; // YYYY-MM-DDTHH-MM-SS
                     const backupPath = join(DROID_CONFIG_DIR, `AGENTS.md.backup.${timestamp}`);
                     writeFileSync(backupPath, existingContent);
                     log(`Backed up existing AGENTS.md to ${backupPath}`);
@@ -386,18 +393,18 @@ export function install(options = {}) {
                 const mergedContent = mergeDroidMd(existingContent, omdContent, VERSION);
                 writeFileSync(droidMdPath, mergedContent);
                 if (existingContent) {
-                    log('Updated AGENTS.md (merged with existing content)');
+                    log("Updated AGENTS.md (merged with existing content)");
                 }
                 else {
-                    log('Created AGENTS.md');
+                    log("Created AGENTS.md");
                 }
             }
             else {
-                log('AGENTS.md exists in home directory, skipping');
+                log("AGENTS.md exists in home directory, skipping");
             }
             // Install hook scripts
             const hookScripts = getHookScripts();
-            log('Installing hook scripts...');
+            log("Installing hook scripts...");
             for (const [filename, content] of Object.entries(hookScripts)) {
                 const filepath = join(HOOKS_DIR, filename);
                 // Create subdirectory if needed (e.g., lib/)
@@ -421,16 +428,16 @@ export function install(options = {}) {
             result.hooksConfigured = true; // Will be set properly after consolidated write
         }
         else {
-            log('Skipping agent/command/hook files (managed by plugin system)');
+            log("Skipping agent/command/hook files (managed by plugin system)");
         }
         // Install HUD statusline (skip for project-scoped plugins to avoid affecting global settings)
         // Project-scoped plugins should not modify ~/.factory/settings.json
         let hudScriptPath = null;
         if (projectScoped) {
-            log('Skipping HUD statusline (project-scoped plugin should not modify global settings)');
+            log("Skipping HUD statusline (project-scoped plugin should not modify global settings)");
         }
         else {
-            log('Installing HUD statusline...');
+            log("Installing HUD statusline...");
         }
         if (!projectScoped)
             try {
@@ -439,117 +446,117 @@ export function install(options = {}) {
                 }
                 // Build the HUD script content (compiled from src/hud/index.ts)
                 // Create a wrapper that checks multiple locations for the HUD module
-                hudScriptPath = join(HUD_DIR, 'omd-hud.mjs');
+                hudScriptPath = join(HUD_DIR, "omd-hud.mjs");
                 const hudScriptLines = [
-                    '#!/usr/bin/env node',
-                    '/**',
-                    ' * OMD HUD - Statusline Script',
-                    ' * Wrapper that imports from dev paths, plugin cache, or npm package',
-                    ' */',
-                    '',
+                    "#!/usr/bin/env node",
+                    "/**",
+                    " * OMD HUD - Statusline Script",
+                    " * Wrapper that imports from dev paths, plugin cache, or npm package",
+                    " */",
+                    "",
                     'import { existsSync, readdirSync } from "node:fs";',
                     'import { homedir } from "node:os";',
                     'import { join } from "node:path";',
                     'import { pathToFileURL } from "node:url";',
-                    '',
-                    'async function main() {',
-                    '  const home = homedir();',
-                    '  let pluginCacheVersion = null;',
-                    '  let pluginCacheDir = null;',
-                    '  ',
-                    '  // 1. Development paths (only when OMD_DEV=1)',
+                    "",
+                    "async function main() {",
+                    "  const home = homedir();",
+                    "  let pluginCacheVersion = null;",
+                    "  let pluginCacheDir = null;",
+                    "  ",
+                    "  // 1. Development paths (only when OMD_DEV=1)",
                     '  if (process.env.OMD_DEV === "1") {',
-                    '    const devPaths = [',
+                    "    const devPaths = [",
                     '      join(home, "Workspace/oh-my-droid/dist/hud/index.js"),',
                     '      join(home, "workspace/oh-my-droid/dist/hud/index.js"),',
                     '      join(home, "projects/oh-my-droid/dist/hud/index.js"),',
-                    '    ];',
-                    '    ',
-                    '    for (const devPath of devPaths) {',
-                    '      if (existsSync(devPath)) {',
-                    '        try {',
-                    '          await import(pathToFileURL(devPath).href);',
-                    '          return;',
-                    '        } catch { /* continue */ }',
-                    '      }',
-                    '    }',
-                    '  }',
-                    '  ',
-                    '  // 2. Plugin cache (for production installs)',
+                    "    ];",
+                    "    ",
+                    "    for (const devPath of devPaths) {",
+                    "      if (existsSync(devPath)) {",
+                    "        try {",
+                    "          await import(pathToFileURL(devPath).href);",
+                    "          return;",
+                    "        } catch { /* continue */ }",
+                    "      }",
+                    "    }",
+                    "  }",
+                    "  ",
+                    "  // 2. Plugin cache (for production installs)",
                     '  const pluginCacheBase = join(home, ".factory/plugins/cache/omd/oh-my-droid");',
-                    '  if (existsSync(pluginCacheBase)) {',
-                    '    try {',
-                    '      const versions = readdirSync(pluginCacheBase);',
-                    '      if (versions.length > 0) {',
-                    '        // Filter to only versions with built dist/hud/index.js',
-                    '        // This prevents picking an unbuilt new version after plugin update',
-                    '        const builtVersions = versions.filter(version => {',
+                    "  if (existsSync(pluginCacheBase)) {",
+                    "    try {",
+                    "      const versions = readdirSync(pluginCacheBase);",
+                    "      if (versions.length > 0) {",
+                    "        // Filter to only versions with built dist/hud/index.js",
+                    "        // This prevents picking an unbuilt new version after plugin update",
+                    "        const builtVersions = versions.filter(version => {",
                     '          const pluginPath = join(pluginCacheBase, version, "dist/hud/index.js");',
-                    '          return existsSync(pluginPath);',
-                    '        });',
-                    '        ',
-                    '        if (builtVersions.length > 0) {',
-                    '          const latestVersion = builtVersions.sort((a, b) => a.localeCompare(b, undefined, { numeric: true })).reverse()[0];',
-                    '          pluginCacheVersion = latestVersion;',
-                    '          pluginCacheDir = join(pluginCacheBase, latestVersion);',
+                    "          return existsSync(pluginPath);",
+                    "        });",
+                    "        ",
+                    "        if (builtVersions.length > 0) {",
+                    "          const latestVersion = builtVersions.sort((a, b) => a.localeCompare(b, undefined, { numeric: true })).reverse()[0];",
+                    "          pluginCacheVersion = latestVersion;",
+                    "          pluginCacheDir = join(pluginCacheBase, latestVersion);",
                     '          const pluginPath = join(pluginCacheDir, "dist/hud/index.js");',
-                    '          await import(pathToFileURL(pluginPath).href);',
-                    '          return;',
-                    '        }',
-                    '      }',
-                    '    } catch { /* continue */ }',
-                    '  }',
-                    '  ',
-                    '  // 3. npm package (global or local install)',
-                    '  try {',
+                    "          await import(pathToFileURL(pluginPath).href);",
+                    "          return;",
+                    "        }",
+                    "      }",
+                    "    } catch { /* continue */ }",
+                    "  }",
+                    "  ",
+                    "  // 3. npm package (global or local install)",
+                    "  try {",
                     '    await import("oh-my-droid/dist/hud/index.js");',
-                    '    return;',
-                    '  } catch { /* continue */ }',
-                    '  ',
-                    '  // 4. Fallback: provide detailed error message with fix instructions',
-                    '  if (pluginCacheDir && existsSync(pluginCacheDir)) {',
-                    '    // Plugin exists but dist/ folder is missing - needs build',
+                    "    return;",
+                    "  } catch { /* continue */ }",
+                    "  ",
+                    "  // 4. Fallback: provide detailed error message with fix instructions",
+                    "  if (pluginCacheDir && existsSync(pluginCacheDir)) {",
+                    "    // Plugin exists but dist/ folder is missing - needs build",
                     '    const distDir = join(pluginCacheDir, "dist");',
-                    '    if (!existsSync(distDir)) {',
+                    "    if (!existsSync(distDir)) {",
                     '      console.log(`[OMD HUD] Plugin installed but not built. Run: cd "${pluginCacheDir}" && npm install && npm run build`);',
-                    '    } else {',
+                    "    } else {",
                     '      console.log(`[OMD HUD] Plugin dist/ exists but HUD not found. Run: cd "${pluginCacheDir}" && npm run build`);',
-                    '    }',
-                    '  } else if (existsSync(pluginCacheBase)) {',
-                    '    // Plugin cache directory exists but no versions',
-                    '    console.log(`[OMD HUD] Plugin cache found but no versions installed. Run: /oh-my-droid:omd-setup`);',
-                    '  } else {',
-                    '    // No plugin installation found at all',
+                    "    }",
+                    "  } else if (existsSync(pluginCacheBase)) {",
+                    "    // Plugin cache directory exists but no versions",
+                    "    console.log(`[OMD HUD] Plugin cache found but no versions installed. Run: /oh-my-droid:omd-setup`);",
+                    "  } else {",
+                    "    // No plugin installation found at all",
                     '    console.log("[OMD HUD] Plugin not installed. Run: /oh-my-droid:omd-setup");',
-                    '  }',
-                    '}',
-                    '',
-                    'main();',
+                    "  }",
+                    "}",
+                    "",
+                    "main();",
                 ];
-                const hudScript = hudScriptLines.join('\n');
+                const hudScript = hudScriptLines.join("\n");
                 writeFileSync(hudScriptPath, hudScript);
                 if (!isWindows()) {
                     chmodSync(hudScriptPath, 0o755);
                 }
-                log('  Installed omd-hud.mjs');
+                log("  Installed omd-hud.mjs");
             }
             catch (_e) {
-                log('  Warning: Could not install HUD statusline script (non-fatal)');
+                log("  Warning: Could not install HUD statusline script (non-fatal)");
                 hudScriptPath = null;
             }
         // Consolidated settings.json write (atomic: read once, modify, write once)
         // Skip for project-scoped plugins to avoid affecting global settings
         if (projectScoped) {
-            log('Skipping settings.json configuration (project-scoped plugin)');
+            log("Skipping settings.json configuration (project-scoped plugin)");
         }
         else {
-            log('Configuring settings.json...');
+            log("Configuring settings.json...");
         }
         if (!projectScoped)
             try {
                 let existingSettings = {};
                 if (existsSync(SETTINGS_FILE)) {
-                    const settingsContent = readFileSync(SETTINGS_FILE, 'utf-8');
+                    const settingsContent = readFileSync(SETTINGS_FILE, "utf-8");
                     existingSettings = JSON.parse(settingsContent);
                 }
                 // 1. Configure hooks (only if not running as plugin)
@@ -567,10 +574,10 @@ export function install(options = {}) {
                             // Check if existing hook is owned by another plugin
                             const existingEventHooks = existingHooks[eventType];
                             let hasNonOmdHook = false;
-                            let nonOmdCommand = '';
+                            let nonOmdCommand = "";
                             for (const hookGroup of existingEventHooks) {
                                 for (const hook of hookGroup.hooks) {
-                                    if (hook.type === 'command' && !isOmdHook(hook.command)) {
+                                    if (hook.type === "command" && !isOmdHook(hook.command)) {
                                         hasNonOmdHook = true;
                                         nonOmdCommand = hook.command;
                                         break;
@@ -582,11 +589,14 @@ export function install(options = {}) {
                             if (hasNonOmdHook && !options.forceHooks) {
                                 // Conflict detected - don't overwrite
                                 log(`  [OMD] Warning: ${eventType} hook owned by another plugin. Skipping. Use --force-hooks to override.`);
-                                result.hookConflicts.push({ eventType, existingCommand: nonOmdCommand });
+                                result.hookConflicts.push({
+                                    eventType,
+                                    existingCommand: nonOmdCommand,
+                                });
                             }
                             else if (options.force || options.forceHooks) {
                                 existingHooks[eventType] = eventHooks;
-                                log(`  Updated ${eventType} hook (${options.forceHooks ? '--force-hooks' : '--force'})`);
+                                log(`  Updated ${eventType} hook (${options.forceHooks ? "--force-hooks" : "--force"})`);
                             }
                             else {
                                 log(`  ${eventType} hook already configured, skipping`);
@@ -594,35 +604,35 @@ export function install(options = {}) {
                         }
                     }
                     existingSettings.hooks = existingHooks;
-                    log('  Hooks configured');
+                    log("  Hooks configured");
                     result.hooksConfigured = true;
                 }
                 // 2. Configure statusLine (always, even in plugin mode)
                 if (hudScriptPath) {
                     if (!existingSettings.statusLine) {
                         existingSettings.statusLine = {
-                            type: 'command',
-                            command: 'node ' + hudScriptPath
+                            type: "command",
+                            command: "node " + hudScriptPath,
                         };
-                        log('  Configured statusLine');
+                        log("  Configured statusLine");
                     }
                     else if (options.force) {
                         existingSettings.statusLine = {
-                            type: 'command',
-                            command: 'node ' + hudScriptPath
+                            type: "command",
+                            command: "node " + hudScriptPath,
                         };
-                        log('  Updated statusLine (--force)');
+                        log("  Updated statusLine (--force)");
                     }
                     else {
-                        log('  statusLine already configured, skipping (use --force to override)');
+                        log("  statusLine already configured, skipping (use --force to override)");
                     }
                 }
                 // 3. Single atomic write
                 writeFileSync(SETTINGS_FILE, JSON.stringify(existingSettings, null, 2));
-                log('  settings.json updated');
+                log("  settings.json updated");
             }
             catch (_e) {
-                log('  Warning: Could not configure settings.json (non-fatal)');
+                log("  Warning: Could not configure settings.json (non-fatal)");
                 result.hooksConfigured = false;
             }
         // Save version metadata (skip for project-scoped plugins)
@@ -630,14 +640,14 @@ export function install(options = {}) {
             const versionMetadata = {
                 version: VERSION,
                 installedAt: new Date().toISOString(),
-                installMethod: 'npm',
-                lastCheckAt: new Date().toISOString()
+                installMethod: "npm",
+                lastCheckAt: new Date().toISOString(),
             };
             writeFileSync(VERSION_FILE, JSON.stringify(versionMetadata, null, 2));
-            log('Saved version metadata');
+            log("Saved version metadata");
         }
         else {
-            log('Skipping version metadata (project-scoped plugin)');
+            log("Skipping version metadata (project-scoped plugin)");
         }
         result.success = true;
         const hookCount = Object.keys(getHookScripts()).length;
@@ -654,7 +664,9 @@ export function install(options = {}) {
  * Check if OMD is already installed
  */
 export function isInstalled() {
-    return existsSync(VERSION_FILE) && existsSync(AGENTS_DIR) && existsSync(COMMANDS_DIR);
+    return (existsSync(VERSION_FILE) &&
+        existsSync(AGENTS_DIR) &&
+        existsSync(COMMANDS_DIR));
 }
 /**
  * Get installation info
@@ -664,12 +676,12 @@ export function getInstallInfo() {
         return null;
     }
     try {
-        const content = readFileSync(VERSION_FILE, 'utf-8');
+        const content = readFileSync(VERSION_FILE, "utf-8");
         const data = JSON.parse(content);
         return {
             version: data.version,
             installedAt: data.installedAt,
-            method: data.installMethod
+            method: data.installMethod,
         };
     }
     catch {

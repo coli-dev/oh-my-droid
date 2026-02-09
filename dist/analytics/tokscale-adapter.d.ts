@@ -5,7 +5,7 @@
  * when the native module is unavailable. This enables optional high-performance
  * token counting and pricing lookup while maintaining compatibility in all environments.
  */
-import { ModelPricing } from './types.js';
+import { ModelPricing } from "./types.js";
 /**
  * Interface for the tokscale adapter - wraps tokscale's native API
  */

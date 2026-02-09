@@ -14,7 +14,7 @@ import {
   renderAgentsDescOnly,
   renderAgentsByFormat,
   renderAgentsMultiLine,
-} from "../hud/elements/droids.js";
+} from "../hud/elements/agents.js";
 import type { ActiveAgent } from "../hud/types.js";
 
 // ANSI color codes for verification

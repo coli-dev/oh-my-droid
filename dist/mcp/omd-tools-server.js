@@ -22,11 +22,11 @@ const allTools = [
     ...stateTools,
     ...notepadTools,
     ...memoryTools,
-    ...traceTools
+    ...traceTools,
 ];
 // Convert to SDK tool format
 // The SDK's tool() expects a ZodRawShape directly (not wrapped in z.object())
-const sdkTools = allTools.map(t => tool(t.name, t.description, t.schema, async (args) => await t.handler(args)));
+const sdkTools = allTools.map((t) => tool(t.name, t.description, t.schema, async (args) => await t.handler(args)));
 /**
  * In-process MCP server exposing all OMD custom tools
  *
@@ -35,33 +35,34 @@ const sdkTools = allTools.map(t => tool(t.name, t.description, t.schema, async (
 export const omdToolsServer = createSdkMcpServer({
     name: "t",
     version: "1.0.0",
-    tools: sdkTools
+    tools: sdkTools,
 });
 /**
  * Tool names in MCP format for allowedTools configuration
  */
-export const omdToolNames = allTools.map(t => `mcp__t__${t.name}`);
+export const omdToolNames = allTools.map((t) => `mcp__t__${t.name}`);
 /**
  * Get tool names filtered by category
  */
 export function getOmdToolNames(options) {
-    const { includeLsp = true, includeAst = true, includePython = true, includeSkills = true, includeState = true, includeNotepad = true, includeMemory = true, includeTrace = true } = options || {};
-    return omdToolNames.filter(name => {
-        if (!includeLsp && name.includes('lsp_'))
+    const { includeLsp = true, includeAst = true, includePython = true, includeSkills = true, includeState = true, includeNotepad = true, includeMemory = true, includeTrace = true, } = options || {};
+    return omdToolNames.filter((name) => {
+        if (!includeLsp && name.includes("lsp_"))
             return false;
-        if (!includeAst && name.includes('ast_'))
+        if (!includeAst && name.includes("ast_"))
             return false;
-        if (!includePython && name.includes('python_repl'))
+        if (!includePython && name.includes("python_repl"))
             return false;
-        if (!includeSkills && (name.includes('load_omd_skills') || name.includes('list_omd_skills')))
+        if (!includeSkills &&
+            (name.includes("load_omd_skills") || name.includes("list_omd_skills")))
             return false;
-        if (!includeState && name.includes('state_'))
+        if (!includeState && name.includes("state_"))
             return false;
-        if (!includeNotepad && name.includes('notepad_'))
+        if (!includeNotepad && name.includes("notepad_"))
             return false;
-        if (!includeMemory && name.includes('memory_'))
+        if (!includeMemory && name.includes("memory_"))
             return false;
-        if (!includeTrace && name.includes('trace_'))
+        if (!includeTrace && name.includes("trace_"))
             return false;
         return true;
     });

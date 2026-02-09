@@ -5,12 +5,12 @@
  * Merges Droid's native team config with MCP shadow registry
  * to provide a single coherent view of all team members.
  */
-import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { homedir } from 'node:os';
-import { listMcpWorkers } from './team-registration.js';
-import { readHeartbeat, isWorkerAlive } from './heartbeat.js';
-import { getDefaultCapabilities } from './capabilities.js';
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { homedir } from "node:os";
+import { listMcpWorkers } from "./team-registration.js";
+import { readHeartbeat, isWorkerAlive } from "./heartbeat.js";
+import { getDefaultCapabilities } from "./capabilities.js";
 /**
  * Get all team members from both Droid native teams and MCP workers.
  */
@@ -18,29 +18,31 @@ export function getTeamMembers(teamName, workingDirectory) {
     const members = [];
     // 1. Read Droid native members from config.json
     try {
-        const configPath = join(homedir(), '.factory', 'teams', teamName, 'config.json');
+        const configPath = join(homedir(), ".factory", "teams", teamName, "config.json");
         if (existsSync(configPath)) {
-            const config = JSON.parse(readFileSync(configPath, 'utf-8'));
+            const config = JSON.parse(readFileSync(configPath, "utf-8"));
             if (Array.isArray(config.members)) {
                 for (const member of config.members) {
                     // Skip MCP workers (they'll be handled below)
-                    if (member.backendType === 'tmux')
+                    if (member.backendType === "tmux")
                         continue;
                     members.push({
-                        name: member.name || 'unknown',
-                        agentId: member.agentId || '',
-                        backend: 'droid-native',
-                        model: member.model || 'unknown',
-                        capabilities: getDefaultCapabilities('droid-native'),
+                        name: member.name || "unknown",
+                        agentId: member.agentId || "",
+                        backend: "droid-native",
+                        model: member.model || "unknown",
+                        capabilities: getDefaultCapabilities("droid-native"),
                         joinedAt: member.joinedAt || 0,
-                        status: 'active', // Droid native members are managed by CC
+                        status: "active", // Droid native members are managed by CC
                         currentTaskId: null,
                     });
                 }
             }
         }
     }
-    catch { /* graceful degradation - config may not exist */ }
+    catch {
+        /* graceful degradation - config may not exist */
+    }
     // 2. Read MCP workers from shadow registry + heartbeat
     try {
         const mcpWorkers = listMcpWorkers(teamName, workingDirectory);
@@ -48,21 +50,21 @@ export function getTeamMembers(teamName, workingDirectory) {
             const heartbeat = readHeartbeat(workingDirectory, teamName, worker.name);
             const alive = isWorkerAlive(workingDirectory, teamName, worker.name, 60000);
             // Determine status from heartbeat
-            let status = 'unknown';
+            let status = "unknown";
             if (heartbeat) {
-                if (heartbeat.status === 'quarantined')
-                    status = 'quarantined';
-                else if (heartbeat.status === 'executing')
-                    status = 'active';
-                else if (heartbeat.status === 'polling')
-                    status = 'idle';
+                if (heartbeat.status === "quarantined")
+                    status = "quarantined";
+                else if (heartbeat.status === "executing")
+                    status = "active";
+                else if (heartbeat.status === "polling")
+                    status = "idle";
                 else
                     status = heartbeat.status;
             }
             if (!alive)
-                status = 'dead';
+                status = "dead";
             // Determine backend and default capabilities
-            const backend = worker.agentType === 'mcp-gemini' ? 'mcp-gemini' : 'mcp-codex';
+            const backend = worker.agentType === "mcp-gemini" ? "mcp-gemini" : "mcp-codex";
             const capabilities = getDefaultCapabilities(backend);
             members.push({
                 name: worker.name,
@@ -76,7 +78,9 @@ export function getTeamMembers(teamName, workingDirectory) {
             });
         }
     }
-    catch { /* graceful degradation */ }
+    catch {
+        /* graceful degradation */
+    }
     return members;
 }
 //# sourceMappingURL=unified-team.js.map

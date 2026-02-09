@@ -4,7 +4,7 @@
  * Generates orchestrator prompts dynamically from agent metadata.
  * Adding a new agent to definitions.ts automatically includes it in the generated prompt.
  */
-import { buildHeader, buildAgentRegistry, buildTriggerTable, buildToolSelectionSection, buildDelegationMatrix, buildOrchestrationPrinciples, buildWorkflow, buildCriticalRules, buildCompletionChecklist } from './prompt-sections/index.js';
+import { buildHeader, buildAgentRegistry, buildTriggerTable, buildToolSelectionSection, buildDelegationMatrix, buildOrchestrationPrinciples, buildWorkflow, buildCriticalRules, buildCompletionChecklist, } from "./prompt-sections/index.js";
 /**
  * Default generator options (all sections enabled)
  */
@@ -16,7 +16,7 @@ const DEFAULT_OPTIONS = {
     includePrinciples: true,
     includeWorkflow: true,
     includeRules: true,
-    includeChecklist: true
+    includeChecklist: true,
 };
 /**
  * Generate complete orchestrator prompt from agent definitions
@@ -48,7 +48,7 @@ export function generateOrchestratorPrompt(droids, options) {
     const sections = [];
     // Always include header
     sections.push(buildHeader());
-    sections.push('');
+    sections.push("");
     // Agent registry
     if (opts.includeAgents) {
         sections.push(buildAgentRegistry(droids));
@@ -56,7 +56,7 @@ export function generateOrchestratorPrompt(droids, options) {
     // Orchestration principles
     if (opts.includePrinciples) {
         sections.push(buildOrchestrationPrinciples());
-        sections.push('');
+        sections.push("");
     }
     // Trigger table
     if (opts.includeTriggers) {
@@ -76,18 +76,18 @@ export function generateOrchestratorPrompt(droids, options) {
     // Workflow
     if (opts.includeWorkflow) {
         sections.push(buildWorkflow());
-        sections.push('');
+        sections.push("");
     }
     // Critical rules
     if (opts.includeRules) {
         sections.push(buildCriticalRules());
-        sections.push('');
+        sections.push("");
     }
     // Completion checklist
     if (opts.includeChecklist) {
         sections.push(buildCompletionChecklist());
     }
-    return sections.join('\n');
+    return sections.join("\n");
 }
 /**
  * Build agent section only (for embedding in other prompts)
@@ -135,7 +135,7 @@ export function convertDefinitionsToConfigs(definitions) {
         tools: def.tools,
         disallowedTools: def.disallowedTools,
         model: def.model,
-        metadata: def.metadata
+        metadata: def.metadata,
     }));
 }
 //# sourceMappingURL=prompt-generator.js.map

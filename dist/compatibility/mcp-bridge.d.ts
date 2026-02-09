@@ -8,8 +8,8 @@
  * - Tool invocation routing
  * - Resource access
  */
-import { EventEmitter } from 'events';
-import type { McpServerEntry, ExternalTool, McpToolResult } from './types.js';
+import { EventEmitter } from "events";
+import type { McpServerEntry, ExternalTool, McpToolResult } from "./types.js";
 /**
  * Security Error for MCP bridge operations
  */

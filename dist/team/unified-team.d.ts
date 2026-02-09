@@ -1,4 +1,4 @@
-import type { WorkerBackend, WorkerCapability } from './types.js';
+import type { WorkerBackend, WorkerCapability } from "./types.js";
 export interface UnifiedTeamMember {
     name: string;
     agentId: string;
@@ -6,7 +6,7 @@ export interface UnifiedTeamMember {
     model: string;
     capabilities: WorkerCapability[];
     joinedAt: number;
-    status: 'active' | 'idle' | 'dead' | 'quarantined' | 'unknown';
+    status: "active" | "idle" | "dead" | "quarantined" | "unknown";
     currentTaskId: string | null;
 }
 /**

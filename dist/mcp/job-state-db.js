@@ -533,7 +533,9 @@ export function getJobSummaryForPreCompact() {
         }
         // Recent completed/failed jobs (last hour) - brief summary
         const recentJobs = getRecentJobs(undefined, 60 * 60 * 1000);
-        const terminalJobs = recentJobs.filter((j) => j.status === "completed" || j.status === "failed" || j.status === "timeout");
+        const terminalJobs = recentJobs.filter((j) => j.status === "completed" ||
+            j.status === "failed" ||
+            j.status === "timeout");
         if (terminalJobs.length > 0) {
             lines.push("## Recent Completed Jobs (last hour)");
             lines.push("");
@@ -542,7 +544,9 @@ export function getJobSummaryForPreCompact() {
                 const fallback = job.usedFallback
                     ? ` (fallback: ${job.fallbackModel})`
                     : "";
-                const errorNote = job.error ? ` - error: ${job.error.slice(0, 80)}` : "";
+                const errorNote = job.error
+                    ? ` - error: ${job.error.slice(0, 80)}`
+                    : "";
                 lines.push(`- **${job.provider}** \`${job.jobId}\` (${job.agentRole}): ${icon}${fallback}${errorNote}`);
             }
             if (terminalJobs.length > 10) {

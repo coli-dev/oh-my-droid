@@ -1,4 +1,4 @@
-export type SessionTag = 'feature' | 'bugfix' | 'refactor' | 'exploration' | 'testing' | 'documentation' | 'other';
+export type SessionTag = "feature" | "bugfix" | "refactor" | "exploration" | "testing" | "documentation" | "other";
 export interface SessionMetadata {
     id: string;
     projectPath: string;
@@ -7,7 +7,7 @@ export interface SessionMetadata {
     startTime: string;
     endTime?: string;
     duration?: number;
-    status: 'active' | 'completed' | 'abandoned';
+    status: "active" | "completed" | "abandoned";
     outcomes: string[];
     notes: string;
 }

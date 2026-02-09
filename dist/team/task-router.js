@@ -1,6 +1,6 @@
 // src/team/task-router.ts
-import { getTeamMembers } from './unified-team.js';
-import { scoreWorkerFitness } from './capabilities.js';
+import { getTeamMembers } from "./unified-team.js";
+import { scoreWorkerFitness } from "./capabilities.js";
 /**
  * Automatically assign tasks to the best available workers.
  * Uses capability scoring + worker availability + current load.
@@ -16,7 +16,7 @@ export function routeTasks(teamName, workingDirectory, unassignedTasks, required
         return [];
     const allMembers = getTeamMembers(teamName, workingDirectory);
     // Filter to available workers (not dead, not quarantined)
-    const available = allMembers.filter(m => m.status !== 'dead' && m.status !== 'quarantined');
+    const available = allMembers.filter((m) => m.status !== "dead" && m.status !== "quarantined");
     if (available.length === 0)
         return [];
     const decisions = [];
@@ -27,21 +27,21 @@ export function routeTasks(teamName, workingDirectory, unassignedTasks, required
         assignmentCounts.set(m.name, m.currentTaskId ? 1 : 0);
     }
     for (const task of unassignedTasks) {
-        const caps = requiredCapabilities?.[task.id] || ['general'];
+        const caps = requiredCapabilities?.[task.id] || ["general"];
         // Score each available worker
         const scored = available
-            .map(worker => {
+            .map((worker) => {
             const fitnessScore = scoreWorkerFitness(worker, caps);
             const currentLoad = assignmentCounts.get(worker.name) || 0;
             // Penalize busy workers: each assigned task reduces score by 0.2
             const loadPenalty = currentLoad * 0.2;
             // Prefer idle workers
-            const idleBonus = worker.status === 'idle' ? 0.1 : 0;
+            const idleBonus = worker.status === "idle" ? 0.1 : 0;
             // Ensure final score stays in 0-1 range
             const finalScore = Math.min(1, Math.max(0, fitnessScore - loadPenalty + idleBonus));
             return { worker, score: finalScore, fitnessScore };
         })
-            .filter(s => s.fitnessScore > 0) // Must have at least some capability match
+            .filter((s) => s.fitnessScore > 0) // Must have at least some capability match
             .sort((a, b) => b.score - a.score);
         if (scored.length > 0) {
             const best = scored[0];
@@ -49,7 +49,7 @@ export function routeTasks(teamName, workingDirectory, unassignedTasks, required
                 taskId: task.id,
                 assignedTo: best.worker.name,
                 backend: best.worker.backend,
-                reason: `Best fitness score (${best.fitnessScore.toFixed(2)}) for capabilities [${caps.join(', ')}]`,
+                reason: `Best fitness score (${best.fitnessScore.toFixed(2)}) for capabilities [${caps.join(", ")}]`,
                 confidence: best.score,
             });
             // Track the assignment

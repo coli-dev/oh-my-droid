@@ -4,7 +4,7 @@
  * Central registry for all external tools, plugins, and MCP servers.
  * Handles tool registration, conflict resolution, and command routing.
  */
-import { discoverAll } from './discovery.js';
+import { discoverAll } from "./discovery.js";
 /**
  * Singleton registry instance
  */
@@ -51,9 +51,12 @@ export class ToolRegistry {
             this.registerMcpServer(server);
         }
         this.emit({
-            type: 'plugin-discovered',
+            type: "plugin-discovered",
             timestamp: Date.now(),
-            data: { pluginCount: result.plugins.length, mcpServerCount: result.mcpServers.length },
+            data: {
+                pluginCount: result.plugins.length,
+                mcpServerCount: result.mcpServers.length,
+            },
         });
     }
     /**
@@ -66,7 +69,7 @@ export class ToolRegistry {
             this.registerTool(tool);
         }
         this.emit({
-            type: 'plugin-loaded',
+            type: "plugin-loaded",
             timestamp: Date.now(),
             data: { plugin: plugin.name, toolCount: plugin.tools.length },
         });
@@ -93,7 +96,7 @@ export class ToolRegistry {
         else {
             this.tools.set(tool.name, tool);
             this.emit({
-                type: 'tool-registered',
+                type: "tool-registered",
                 timestamp: Date.now(),
                 data: { tool: tool.name, source: tool.source },
             });
@@ -110,7 +113,7 @@ export class ToolRegistry {
             conflict = {
                 name: conflictKey,
                 tools: [existing],
-                resolution: 'priority',
+                resolution: "priority",
                 winner: existing,
             };
             this.conflicts.set(conflictKey, conflict);
@@ -125,7 +128,7 @@ export class ToolRegistry {
             this.tools.set(incoming.name, incoming);
         }
         this.emit({
-            type: 'tool-conflict',
+            type: "tool-conflict",
             timestamp: Date.now(),
             data: { name: conflictKey, winner: conflict.winner.source },
         });
@@ -140,7 +143,7 @@ export class ToolRegistry {
         }
         // Try to find by short name (without namespace)
         for (const [fullName, tool] of this.tools) {
-            const shortName = fullName.split(':').pop();
+            const shortName = fullName.split(":").pop();
             if (shortName === name) {
                 return tool;
             }
@@ -151,13 +154,13 @@ export class ToolRegistry {
      * Get all tools from a specific source
      */
     getToolsBySource(source) {
-        return Array.from(this.tools.values()).filter(t => t.source === source);
+        return Array.from(this.tools.values()).filter((t) => t.source === source);
     }
     /**
      * Get all tools of a specific type
      */
     getToolsByType(type) {
-        return Array.from(this.tools.values()).filter(t => t.type === type);
+        return Array.from(this.tools.values()).filter((t) => t.type === type);
     }
     /**
      * Get all registered tools
@@ -192,23 +195,23 @@ export class ToolRegistry {
             return null;
         }
         // Determine if permission is required based on capabilities
-        const requiresPermission = tool.capabilities?.some(c => c === 'write' || c === 'execute') ?? false;
+        const requiresPermission = tool.capabilities?.some((c) => c === "write" || c === "execute") ?? false;
         const route = {
             tool,
             requiresPermission,
         };
         // Add handler info for plugin tools
-        if (tool.type === 'plugin') {
+        if (tool.type === "plugin") {
             const plugin = this.plugins.get(tool.source);
             if (plugin?.manifest.tools) {
-                const toolDef = plugin.manifest.tools.find(t => `${plugin.name}:${t.name}` === tool.name);
+                const toolDef = plugin.manifest.tools.find((t) => `${plugin.name}:${t.name}` === tool.name);
                 if (toolDef) {
                     route.handler = toolDef.handler;
                 }
             }
         }
         // Add MCP server info for MCP tools
-        if (tool.type === 'mcp') {
+        if (tool.type === "mcp") {
             // Extract server name from tool source
             route.mcpServer = tool.source;
         }
@@ -265,7 +268,7 @@ export class ToolRegistry {
             server.tools = updates.tools;
         }
         this.emit({
-            type: updates.connected ? 'mcp-connected' : 'mcp-disconnected',
+            type: updates.connected ? "mcp-connected" : "mcp-disconnected",
             timestamp: Date.now(),
             data: { server: name, toolCount: server.tools.length },
         });
@@ -287,8 +290,8 @@ export class ToolRegistry {
      */
     searchTools(query) {
         const lowerQuery = query.toLowerCase();
-        return Array.from(this.tools.values()).filter(tool => {
-            const searchText = `${tool.name} ${tool.description || ''} ${tool.source}`.toLowerCase();
+        return Array.from(this.tools.values()).filter((tool) => {
+            const searchText = `${tool.name} ${tool.description || ""} ${tool.source}`.toLowerCase();
             return searchText.includes(lowerQuery);
         });
     }

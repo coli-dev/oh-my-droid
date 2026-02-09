@@ -7,14 +7,14 @@
  *
  * This module is SDK-agnostic and contains no dependencies on @anthropic-ai/claude-agent-sdk.
  */
-import { spawn } from 'child_process';
-import { existsSync, mkdirSync, readFileSync, realpathSync, statSync, writeFileSync } from 'fs';
-import { dirname, resolve, relative, sep, isAbsolute, basename, join } from 'path';
-import { detectCodexCli } from './cli-detection.js';
-import { getWorktreeRoot } from '../lib/worktree-paths.js';
-import { resolveSystemPrompt, buildPromptWithSystemContext, VALID_AGENT_ROLES } from './prompt-injection.js';
-import { persistPrompt, persistResponse, getExpectedResponsePath } from './prompt-persistence.js';
-import { writeJobStatus, getStatusFilePath, readJobStatus } from './prompt-persistence.js';
+import { spawn } from "child_process";
+import { existsSync, mkdirSync, readFileSync, realpathSync, statSync, writeFileSync, } from "fs";
+import { dirname, resolve, relative, sep, isAbsolute, basename, join, } from "path";
+import { detectCodexCli } from "./cli-detection.js";
+import { getWorktreeRoot } from "../lib/worktree-paths.js";
+import { resolveSystemPrompt, buildPromptWithSystemContext, VALID_AGENT_ROLES, } from "./prompt-injection.js";
+import { persistPrompt, persistResponse, getExpectedResponsePath, } from "./prompt-persistence.js";
+import { writeJobStatus, getStatusFilePath, readJobStatus, } from "./prompt-persistence.js";
 // Module-scoped PID registry - tracks PIDs spawned by this process
 const spawnedPids = new Set();
 export function isSpawnedPid(pid) {
@@ -31,80 +31,101 @@ function validateModelName(model) {
     }
 }
 // Default model can be overridden via environment variable
-export const CODEX_DEFAULT_MODEL = process.env.OMD_CODEX_DEFAULT_MODEL || 'gpt-5.3-codex';
-export const CODEX_TIMEOUT = Math.min(Math.max(5000, parseInt(process.env.OMD_CODEX_TIMEOUT || '3600000', 10) || 3600000), 3600000);
+export const CODEX_DEFAULT_MODEL = process.env.OMD_CODEX_DEFAULT_MODEL || "gpt-5.3-codex";
+export const CODEX_TIMEOUT = Math.min(Math.max(5000, parseInt(process.env.OMD_CODEX_TIMEOUT || "3600000", 10) || 3600000), 3600000);
 // Model fallback chain: try each in order if previous fails with model_not_found
 export const CODEX_MODEL_FALLBACKS = [
-    'gpt-5.3-codex',
-    'gpt-5.3',
-    'gpt-5.2-codex',
-    'gpt-5.2',
+    "gpt-5.3-codex",
+    "gpt-5.3",
+    "gpt-5.2-codex",
+    "gpt-5.2",
 ];
 // Codex is best for analytical/planning tasks (recommended, not enforced)
-export const CODEX_RECOMMENDED_ROLES = ['architect', 'planner', 'critic', 'analyst', 'code-reviewer', 'security-reviewer', 'tdd-guide'];
+export const CODEX_RECOMMENDED_ROLES = [
+    "architect",
+    "planner",
+    "critic",
+    "analyst",
+    "code-reviewer",
+    "security-reviewer",
+    "tdd-guide",
+];
 export const MAX_CONTEXT_FILES = 20;
 export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB per file
 /**
  * Check if Codex JSONL output contains a model-not-found error
  */
 export function isModelError(output) {
-    const lines = output.trim().split('\n').filter(l => l.trim());
+    const lines = output
+        .trim()
+        .split("\n")
+        .filter((l) => l.trim());
     for (const line of lines) {
         try {
             const event = JSON.parse(line);
-            if (event.type === 'error' || event.type === 'turn.failed') {
-                const msg = typeof event.message === 'string' ? event.message :
-                    typeof event.error?.message === 'string' ? event.error.message : '';
+            if (event.type === "error" || event.type === "turn.failed") {
+                const msg = typeof event.message === "string"
+                    ? event.message
+                    : typeof event.error?.message === "string"
+                        ? event.error.message
+                        : "";
                 if (/model_not_found|model is not supported/i.test(msg)) {
                     return { isError: true, message: msg };
                 }
             }
         }
-        catch { /* skip non-JSON lines */ }
+        catch {
+            /* skip non-JSON lines */
+        }
     }
-    return { isError: false, message: '' };
+    return { isError: false, message: "" };
 }
 /**
  * Check if an error message or output indicates a rate-limit (429) error
  * that should trigger a fallback to the next model in the chain.
  */
-export function isRateLimitError(output, stderr = '') {
+export function isRateLimitError(output, stderr = "") {
     const combined = `${output}\n${stderr}`;
     // Check for 429 status codes and rate limit messages in both stdout and stderr
     if (/429|rate.?limit|too many requests|quota.?exceeded|resource.?exhausted/i.test(combined)) {
         // Extract a meaningful message
-        const lines = combined.split('\n').filter(l => l.trim());
+        const lines = combined.split("\n").filter((l) => l.trim());
         for (const line of lines) {
             try {
                 const event = JSON.parse(line);
-                const msg = typeof event.message === 'string' ? event.message :
-                    typeof event.error?.message === 'string' ? event.error.message : '';
+                const msg = typeof event.message === "string"
+                    ? event.message
+                    : typeof event.error?.message === "string"
+                        ? event.error.message
+                        : "";
                 if (/429|rate.?limit|too many requests|quota.?exceeded|resource.?exhausted/i.test(msg)) {
                     return { isError: true, message: msg };
                 }
             }
-            catch { /* check raw line */ }
+            catch {
+                /* check raw line */
+            }
             if (/429|rate.?limit|too many requests|quota.?exceeded|resource.?exhausted/i.test(line)) {
                 return { isError: true, message: line.trim() };
             }
         }
-        return { isError: true, message: 'Rate limit error detected' };
+        return { isError: true, message: "Rate limit error detected" };
     }
-    return { isError: false, message: '' };
+    return { isError: false, message: "" };
 }
 /**
  * Check if an error is retryable (model error OR rate limit error)
  */
-export function isRetryableError(output, stderr = '') {
+export function isRetryableError(output, stderr = "") {
     const modelErr = isModelError(output);
     if (modelErr.isError) {
-        return { isError: true, message: modelErr.message, type: 'model' };
+        return { isError: true, message: modelErr.message, type: "model" };
     }
     const rateErr = isRateLimitError(output, stderr);
     if (rateErr.isError) {
-        return { isError: true, message: rateErr.message, type: 'rate_limit' };
+        return { isError: true, message: rateErr.message, type: "rate_limit" };
     }
-    return { isError: false, message: '', type: 'none' };
+    return { isError: false, message: "", type: "none" };
 }
 /**
  * Parse Codex JSONL output to extract the final text response
@@ -118,34 +139,37 @@ export function isRetryableError(output, stderr = '') {
  * If it does, callers should prefer the file content over parsed stdout.
  */
 export function parseCodexOutput(output) {
-    const lines = output.trim().split('\n').filter(l => l.trim());
+    const lines = output
+        .trim()
+        .split("\n")
+        .filter((l) => l.trim());
     const messages = [];
     for (const line of lines) {
         try {
             const event = JSON.parse(line);
             // Handle item.completed events (primary format from current Codex CLI)
-            if (event.type === 'item.completed' && event.item) {
+            if (event.type === "item.completed" && event.item) {
                 const item = event.item;
                 // agent_message contains the final response text
-                if (item.type === 'agent_message' && item.text) {
+                if (item.type === "agent_message" && item.text) {
                     messages.push(item.text);
                 }
             }
             // Handle message events with text content (older/alternative format)
-            if (event.type === 'message' && event.content) {
-                if (typeof event.content === 'string') {
+            if (event.type === "message" && event.content) {
+                if (typeof event.content === "string") {
                     messages.push(event.content);
                 }
                 else if (Array.isArray(event.content)) {
                     for (const part of event.content) {
-                        if (part.type === 'text' && part.text) {
+                        if (part.type === "text" && part.text) {
                             messages.push(part.text);
                         }
                     }
                 }
             }
             // Handle output_text events
-            if (event.type === 'output_text' && event.text) {
+            if (event.type === "output_text" && event.text) {
                 messages.push(event.text);
             }
         }
@@ -153,7 +177,7 @@ export function parseCodexOutput(output) {
             // Skip non-JSON lines (progress indicators, etc.)
         }
     }
-    return messages.join('\n') || output; // Fallback to raw output
+    return messages.join("\n") || output; // Fallback to raw output
 }
 /**
  * Execute Codex CLI command and return the response
@@ -162,38 +186,38 @@ export function executeCodex(prompt, model, cwd) {
     return new Promise((resolve, reject) => {
         validateModelName(model);
         let settled = false;
-        const args = ['exec', '-m', model, '--json', '--full-auto'];
-        const child = spawn('codex', args, {
-            stdio: ['pipe', 'pipe', 'pipe'],
+        const args = ["exec", "-m", model, "--json", "--full-auto"];
+        const child = spawn("codex", args, {
+            stdio: ["pipe", "pipe", "pipe"],
             ...(cwd ? { cwd } : {}),
             // shell: true needed on Windows for .cmd/.bat executables.
             // Safe: args are array-based and model names are regex-validated.
-            ...(process.platform === 'win32' ? { shell: true } : {})
+            ...(process.platform === "win32" ? { shell: true } : {}),
         });
         // Manual timeout handling to ensure proper cleanup
         const timeoutHandle = setTimeout(() => {
             if (!settled) {
                 settled = true;
-                child.kill('SIGTERM');
+                child.kill("SIGTERM");
                 reject(new Error(`Codex timed out after ${CODEX_TIMEOUT}ms`));
             }
         }, CODEX_TIMEOUT);
-        let stdout = '';
-        let stderr = '';
-        child.stdout.on('data', (data) => {
+        let stdout = "";
+        let stderr = "";
+        child.stdout.on("data", (data) => {
             stdout += data.toString();
         });
-        child.stderr.on('data', (data) => {
+        child.stderr.on("data", (data) => {
             stderr += data.toString();
         });
-        child.on('close', (code) => {
+        child.on("close", (code) => {
             if (!settled) {
                 settled = true;
                 clearTimeout(timeoutHandle);
                 if (code === 0 || stdout.trim()) {
                     const retryable = isRetryableError(stdout, stderr);
                     if (retryable.isError) {
-                        reject(new Error(`Codex ${retryable.type === 'rate_limit' ? 'rate limit' : 'model'} error: ${retryable.message}`));
+                        reject(new Error(`Codex ${retryable.type === "rate_limit" ? "rate limit" : "model"} error: ${retryable.message}`));
                     }
                     else {
                         resolve(parseCodexOutput(stdout));
@@ -206,25 +230,25 @@ export function executeCodex(prompt, model, cwd) {
                         reject(new Error(`Codex rate limit error: ${retryableExit.message}`));
                     }
                     else {
-                        reject(new Error(`Codex exited with code ${code}: ${stderr || 'No output'}`));
+                        reject(new Error(`Codex exited with code ${code}: ${stderr || "No output"}`));
                     }
                 }
             }
         });
-        child.on('error', (err) => {
+        child.on("error", (err) => {
             if (!settled) {
                 settled = true;
                 clearTimeout(timeoutHandle);
-                child.kill('SIGTERM');
+                child.kill("SIGTERM");
                 reject(new Error(`Failed to spawn Codex CLI: ${err.message}`));
             }
         });
         // Pipe prompt via stdin with error handling
-        child.stdin.on('error', (err) => {
+        child.stdin.on("error", (err) => {
             if (!settled) {
                 settled = true;
                 clearTimeout(timeoutHandle);
-                child.kill('SIGTERM');
+                child.kill("SIGTERM");
                 reject(new Error(`Stdin write error: ${err.message}`));
             }
         });
@@ -237,7 +261,7 @@ export function executeCodex(prompt, model, cwd) {
  * Only falls back on model_not_found errors when model was not explicitly provided
  */
 export async function executeCodexWithFallback(prompt, model, cwd) {
-    const modelExplicit = model !== undefined && model !== null && model !== '';
+    const modelExplicit = model !== undefined && model !== null && model !== "";
     const effectiveModel = model || CODEX_DEFAULT_MODEL;
     // If model was explicitly provided, no fallback
     if (modelExplicit) {
@@ -267,45 +291,45 @@ export async function executeCodexWithFallback(prompt, model, cwd) {
             // Continue to next model in chain
         }
     }
-    throw lastError || new Error('All Codex models in fallback chain failed');
+    throw lastError || new Error("All Codex models in fallback chain failed");
 }
 /**
  * Execute Codex CLI in background with fallback chain, writing status and response files upon completion
  */
 export function executeCodexBackground(fullPrompt, modelInput, jobMeta, workingDirectory) {
     try {
-        const modelExplicit = modelInput !== undefined && modelInput !== null && modelInput !== '';
+        const modelExplicit = modelInput !== undefined && modelInput !== null && modelInput !== "";
         const effectiveModel = modelInput || CODEX_DEFAULT_MODEL;
         // Build fallback chain
         const modelsToTry = modelExplicit
             ? [effectiveModel] // No fallback if model explicitly provided
-            : (CODEX_MODEL_FALLBACKS.includes(effectiveModel)
+            : CODEX_MODEL_FALLBACKS.includes(effectiveModel)
                 ? CODEX_MODEL_FALLBACKS.slice(CODEX_MODEL_FALLBACKS.indexOf(effectiveModel))
-                : [effectiveModel, ...CODEX_MODEL_FALLBACKS]);
+                : [effectiveModel, ...CODEX_MODEL_FALLBACKS];
         // Helper to try spawning with a specific model
         const trySpawnWithModel = (tryModel, remainingModels) => {
             validateModelName(tryModel);
-            const args = ['exec', '-m', tryModel, '--json', '--full-auto'];
-            const child = spawn('codex', args, {
-                detached: process.platform !== 'win32',
-                stdio: ['pipe', 'pipe', 'pipe'],
+            const args = ["exec", "-m", tryModel, "--json", "--full-auto"];
+            const child = spawn("codex", args, {
+                detached: process.platform !== "win32",
+                stdio: ["pipe", "pipe", "pipe"],
                 ...(workingDirectory ? { cwd: workingDirectory } : {}),
                 // shell: true needed on Windows for .cmd/.bat executables.
                 // Safe: args are array-based and model names are regex-validated.
-                ...(process.platform === 'win32' ? { shell: true } : {})
+                ...(process.platform === "win32" ? { shell: true } : {}),
             });
             if (!child.pid) {
-                return { error: 'Failed to get process ID' };
+                return { error: "Failed to get process ID" };
             }
             const pid = child.pid;
             spawnedPids.add(pid);
             child.unref();
             // Write initial spawned status
             const initialStatus = {
-                provider: 'codex',
+                provider: "codex",
                 jobId: jobMeta.jobId,
                 slug: jobMeta.slug,
-                status: 'spawned',
+                status: "spawned",
                 pid,
                 promptFile: jobMeta.promptFile,
                 responseFile: jobMeta.responseFile,
@@ -314,56 +338,60 @@ export function executeCodexBackground(fullPrompt, modelInput, jobMeta, workingD
                 spawnedAt: new Date().toISOString(),
             };
             writeJobStatus(initialStatus, workingDirectory);
-            let stdout = '';
-            let stderr = '';
+            let stdout = "";
+            let stderr = "";
             let settled = false;
             const timeoutHandle = setTimeout(() => {
                 if (!settled) {
                     settled = true;
                     try {
                         // Detached children are process-group leaders on POSIX.
-                        if (process.platform !== 'win32')
-                            process.kill(-pid, 'SIGTERM');
+                        if (process.platform !== "win32")
+                            process.kill(-pid, "SIGTERM");
                         else
-                            child.kill('SIGTERM');
+                            child.kill("SIGTERM");
                     }
                     catch {
                         // ignore
                     }
                     writeJobStatus({
                         ...initialStatus,
-                        status: 'timeout',
+                        status: "timeout",
                         completedAt: new Date().toISOString(),
                         error: `Codex timed out after ${CODEX_TIMEOUT}ms`,
                     }, workingDirectory);
                 }
             }, CODEX_TIMEOUT);
-            child.stdout?.on('data', (data) => { stdout += data.toString(); });
-            child.stderr?.on('data', (data) => { stderr += data.toString(); });
+            child.stdout?.on("data", (data) => {
+                stdout += data.toString();
+            });
+            child.stderr?.on("data", (data) => {
+                stderr += data.toString();
+            });
             // Update to running after stdin write
-            child.stdin?.on('error', (err) => {
+            child.stdin?.on("error", (err) => {
                 if (settled)
                     return;
                 settled = true;
                 clearTimeout(timeoutHandle);
                 writeJobStatus({
                     ...initialStatus,
-                    status: 'failed',
+                    status: "failed",
                     completedAt: new Date().toISOString(),
                     error: `Stdin write error: ${err.message}`,
                 }, workingDirectory);
             });
             child.stdin?.write(fullPrompt);
             child.stdin?.end();
-            writeJobStatus({ ...initialStatus, status: 'running' }, workingDirectory);
-            child.on('close', (code) => {
+            writeJobStatus({ ...initialStatus, status: "running" }, workingDirectory);
+            child.on("close", (code) => {
                 if (settled)
                     return;
                 settled = true;
                 clearTimeout(timeoutHandle);
                 spawnedPids.delete(pid);
                 // Check if user killed this job - if so, don't overwrite the killed status
-                const currentStatus = readJobStatus('codex', jobMeta.slug, jobMeta.jobId, workingDirectory);
+                const currentStatus = readJobStatus("codex", jobMeta.slug, jobMeta.jobId, workingDirectory);
                 if (currentStatus?.killedByUser) {
                     return; // Status already set by kill_job, don't overwrite
                 }
@@ -375,11 +403,11 @@ export function executeCodexBackground(fullPrompt, modelInput, jobMeta, workingD
                         const nextModel = remainingModels[0];
                         const newRemainingModels = remainingModels.slice(1);
                         const retryResult = trySpawnWithModel(nextModel, newRemainingModels);
-                        if ('error' in retryResult) {
+                        if ("error" in retryResult) {
                             // Retry spawn failed - write failed status
                             writeJobStatus({
                                 ...initialStatus,
-                                status: 'failed',
+                                status: "failed",
                                 completedAt: new Date().toISOString(),
                                 error: `Fallback spawn failed for model ${nextModel}: ${retryResult.error}`,
                             }, workingDirectory);
@@ -390,7 +418,7 @@ export function executeCodexBackground(fullPrompt, modelInput, jobMeta, workingD
                         // No remaining models and current model errored
                         writeJobStatus({
                             ...initialStatus,
-                            status: 'failed',
+                            status: "failed",
                             completedAt: new Date().toISOString(),
                             error: `All models in fallback chain failed. Last error (${retryableErr.type}): ${retryableErr.message}`,
                         }, workingDirectory);
@@ -399,7 +427,7 @@ export function executeCodexBackground(fullPrompt, modelInput, jobMeta, workingD
                     const response = parseCodexOutput(stdout);
                     const usedFallback = tryModel !== effectiveModel;
                     persistResponse({
-                        provider: 'codex',
+                        provider: "codex",
                         agentRole: jobMeta.agentRole,
                         model: tryModel,
                         promptId: jobMeta.jobId,
@@ -412,7 +440,7 @@ export function executeCodexBackground(fullPrompt, modelInput, jobMeta, workingD
                     writeJobStatus({
                         ...initialStatus,
                         model: tryModel,
-                        status: 'completed',
+                        status: "completed",
                         completedAt: new Date().toISOString(),
                         usedFallback: usedFallback || undefined,
                         fallbackModel: usedFallback ? tryModel : undefined,
@@ -425,10 +453,10 @@ export function executeCodexBackground(fullPrompt, modelInput, jobMeta, workingD
                         const nextModel = remainingModels[0];
                         const newRemainingModels = remainingModels.slice(1);
                         const retryResult = trySpawnWithModel(nextModel, newRemainingModels);
-                        if ('error' in retryResult) {
+                        if ("error" in retryResult) {
                             writeJobStatus({
                                 ...initialStatus,
-                                status: 'failed',
+                                status: "failed",
                                 completedAt: new Date().toISOString(),
                                 error: `Fallback spawn failed for model ${nextModel}: ${retryResult.error}`,
                             }, workingDirectory);
@@ -437,20 +465,20 @@ export function executeCodexBackground(fullPrompt, modelInput, jobMeta, workingD
                     }
                     writeJobStatus({
                         ...initialStatus,
-                        status: 'failed',
+                        status: "failed",
                         completedAt: new Date().toISOString(),
-                        error: `Codex exited with code ${code}: ${stderr || 'No output'}`,
+                        error: `Codex exited with code ${code}: ${stderr || "No output"}`,
                     }, workingDirectory);
                 }
             });
-            child.on('error', (err) => {
+            child.on("error", (err) => {
                 if (settled)
                     return;
                 settled = true;
                 clearTimeout(timeoutHandle);
                 writeJobStatus({
                     ...initialStatus,
-                    status: 'failed',
+                    status: "failed",
                     completedAt: new Date().toISOString(),
                     error: `Failed to spawn Codex CLI: ${err.message}`,
                 }, workingDirectory);
@@ -461,14 +489,16 @@ export function executeCodexBackground(fullPrompt, modelInput, jobMeta, workingD
         return trySpawnWithModel(modelsToTry[0], modelsToTry.slice(1));
     }
     catch (err) {
-        return { error: `Failed to start background execution: ${err.message}` };
+        return {
+            error: `Failed to start background execution: ${err.message}`,
+        };
     }
 }
 /**
  * Validate and read a file for context inclusion
  */
 export function validateAndReadFile(filePath, baseDir) {
-    if (typeof filePath !== 'string') {
+    if (typeof filePath !== "string") {
         return `--- File: ${filePath} --- (Invalid path type)`;
     }
     try {
@@ -477,13 +507,17 @@ export function validateAndReadFile(filePath, baseDir) {
         // Security: ensure file is within working directory (worktree boundary)
         const cwdReal = realpathSync(workingDir);
         const relAbs = relative(cwdReal, resolvedAbs);
-        if (relAbs === '..' || relAbs.startsWith('..' + sep) || isAbsolute(relAbs)) {
+        if (relAbs === ".." ||
+            relAbs.startsWith(".." + sep) ||
+            isAbsolute(relAbs)) {
             return `[BLOCKED] File '${filePath}' is outside the working directory. Only files within the project are allowed.`;
         }
         // Symlink-safe check: ensure the real path also stays inside the boundary.
         const resolvedReal = realpathSync(resolvedAbs);
         const relReal = relative(cwdReal, resolvedReal);
-        if (relReal === '..' || relReal.startsWith('..' + sep) || isAbsolute(relReal)) {
+        if (relReal === ".." ||
+            relReal.startsWith(".." + sep) ||
+            isAbsolute(relReal)) {
             return `[BLOCKED] File '${filePath}' is outside the working directory. Only files within the project are allowed.`;
         }
         const stats = statSync(resolvedReal);
@@ -493,7 +527,7 @@ export function validateAndReadFile(filePath, baseDir) {
         if (stats.size > MAX_FILE_SIZE) {
             return `--- File: ${filePath} --- (File too large: ${(stats.size / 1024 / 1024).toFixed(1)}MB, max 5MB)`;
         }
-        return `--- File: ${filePath} ---\n${readFileSync(resolvedReal, 'utf-8')}`;
+        return `--- File: ${filePath} ---\n${readFileSync(resolvedReal, "utf-8")}`;
     }
     catch {
         return `--- File: ${filePath} --- (Error reading file)`;
@@ -515,12 +549,17 @@ export async function handleAskCodex(args) {
     }
     catch (err) {
         return {
-            content: [{ type: 'text', text: `working_directory '${args.working_directory}' does not exist or is not accessible: ${err.message}` }],
-            isError: true
+            content: [
+                {
+                    type: "text",
+                    text: `working_directory '${args.working_directory}' does not exist or is not accessible: ${err.message}`,
+                },
+            ],
+            isError: true,
         };
     }
     // Security: validate working_directory is within worktree (unless bypass enabled)
-    if (process.env.OMD_ALLOW_EXTERNAL_WORKDIR !== '1') {
+    if (process.env.OMD_ALLOW_EXTERNAL_WORKDIR !== "1") {
         const worktreeRoot = getWorktreeRoot(baseDirReal);
         if (worktreeRoot) {
             let worktreeReal;
@@ -529,14 +568,19 @@ export async function handleAskCodex(args) {
             }
             catch {
                 // If worktree root can't be resolved, skip boundary check rather than break
-                worktreeReal = '';
+                worktreeReal = "";
             }
             if (worktreeReal) {
                 const relToWorktree = relative(worktreeReal, baseDirReal);
-                if (relToWorktree.startsWith('..') || isAbsolute(relToWorktree)) {
+                if (relToWorktree.startsWith("..") || isAbsolute(relToWorktree)) {
                     return {
-                        content: [{ type: 'text', text: `working_directory '${args.working_directory}' is outside the project worktree (${worktreeRoot}). Set OMD_ALLOW_EXTERNAL_WORKDIR=1 to bypass.` }],
-                        isError: true
+                        content: [
+                            {
+                                type: "text",
+                                text: `working_directory '${args.working_directory}' is outside the project worktree (${worktreeRoot}). Set OMD_ALLOW_EXTERNAL_WORKDIR=1 to bypass.`,
+                            },
+                        ],
+                        isError: true,
                     };
                 }
             }
@@ -545,41 +589,55 @@ export async function handleAskCodex(args) {
     // Validate agent_role against the shared allowed droids list
     if (!agent_role || !agent_role.trim()) {
         return {
-            content: [{
-                    type: 'text',
-                    text: `agent_role is required. Recommended roles for Codex: ${CODEX_RECOMMENDED_ROLES.join(', ')}`
-                }],
-            isError: true
+            content: [
+                {
+                    type: "text",
+                    text: `agent_role is required. Recommended roles for Codex: ${CODEX_RECOMMENDED_ROLES.join(", ")}`,
+                },
+            ],
+            isError: true,
         };
     }
     if (!VALID_AGENT_ROLES.includes(agent_role)) {
         return {
-            content: [{
-                    type: 'text',
-                    text: `Invalid agent_role: "${agent_role}". Must be one of: ${VALID_AGENT_ROLES.join(', ')}. Recommended for Codex: ${CODEX_RECOMMENDED_ROLES.join(', ')}`
-                }],
-            isError: true
+            content: [
+                {
+                    type: "text",
+                    text: `Invalid agent_role: "${agent_role}". Must be one of: ${VALID_AGENT_ROLES.join(", ")}. Recommended for Codex: ${CODEX_RECOMMENDED_ROLES.join(", ")}`,
+                },
+            ],
+            isError: true,
         };
     }
     // Validate output_file is provided
     if (!args.output_file || !args.output_file.trim()) {
         return {
-            content: [{ type: 'text', text: 'output_file is required. Specify a path where the response should be written.' }],
-            isError: true
+            content: [
+                {
+                    type: "text",
+                    text: "output_file is required. Specify a path where the response should be written.",
+                },
+            ],
+            isError: true,
         };
     }
     // Check if deprecated 'prompt' parameter is being used
-    if ('prompt' in args) {
+    if ("prompt" in args) {
         return {
-            content: [{ type: 'text', text: "The 'prompt' parameter has been removed. Write the prompt to a file (recommended: .omd/prompts/) and pass 'prompt_file' instead." }],
-            isError: true
+            content: [
+                {
+                    type: "text",
+                    text: "The 'prompt' parameter has been removed. Write the prompt to a file (recommended: .omd/prompts/) and pass 'prompt_file' instead.",
+                },
+            ],
+            isError: true,
         };
     }
     // Validate prompt_file is provided and not empty
     if (!args.prompt_file || !args.prompt_file.trim()) {
         return {
-            content: [{ type: 'text', text: 'prompt_file is required.' }],
-            isError: true
+            content: [{ type: "text", text: "prompt_file is required." }],
+            isError: true,
         };
     }
     // Resolve prompt from prompt_file
@@ -587,10 +645,17 @@ export async function handleAskCodex(args) {
     const resolvedPath = resolve(baseDir, args.prompt_file);
     const cwdReal = realpathSync(baseDir);
     const relPath = relative(cwdReal, resolvedPath);
-    if (relPath === '..' || relPath.startsWith('..' + sep) || isAbsolute(relPath)) {
+    if (relPath === ".." ||
+        relPath.startsWith(".." + sep) ||
+        isAbsolute(relPath)) {
         return {
-            content: [{ type: 'text', text: `prompt_file '${args.prompt_file}' is outside the working directory.` }],
-            isError: true
+            content: [
+                {
+                    type: "text",
+                    text: `prompt_file '${args.prompt_file}' is outside the working directory.`,
+                },
+            ],
+            isError: true,
         };
     }
     // BEFORE reading, resolve symlinks and validate boundary
@@ -600,32 +665,54 @@ export async function handleAskCodex(args) {
     }
     catch (err) {
         return {
-            content: [{ type: 'text', text: `Failed to resolve prompt_file '${args.prompt_file}': ${err.message}` }],
-            isError: true
+            content: [
+                {
+                    type: "text",
+                    text: `Failed to resolve prompt_file '${args.prompt_file}': ${err.message}`,
+                },
+            ],
+            isError: true,
         };
     }
     const relReal = relative(cwdReal, resolvedReal);
-    if (relReal === '..' || relReal.startsWith('..' + sep) || isAbsolute(relReal)) {
+    if (relReal === ".." ||
+        relReal.startsWith(".." + sep) ||
+        isAbsolute(relReal)) {
         return {
-            content: [{ type: 'text', text: `prompt_file '${args.prompt_file}' resolves to a path outside the working directory.` }],
-            isError: true
+            content: [
+                {
+                    type: "text",
+                    text: `prompt_file '${args.prompt_file}' resolves to a path outside the working directory.`,
+                },
+            ],
+            isError: true,
         };
     }
     // Now safe to read from the validated real path
     try {
-        resolvedPrompt = readFileSync(resolvedReal, 'utf-8');
+        resolvedPrompt = readFileSync(resolvedReal, "utf-8");
     }
     catch (err) {
         return {
-            content: [{ type: 'text', text: `Failed to read prompt_file '${args.prompt_file}': ${err.message}` }],
-            isError: true
+            content: [
+                {
+                    type: "text",
+                    text: `Failed to read prompt_file '${args.prompt_file}': ${err.message}`,
+                },
+            ],
+            isError: true,
         };
     }
     // Check for empty prompt
     if (!resolvedPrompt.trim()) {
         return {
-            content: [{ type: 'text', text: `prompt_file '${args.prompt_file}' is empty.` }],
-            isError: true
+            content: [
+                {
+                    type: "text",
+                    text: `prompt_file '${args.prompt_file}' is empty.`,
+                },
+            ],
+            isError: true,
         };
     }
     // Add headless execution context so Codex produces comprehensive output
@@ -636,11 +723,13 @@ ${resolvedPrompt}`;
     const detection = detectCodexCli();
     if (!detection.available) {
         return {
-            content: [{
-                    type: 'text',
-                    text: `Codex CLI is not available: ${detection.error}\n\n${detection.installHint}`
-                }],
-            isError: true
+            content: [
+                {
+                    type: "text",
+                    text: `Codex CLI is not available: ${detection.error}\n\n${detection.installHint}`,
+                },
+            ],
+            isError: true,
         };
     }
     // Resolve system prompt from agent role
@@ -650,20 +739,24 @@ ${resolvedPrompt}`;
     if (context_files && context_files.length > 0) {
         if (context_files.length > MAX_CONTEXT_FILES) {
             return {
-                content: [{
-                        type: 'text',
-                        text: `Too many context files (max ${MAX_CONTEXT_FILES}, got ${context_files.length})`
-                    }],
-                isError: true
+                content: [
+                    {
+                        type: "text",
+                        text: `Too many context files (max ${MAX_CONTEXT_FILES}, got ${context_files.length})`,
+                    },
+                ],
+                isError: true,
             };
         }
-        fileContext = context_files.map(f => validateAndReadFile(f, baseDir)).join('\n\n');
+        fileContext = context_files
+            .map((f) => validateAndReadFile(f, baseDir))
+            .join("\n\n");
     }
     // Combine: system prompt > file context > user prompt
     const fullPrompt = buildPromptWithSystemContext(userPrompt, fileContext, resolvedSystemPrompt);
     // Persist prompt for audit trail
     const promptResult = persistPrompt({
-        provider: 'codex',
+        provider: "codex",
         agentRole: agent_role,
         model,
         files: context_files,
@@ -673,19 +766,24 @@ ${resolvedPrompt}`;
     });
     // Compute expected response path for immediate return
     const expectedResponsePath = promptResult
-        ? getExpectedResponsePath('codex', promptResult.slug, promptResult.id, baseDir)
+        ? getExpectedResponsePath("codex", promptResult.slug, promptResult.id, baseDir)
         : undefined;
     // Background mode: return immediately with job metadata
     if (args.background) {
         if (!promptResult) {
             return {
-                content: [{ type: 'text', text: 'Failed to persist prompt for background execution' }],
-                isError: true
+                content: [
+                    {
+                        type: "text",
+                        text: "Failed to persist prompt for background execution",
+                    },
+                ],
+                isError: true,
             };
         }
-        const statusFilePath = getStatusFilePath('codex', promptResult.slug, promptResult.id, baseDir);
+        const statusFilePath = getStatusFilePath("codex", promptResult.slug, promptResult.id, baseDir);
         const result = executeCodexBackground(fullPrompt, args.model, {
-            provider: 'codex',
+            provider: "codex",
             jobId: promptResult.id,
             slug: promptResult.slug,
             agentRole: agent_role,
@@ -693,15 +791,21 @@ ${resolvedPrompt}`;
             promptFile: promptResult.filePath,
             responseFile: expectedResponsePath,
         }, baseDir);
-        if ('error' in result) {
+        if ("error" in result) {
             return {
-                content: [{ type: 'text', text: `Failed to spawn background job: ${result.error}` }],
-                isError: true
+                content: [
+                    {
+                        type: "text",
+                        text: `Failed to spawn background job: ${result.error}`,
+                    },
+                ],
+                isError: true,
             };
         }
         return {
-            content: [{
-                    type: 'text',
+            content: [
+                {
+                    type: "text",
                     text: [
                         `**Mode:** Background (non-blocking)`,
                         `**Job ID:** ${promptResult.id}`,
@@ -713,23 +817,26 @@ ${resolvedPrompt}`;
                         `**Status File:** ${statusFilePath}`,
                         ``,
                         `Job dispatched. Check response file existence or read status file for completion.`,
-                    ].join('\n')
-                }]
+                    ].join("\n"),
+                },
+            ],
         };
     }
     // Build parameter visibility block
     const paramLines = [
         `**Agent Role:** ${agent_role}`,
-        context_files?.length ? `**Files:** ${context_files.join(', ')}` : null,
+        context_files?.length ? `**Files:** ${context_files.join(", ")}` : null,
         promptResult ? `**Prompt File:** ${promptResult.filePath}` : null,
         expectedResponsePath ? `**Response File:** ${expectedResponsePath}` : null,
-    ].filter(Boolean).join('\n');
+    ]
+        .filter(Boolean)
+        .join("\n");
     try {
         const { response, usedFallback, actualModel } = await executeCodexWithFallback(fullPrompt, args.model, baseDir);
         // Persist response to disk (audit trail)
         if (promptResult) {
             persistResponse({
-                provider: 'codex',
+                provider: "codex",
                 agentRole: agent_role,
                 model: actualModel,
                 promptId: promptResult.id,
@@ -747,7 +854,7 @@ ${resolvedPrompt}`;
         if (args.output_file) {
             const outputPath = resolve(baseDirReal, args.output_file);
             const relOutput = relative(baseDirReal, outputPath);
-            if (relOutput.startsWith('..') || isAbsolute(relOutput)) {
+            if (relOutput.startsWith("..") || isAbsolute(relOutput)) {
                 console.warn(`[codex-core] output_file '${args.output_file}' resolves outside working directory, skipping write.`);
             }
             else {
@@ -755,7 +862,7 @@ ${resolvedPrompt}`;
                     const outputDir = dirname(outputPath);
                     if (!existsSync(outputDir)) {
                         const relDir = relative(baseDirReal, outputDir);
-                        if (relDir.startsWith('..') || isAbsolute(relDir)) {
+                        if (relDir.startsWith("..") || isAbsolute(relDir)) {
                             console.warn(`[codex-core] output_file directory is outside working directory, skipping write.`);
                         }
                         else {
@@ -771,12 +878,12 @@ ${resolvedPrompt}`;
                     }
                     if (outputDirReal) {
                         const relDirReal = relative(baseDirReal, outputDirReal);
-                        if (relDirReal.startsWith('..') || isAbsolute(relDirReal)) {
+                        if (relDirReal.startsWith("..") || isAbsolute(relDirReal)) {
                             console.warn(`[codex-core] output_file directory resolves outside working directory, skipping write.`);
                         }
                         else {
                             const safePath = join(outputDirReal, basename(outputPath));
-                            writeFileSync(safePath, response, 'utf-8');
+                            writeFileSync(safePath, response, "utf-8");
                         }
                     }
                 }
@@ -786,19 +893,23 @@ ${resolvedPrompt}`;
             }
         }
         return {
-            content: [{
-                    type: 'text',
-                    text: paramLines
-                }]
+            content: [
+                {
+                    type: "text",
+                    text: paramLines,
+                },
+            ],
         };
     }
     catch (err) {
         return {
-            content: [{
-                    type: 'text',
-                    text: `${paramLines}\n\n---\n\nCodex CLI error: ${err.message}`
-                }],
-            isError: true
+            content: [
+                {
+                    type: "text",
+                    text: `${paramLines}\n\n---\n\nCodex CLI error: ${err.message}`,
+                },
+            ],
+            isError: true,
         };
     }
 }

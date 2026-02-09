@@ -6,7 +6,7 @@
  *
  * @deprecated Will be removed in v4.0.0
  */
-import type { AgentConfig, AgentPromptMetadata } from './types.js';
+import type { AgentConfig, AgentPromptMetadata } from "./types.js";
 /**
  * @deprecated Will be removed in v4.0.0. The coordinator was never a runtime agent.
  */

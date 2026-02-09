@@ -4,8 +4,8 @@
  * Central registry for all external tools, plugins, and MCP servers.
  * Handles tool registration, conflict resolution, and command routing.
  */
-import type { ExternalTool, DiscoveredPlugin, DiscoveredMcpServer, ToolRoute, ToolConflict, RegistryState, RegistryEventListener, DiscoveryOptions } from './types.js';
-import { type DiscoveryResult } from './discovery.js';
+import type { ExternalTool, DiscoveredPlugin, DiscoveredMcpServer, ToolRoute, ToolConflict, RegistryState, RegistryEventListener, DiscoveryOptions } from "./types.js";
+import { type DiscoveryResult } from "./discovery.js";
 /**
  * Tool Registry - Central hub for all external tools
  */
@@ -56,7 +56,7 @@ export declare class ToolRegistry {
     /**
      * Get all tools of a specific type
      */
-    getToolsByType(type: ExternalTool['type']): ExternalTool[];
+    getToolsByType(type: ExternalTool["type"]): ExternalTool[];
     /**
      * Get all registered tools
      */
@@ -96,7 +96,7 @@ export declare class ToolRegistry {
     /**
      * Update MCP server connection status and tools
      */
-    updateMcpServer(name: string, updates: Partial<Pick<DiscoveredMcpServer, 'connected' | 'tools' | 'error'>>): void;
+    updateMcpServer(name: string, updates: Partial<Pick<DiscoveredMcpServer, "connected" | "tools" | "error">>): void;
     /**
      * Get current registry state snapshot
      */

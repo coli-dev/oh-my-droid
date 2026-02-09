@@ -103,8 +103,8 @@ export function shouldRunInBackground(command, currentBackgroundCount = 0, maxBa
         return {
             runInBackground: false,
             reason: `At background task limit (${currentBackgroundCount}/${maxBackgroundTasks}). Wait for existing tasks or run blocking.`,
-            estimatedDuration: 'unknown',
-            confidence: 'high'
+            estimatedDuration: "unknown",
+            confidence: "high",
         };
     }
     // Check for explicit blocking patterns first
@@ -112,9 +112,9 @@ export function shouldRunInBackground(command, currentBackgroundCount = 0, maxBa
         if (pattern.test(command)) {
             return {
                 runInBackground: false,
-                reason: 'Quick operation that should complete immediately.',
-                estimatedDuration: 'quick',
-                confidence: 'high'
+                reason: "Quick operation that should complete immediately.",
+                estimatedDuration: "quick",
+                confidence: "high",
             };
         }
     }
@@ -123,27 +123,28 @@ export function shouldRunInBackground(command, currentBackgroundCount = 0, maxBa
         if (pattern.test(command)) {
             return {
                 runInBackground: true,
-                reason: 'Long-running operation detected. Run in background to continue other work.',
-                estimatedDuration: 'long',
-                confidence: 'high'
+                reason: "Long-running operation detected. Run in background to continue other work.",
+                estimatedDuration: "long",
+                confidence: "high",
             };
         }
     }
     // Heuristic: commands with multiple operations (piped or chained)
-    if ((command.match(/\|/g) || []).length > 2 || (command.match(/&&/g) || []).length > 2) {
+    if ((command.match(/\|/g) || []).length > 2 ||
+        (command.match(/&&/g) || []).length > 2) {
         return {
             runInBackground: true,
-            reason: 'Complex command chain that may take time.',
-            estimatedDuration: 'medium',
-            confidence: 'medium'
+            reason: "Complex command chain that may take time.",
+            estimatedDuration: "medium",
+            confidence: "medium",
         };
     }
     // Default: run blocking for unknown commands
     return {
         runInBackground: false,
-        reason: 'Unknown command type. Running blocking for immediate feedback.',
-        estimatedDuration: 'unknown',
-        confidence: 'low'
+        reason: "Unknown command type. Running blocking for immediate feedback.",
+        estimatedDuration: "unknown",
+        confidence: "low",
     };
 }
 /**
@@ -157,7 +158,7 @@ export function createBackgroundTaskManager(state, config) {
                 id: `task_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`,
                 agentName,
                 prompt,
-                status: 'pending'
+                status: "pending",
             };
             state.backgroundTasks.push(task);
             return task;
@@ -166,16 +167,16 @@ export function createBackgroundTaskManager(state, config) {
             return [...state.backgroundTasks];
         },
         getTasksByStatus(status) {
-            return state.backgroundTasks.filter(t => t.status === status);
+            return state.backgroundTasks.filter((t) => t.status === status);
         },
         getRunningCount() {
-            return state.backgroundTasks.filter(t => t.status === 'running' || t.status === 'pending').length;
+            return state.backgroundTasks.filter((t) => t.status === "running" || t.status === "pending").length;
         },
         canStartNewTask() {
             return this.getRunningCount() < maxBackgroundTasks;
         },
         updateTaskStatus(taskId, status, result, error) {
-            const task = state.backgroundTasks.find(t => t.id === taskId);
+            const task = state.backgroundTasks.find((t) => t.id === taskId);
             if (task) {
                 task.status = status;
                 if (result !== undefined)
@@ -185,16 +186,16 @@ export function createBackgroundTaskManager(state, config) {
             }
         },
         completeTask(taskId, result) {
-            this.updateTaskStatus(taskId, 'completed', result);
+            this.updateTaskStatus(taskId, "completed", result);
         },
         failTask(taskId, error) {
-            this.updateTaskStatus(taskId, 'error', undefined, error);
+            this.updateTaskStatus(taskId, "error", undefined, error);
         },
         pruneCompletedTasks(_maxAge = 5 * 60 * 1000) {
             // Note: maxAge-based pruning would require tracking task completion timestamps
             // For now, just prune all completed/errored tasks
             const before = state.backgroundTasks.length;
-            state.backgroundTasks = state.backgroundTasks.filter(t => t.status !== 'completed' && t.status !== 'error');
+            state.backgroundTasks = state.backgroundTasks.filter((t) => t.status !== "completed" && t.status !== "error");
             return before - state.backgroundTasks.length;
         },
         getMaxTasks() {
@@ -202,7 +203,7 @@ export function createBackgroundTaskManager(state, config) {
         },
         shouldRunInBackground(command) {
             return shouldRunInBackground(command, this.getRunningCount(), maxBackgroundTasks);
-        }
+        },
     };
 }
 /**

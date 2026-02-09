@@ -3,13 +3,13 @@
  *
  * This module provides mtime-based caching for <10ms session load times.
  */
-import { homedir } from 'os';
-import { join } from 'path';
+import { homedir } from "os";
+import { join } from "path";
 /**
  * Get summary file path for session ID.
  */
 export function getSummaryPath(sessionId) {
-    return join(homedir(), '.omd', 'state', `analytics-summary-${sessionId}.json`);
+    return join(homedir(), ".omd", "state", `analytics-summary-${sessionId}.json`);
 }
 /**
  * Initialize empty summary for new session.
@@ -24,14 +24,14 @@ export function createEmptySummary(sessionId) {
             outputTokens: 0,
             cacheCreationTokens: 0,
             cacheReadTokens: 0,
-            estimatedCost: 0
+            estimatedCost: 0,
         },
         topAgents: [],
-        cacheHitRate: 0
+        cacheHitRate: 0,
     };
 }
-import * as fs from 'fs/promises';
-import { calculateCost } from './cost-estimator.js';
+import * as fs from "fs/promises";
+import { calculateCost } from "./cost-estimator.js";
 /**
  * Get file modification time
  */
@@ -48,7 +48,7 @@ async function getFileMtime(filePath) {
  * Update top droids list
  */
 function updateTopAgents(summary, agentName, cost, tokens) {
-    let agent = summary.topAgents.find(a => a.agent === agentName);
+    let agent = summary.topAgents.find((a) => a.agent === agentName);
     if (!agent) {
         agent = { agent: agentName, cost: 0, tokens: 0 };
         summary.topAgents.push(agent);
@@ -78,7 +78,7 @@ async function rebuildSummaryIncremental(sessionId, summaryPath, logPath) {
     let startOffset = 0;
     try {
         // Try to load existing summary
-        const content = await fs.readFile(summaryPath, 'utf-8');
+        const content = await fs.readFile(summaryPath, "utf-8");
         summary = JSON.parse(content);
         startOffset = summary.lastLogOffset;
     }
@@ -87,8 +87,8 @@ async function rebuildSummaryIncremental(sessionId, summaryPath, logPath) {
         summary = createEmptySummary(sessionId);
     }
     // Read JSONL from lastLogOffset
-    const logContent = await fs.readFile(logPath, 'utf-8');
-    const lines = logContent.split('\n').slice(startOffset);
+    const logContent = await fs.readFile(logPath, "utf-8");
+    const lines = logContent.split("\n").slice(startOffset);
     for (const line of lines) {
         if (!line.trim())
             continue;
@@ -106,11 +106,11 @@ async function rebuildSummaryIncremental(sessionId, summaryPath, logPath) {
             inputTokens: record.inputTokens,
             outputTokens: record.outputTokens,
             cacheCreationTokens: record.cacheCreationTokens,
-            cacheReadTokens: record.cacheReadTokens
+            cacheReadTokens: record.cacheReadTokens,
         });
         summary.totals.estimatedCost += cost.totalCost;
         // Update top droids (use "(main session)" for entries without agentName)
-        const agentKey = record.agentName || '(main session)';
+        const agentKey = record.agentName || "(main session)";
         updateTopAgents(summary, agentKey, cost.totalCost, record.inputTokens + record.outputTokens);
     }
     // Update metadata
@@ -118,7 +118,7 @@ async function rebuildSummaryIncremental(sessionId, summaryPath, logPath) {
     summary.lastLogOffset = startOffset + lines.length;
     summary.cacheHitRate = calculateCacheHitRate(summary.totals);
     // Save updated summary
-    const summaryDir = join(homedir(), '.omd', 'state');
+    const summaryDir = join(homedir(), ".omd", "state");
     await fs.mkdir(summaryDir, { recursive: true });
     await fs.writeFile(summaryPath, JSON.stringify(summary, null, 2));
     return summary;
@@ -135,14 +135,14 @@ async function rebuildSummaryIncremental(sessionId, summaryPath, logPath) {
  */
 export async function loadAnalyticsFast(sessionId) {
     const summaryPath = getSummaryPath(sessionId);
-    const logPath = join(homedir(), '.omd', 'state', 'token-tracking.jsonl');
+    const logPath = join(homedir(), ".omd", "state", "token-tracking.jsonl");
     try {
         // Check if summary exists and is fresh
         const summaryMtime = await getFileMtime(summaryPath);
         const logMtime = await getFileMtime(logPath);
         if (summaryMtime && logMtime && summaryMtime >= logMtime) {
             // Summary is up-to-date, use cached version
-            const content = await fs.readFile(summaryPath, 'utf-8');
+            const content = await fs.readFile(summaryPath, "utf-8");
             return JSON.parse(content);
         }
         // Need to rebuild (incremental if summary exists)
@@ -158,7 +158,7 @@ export async function loadAnalyticsFast(sessionId) {
  */
 export async function rebuildAnalyticsSummary(sessionId) {
     const summaryPath = getSummaryPath(sessionId);
-    const logPath = join(homedir(), '.omd', 'state', 'token-tracking.jsonl');
+    const logPath = join(homedir(), ".omd", "state", "token-tracking.jsonl");
     // Delete existing summary to force full rebuild
     try {
         await fs.unlink(summaryPath);

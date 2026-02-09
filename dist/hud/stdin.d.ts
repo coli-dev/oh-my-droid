@@ -4,7 +4,7 @@
  * Parse stdin JSON from Droid statusline interface.
  * Based on droid-hud reference implementation.
  */
-import type { StatuslineStdin } from './types.js';
+import type { StatuslineStdin } from "./types.js";
 /**
  * Read and parse stdin JSON from Droid.
  * Returns null if stdin is not available or invalid.

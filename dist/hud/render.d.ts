@@ -3,7 +3,7 @@
  *
  * Composes statusline output from render context.
  */
-import type { HudRenderContext, HudConfig } from './types.js';
+import type { HudRenderContext, HudConfig } from "./types.js";
 /**
  * Limit output lines to prevent input field shrinkage (Issue #222).
  * Trims lines from the end while preserving the first (header) line.

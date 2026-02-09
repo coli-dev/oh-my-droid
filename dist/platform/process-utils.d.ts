@@ -22,5 +22,5 @@ export declare function getProcessStartTime(pid: number): Promise<number | undef
 /**
  * Gracefully terminate a process with escalation.
  */
-export declare function gracefulKill(pid: number, gracePeriodMs?: number): Promise<'graceful' | 'forced' | 'failed'>;
+export declare function gracefulKill(pid: number, gracePeriodMs?: number): Promise<"graceful" | "forced" | "failed">;
 //# sourceMappingURL=process-utils.d.ts.map

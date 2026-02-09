@@ -7,7 +7,7 @@
  *
  * This module is SDK-agnostic and contains no dependencies on @anthropic-ai/claude-agent-sdk.
  */
-import type { BackgroundJobMeta } from './prompt-persistence.js';
+import type { BackgroundJobMeta } from "./prompt-persistence.js";
 export declare function isSpawnedPid(pid: number): boolean;
 export declare function clearSpawnedPids(): void;
 export declare const CODEX_DEFAULT_MODEL: string;
@@ -37,7 +37,7 @@ export declare function isRateLimitError(output: string, stderr?: string): {
 export declare function isRetryableError(output: string, stderr?: string): {
     isError: boolean;
     message: string;
-    type: 'model' | 'rate_limit' | 'none';
+    type: "model" | "rate_limit" | "none";
 };
 /**
  * Parse Codex JSONL output to extract the final text response
@@ -92,7 +92,7 @@ export declare function handleAskCodex(args: {
     working_directory?: string;
 }): Promise<{
     content: Array<{
-        type: 'text';
+        type: "text";
         text: string;
     }>;
     isError?: boolean;

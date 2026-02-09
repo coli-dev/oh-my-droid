@@ -6,8 +6,8 @@
  * All merge operations use --no-ff for clear history.
  * Failed merges are always aborted to prevent leaving the repo dirty.
  */
-import { execFileSync } from 'node:child_process';
-import { listTeamWorktrees } from './git-worktree.js';
+import { execFileSync } from "node:child_process";
+import { listTeamWorktrees } from "./git-worktree.js";
 const BRANCH_NAME_RE = /^[a-zA-Z0-9][a-zA-Z0-9/_.-]*$/;
 /** Validate branch name to prevent flag injection in git commands */
 function validateBranchName(branch) {
@@ -24,17 +24,17 @@ export function checkMergeConflicts(workerBranch, baseBranch, repoRoot) {
     validateBranchName(workerBranch);
     validateBranchName(baseBranch);
     // Find merge base
-    const mergeBase = execFileSync('git', ['merge-base', baseBranch, workerBranch], { cwd: repoRoot, encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] }).trim();
+    const mergeBase = execFileSync("git", ["merge-base", baseBranch, workerBranch], { cwd: repoRoot, encoding: "utf-8", stdio: ["pipe", "pipe", "pipe"] }).trim();
     // Check for overlapping changes by comparing what changed in each branch
-    const baseDiff = execFileSync('git', ['diff', '--name-only', mergeBase, baseBranch], { cwd: repoRoot, encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] }).trim();
-    const workerDiff = execFileSync('git', ['diff', '--name-only', mergeBase, workerBranch], { cwd: repoRoot, encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] }).trim();
+    const baseDiff = execFileSync("git", ["diff", "--name-only", mergeBase, baseBranch], { cwd: repoRoot, encoding: "utf-8", stdio: ["pipe", "pipe", "pipe"] }).trim();
+    const workerDiff = execFileSync("git", ["diff", "--name-only", mergeBase, workerBranch], { cwd: repoRoot, encoding: "utf-8", stdio: ["pipe", "pipe", "pipe"] }).trim();
     if (!baseDiff || !workerDiff) {
         return []; // No changes in one or both branches
     }
-    const baseFiles = new Set(baseDiff.split('\n').filter(f => f));
-    const workerFiles = workerDiff.split('\n').filter(f => f);
+    const baseFiles = new Set(baseDiff.split("\n").filter((f) => f));
+    const workerFiles = workerDiff.split("\n").filter((f) => f);
     // Files changed in both branches are potential conflicts
-    return workerFiles.filter(f => baseFiles.has(f));
+    return workerFiles.filter((f) => baseFiles.has(f));
 }
 /**
  * Merge a worker's branch back to the base branch.
@@ -44,29 +44,40 @@ export function checkMergeConflicts(workerBranch, baseBranch, repoRoot) {
 export function mergeWorkerBranch(workerBranch, baseBranch, repoRoot) {
     validateBranchName(workerBranch);
     validateBranchName(baseBranch);
-    const workerName = workerBranch.split('/').pop() || workerBranch;
+    const workerName = workerBranch.split("/").pop() || workerBranch;
     try {
         // Abort if working tree has uncommitted changes to tracked files to prevent clobbering.
         // Uses diff-index which ignores untracked files (e.g. .omd/ worktree metadata).
         try {
-            execFileSync('git', ['diff-index', '--quiet', 'HEAD', '--'], {
-                cwd: repoRoot, stdio: 'pipe'
+            execFileSync("git", ["diff-index", "--quiet", "HEAD", "--"], {
+                cwd: repoRoot,
+                stdio: "pipe",
             });
         }
         catch {
-            throw new Error('Working tree has uncommitted changes — commit or stash before merging');
+            throw new Error("Working tree has uncommitted changes — commit or stash before merging");
         }
         // Ensure we're on the base branch
-        execFileSync('git', ['checkout', baseBranch], {
-            cwd: repoRoot, stdio: 'pipe'
+        execFileSync("git", ["checkout", baseBranch], {
+            cwd: repoRoot,
+            stdio: "pipe",
         });
         // Attempt merge
-        execFileSync('git', ['merge', '--no-ff', '-m', `Merge ${workerBranch} into ${baseBranch}`, workerBranch], {
-            cwd: repoRoot, stdio: 'pipe'
+        execFileSync("git", [
+            "merge",
+            "--no-ff",
+            "-m",
+            `Merge ${workerBranch} into ${baseBranch}`,
+            workerBranch,
+        ], {
+            cwd: repoRoot,
+            stdio: "pipe",
         });
         // Get merge commit hash
-        const mergeCommit = execFileSync('git', ['rev-parse', 'HEAD'], {
-            cwd: repoRoot, encoding: 'utf-8', stdio: 'pipe'
+        const mergeCommit = execFileSync("git", ["rev-parse", "HEAD"], {
+            cwd: repoRoot,
+            encoding: "utf-8",
+            stdio: "pipe",
         }).trim();
         return {
             workerName,
@@ -79,9 +90,14 @@ export function mergeWorkerBranch(workerBranch, baseBranch, repoRoot) {
     catch (err) {
         // Abort the failed merge
         try {
-            execFileSync('git', ['merge', '--abort'], { cwd: repoRoot, stdio: 'pipe' });
+            execFileSync("git", ["merge", "--abort"], {
+                cwd: repoRoot,
+                stdio: "pipe",
+            });
         }
-        catch { /* may not be in merge state */ }
+        catch {
+            /* may not be in merge state */
+        }
         // Try to detect conflicting files
         const conflicts = checkMergeConflicts(workerBranch, baseBranch, repoRoot);
         return {
@@ -101,9 +117,12 @@ export function mergeAllWorkerBranches(teamName, repoRoot, baseBranch) {
     if (worktrees.length === 0)
         return [];
     // Determine base branch
-    const base = baseBranch || execFileSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], {
-        cwd: repoRoot, encoding: 'utf-8', stdio: 'pipe'
-    }).trim();
+    const base = baseBranch ||
+        execFileSync("git", ["rev-parse", "--abbrev-ref", "HEAD"], {
+            cwd: repoRoot,
+            encoding: "utf-8",
+            stdio: "pipe",
+        }).trim();
     validateBranchName(base);
     const results = [];
     for (const wt of worktrees) {

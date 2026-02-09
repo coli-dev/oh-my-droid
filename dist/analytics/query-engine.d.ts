@@ -7,7 +7,7 @@ export interface CostReport {
     byAgent: Record<string, number>;
     byModel: Record<string, number>;
     byDay?: Record<string, number>;
-    period: 'daily' | 'weekly' | 'monthly';
+    period: "daily" | "weekly" | "monthly";
     range: TimeRange;
 }
 export interface UsagePattern {
@@ -20,7 +20,7 @@ export interface UsagePattern {
     totalSessions: number;
 }
 export declare class QueryEngine {
-    getCostReport(period: 'daily' | 'weekly' | 'monthly'): Promise<CostReport>;
+    getCostReport(period: "daily" | "weekly" | "monthly"): Promise<CostReport>;
     private getCostReportViaTokscale;
     private getCostReportLegacy;
     private getAgentCostFromLocalLog;

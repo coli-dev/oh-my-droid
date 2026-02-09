@@ -1,5 +1,5 @@
 export interface RouteResult {
-    method: 'native' | 'inbox';
+    method: "native" | "inbox";
     details: string;
 }
 export interface BroadcastResult {

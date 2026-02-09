@@ -2,16 +2,16 @@
  * Platform Detection and Utilities
  * Central module for all platform-specific code.
  */
-import * as path from 'path';
+import * as path from "path";
 export const PLATFORM = process.platform;
 export function isWindows() {
-    return PLATFORM === 'win32';
+    return PLATFORM === "win32";
 }
 export function isMacOS() {
-    return PLATFORM === 'darwin';
+    return PLATFORM === "darwin";
 }
 export function isLinux() {
-    return PLATFORM === 'linux';
+    return PLATFORM === "linux";
 }
 export function isUnix() {
     return isMacOS() || isLinux();
@@ -25,5 +25,5 @@ export function isPathRoot(filepath) {
     return parsed.root === filepath;
 }
 // Re-exports
-export * from './process-utils.js';
+export * from "./process-utils.js";
 //# sourceMappingURL=index.js.map

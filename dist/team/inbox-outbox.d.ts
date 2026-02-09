@@ -1,4 +1,4 @@
-import type { InboxMessage, OutboxMessage, ShutdownSignal, DrainSignal } from './types.js';
+import type { InboxMessage, OutboxMessage, ShutdownSignal, DrainSignal } from "./types.js";
 /**
  * Append a message to the outbox JSONL file.
  * Creates directories if needed.

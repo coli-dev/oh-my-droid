@@ -7,37 +7,37 @@
  * 3. getAgentDefinitions() for agent registry
  * 4. omdSystemPrompt for the main orchestrator
  */
-import { loadAgentPrompt, parseDisallowedTools } from './utils.js';
+import { loadAgentPrompt, parseDisallowedTools } from "./utils.js";
 // Re-export base droids from individual files (rebranded names)
-export { architectAgent } from './architect.js';
-export { designerAgent } from './designer.js';
-export { writerAgent } from './writer.js';
-export { visionAgent } from './vision.js';
-export { criticAgent } from './critic.js';
-export { analystAgent } from './analyst.js';
-export { executorAgent } from './executor.js';
-export { plannerAgent } from './planner.js';
-export { deepExecutorAgent } from './deep-executor.js';
-export { qaTesterAgent } from './qa-tester.js';
-export { scientistAgent } from './scientist.js';
-export { exploreAgent } from './explore.js';
+export { architectAgent } from "./architect.js";
+export { designerAgent } from "./designer.js";
+export { writerAgent } from "./writer.js";
+export { visionAgent } from "./vision.js";
+export { criticAgent } from "./critic.js";
+export { analystAgent } from "./analyst.js";
+export { executorAgent } from "./executor.js";
+export { plannerAgent } from "./planner.js";
+export { deepExecutorAgent } from "./deep-executor.js";
+export { qaTesterAgent } from "./qa-tester.js";
+export { scientistAgent } from "./scientist.js";
+export { exploreAgent } from "./explore.js";
 // Backward compatibility: Deprecated aliases
 /** @deprecated Use dependency-expert agent instead */
-export { researcherAgent } from './researcher.js';
+export { researcherAgent } from "./researcher.js";
 // Import base droids for use in getAgentDefinitions
-import { architectAgent } from './architect.js';
-import { designerAgent } from './designer.js';
-import { writerAgent } from './writer.js';
-import { visionAgent } from './vision.js';
-import { criticAgent } from './critic.js';
-import { analystAgent } from './analyst.js';
-import { executorAgent } from './executor.js';
-import { plannerAgent } from './planner.js';
-import { deepExecutorAgent } from './deep-executor.js';
-import { qaTesterAgent } from './qa-tester.js';
-import { scientistAgent } from './scientist.js';
-import { exploreAgent } from './explore.js';
-import { researcherAgent } from './researcher.js';
+import { architectAgent } from "./architect.js";
+import { designerAgent } from "./designer.js";
+import { writerAgent } from "./writer.js";
+import { visionAgent } from "./vision.js";
+import { criticAgent } from "./critic.js";
+import { analystAgent } from "./analyst.js";
+import { executorAgent } from "./executor.js";
+import { plannerAgent } from "./planner.js";
+import { deepExecutorAgent } from "./deep-executor.js";
+import { qaTesterAgent } from "./qa-tester.js";
+import { scientistAgent } from "./scientist.js";
+import { exploreAgent } from "./explore.js";
+import { researcherAgent } from "./researcher.js";
 // Re-export loadAgentPrompt (also exported from index.ts)
 export { loadAgentPrompt };
 // ============================================================
@@ -47,21 +47,21 @@ export { loadAgentPrompt };
  * Debugger Agent - Root-Cause Analysis & Debugging (Sonnet)
  */
 export const debuggerAgent = {
-    name: 'debugger',
-    description: 'Root-cause analysis, regression isolation, failure diagnosis (Sonnet).',
-    prompt: loadAgentPrompt('debugger'),
-    model: 'sonnet',
-    defaultModel: 'sonnet'
+    name: "debugger",
+    description: "Root-cause analysis, regression isolation, failure diagnosis (Sonnet).",
+    prompt: loadAgentPrompt("debugger"),
+    model: "sonnet",
+    defaultModel: "sonnet",
 };
 /**
  * Verifier Agent - Completion Evidence & Test Validation (Sonnet)
  */
 export const verifierAgent = {
-    name: 'verifier',
-    description: 'Completion evidence, claim validation, test adequacy (Sonnet).',
-    prompt: loadAgentPrompt('verifier'),
-    model: 'sonnet',
-    defaultModel: 'sonnet'
+    name: "verifier",
+    description: "Completion evidence, claim validation, test adequacy (Sonnet).",
+    prompt: loadAgentPrompt("verifier"),
+    model: "sonnet",
+    defaultModel: "sonnet",
 };
 // ============================================================
 // REFORMED AGENTS (REVIEW LANE)
@@ -70,41 +70,41 @@ export const verifierAgent = {
  * Style-Reviewer Agent - Code Style & Conventions (Haiku)
  */
 export const styleReviewerAgent = {
-    name: 'style-reviewer',
-    description: 'Formatting, naming, idioms, lint/style conventions (Haiku).',
-    prompt: loadAgentPrompt('style-reviewer'),
-    model: 'haiku',
-    defaultModel: 'haiku'
+    name: "style-reviewer",
+    description: "Formatting, naming, idioms, lint/style conventions (Haiku).",
+    prompt: loadAgentPrompt("style-reviewer"),
+    model: "haiku",
+    defaultModel: "haiku",
 };
 /**
  * Quality-Reviewer Agent - Logic Defects & Maintainability (Sonnet)
  */
 export const qualityReviewerAgent = {
-    name: 'quality-reviewer',
-    description: 'Logic defects, maintainability, anti-patterns (Sonnet).',
-    prompt: loadAgentPrompt('quality-reviewer'),
-    model: 'sonnet',
-    defaultModel: 'sonnet'
+    name: "quality-reviewer",
+    description: "Logic defects, maintainability, anti-patterns (Sonnet).",
+    prompt: loadAgentPrompt("quality-reviewer"),
+    model: "sonnet",
+    defaultModel: "sonnet",
 };
 /**
  * API-Reviewer Agent - API Contracts & Versioning (Sonnet)
  */
 export const apiReviewerAgent = {
-    name: 'api-reviewer',
-    description: 'API contracts, versioning, backward compatibility (Sonnet).',
-    prompt: loadAgentPrompt('api-reviewer'),
-    model: 'sonnet',
-    defaultModel: 'sonnet'
+    name: "api-reviewer",
+    description: "API contracts, versioning, backward compatibility (Sonnet).",
+    prompt: loadAgentPrompt("api-reviewer"),
+    model: "sonnet",
+    defaultModel: "sonnet",
 };
 /**
  * Performance-Reviewer Agent - Performance & Complexity (Sonnet)
  */
 export const performanceReviewerAgent = {
-    name: 'performance-reviewer',
-    description: 'Hotspots, complexity, memory/latency optimization (Sonnet).',
-    prompt: loadAgentPrompt('performance-reviewer'),
-    model: 'sonnet',
-    defaultModel: 'sonnet'
+    name: "performance-reviewer",
+    description: "Hotspots, complexity, memory/latency optimization (Sonnet).",
+    prompt: loadAgentPrompt("performance-reviewer"),
+    model: "sonnet",
+    defaultModel: "sonnet",
 };
 // ============================================================
 // REFORMED AGENTS (DOMAIN SPECIALISTS)
@@ -114,32 +114,32 @@ export const performanceReviewerAgent = {
  * Replaces: researcher agent
  */
 export const dependencyExpertAgent = {
-    name: 'dependency-expert',
-    description: 'External SDK/API/package evaluation (Sonnet).',
-    prompt: loadAgentPrompt('dependency-expert'),
-    model: 'sonnet',
-    defaultModel: 'sonnet'
+    name: "dependency-expert",
+    description: "External SDK/API/package evaluation (Sonnet).",
+    prompt: loadAgentPrompt("dependency-expert"),
+    model: "sonnet",
+    defaultModel: "sonnet",
 };
 /**
  * Test-Engineer Agent - Test Strategy & Coverage (Sonnet)
  * Replaces: tdd-guide agent
  */
 export const testEngineerAgent = {
-    name: 'test-engineer',
-    description: 'Test strategy, coverage, flaky test hardening (Sonnet).',
-    prompt: loadAgentPrompt('test-engineer'),
-    model: 'sonnet',
-    defaultModel: 'sonnet'
+    name: "test-engineer",
+    description: "Test strategy, coverage, flaky test hardening (Sonnet).",
+    prompt: loadAgentPrompt("test-engineer"),
+    model: "sonnet",
+    defaultModel: "sonnet",
 };
 /**
  * Quality-Strategist Agent - Quality Strategy & Release Readiness (Sonnet)
  */
 export const qualityStrategistAgent = {
-    name: 'quality-strategist',
-    description: 'Quality strategy, release readiness, risk assessment, and quality gates (Sonnet).',
-    prompt: loadAgentPrompt('quality-strategist'),
-    model: 'sonnet',
-    defaultModel: 'sonnet'
+    name: "quality-strategist",
+    description: "Quality strategy, release readiness, risk assessment, and quality gates (Sonnet).",
+    prompt: loadAgentPrompt("quality-strategist"),
+    model: "sonnet",
+    defaultModel: "sonnet",
 };
 // ============================================================
 // REFORMED AGENTS (PRODUCT LANE)
@@ -148,41 +148,41 @@ export const qualityStrategistAgent = {
  * Product Manager Agent - Problem Framing & Value Hypothesis (Sonnet)
  */
 export const productManagerAgent = {
-    name: 'product-manager',
-    description: 'Problem framing, personas/JTBD, value hypothesis, PRDs, KPI trees (Sonnet).',
-    prompt: loadAgentPrompt('product-manager'),
-    model: 'sonnet',
-    defaultModel: 'sonnet'
+    name: "product-manager",
+    description: "Problem framing, personas/JTBD, value hypothesis, PRDs, KPI trees (Sonnet).",
+    prompt: loadAgentPrompt("product-manager"),
+    model: "sonnet",
+    defaultModel: "sonnet",
 };
 /**
  * UX Researcher Agent - Heuristic Audits & Usability (Sonnet)
  */
 export const uxResearcherAgent = {
-    name: 'ux-researcher',
-    description: 'Heuristic audits, usability risks, accessibility, research plans (Sonnet).',
-    prompt: loadAgentPrompt('ux-researcher'),
-    model: 'sonnet',
-    defaultModel: 'sonnet'
+    name: "ux-researcher",
+    description: "Heuristic audits, usability risks, accessibility, research plans (Sonnet).",
+    prompt: loadAgentPrompt("ux-researcher"),
+    model: "sonnet",
+    defaultModel: "sonnet",
 };
 /**
  * Information Architect Agent - Taxonomy & Navigation (Sonnet)
  */
 export const informationArchitectAgent = {
-    name: 'information-architect',
-    description: 'Taxonomy, navigation, findability, naming consistency (Sonnet).',
-    prompt: loadAgentPrompt('information-architect'),
-    model: 'sonnet',
-    defaultModel: 'sonnet'
+    name: "information-architect",
+    description: "Taxonomy, navigation, findability, naming consistency (Sonnet).",
+    prompt: loadAgentPrompt("information-architect"),
+    model: "sonnet",
+    defaultModel: "sonnet",
 };
 /**
  * Product Analyst Agent - Metrics & Experiment Design (Sonnet)
  */
 export const productAnalystAgent = {
-    name: 'product-analyst',
-    description: 'Product metrics, funnel analysis, experiment design, KPI definitions (Sonnet).',
-    prompt: loadAgentPrompt('product-analyst'),
-    model: 'sonnet',
-    defaultModel: 'sonnet'
+    name: "product-analyst",
+    description: "Product metrics, funnel analysis, experiment design, KPI definitions (Sonnet).",
+    prompt: loadAgentPrompt("product-analyst"),
+    model: "sonnet",
+    defaultModel: "sonnet",
 };
 // ============================================================
 // SPECIALIZED AGENTS (Security, Build, TDD, Code Review)
@@ -191,41 +191,41 @@ export const productAnalystAgent = {
  * Security-Reviewer Agent - Security Vulnerability Detection (Sonnet)
  */
 export const securityReviewerAgent = {
-    name: 'security-reviewer',
-    description: 'Security vulnerability detection specialist (Sonnet). Use for security audits and OWASP detection.',
-    prompt: loadAgentPrompt('security-reviewer'),
-    model: 'sonnet',
-    defaultModel: 'sonnet'
+    name: "security-reviewer",
+    description: "Security vulnerability detection specialist (Sonnet). Use for security audits and OWASP detection.",
+    prompt: loadAgentPrompt("security-reviewer"),
+    model: "sonnet",
+    defaultModel: "sonnet",
 };
 /**
  * Build-Fixer Agent - Build Error Resolution (Sonnet)
  */
 export const buildFixerAgent = {
-    name: 'build-fixer',
-    description: 'Build and compilation error resolution specialist (Sonnet). Use for fixing build/type errors in any language.',
-    prompt: loadAgentPrompt('build-fixer'),
-    model: 'sonnet',
-    defaultModel: 'sonnet'
+    name: "build-fixer",
+    description: "Build and compilation error resolution specialist (Sonnet). Use for fixing build/type errors in any language.",
+    prompt: loadAgentPrompt("build-fixer"),
+    model: "sonnet",
+    defaultModel: "sonnet",
 };
 /**
  * Code-Reviewer Agent - Expert Code Review (Opus)
  */
 export const codeReviewerAgent = {
-    name: 'code-reviewer',
-    description: 'Expert code review specialist (Opus). Use for comprehensive code quality review.',
-    prompt: loadAgentPrompt('code-reviewer'),
-    model: 'opus',
-    defaultModel: 'opus'
+    name: "code-reviewer",
+    description: "Expert code review specialist (Opus). Use for comprehensive code quality review.",
+    prompt: loadAgentPrompt("code-reviewer"),
+    model: "opus",
+    defaultModel: "opus",
 };
 /**
  * Git-Master Agent - Git Operations Expert (Sonnet)
  */
 export const gitMasterAgent = {
-    name: 'git-master',
-    description: 'Git expert for atomic commits, rebasing, and history management with style detection',
-    prompt: loadAgentPrompt('git-master'),
-    model: 'sonnet',
-    defaultModel: 'sonnet'
+    name: "git-master",
+    description: "Git expert for atomic commits, rebasing, and history management with style detection",
+    prompt: loadAgentPrompt("git-master"),
+    model: "sonnet",
+    defaultModel: "sonnet",
 };
 // ============================================================
 // DEPRECATED ALIASES (Backward Compatibility)
@@ -269,36 +269,36 @@ export function getAgentDefinitions(overrides) {
         architect: architectAgent,
         debugger: debuggerAgent,
         executor: executorAgent,
-        'deep-executor': deepExecutorAgent,
+        "deep-executor": deepExecutorAgent,
         verifier: verifierAgent,
         // ============================================================
         // REVIEW LANE
         // ============================================================
-        'style-reviewer': styleReviewerAgent,
-        'quality-reviewer': qualityReviewerAgent,
-        'api-reviewer': apiReviewerAgent,
-        'security-reviewer': securityReviewerAgent,
-        'performance-reviewer': performanceReviewerAgent,
-        'code-reviewer': codeReviewerAgent,
+        "style-reviewer": styleReviewerAgent,
+        "quality-reviewer": qualityReviewerAgent,
+        "api-reviewer": apiReviewerAgent,
+        "security-reviewer": securityReviewerAgent,
+        "performance-reviewer": performanceReviewerAgent,
+        "code-reviewer": codeReviewerAgent,
         // ============================================================
         // DOMAIN SPECIALISTS
         // ============================================================
-        'dependency-expert': dependencyExpertAgent,
-        'test-engineer': testEngineerAgent,
-        'quality-strategist': qualityStrategistAgent,
-        'build-fixer': buildFixerAgent,
+        "dependency-expert": dependencyExpertAgent,
+        "test-engineer": testEngineerAgent,
+        "quality-strategist": qualityStrategistAgent,
+        "build-fixer": buildFixerAgent,
         designer: designerAgent,
         writer: writerAgent,
-        'qa-tester': qaTesterAgent,
+        "qa-tester": qaTesterAgent,
         scientist: scientistAgent,
-        'git-master': gitMasterAgent,
+        "git-master": gitMasterAgent,
         // ============================================================
         // PRODUCT LANE
         // ============================================================
-        'product-manager': productManagerAgent,
-        'ux-researcher': uxResearcherAgent,
-        'information-architect': informationArchitectAgent,
-        'product-analyst': productAnalystAgent,
+        "product-manager": productManagerAgent,
+        "ux-researcher": uxResearcherAgent,
+        "information-architect": informationArchitectAgent,
+        "product-analyst": productAnalystAgent,
         // ============================================================
         // COORDINATION
         // ============================================================
@@ -308,7 +308,7 @@ export function getAgentDefinitions(overrides) {
         // BACKWARD COMPATIBILITY (Deprecated)
         // ============================================================
         researcher: researcherAgent,
-        'tdd-guide': testEngineerAgent
+        "tdd-guide": testEngineerAgent,
     };
     const result = {};
     for (const [name, config] of Object.entries(droids)) {
@@ -320,7 +320,7 @@ export function getAgentDefinitions(overrides) {
             tools: override?.tools ?? config.tools,
             disallowedTools,
             model: (override?.model ?? config.model),
-            defaultModel: (override?.defaultModel ?? config.defaultModel)
+            defaultModel: (override?.defaultModel ?? config.defaultModel),
         };
     }
     return result;

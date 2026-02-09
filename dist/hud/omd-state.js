@@ -4,8 +4,8 @@
  * Read ralph, ultrawork, and PRD state from existing OMD files.
  * These are read-only functions that don't modify the state files.
  */
-import { existsSync, readFileSync, statSync, readdirSync } from 'fs';
-import { join } from 'path';
+import { existsSync, readFileSync, statSync, readdirSync } from "fs";
+import { join } from "path";
 /**
  * Maximum age for state files to be considered "active".
  * Files older than this are treated as stale/abandoned.
@@ -37,7 +37,7 @@ function resolveStatePath(directory, filename) {
     let bestPath = null;
     let bestMtime = 0;
     // Check session-scoped paths first (most likely location after Issue #456 fix)
-    const sessionsDir = join(directory, '.omd', 'state', 'sessions');
+    const sessionsDir = join(directory, ".omd", "state", "sessions");
     if (existsSync(sessionsDir)) {
         try {
             const entries = readdirSync(sessionsDir, { withFileTypes: true });
@@ -64,7 +64,7 @@ function resolveStatePath(directory, filename) {
         }
     }
     // Check standard path
-    const newPath = join(directory, '.omd', 'state', filename);
+    const newPath = join(directory, ".omd", "state", filename);
     if (existsSync(newPath)) {
         try {
             const mtime = statSync(newPath).mtimeMs;
@@ -79,7 +79,7 @@ function resolveStatePath(directory, filename) {
         }
     }
     // Check legacy path
-    const legacyPath = join(directory, '.omd', filename);
+    const legacyPath = join(directory, ".omd", filename);
     if (existsSync(legacyPath)) {
         try {
             const mtime = statSync(legacyPath).mtimeMs;
@@ -99,7 +99,7 @@ function resolveStatePath(directory, filename) {
  * Returns null if no state file exists or on error.
  */
 export function readRalphStateForHud(directory) {
-    const stateFile = resolveStatePath(directory, 'ralph-state.json');
+    const stateFile = resolveStatePath(directory, "ralph-state.json");
     if (!stateFile) {
         return null;
     }
@@ -108,7 +108,7 @@ export function readRalphStateForHud(directory) {
         return null;
     }
     try {
-        const content = readFileSync(stateFile, 'utf-8');
+        const content = readFileSync(stateFile, "utf-8");
         const state = JSON.parse(content);
         if (!state.active) {
             return null;
@@ -131,12 +131,12 @@ export function readRalphStateForHud(directory) {
  */
 export function readUltraworkStateForHud(directory) {
     // Check local state only (with new path fallback)
-    const localFile = resolveStatePath(directory, 'ultrawork-state.json');
+    const localFile = resolveStatePath(directory, "ultrawork-state.json");
     if (!localFile || isStateFileStale(localFile)) {
         return null;
     }
     try {
-        const content = readFileSync(localFile, 'utf-8');
+        const content = readFileSync(localFile, "utf-8");
         const state = JSON.parse(content);
         if (!state.active) {
             return null;
@@ -156,16 +156,16 @@ export function readUltraworkStateForHud(directory) {
  */
 export function readPrdStateForHud(directory) {
     // Check root first
-    let prdPath = join(directory, 'prd.json');
+    let prdPath = join(directory, "prd.json");
     if (!existsSync(prdPath)) {
         // Check .omd
-        prdPath = join(directory, '.omd', 'prd.json');
+        prdPath = join(directory, ".omd", "prd.json");
         if (!existsSync(prdPath)) {
             return null;
         }
     }
     try {
-        const content = readFileSync(prdPath, 'utf-8');
+        const content = readFileSync(prdPath, "utf-8");
         const prd = JSON.parse(content);
         if (!prd.userStories || !Array.isArray(prd.userStories)) {
             return null;
@@ -192,7 +192,7 @@ export function readPrdStateForHud(directory) {
  * Returns shape matching AutopilotStateForHud from elements/autopilot.ts.
  */
 export function readAutopilotStateForHud(directory) {
-    const stateFile = resolveStatePath(directory, 'autopilot-state.json');
+    const stateFile = resolveStatePath(directory, "autopilot-state.json");
     if (!stateFile) {
         return null;
     }
@@ -201,7 +201,7 @@ export function readAutopilotStateForHud(directory) {
         return null;
     }
     try {
-        const content = readFileSync(stateFile, 'utf-8');
+        const content = readFileSync(stateFile, "utf-8");
         const state = JSON.parse(content);
         if (!state.active) {
             return null;
@@ -213,7 +213,7 @@ export function readAutopilotStateForHud(directory) {
             maxIterations: state.max_iterations,
             tasksCompleted: state.execution?.tasks_completed,
             tasksTotal: state.execution?.tasks_total,
-            filesCreated: state.execution?.files_created?.length
+            filesCreated: state.execution?.files_created?.length,
         };
     }
     catch {
@@ -230,7 +230,9 @@ export function isAnyModeActive(directory) {
     const ralph = readRalphStateForHud(directory);
     const ultrawork = readUltraworkStateForHud(directory);
     const autopilot = readAutopilotStateForHud(directory);
-    return (ralph?.active ?? false) || (ultrawork?.active ?? false) || (autopilot?.active ?? false);
+    return ((ralph?.active ?? false) ||
+        (ultrawork?.active ?? false) ||
+        (autopilot?.active ?? false));
 }
 /**
  * Get active skill names for display
@@ -239,15 +241,15 @@ export function getActiveSkills(directory) {
     const skills = [];
     const autopilot = readAutopilotStateForHud(directory);
     if (autopilot?.active) {
-        skills.push('autopilot');
+        skills.push("autopilot");
     }
     const ralph = readRalphStateForHud(directory);
     if (ralph?.active) {
-        skills.push('ralph');
+        skills.push("ralph");
     }
     const ultrawork = readUltraworkStateForHud(directory);
     if (ultrawork?.active) {
-        skills.push('ultrawork');
+        skills.push("ultrawork");
     }
     return skills;
 }

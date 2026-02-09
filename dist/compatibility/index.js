@@ -22,19 +22,19 @@
  *   const result = await bridge.invokeTool('filesystem', 'read_file', { path: '/etc/hosts' });
  */
 // Discovery
-export { discoverAll, discoverPlugins, discoverMcpServers, discoverPluginMcpServers, getPluginPaths, getMcpConfigPath, isPluginInstalled, getPluginInfo, } from './discovery.js';
+export { discoverAll, discoverPlugins, discoverMcpServers, discoverPluginMcpServers, getPluginPaths, getMcpConfigPath, isPluginInstalled, getPluginInfo, } from "./discovery.js";
 // Registry
-export { ToolRegistry, getRegistry, initializeRegistry, routeCommand, getExternalTool, listExternalTools, hasExternalPlugins, hasMcpServers, } from './registry.js';
+export { ToolRegistry, getRegistry, initializeRegistry, routeCommand, getExternalTool, listExternalTools, hasExternalPlugins, hasMcpServers, } from "./registry.js";
 // Permission Adapter
-export { checkPermission, grantPermission, denyPermission, clearPermissionCache, registerPluginSafePatterns, getSafePatterns, addSafePattern, removeSafePatternsFromSource, shouldDelegate, getDelegationTarget, integrateWithPermissionSystem, processExternalToolPermission, } from './permission-adapter.js';
+export { checkPermission, grantPermission, denyPermission, clearPermissionCache, registerPluginSafePatterns, getSafePatterns, addSafePattern, removeSafePatternsFromSource, shouldDelegate, getDelegationTarget, integrateWithPermissionSystem, processExternalToolPermission, } from "./permission-adapter.js";
 // MCP Bridge
-export { McpBridge, getMcpBridge, resetMcpBridge, invokeMcpTool, readMcpResource, } from './mcp-bridge.js';
+export { McpBridge, getMcpBridge, resetMcpBridge, invokeMcpTool, readMcpResource, } from "./mcp-bridge.js";
 // ============================================================
 // Convenience initialization function
 // ============================================================
-import { initializeRegistry } from './registry.js';
-import { integrateWithPermissionSystem } from './permission-adapter.js';
-import { getMcpBridge } from './mcp-bridge.js';
+import { initializeRegistry } from "./registry.js";
+import { integrateWithPermissionSystem } from "./permission-adapter.js";
+import { getMcpBridge } from "./mcp-bridge.js";
 /**
  * Initialize the complete compatibility layer
  *

@@ -10,7 +10,7 @@
  * - Data transformations and feature engineering
  * - Generating structured findings with evidence
  */
-import type { AgentConfig, AgentPromptMetadata } from './types.js';
+import type { AgentConfig, AgentPromptMetadata } from "./types.js";
 export declare const SCIENTIST_PROMPT_METADATA: AgentPromptMetadata;
 export declare const scientistAgent: AgentConfig;
 //# sourceMappingURL=scientist.d.ts.map

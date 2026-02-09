@@ -7,7 +7,7 @@
 export interface BridgeConfig {
     teamName: string;
     workerName: string;
-    provider: 'codex' | 'gemini';
+    provider: "codex" | "gemini";
     model?: string;
     workingDirectory: string;
     pollIntervalMs: number;
@@ -15,7 +15,7 @@ export interface BridgeConfig {
     maxConsecutiveErrors: number;
     outboxMaxLines: number;
     maxRetries?: number;
-    permissionEnforcement?: 'off' | 'audit' | 'enforce';
+    permissionEnforcement?: "off" | "audit" | "enforce";
     permissions?: BridgeWorkerPermissions;
 }
 /** Permission scoping embedded in BridgeConfig (mirrors WorkerPermissions shape) */
@@ -31,7 +31,7 @@ export interface TaskFile {
     subject: string;
     description: string;
     activeForm?: string;
-    status: 'pending' | 'in_progress' | 'completed';
+    status: "pending" | "in_progress" | "completed";
     owner: string;
     blocks: string[];
     blockedBy: string[];
@@ -41,16 +41,16 @@ export interface TaskFile {
     claimPid?: number;
 }
 /** Partial update for a task file (only fields being changed) */
-export type TaskFileUpdate = Partial<Pick<TaskFile, 'status' | 'owner' | 'metadata' | 'claimedBy' | 'claimedAt' | 'claimPid'>>;
+export type TaskFileUpdate = Partial<Pick<TaskFile, "status" | "owner" | "metadata" | "claimedBy" | "claimedAt" | "claimPid">>;
 /** JSONL message from lead -> worker (inbox) */
 export interface InboxMessage {
-    type: 'message' | 'context';
+    type: "message" | "context";
     content: string;
     timestamp: string;
 }
 /** JSONL message from worker -> lead (outbox) */
 export interface OutboxMessage {
-    type: 'task_complete' | 'task_failed' | 'idle' | 'shutdown_ack' | 'drain_ack' | 'heartbeat' | 'error';
+    type: "task_complete" | "task_failed" | "idle" | "shutdown_ack" | "drain_ack" | "heartbeat" | "error";
     taskId?: string;
     summary?: string;
     message?: string;
@@ -79,19 +79,19 @@ export interface McpWorkerMember {
     joinedAt: number;
     tmuxPaneId: string;
     cwd: string;
-    backendType: 'tmux';
+    backendType: "tmux";
     subscriptions: string[];
 }
 /** Heartbeat file content */
 export interface HeartbeatData {
     workerName: string;
     teamName: string;
-    provider: 'codex' | 'gemini';
+    provider: "codex" | "gemini";
     pid: number;
     lastPollAt: string;
     currentTaskId?: string;
     consecutiveErrors: number;
-    status: 'polling' | 'executing' | 'shutdown' | 'quarantined';
+    status: "polling" | "executing" | "shutdown" | "quarantined";
 }
 /** Offset cursor for JSONL consumption */
 export interface InboxCursor {
@@ -99,14 +99,14 @@ export interface InboxCursor {
 }
 /** Result of config.json schema probe */
 export interface ConfigProbeResult {
-    probeResult: 'pass' | 'fail' | 'partial';
+    probeResult: "pass" | "fail" | "partial";
     probedAt: string;
     version: string;
 }
 /** Sidecar mapping task IDs to execution modes */
 export interface TaskModeMap {
     teamName: string;
-    taskModes: Record<string, 'mcp_codex' | 'mcp_gemini' | 'droid_worker'>;
+    taskModes: Record<string, "mcp_codex" | "mcp_gemini" | "droid_worker">;
 }
 /** Failure sidecar for a task */
 export interface TaskFailureSidecar {
@@ -116,7 +116,7 @@ export interface TaskFailureSidecar {
     lastFailedAt: string;
 }
 /** Worker backend type */
-export type WorkerBackend = 'droid-native' | 'mcp-codex' | 'mcp-gemini';
+export type WorkerBackend = "droid-native" | "mcp-codex" | "mcp-gemini";
 /** Worker capability tag */
-export type WorkerCapability = 'code-edit' | 'code-review' | 'security-review' | 'architecture' | 'testing' | 'documentation' | 'ui-design' | 'refactoring' | 'research' | 'general';
+export type WorkerCapability = "code-edit" | "code-review" | "security-review" | "architecture" | "testing" | "documentation" | "ui-design" | "refactoring" | "research" | "general";
 //# sourceMappingURL=types.d.ts.map

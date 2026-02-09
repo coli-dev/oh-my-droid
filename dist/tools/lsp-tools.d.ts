@@ -10,8 +10,8 @@
  * - Rename
  * - Code actions
  */
-import { z } from 'zod';
-import { ToolDefinition } from './types.js';
+import { z } from "zod";
+import { ToolDefinition } from "./types.js";
 /**
  * LSP Hover Tool - Get type information and documentation at a position
  */
@@ -55,7 +55,7 @@ export declare const lspWorkspaceSymbolsTool: ToolDefinition<{
  */
 export declare const lspDiagnosticsTool: ToolDefinition<{
     file: z.ZodString;
-    severity: z.ZodOptional<z.ZodEnum<['error', 'warning', 'info', 'hint']>>;
+    severity: z.ZodOptional<z.ZodEnum<["error", "warning", "info", "hint"]>>;
 }>;
 /**
  * LSP Servers Tool - List available language servers
@@ -104,7 +104,7 @@ export declare const lspCodeActionResolveTool: ToolDefinition<{
  */
 export declare const lspDiagnosticsDirectoryTool: ToolDefinition<{
     directory: z.ZodString;
-    strategy: z.ZodOptional<z.ZodEnum<['tsc', 'lsp', 'auto']>>;
+    strategy: z.ZodOptional<z.ZodEnum<["tsc", "lsp", "auto"]>>;
 }>;
 /**
  * Get all LSP tool definitions

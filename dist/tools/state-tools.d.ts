@@ -4,8 +4,8 @@
  * Provides tools for reading, writing, and managing mode state files.
  * All paths are validated to stay within the worktree boundary.
  */
-import { z } from 'zod';
-import { ToolDefinition } from './types.js';
+import { z } from "zod";
+import { ToolDefinition } from "./types.js";
 declare const STATE_TOOL_MODES: [string, ...string[]];
 export declare const stateReadTool: ToolDefinition<{
     mode: z.ZodEnum<typeof STATE_TOOL_MODES>;

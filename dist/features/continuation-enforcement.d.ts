@@ -7,7 +7,7 @@
  * - Prevents premature stopping
  * - Provides background task execution guidance
  */
-import type { HookDefinition } from '../shared/types.js';
+import type { HookDefinition } from "../shared/types.js";
 /**
  * Create a continuation enforcement hook
  *
@@ -26,7 +26,7 @@ export declare const continuationSystemPromptAddition: string;
  */
 export declare function detectCompletionSignals(response: string): {
     claimed: boolean;
-    confidence: 'high' | 'medium' | 'low';
+    confidence: "high" | "medium" | "low";
     reason: string;
 };
 /**

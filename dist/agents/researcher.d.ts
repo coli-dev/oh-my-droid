@@ -6,7 +6,7 @@
  *
  * Ported from oh-my-opencode's researcher agent.
  */
-import type { AgentConfig, AgentPromptMetadata } from './types.js';
+import type { AgentConfig, AgentPromptMetadata } from "./types.js";
 export declare const RESEARCHER_PROMPT_METADATA: AgentPromptMetadata;
 export declare const researcherAgent: AgentConfig;
 //# sourceMappingURL=researcher.d.ts.map

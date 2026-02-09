@@ -11,7 +11,7 @@
  * API: api.anthropic.com/api/oauth/usage
  * Response: { five_hour: { utilization }, seven_day: { utilization } }
  */
-import type { RateLimits } from './types.js';
+import type { RateLimits } from "./types.js";
 /**
  * Get usage data (with caching)
  *

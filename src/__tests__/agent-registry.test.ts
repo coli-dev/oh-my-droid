@@ -2,7 +2,7 @@ import { describe, test, expect } from "vitest";
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
-import { getAgentDefinitions } from "../droids/definitions.js";
+import { getAgentDefinitions } from "../agents/definitions.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,7 +32,7 @@ describe("Agent Registry Validation", () => {
 
   test("all registry droids are exported from index.ts", async () => {
     const registryAgents = Object.keys(getAgentDefinitions());
-    const exports = (await import("../droids/index.js")) as Record<
+    const exports = (await import("../agents/index.js")) as Record<
       string,
       unknown
     >;
@@ -64,7 +64,7 @@ describe("Agent Registry Validation", () => {
       "scientist",
       "qa-tester",
     ];
-    const agentsDir = path.join(__dirname, "../droids");
+    const agentsDir = path.join(__dirname, "../agents");
     for (const name of baseAgents) {
       const content = fs.readFileSync(
         path.join(agentsDir, `${name}.ts`),

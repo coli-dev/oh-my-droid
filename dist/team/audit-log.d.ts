@@ -1,4 +1,4 @@
-export type AuditEventType = 'bridge_start' | 'bridge_shutdown' | 'task_claimed' | 'task_started' | 'task_completed' | 'task_failed' | 'task_permanently_failed' | 'worker_quarantined' | 'worker_idle' | 'inbox_rotated' | 'outbox_rotated' | 'cli_spawned' | 'cli_timeout' | 'cli_error' | 'shutdown_received' | 'shutdown_ack' | 'permission_violation' | 'permission_audit';
+export type AuditEventType = "bridge_start" | "bridge_shutdown" | "task_claimed" | "task_started" | "task_completed" | "task_failed" | "task_permanently_failed" | "worker_quarantined" | "worker_idle" | "inbox_rotated" | "outbox_rotated" | "cli_spawned" | "cli_timeout" | "cli_error" | "shutdown_received" | "shutdown_ack" | "permission_violation" | "permission_audit";
 export interface AuditEvent {
     timestamp: string;
     eventType: AuditEventType;

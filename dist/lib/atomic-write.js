@@ -98,9 +98,9 @@ export function atomicWriteSync(filePath, content) {
         // Ensure parent directory exists
         ensureDirSync(dir);
         // Write to temp file with exclusive creation
-        const fd = fsSync.openSync(tempPath, 'wx', 0o600);
+        const fd = fsSync.openSync(tempPath, "wx", 0o600);
         try {
-            fsSync.writeSync(fd, content, 0, 'utf-8');
+            fsSync.writeSync(fd, content, 0, "utf-8");
             // Sync file data to disk before rename
             fsSync.fsyncSync(fd);
         }
@@ -112,7 +112,7 @@ export function atomicWriteSync(filePath, content) {
         success = true;
         // Best-effort directory fsync to ensure rename is durable
         try {
-            const dirFd = fsSync.openSync(dir, 'r');
+            const dirFd = fsSync.openSync(dir, "r");
             try {
                 fsSync.fsyncSync(dirFd);
             }

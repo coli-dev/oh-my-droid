@@ -7,7 +7,7 @@
  * - ~/.factory/droid_desktop_config.json (Desktop app MCP config)
  * - Project-local .factory-plugin/ directories
  */
-import type { DiscoveryOptions, DiscoveredPlugin, DiscoveredMcpServer, ExternalTool } from './types.js';
+import type { DiscoveryOptions, DiscoveredPlugin, DiscoveredMcpServer, ExternalTool } from "./types.js";
 /**
  * Security Error for discovery operations
  */

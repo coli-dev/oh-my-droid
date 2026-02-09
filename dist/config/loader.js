@@ -6,79 +6,107 @@
  * - Project config: .factory/sisyphus.jsonc
  * - Environment variables
  */
-import { readFileSync, existsSync } from 'fs';
-import { join, dirname } from 'path';
-import * as jsonc from 'jsonc-parser';
-import { getConfigDir } from '../utils/paths.js';
+import { readFileSync, existsSync } from "fs";
+import { join, dirname } from "path";
+import * as jsonc from "jsonc-parser";
+import { getConfigDir } from "../utils/paths.js";
 /**
  * Default configuration
  */
 export const DEFAULT_CONFIG = {
     droids: {
-        omd: { model: 'claude-opus-4-6-20260205' },
-        architect: { model: 'claude-opus-4-6-20260205', enabled: true },
-        researcher: { model: 'claude-sonnet-4-5-20250929' },
-        explore: { model: 'claude-haiku-4-5-20251001' },
-        frontendEngineer: { model: 'claude-sonnet-4-5-20250929', enabled: true },
-        documentWriter: { model: 'claude-haiku-4-5-20251001', enabled: true },
-        multimodalLooker: { model: 'claude-sonnet-4-5-20250929', enabled: true },
+        omd: { model: "claude-opus-4-6-20260205" },
+        architect: { model: "claude-opus-4-6-20260205", enabled: true },
+        researcher: { model: "claude-sonnet-4-5-20250929" },
+        explore: { model: "claude-haiku-4-5-20251001" },
+        frontendEngineer: { model: "claude-sonnet-4-5-20250929", enabled: true },
+        documentWriter: { model: "claude-haiku-4-5-20251001", enabled: true },
+        multimodalLooker: { model: "claude-sonnet-4-5-20250929", enabled: true },
         // New droids from oh-my-opencode
-        critic: { model: 'claude-opus-4-6-20260205', enabled: true },
-        analyst: { model: 'claude-opus-4-6-20260205', enabled: true },
-        orchestratorSisyphus: { model: 'claude-sonnet-4-5-20250929', enabled: true },
-        sisyphusJunior: { model: 'claude-sonnet-4-5-20250929', enabled: true },
-        planner: { model: 'claude-opus-4-6-20260205', enabled: true }
+        critic: { model: "claude-opus-4-6-20260205", enabled: true },
+        analyst: { model: "claude-opus-4-6-20260205", enabled: true },
+        orchestratorSisyphus: {
+            model: "claude-sonnet-4-5-20250929",
+            enabled: true,
+        },
+        sisyphusJunior: { model: "claude-sonnet-4-5-20250929", enabled: true },
+        planner: { model: "claude-opus-4-6-20260205", enabled: true },
     },
     features: {
         parallelExecution: true,
         lspTools: true, // Real LSP integration with language servers
         astTools: true, // Real AST tools using ast-grep
         continuationEnforcement: true,
-        autoContextInjection: true
+        autoContextInjection: true,
     },
     mcpServers: {
         exa: { enabled: true },
-        context7: { enabled: true }
+        context7: { enabled: true },
     },
     permissions: {
         allowBash: true,
         allowEdit: true,
         allowWrite: true,
-        maxBackgroundTasks: 5
+        maxBackgroundTasks: 5,
     },
     magicKeywords: {
-        ultrawork: ['ultrawork', 'ulw', 'uw'],
-        search: ['search', 'find', 'locate'],
-        analyze: ['analyze', 'investigate', 'examine'],
-        ultrathink: ['ultrathink', 'think', 'reason', 'ponder']
+        ultrawork: ["ultrawork", "ulw", "uw"],
+        search: ["search", "find", "locate"],
+        analyze: ["analyze", "investigate", "examine"],
+        ultrathink: ["ultrathink", "think", "reason", "ponder"],
     },
     // Intelligent model routing configuration
     routing: {
         enabled: true,
-        defaultTier: 'MEDIUM',
+        defaultTier: "MEDIUM",
         escalationEnabled: true,
         maxEscalations: 2,
         tierModels: {
-            LOW: 'claude-haiku-4-5-20251001',
-            MEDIUM: 'claude-sonnet-4-5-20250929',
-            HIGH: 'claude-opus-4-6-20260205'
+            LOW: "claude-haiku-4-5-20251001",
+            MEDIUM: "claude-sonnet-4-5-20250929",
+            HIGH: "claude-opus-4-6-20260205",
         },
         agentOverrides: {
-            architect: { tier: 'HIGH', reason: 'Advisory agent requires deep reasoning' },
-            planner: { tier: 'HIGH', reason: 'Strategic planning requires deep reasoning' },
-            critic: { tier: 'HIGH', reason: 'Critical review requires deep reasoning' },
-            analyst: { tier: 'HIGH', reason: 'Pre-planning analysis requires deep reasoning' },
-            explore: { tier: 'LOW', reason: 'Exploration is search-focused' },
-            'writer': { tier: 'LOW', reason: 'Documentation is straightforward' }
+            architect: {
+                tier: "HIGH",
+                reason: "Advisory agent requires deep reasoning",
+            },
+            planner: {
+                tier: "HIGH",
+                reason: "Strategic planning requires deep reasoning",
+            },
+            critic: {
+                tier: "HIGH",
+                reason: "Critical review requires deep reasoning",
+            },
+            analyst: {
+                tier: "HIGH",
+                reason: "Pre-planning analysis requires deep reasoning",
+            },
+            explore: { tier: "LOW", reason: "Exploration is search-focused" },
+            writer: { tier: "LOW", reason: "Documentation is straightforward" },
         },
         escalationKeywords: [
-            'critical', 'production', 'urgent', 'security', 'breaking',
-            'architecture', 'refactor', 'redesign', 'root cause'
+            "critical",
+            "production",
+            "urgent",
+            "security",
+            "breaking",
+            "architecture",
+            "refactor",
+            "redesign",
+            "root cause",
         ],
         simplificationKeywords: [
-            'find', 'list', 'show', 'where', 'search', 'locate', 'grep'
-        ]
-    }
+            "find",
+            "list",
+            "show",
+            "where",
+            "search",
+            "locate",
+            "grep",
+        ],
+    },
 };
 /**
  * Configuration file locations
@@ -86,8 +114,8 @@ export const DEFAULT_CONFIG = {
 export function getConfigPaths() {
     const userConfigDir = getConfigDir();
     return {
-        user: join(userConfigDir, 'droid-sisyphus', 'config.jsonc'),
-        project: join(process.cwd(), '.factory', 'sisyphus.jsonc')
+        user: join(userConfigDir, "droid-sisyphus", "config.jsonc"),
+        project: join(process.cwd(), ".factory", "sisyphus.jsonc"),
     };
 }
 /**
@@ -98,11 +126,11 @@ export function loadJsoncFile(path) {
         return null;
     }
     try {
-        const content = readFileSync(path, 'utf-8');
+        const content = readFileSync(path, "utf-8");
         const errors = [];
         const result = jsonc.parse(content, errors, {
             allowTrailingComma: true,
-            allowEmptyContent: true
+            allowEmptyContent: true,
         });
         if (errors.length > 0) {
             console.warn(`Warning: Parse errors in ${path}:`, errors);
@@ -123,10 +151,10 @@ export function deepMerge(target, source) {
         const sourceValue = source[key];
         const targetValue = result[key];
         if (sourceValue !== undefined &&
-            typeof sourceValue === 'object' &&
+            typeof sourceValue === "object" &&
             sourceValue !== null &&
             !Array.isArray(sourceValue) &&
-            typeof targetValue === 'object' &&
+            typeof targetValue === "object" &&
             targetValue !== null &&
             !Array.isArray(targetValue)) {
             result[key] = deepMerge(targetValue, sourceValue);
@@ -146,20 +174,20 @@ export function loadEnvConfig() {
     if (process.env.EXA_API_KEY) {
         config.mcpServers = {
             ...config.mcpServers,
-            exa: { enabled: true, apiKey: process.env.EXA_API_KEY }
+            exa: { enabled: true, apiKey: process.env.EXA_API_KEY },
         };
     }
     // Feature flags from environment
     if (process.env.OMD_PARALLEL_EXECUTION !== undefined) {
         config.features = {
             ...config.features,
-            parallelExecution: process.env.OMD_PARALLEL_EXECUTION === 'true'
+            parallelExecution: process.env.OMD_PARALLEL_EXECUTION === "true",
         };
     }
     if (process.env.OMD_LSP_TOOLS !== undefined) {
         config.features = {
             ...config.features,
-            lspTools: process.env.OMD_LSP_TOOLS === 'true'
+            lspTools: process.env.OMD_LSP_TOOLS === "true",
         };
     }
     if (process.env.OMD_MAX_BACKGROUND_TASKS) {
@@ -167,7 +195,7 @@ export function loadEnvConfig() {
         if (!isNaN(maxTasks)) {
             config.permissions = {
                 ...config.permissions,
-                maxBackgroundTasks: maxTasks
+                maxBackgroundTasks: maxTasks,
             };
         }
     }
@@ -175,22 +203,22 @@ export function loadEnvConfig() {
     if (process.env.OMD_ROUTING_ENABLED !== undefined) {
         config.routing = {
             ...config.routing,
-            enabled: process.env.OMD_ROUTING_ENABLED === 'true'
+            enabled: process.env.OMD_ROUTING_ENABLED === "true",
         };
     }
     if (process.env.OMD_ROUTING_DEFAULT_TIER) {
         const tier = process.env.OMD_ROUTING_DEFAULT_TIER.toUpperCase();
-        if (tier === 'LOW' || tier === 'MEDIUM' || tier === 'HIGH') {
+        if (tier === "LOW" || tier === "MEDIUM" || tier === "HIGH") {
             config.routing = {
                 ...config.routing,
-                defaultTier: tier
+                defaultTier: tier,
             };
         }
     }
     if (process.env.OMD_ESCALATION_ENABLED !== undefined) {
         config.routing = {
             ...config.routing,
-            escalationEnabled: process.env.OMD_ESCALATION_ENABLED === 'true'
+            escalationEnabled: process.env.OMD_ESCALATION_ENABLED === "true",
         };
     }
     return config;
@@ -225,10 +253,10 @@ export function findContextFiles(startDir) {
     const searchDir = startDir ?? process.cwd();
     // Files to look for
     const contextFileNames = [
-        'AGENTS.md',
-        'AGENTS.md',
-        '.factory/AGENTS.md',
-        '.factory/AGENTS.md'
+        "AGENTS.md",
+        "AGENTS.md",
+        ".factory/AGENTS.md",
+        ".factory/AGENTS.md",
     ];
     // Search in current directory and parent directories
     let currentDir = searchDir;
@@ -255,131 +283,149 @@ export function loadContextFromFiles(files) {
     const contexts = [];
     for (const file of files) {
         try {
-            const content = readFileSync(file, 'utf-8');
+            const content = readFileSync(file, "utf-8");
             contexts.push(`## Context from ${file}\n\n${content}`);
         }
         catch (error) {
             console.warn(`Warning: Could not read context file ${file}:`, error);
         }
     }
-    return contexts.join('\n\n---\n\n');
+    return contexts.join("\n\n---\n\n");
 }
 /**
  * Generate JSON Schema for configuration (for editor autocomplete)
  */
 export function generateConfigSchema() {
     return {
-        $schema: 'http://json-schema.org/draft-07/schema#',
-        title: 'Oh-My-Droid-Sisyphus Configuration',
-        type: 'object',
+        $schema: "http://json-schema.org/draft-07/schema#",
+        title: "Oh-My-Droid-Sisyphus Configuration",
+        type: "object",
         properties: {
             droids: {
-                type: 'object',
-                description: 'Agent model and feature configuration',
+                type: "object",
+                description: "Agent model and feature configuration",
                 properties: {
                     sisyphus: {
-                        type: 'object',
+                        type: "object",
                         properties: {
-                            model: { type: 'string', description: 'Model ID for the main orchestrator' }
-                        }
+                            model: {
+                                type: "string",
+                                description: "Model ID for the main orchestrator",
+                            },
+                        },
                     },
                     architect: {
-                        type: 'object',
+                        type: "object",
                         properties: {
-                            model: { type: 'string' },
-                            enabled: { type: 'boolean' }
-                        }
+                            model: { type: "string" },
+                            enabled: { type: "boolean" },
+                        },
                     },
                     researcher: {
-                        type: 'object',
-                        properties: { model: { type: 'string' } }
+                        type: "object",
+                        properties: { model: { type: "string" } },
                     },
                     explore: {
-                        type: 'object',
-                        properties: { model: { type: 'string' } }
+                        type: "object",
+                        properties: { model: { type: "string" } },
                     },
                     frontendEngineer: {
-                        type: 'object',
+                        type: "object",
                         properties: {
-                            model: { type: 'string' },
-                            enabled: { type: 'boolean' }
-                        }
+                            model: { type: "string" },
+                            enabled: { type: "boolean" },
+                        },
                     },
                     documentWriter: {
-                        type: 'object',
+                        type: "object",
                         properties: {
-                            model: { type: 'string' },
-                            enabled: { type: 'boolean' }
-                        }
+                            model: { type: "string" },
+                            enabled: { type: "boolean" },
+                        },
                     },
                     multimodalLooker: {
-                        type: 'object',
+                        type: "object",
                         properties: {
-                            model: { type: 'string' },
-                            enabled: { type: 'boolean' }
-                        }
-                    }
-                }
+                            model: { type: "string" },
+                            enabled: { type: "boolean" },
+                        },
+                    },
+                },
             },
             features: {
-                type: 'object',
-                description: 'Feature toggles',
+                type: "object",
+                description: "Feature toggles",
                 properties: {
-                    parallelExecution: { type: 'boolean', default: true },
-                    lspTools: { type: 'boolean', default: true },
-                    astTools: { type: 'boolean', default: true },
-                    continuationEnforcement: { type: 'boolean', default: true },
-                    autoContextInjection: { type: 'boolean', default: true }
-                }
+                    parallelExecution: { type: "boolean", default: true },
+                    lspTools: { type: "boolean", default: true },
+                    astTools: { type: "boolean", default: true },
+                    continuationEnforcement: { type: "boolean", default: true },
+                    autoContextInjection: { type: "boolean", default: true },
+                },
             },
             mcpServers: {
-                type: 'object',
-                description: 'MCP server configurations',
+                type: "object",
+                description: "MCP server configurations",
                 properties: {
                     exa: {
-                        type: 'object',
+                        type: "object",
                         properties: {
-                            enabled: { type: 'boolean' },
-                            apiKey: { type: 'string' }
-                        }
+                            enabled: { type: "boolean" },
+                            apiKey: { type: "string" },
+                        },
                     },
                     context7: {
-                        type: 'object',
-                        properties: { enabled: { type: 'boolean' } }
-                    }
-                }
+                        type: "object",
+                        properties: { enabled: { type: "boolean" } },
+                    },
+                },
             },
             permissions: {
-                type: 'object',
-                description: 'Permission settings',
+                type: "object",
+                description: "Permission settings",
                 properties: {
-                    allowBash: { type: 'boolean', default: true },
-                    allowEdit: { type: 'boolean', default: true },
-                    allowWrite: { type: 'boolean', default: true },
-                    maxBackgroundTasks: { type: 'integer', default: 5, minimum: 1, maximum: 50 }
-                }
+                    allowBash: { type: "boolean", default: true },
+                    allowEdit: { type: "boolean", default: true },
+                    allowWrite: { type: "boolean", default: true },
+                    maxBackgroundTasks: {
+                        type: "integer",
+                        default: 5,
+                        minimum: 1,
+                        maximum: 50,
+                    },
+                },
             },
             magicKeywords: {
-                type: 'object',
-                description: 'Magic keyword triggers',
+                type: "object",
+                description: "Magic keyword triggers",
                 properties: {
-                    ultrawork: { type: 'array', items: { type: 'string' } },
-                    search: { type: 'array', items: { type: 'string' } },
-                    analyze: { type: 'array', items: { type: 'string' } },
-                    ultrathink: { type: 'array', items: { type: 'string' } }
-                }
+                    ultrawork: { type: "array", items: { type: "string" } },
+                    search: { type: "array", items: { type: "string" } },
+                    analyze: { type: "array", items: { type: "string" } },
+                    ultrathink: { type: "array", items: { type: "string" } },
+                },
             },
             swarm: {
-                type: 'object',
-                description: 'Swarm mode settings',
+                type: "object",
+                description: "Swarm mode settings",
                 properties: {
-                    defaultMaxConcurrent: { type: 'integer', default: 5, minimum: 1, maximum: 50 },
-                    wavePollingInterval: { type: 'integer', default: 5000, minimum: 1000, maximum: 30000 },
-                    aggressiveThreshold: { type: 'integer', default: 5 },
-                    enableFileOwnership: { type: 'boolean', default: true }
-                }
-            }
-        }
+                    defaultMaxConcurrent: {
+                        type: "integer",
+                        default: 5,
+                        minimum: 1,
+                        maximum: 50,
+                    },
+                    wavePollingInterval: {
+                        type: "integer",
+                        default: 5000,
+                        minimum: 1000,
+                        maximum: 30000,
+                    },
+                    aggressiveThreshold: { type: "integer", default: 5 },
+                    enableFileOwnership: { type: "boolean", default: true },
+                },
+            },
+        },
     };
 }
 //# sourceMappingURL=loader.js.map

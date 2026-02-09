@@ -4,4 +4,4 @@
  * Tests for agent visualization with different formats.
  */
 export {};
-//# sourceMappingURL=hud-droids.test.d.ts.map
+//# sourceMappingURL=hud-agents.test.d.ts.map

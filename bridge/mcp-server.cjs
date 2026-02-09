@@ -18743,36 +18743,44 @@ async function withLspClient(filePath, operation, fn) {
       const serverConfig = getServerForFile(filePath);
       if (!serverConfig) {
         return {
-          content: [{
-            type: "text",
-            text: `No language server available for file type: ${filePath}
+          content: [
+            {
+              type: "text",
+              text: `No language server available for file type: ${filePath}
 
 Use lsp_servers tool to see available language servers.`
-          }]
+            }
+          ]
         };
       }
       return {
-        content: [{
-          type: "text",
-          text: `Language server '${serverConfig.name}' not installed.
+        content: [
+          {
+            type: "text",
+            text: `Language server '${serverConfig.name}' not installed.
 
 Install with: ${serverConfig.installHint}`
-        }]
+          }
+        ]
       };
     }
     const result = await fn(client);
     return {
-      content: [{
-        type: "text",
-        text: String(result)
-      }]
+      content: [
+        {
+          type: "text",
+          text: String(result)
+        }
+      ]
     };
   } catch (error2) {
     return {
-      content: [{
-        type: "text",
-        text: `Error in ${operation}: ${error2 instanceof Error ? error2.message : String(error2)}`
-      }]
+      content: [
+        {
+          type: "text",
+          text: `Error in ${operation}: ${error2 instanceof Error ? error2.message : String(error2)}`
+        }
+      ]
     };
   }
 }
@@ -18820,7 +18828,12 @@ var lspFindReferencesTool = {
   handler: async (args) => {
     const { file, line, character, includeDeclaration = true } = args;
     return withLspClient(file, "find references", async (client) => {
-      const locations = await client.references(file, line - 1, character, includeDeclaration);
+      const locations = await client.references(
+        file,
+        line - 1,
+        character,
+        includeDeclaration
+      );
       if (!locations || locations.length === 0) {
         return "No references found";
       }
@@ -18849,7 +18862,9 @@ var lspWorkspaceSymbolsTool = {
   description: "Search for symbols (functions, classes, etc.) across the entire workspace by name. Useful for finding definitions without knowing the exact file.",
   schema: {
     query: external_exports.string().describe("Symbol name or pattern to search"),
-    file: external_exports.string().describe("Any file in the workspace (used to determine which language server to use)")
+    file: external_exports.string().describe(
+      "Any file in the workspace (used to determine which language server to use)"
+    )
   },
   handler: async (args) => {
     const { query, file } = args;
@@ -18875,14 +18890,16 @@ var lspDiagnosticsTool = {
     const { file, severity } = args;
     return withLspClient(file, "diagnostics", async (client) => {
       await client.openDocument(file);
-      await new Promise((resolve5) => setTimeout(resolve5, LSP_DIAGNOSTICS_WAIT_MS));
+      await new Promise(
+        (resolve5) => setTimeout(resolve5, LSP_DIAGNOSTICS_WAIT_MS)
+      );
       let diagnostics = client.getDiagnostics(file);
       if (severity) {
         const severityMap = {
-          "error": 1,
-          "warning": 2,
-          "info": 3,
-          "hint": 4
+          error: 1,
+          warning: 2,
+          info: 3,
+          hint: 4
         };
         const severityNum = severityMap[severity];
         diagnostics = diagnostics.filter((d) => d.severity === severityNum);
@@ -18927,10 +18944,12 @@ var lspServersTool = {
       }
     }
     return {
-      content: [{
-        type: "text",
-        text
-      }]
+      content: [
+        {
+          type: "text",
+          text
+        }
+      ]
     };
   }
 };
@@ -19009,10 +19028,19 @@ var lspCodeActionResolveTool = {
     startCharacter: external_exports.number().int().min(0).describe("Start character of selection (0-indexed)"),
     endLine: external_exports.number().int().min(1).describe("End line of selection (1-indexed)"),
     endCharacter: external_exports.number().int().min(0).describe("End character of selection (0-indexed)"),
-    actionIndex: external_exports.number().int().min(1).describe("Index of the action (1-indexed, from lsp_code_actions output)")
+    actionIndex: external_exports.number().int().min(1).describe(
+      "Index of the action (1-indexed, from lsp_code_actions output)"
+    )
   },
   handler: async (args) => {
-    const { file, startLine, startCharacter, endLine, endCharacter, actionIndex } = args;
+    const {
+      file,
+      startLine,
+      startCharacter,
+      endLine,
+      endCharacter,
+      actionIndex
+    } = args;
     return withLspClient(file, "code action resolve", async (client) => {
       const range = {
         start: { line: startLine - 1, character: startCharacter },
@@ -19050,7 +19078,9 @@ var lspDiagnosticsDirectoryTool = {
   description: "Run project-level diagnostics on a directory using tsc --noEmit (preferred) or LSP iteration (fallback). Useful for checking the entire codebase for errors.",
   schema: {
     directory: external_exports.string().describe("Project directory to check"),
-    strategy: external_exports.enum(["tsc", "lsp", "auto"]).optional().describe('Strategy to use: "tsc" (TypeScript compiler), "lsp" (Language Server iteration), or "auto" (default: auto-detect)')
+    strategy: external_exports.enum(["tsc", "lsp", "auto"]).optional().describe(
+      'Strategy to use: "tsc" (TypeScript compiler), "lsp" (Language Server iteration), or "auto" (default: auto-detect)'
+    )
   },
   handler: async (args) => {
     const { directory, strategy = "auto" } = args;
@@ -19072,17 +19102,21 @@ ${result.diagnostics}`;
         output += result.diagnostics;
       }
       return {
-        content: [{
-          type: "text",
-          text: output
-        }]
+        content: [
+          {
+            type: "text",
+            text: output
+          }
+        ]
       };
     } catch (error2) {
       return {
-        content: [{
-          type: "text",
-          text: `Error running directory diagnostics: ${error2 instanceof Error ? error2.message : String(error2)}`
-        }]
+        content: [
+          {
+            type: "text",
+            text: `Error running directory diagnostics: ${error2 instanceof Error ? error2.message : String(error2)}`
+          }
+        ]
       };
     }
   }
@@ -19116,7 +19150,9 @@ async function getSgModule() {
   }
   if (!sgModule) {
     try {
-      const require2 = (0, import_module.createRequire)(import_meta.url || __filename || process.cwd() + "/");
+      const require2 = (0, import_module.createRequire)(
+        import_meta.url || __filename || process.cwd() + "/"
+      );
       sgModule = require2("@ast-grep/napi");
     } catch {
       try {
@@ -19788,14 +19824,18 @@ async function getProcessStartTime(pid) {
 }
 async function getProcessStartTimeWindows(pid) {
   try {
-    const { stdout } = await execFileAsync("wmic", [
-      "process",
-      "where",
-      `ProcessId=${pid}`,
-      "get",
-      "CreationDate",
-      "/format:csv"
-    ], { timeout: 5e3, windowsHide: true });
+    const { stdout } = await execFileAsync(
+      "wmic",
+      [
+        "process",
+        "where",
+        `ProcessId=${pid}`,
+        "get",
+        "CreationDate",
+        "/format:csv"
+      ],
+      { timeout: 5e3, windowsHide: true }
+    );
     const lines = stdout.trim().split(/\r?\n/).filter((l) => l.trim());
     if (lines.length < 2) return void 0;
     const match = lines[1].match(/,(\d{14})/);
@@ -19816,10 +19856,14 @@ async function getProcessStartTimeWindows(pid) {
 }
 async function getProcessStartTimeMacOS(pid) {
   try {
-    const { stdout } = await execFileAsync("ps", ["-p", String(pid), "-o", "lstart="], {
-      env: { ...process.env, LC_ALL: "C" },
-      windowsHide: true
-    });
+    const { stdout } = await execFileAsync(
+      "ps",
+      ["-p", String(pid), "-o", "lstart="],
+      {
+        env: { ...process.env, LC_ALL: "C" },
+        windowsHide: true
+      }
+    );
     const date3 = new Date(stdout.trim());
     return isNaN(date3.getTime()) ? void 0 : date3.getTime();
   } catch {
@@ -21036,7 +21080,9 @@ function resolveOmdPath(relativePath, worktreeRoot) {
 }
 function resolveStatePath(stateName, worktreeRoot) {
   if (stateName === "swarm" || stateName === "swarm-state") {
-    throw new Error("Swarm uses SQLite (swarm.db), not JSON state. Use getStateFilePath from mode-registry instead.");
+    throw new Error(
+      "Swarm uses SQLite (swarm.db), not JSON state. Use getStateFilePath from mode-registry instead."
+    );
   }
   const normalizedName = stateName.endsWith("-state") ? stateName : `${stateName}-state`;
   return resolveOmdPath(`state/${normalizedName}.json`, worktreeRoot);
@@ -21071,19 +21117,28 @@ function validateSessionId(sessionId) {
     throw new Error("Session ID cannot be empty");
   }
   if (sessionId.includes("..") || sessionId.includes("/") || sessionId.includes("\\")) {
-    throw new Error(`Invalid session ID: path traversal not allowed (${sessionId})`);
+    throw new Error(
+      `Invalid session ID: path traversal not allowed (${sessionId})`
+    );
   }
   if (!SESSION_ID_REGEX.test(sessionId)) {
-    throw new Error(`Invalid session ID: must be alphanumeric with hyphens/underscores, max 256 chars (${sessionId})`);
+    throw new Error(
+      `Invalid session ID: must be alphanumeric with hyphens/underscores, max 256 chars (${sessionId})`
+    );
   }
 }
 function resolveSessionStatePath(stateName, sessionId, worktreeRoot) {
   validateSessionId(sessionId);
   if (stateName === "swarm" || stateName === "swarm-state") {
-    throw new Error("Swarm uses SQLite (swarm.db), not session-scoped JSON state.");
+    throw new Error(
+      "Swarm uses SQLite (swarm.db), not session-scoped JSON state."
+    );
   }
   const normalizedName = stateName.endsWith("-state") ? stateName : `${stateName}-state`;
-  return resolveOmdPath(`state/sessions/${sessionId}/${normalizedName}.json`, worktreeRoot);
+  return resolveOmdPath(
+    `state/sessions/${sessionId}/${normalizedName}.json`,
+    worktreeRoot
+  );
 }
 function getSessionStateDir(sessionId, worktreeRoot) {
   validateSessionId(sessionId);
@@ -21098,7 +21153,9 @@ function listSessionIds(worktreeRoot) {
   }
   try {
     const entries = (0, import_fs6.readdirSync)(sessionsDir, { withFileTypes: true });
-    return entries.filter((entry) => entry.isDirectory() && SESSION_ID_REGEX.test(entry.name)).map((entry) => entry.name);
+    return entries.filter(
+      (entry) => entry.isDirectory() && SESSION_ID_REGEX.test(entry.name)
+    ).map((entry) => entry.name);
   } catch {
     return [];
   }
@@ -21127,11 +21184,15 @@ function validateWorkingDirectory(workingDirectory) {
   try {
     providedRootReal = (0, import_fs6.realpathSync)(providedRoot);
   } catch {
-    throw new Error(`workingDirectory '${workingDirectory}' does not exist or is not accessible.`);
+    throw new Error(
+      `workingDirectory '${workingDirectory}' does not exist or is not accessible.`
+    );
   }
   const rel = (0, import_path7.relative)(trustedRootReal, providedRootReal);
   if (rel.startsWith("..") || (0, import_path7.isAbsolute)(rel)) {
-    throw new Error(`workingDirectory '${workingDirectory}' is outside the trusted worktree root '${trustedRoot}'.`);
+    throw new Error(
+      `workingDirectory '${workingDirectory}' is outside the trusted worktree root '${trustedRoot}'.`
+    );
   }
   return providedRoot;
 }
@@ -21368,7 +21429,9 @@ var stateReadTool = {
   schema: {
     mode: external_exports.enum(STATE_TOOL_MODES).describe("The mode to read state for"),
     workingDirectory: external_exports.string().optional().describe("Working directory (defaults to cwd)"),
-    session_id: external_exports.string().optional().describe("Session ID for session-scoped state isolation. STRONGLY RECOMMENDED \u2014 prevents state leakage across parallel Droid sessions. When omitted, falls back to legacy shared path.")
+    session_id: external_exports.string().optional().describe(
+      "Session ID for session-scoped state isolation. STRONGLY RECOMMENDED \u2014 prevents state leakage across parallel Droid sessions. When omitted, falls back to legacy shared path."
+    )
   },
   handler: async (args) => {
     const { mode, workingDirectory, session_id } = args;
@@ -21379,22 +21442,26 @@ var stateReadTool = {
         const statePath2 = getStatePath(mode, root);
         if (!(0, import_fs8.existsSync)(statePath2)) {
           return {
-            content: [{
-              type: "text",
-              text: `No state found for mode: swarm
+            content: [
+              {
+                type: "text",
+                text: `No state found for mode: swarm
 Note: Swarm uses SQLite (swarm.db), not JSON. Expected path: ${statePath2}`
-            }]
+              }
+            ]
           };
         }
         return {
-          content: [{
-            type: "text",
-            text: `## State for swarm
+          content: [
+            {
+              type: "text",
+              text: `## State for swarm
 
 Path: ${statePath2}
 
 Note: Swarm uses SQLite database. Use swarm-specific tools to query state.`
-          }]
+            }
+          ]
         };
       }
       if (sessionId) {
@@ -21402,26 +21469,30 @@ Note: Swarm uses SQLite database. Use swarm-specific tools to query state.`
         const statePath2 = MODE_CONFIGS[mode] ? getStateFilePath(root, mode, sessionId) : resolveSessionStatePath(mode, sessionId, root);
         if (!(0, import_fs8.existsSync)(statePath2)) {
           return {
-            content: [{
-              type: "text",
-              text: `No state found for mode: ${mode} in session: ${sessionId}
+            content: [
+              {
+                type: "text",
+                text: `No state found for mode: ${mode} in session: ${sessionId}
 Expected path: ${statePath2}`
-            }]
+              }
+            ]
           };
         }
         const content = (0, import_fs8.readFileSync)(statePath2, "utf-8");
         const state = JSON.parse(content);
         return {
-          content: [{
-            type: "text",
-            text: `## State for ${mode} (session: ${sessionId})
+          content: [
+            {
+              type: "text",
+              text: `## State for ${mode} (session: ${sessionId})
 
 Path: ${statePath2}
 
 \`\`\`json
 ${JSON.stringify(state, null, 2)}
 \`\`\``
-          }]
+            }
+          ]
         };
       }
       const statePath = getStatePath(mode, root);
@@ -21436,14 +21507,16 @@ ${JSON.stringify(state, null, 2)}
       }
       if (!legacyExists && activeSessions.length === 0) {
         return {
-          content: [{
-            type: "text",
-            text: `No state found for mode: ${mode}
+          content: [
+            {
+              type: "text",
+              text: `No state found for mode: ${mode}
 Expected legacy path: ${statePath}
 No active sessions found.
 
 Note: Reading from legacy/aggregate path (no session_id). This may include state from other sessions.`
-          }]
+            }
+          ]
         };
       }
       let output = `## State for ${mode}
@@ -21498,17 +21571,21 @@ Path: ${sessionStatePath}
         }
       }
       return {
-        content: [{
-          type: "text",
-          text: output
-        }]
+        content: [
+          {
+            type: "text",
+            text: output
+          }
+        ]
       };
     } catch (error2) {
       return {
-        content: [{
-          type: "text",
-          text: `Error reading state for ${mode}: ${error2 instanceof Error ? error2.message : String(error2)}`
-        }]
+        content: [
+          {
+            type: "text",
+            text: `Error reading state for ${mode}: ${error2 instanceof Error ? error2.message : String(error2)}`
+          }
+        ]
       };
     }
   }
@@ -21527,9 +21604,13 @@ var stateWriteTool = {
     started_at: external_exports.string().optional().describe("ISO timestamp when the mode started"),
     completed_at: external_exports.string().optional().describe("ISO timestamp when the mode completed"),
     error: external_exports.string().optional().describe("Error message if the mode failed"),
-    state: external_exports.record(external_exports.string(), external_exports.unknown()).optional().describe("Additional custom state fields (merged with explicit parameters)"),
+    state: external_exports.record(external_exports.string(), external_exports.unknown()).optional().describe(
+      "Additional custom state fields (merged with explicit parameters)"
+    ),
     workingDirectory: external_exports.string().optional().describe("Working directory (defaults to cwd)"),
-    session_id: external_exports.string().optional().describe("Session ID for session-scoped state isolation. STRONGLY RECOMMENDED \u2014 prevents state leakage across parallel Droid sessions. When omitted, falls back to legacy shared path.")
+    session_id: external_exports.string().optional().describe(
+      "Session ID for session-scoped state isolation. STRONGLY RECOMMENDED \u2014 prevents state leakage across parallel Droid sessions. When omitted, falls back to legacy shared path."
+    )
   },
   handler: async (args) => {
     const {
@@ -21552,10 +21633,12 @@ var stateWriteTool = {
       const sessionId = session_id || getProcessSessionId();
       if (mode === "swarm") {
         return {
-          content: [{
-            type: "text",
-            text: `Error: Swarm uses SQLite database (swarm.db), not JSON. Use swarm-specific APIs to modify state.`
-          }]
+          content: [
+            {
+              type: "text",
+              text: `Error: Swarm uses SQLite database (swarm.db), not JSON. Use swarm-specific APIs to modify state.`
+            }
+          ]
         };
       }
       let statePath;
@@ -21570,9 +21653,11 @@ var stateWriteTool = {
       const builtState = {};
       if (active !== void 0) builtState.active = active;
       if (iteration !== void 0) builtState.iteration = iteration;
-      if (max_iterations !== void 0) builtState.max_iterations = max_iterations;
+      if (max_iterations !== void 0)
+        builtState.max_iterations = max_iterations;
       if (current_phase !== void 0) builtState.current_phase = current_phase;
-      if (task_description !== void 0) builtState.task_description = task_description;
+      if (task_description !== void 0)
+        builtState.task_description = task_description;
       if (plan_path !== void 0) builtState.plan_path = plan_path;
       if (started_at !== void 0) builtState.started_at = started_at;
       if (completed_at !== void 0) builtState.completed_at = completed_at;
@@ -21597,22 +21682,26 @@ var stateWriteTool = {
       const sessionInfo = sessionId ? ` (session: ${sessionId})` : " (legacy path)";
       const warningMessage = sessionId ? "" : "\n\nWARNING: No session_id provided. State written to legacy shared path which may leak across parallel sessions. Pass session_id for session-scoped isolation.";
       return {
-        content: [{
-          type: "text",
-          text: `Successfully wrote state for ${mode}${sessionInfo}
+        content: [
+          {
+            type: "text",
+            text: `Successfully wrote state for ${mode}${sessionInfo}
 Path: ${statePath}
 
 \`\`\`json
 ${JSON.stringify(stateWithMeta, null, 2)}
 \`\`\`${warningMessage}`
-        }]
+          }
+        ]
       };
     } catch (error3) {
       return {
-        content: [{
-          type: "text",
-          text: `Error writing state for ${mode}: ${error3 instanceof Error ? error3.message : String(error3)}`
-        }]
+        content: [
+          {
+            type: "text",
+            text: `Error writing state for ${mode}: ${error3 instanceof Error ? error3.message : String(error3)}`
+          }
+        ]
       };
     }
   }
@@ -21623,7 +21712,9 @@ var stateClearTool = {
   schema: {
     mode: external_exports.enum(STATE_TOOL_MODES).describe("The mode to clear state for"),
     workingDirectory: external_exports.string().optional().describe("Working directory (defaults to cwd)"),
-    session_id: external_exports.string().optional().describe("Session ID for session-scoped state isolation. STRONGLY RECOMMENDED \u2014 prevents state leakage across parallel Droid sessions. When omitted, falls back to legacy shared path.")
+    session_id: external_exports.string().optional().describe(
+      "Session ID for session-scoped state isolation. STRONGLY RECOMMENDED \u2014 prevents state leakage across parallel Droid sessions. When omitted, falls back to legacy shared path."
+    )
   },
   handler: async (args) => {
     const { mode, workingDirectory, session_id } = args;
@@ -21633,20 +21724,28 @@ var stateClearTool = {
       if (sessionId) {
         validateSessionId(sessionId);
         if (MODE_CONFIGS[mode]) {
-          const success = clearModeState(mode, root, sessionId);
+          const success = clearModeState(
+            mode,
+            root,
+            sessionId
+          );
           if (success) {
             return {
-              content: [{
-                type: "text",
-                text: `Successfully cleared state for mode: ${mode} in session: ${sessionId}`
-              }]
+              content: [
+                {
+                  type: "text",
+                  text: `Successfully cleared state for mode: ${mode} in session: ${sessionId}`
+                }
+              ]
             };
           } else {
             return {
-              content: [{
-                type: "text",
-                text: `Warning: Some files could not be removed for mode: ${mode} in session: ${sessionId}`
-              }]
+              content: [
+                {
+                  type: "text",
+                  text: `Warning: Some files could not be removed for mode: ${mode} in session: ${sessionId}`
+                }
+              ]
             };
           }
         }
@@ -21654,18 +21753,22 @@ var stateClearTool = {
         if ((0, import_fs8.existsSync)(statePath)) {
           (0, import_fs8.unlinkSync)(statePath);
           return {
-            content: [{
-              type: "text",
-              text: `Successfully cleared state for mode: ${mode} in session: ${sessionId}
+            content: [
+              {
+                type: "text",
+                text: `Successfully cleared state for mode: ${mode} in session: ${sessionId}
 Removed: ${statePath}`
-            }]
+              }
+            ]
           };
         } else {
           return {
-            content: [{
-              type: "text",
-              text: `No state found to clear for mode: ${mode} in session: ${sessionId}`
-            }]
+            content: [
+              {
+                type: "text",
+                text: `No state found to clear for mode: ${mode} in session: ${sessionId}`
+              }
+            ]
           };
         }
       }
@@ -21710,10 +21813,12 @@ Removed: ${statePath}`
       }
       if (clearedCount === 0 && errors.length === 0) {
         return {
-          content: [{
-            type: "text",
-            text: `No state found to clear for mode: ${mode}`
-          }]
+          content: [
+            {
+              type: "text",
+              text: `No state found to clear for mode: ${mode}`
+            }
+          ]
         };
       }
       let message = `Cleared state for mode: ${mode}
@@ -21723,17 +21828,21 @@ Removed: ${statePath}`
 - Errors: ${errors.join(", ")}`;
       }
       return {
-        content: [{
-          type: "text",
-          text: message
-        }]
+        content: [
+          {
+            type: "text",
+            text: message
+          }
+        ]
       };
     } catch (error2) {
       return {
-        content: [{
-          type: "text",
-          text: `Error clearing state for ${mode}: ${error2 instanceof Error ? error2.message : String(error2)}`
-        }]
+        content: [
+          {
+            type: "text",
+            text: `Error clearing state for ${mode}: ${error2 instanceof Error ? error2.message : String(error2)}`
+          }
+        ]
       };
     }
   }
@@ -21743,7 +21852,9 @@ var stateListActiveTool = {
   description: "List all currently active modes. Returns which modes have active state files.",
   schema: {
     workingDirectory: external_exports.string().optional().describe("Working directory (defaults to cwd)"),
-    session_id: external_exports.string().optional().describe("Session ID for session-scoped state isolation. STRONGLY RECOMMENDED \u2014 prevents state leakage across parallel Droid sessions. When omitted, falls back to legacy shared path.")
+    session_id: external_exports.string().optional().describe(
+      "Session ID for session-scoped state isolation. STRONGLY RECOMMENDED \u2014 prevents state leakage across parallel Droid sessions. When omitted, falls back to legacy shared path."
+    )
   },
   handler: async (args) => {
     const { workingDirectory, session_id } = args;
@@ -21754,7 +21865,11 @@ var stateListActiveTool = {
         validateSessionId(sessionId);
         const activeModes = [...getActiveModes(root, sessionId)];
         try {
-          const ralplanPath2 = resolveSessionStatePath("ralplan", sessionId, root);
+          const ralplanPath2 = resolveSessionStatePath(
+            "ralplan",
+            sessionId,
+            root
+          );
           if ((0, import_fs8.existsSync)(ralplanPath2)) {
             const content = (0, import_fs8.readFileSync)(ralplanPath2, "utf-8");
             const state = JSON.parse(content);
@@ -21766,22 +21881,26 @@ var stateListActiveTool = {
         }
         if (activeModes.length === 0) {
           return {
-            content: [{
-              type: "text",
-              text: `## Active Modes (session: ${sessionId})
+            content: [
+              {
+                type: "text",
+                text: `## Active Modes (session: ${sessionId})
 
 No modes are currently active in this session.`
-            }]
+              }
+            ]
           };
         }
         const modeList = activeModes.map((mode) => `- **${mode}**`).join("\n");
         return {
-          content: [{
-            type: "text",
-            text: `## Active Modes (session: ${sessionId}, ${activeModes.length})
+          content: [
+            {
+              type: "text",
+              text: `## Active Modes (session: ${sessionId}, ${activeModes.length})
 
 ${modeList}`
-          }]
+            }
+          ]
         };
       }
       const modeSessionMap = /* @__PURE__ */ new Map();
@@ -21807,7 +21926,11 @@ ${modeList}`
       for (const sid of sessionIds) {
         const sessionActiveModes = [...getActiveModes(root, sid)];
         try {
-          const ralplanSessionPath = resolveSessionStatePath("ralplan", sid, root);
+          const ralplanSessionPath = resolveSessionStatePath(
+            "ralplan",
+            sid,
+            root
+          );
           if ((0, import_fs8.existsSync)(ralplanSessionPath)) {
             const content = (0, import_fs8.readFileSync)(ralplanSessionPath, "utf-8");
             const state = JSON.parse(content);
@@ -21826,10 +21949,12 @@ ${modeList}`
       }
       if (modeSessionMap.size === 0) {
         return {
-          content: [{
-            type: "text",
-            text: "## Active Modes\n\nNo modes are currently active."
-          }]
+          content: [
+            {
+              type: "text",
+              text: "## Active Modes\n\nNo modes are currently active."
+            }
+          ]
         };
       }
       const lines = [`## Active Modes (${modeSessionMap.size})
@@ -21838,17 +21963,21 @@ ${modeList}`
         lines.push(`- **${mode}** (${sessions.join(", ")})`);
       }
       return {
-        content: [{
-          type: "text",
-          text: lines.join("\n")
-        }]
+        content: [
+          {
+            type: "text",
+            text: lines.join("\n")
+          }
+        ]
       };
     } catch (error2) {
       return {
-        content: [{
-          type: "text",
-          text: `Error listing active modes: ${error2 instanceof Error ? error2.message : String(error2)}`
-        }]
+        content: [
+          {
+            type: "text",
+            text: `Error listing active modes: ${error2 instanceof Error ? error2.message : String(error2)}`
+          }
+        ]
       };
     }
   }
@@ -21859,7 +21988,9 @@ var stateGetStatusTool = {
   schema: {
     mode: external_exports.enum(STATE_TOOL_MODES).optional().describe("Specific mode to check (omit for all modes)"),
     workingDirectory: external_exports.string().optional().describe("Working directory (defaults to cwd)"),
-    session_id: external_exports.string().optional().describe("Session ID for session-scoped state isolation. STRONGLY RECOMMENDED \u2014 prevents state leakage across parallel Droid sessions. When omitted, falls back to legacy shared path.")
+    session_id: external_exports.string().optional().describe(
+      "Session ID for session-scoped state isolation. STRONGLY RECOMMENDED \u2014 prevents state leakage across parallel Droid sessions. When omitted, falls back to legacy shared path."
+    )
   },
   handler: async (args) => {
     const { mode, workingDirectory, session_id } = args;
@@ -21887,7 +22018,8 @@ var stateGetStatusTool = {
               const content = (0, import_fs8.readFileSync)(statePath, "utf-8");
               const state = JSON.parse(content);
               statePreview = JSON.stringify(state, null, 2).slice(0, 500);
-              if (statePreview.length >= 500) statePreview += "\n...(truncated)";
+              if (statePreview.length >= 500)
+                statePreview += "\n...(truncated)";
             } catch {
               statePreview = "Error reading state file";
             }
@@ -21896,16 +22028,20 @@ var stateGetStatusTool = {
           lines2.push(`- **Active:** ${active ? "Yes" : "No"}`);
           lines2.push(`- **State Path:** ${statePath}`);
           lines2.push(`- **Exists:** ${(0, import_fs8.existsSync)(statePath) ? "Yes" : "No"}`);
-          lines2.push(`
+          lines2.push(
+            `
 ### State Preview
 \`\`\`json
 ${statePreview}
-\`\`\``);
+\`\`\``
+          );
           return {
-            content: [{
-              type: "text",
-              text: lines2.join("\n")
-            }]
+            content: [
+              {
+                type: "text",
+                text: lines2.join("\n")
+              }
+            ]
           };
         }
         const legacyPath = getStatePath(mode, root);
@@ -21946,10 +22082,12 @@ ${statePreview}
 No active sessions for this mode.`);
         }
         return {
-          content: [{
-            type: "text",
-            text: lines2.join("\n")
-          }]
+          content: [
+            {
+              type: "text",
+              text: lines2.join("\n")
+            }
+          ]
         };
       }
       const statuses = getAllModeStatuses(root, sessionId);
@@ -21957,7 +22095,9 @@ No active sessions for this mode.`);
 `] : ["## All Mode Statuses\n"];
       for (const status of statuses) {
         const icon = status.active ? "[ACTIVE]" : "[INACTIVE]";
-        lines.push(`${icon} **${status.mode}**: ${status.active ? "Active" : "Inactive"}`);
+        lines.push(
+          `${icon} **${status.mode}**: ${status.active ? "Active" : "Inactive"}`
+        );
         lines.push(`   Path: \`${status.stateFilePath}\``);
         if (!sessionId && MODE_CONFIGS[status.mode]) {
           const activeSessions = getActiveSessionsForMode(status.mode, root);
@@ -21977,20 +22117,26 @@ No active sessions for this mode.`);
         }
       }
       const ralplanIcon = ralplanActive ? "[ACTIVE]" : "[INACTIVE]";
-      lines.push(`${ralplanIcon} **ralplan**: ${ralplanActive ? "Active" : "Inactive"}`);
+      lines.push(
+        `${ralplanIcon} **ralplan**: ${ralplanActive ? "Active" : "Inactive"}`
+      );
       lines.push(`   Path: \`${ralplanPath}\``);
       return {
-        content: [{
-          type: "text",
-          text: lines.join("\n")
-        }]
+        content: [
+          {
+            type: "text",
+            text: lines.join("\n")
+          }
+        ]
       };
     } catch (error2) {
       return {
-        content: [{
-          type: "text",
-          text: `Error getting status: ${error2 instanceof Error ? error2.message : String(error2)}`
-        }]
+        content: [
+          {
+            type: "text",
+            text: `Error getting status: ${error2 instanceof Error ? error2.message : String(error2)}`
+          }
+        ]
       };
     }
   }
@@ -22253,12 +22399,19 @@ function formatFullNotepad(directory) {
 }
 
 // src/tools/notepad-tools.ts
-var SECTION_NAMES = ["all", "priority", "working", "manual"];
+var SECTION_NAMES = [
+  "all",
+  "priority",
+  "working",
+  "manual"
+];
 var notepadReadTool = {
   name: "notepad_read",
   description: "Read the notepad content. Can read the full notepad or a specific section (priority, working, manual).",
   schema: {
-    section: external_exports.enum(SECTION_NAMES).optional().describe('Section to read: "all" (default), "priority", "working", or "manual"'),
+    section: external_exports.enum(SECTION_NAMES).optional().describe(
+      'Section to read: "all" (default), "priority", "working", or "manual"'
+    ),
     workingDirectory: external_exports.string().optional().describe("Working directory (defaults to cwd)")
   },
   handler: async (args) => {
@@ -22269,21 +22422,25 @@ var notepadReadTool = {
         const content = formatFullNotepad(root);
         if (!content) {
           return {
-            content: [{
-              type: "text",
-              text: "Notepad does not exist. Use notepad_write_* tools to create it."
-            }]
+            content: [
+              {
+                type: "text",
+                text: "Notepad does not exist. Use notepad_write_* tools to create it."
+              }
+            ]
           };
         }
         return {
-          content: [{
-            type: "text",
-            text: `## Notepad
+          content: [
+            {
+              type: "text",
+              text: `## Notepad
 
 Path: ${getWorktreeNotepadPath(root)}
 
 ${content}`
-          }]
+            }
+          ]
         };
       }
       let sectionContent = null;
@@ -22304,28 +22461,34 @@ ${content}`
       }
       if (!sectionContent) {
         return {
-          content: [{
-            type: "text",
-            text: `## ${sectionTitle}
+          content: [
+            {
+              type: "text",
+              text: `## ${sectionTitle}
 
 (Empty or notepad does not exist)`
-          }]
+            }
+          ]
         };
       }
       return {
-        content: [{
-          type: "text",
-          text: `## ${sectionTitle}
+        content: [
+          {
+            type: "text",
+            text: `## ${sectionTitle}
 
 ${sectionContent}`
-        }]
+          }
+        ]
       };
     } catch (error2) {
       return {
-        content: [{
-          type: "text",
-          text: `Error reading notepad: ${error2 instanceof Error ? error2.message : String(error2)}`
-        }]
+        content: [
+          {
+            type: "text",
+            text: `Error reading notepad: ${error2 instanceof Error ? error2.message : String(error2)}`
+          }
+        ]
       };
     }
   }
@@ -22345,10 +22508,12 @@ var notepadWritePriorityTool = {
       const result = setPriorityContext(root, content);
       if (!result.success) {
         return {
-          content: [{
-            type: "text",
-            text: "Failed to write to Priority Context. Check file permissions."
-          }]
+          content: [
+            {
+              type: "text",
+              text: "Failed to write to Priority Context. Check file permissions."
+            }
+          ]
         };
       }
       let response = `Successfully wrote to Priority Context (${content.length} chars)`;
@@ -22358,17 +22523,21 @@ var notepadWritePriorityTool = {
 **Warning:** ${result.warning}`;
       }
       return {
-        content: [{
-          type: "text",
-          text: response
-        }]
+        content: [
+          {
+            type: "text",
+            text: response
+          }
+        ]
       };
     } catch (error2) {
       return {
-        content: [{
-          type: "text",
-          text: `Error writing to Priority Context: ${error2 instanceof Error ? error2.message : String(error2)}`
-        }]
+        content: [
+          {
+            type: "text",
+            text: `Error writing to Priority Context: ${error2 instanceof Error ? error2.message : String(error2)}`
+          }
+        ]
       };
     }
   }
@@ -22388,24 +22557,30 @@ var notepadWriteWorkingTool = {
       const success = addWorkingMemoryEntry(root, content);
       if (!success) {
         return {
-          content: [{
-            type: "text",
-            text: "Failed to add entry to Working Memory. Check file permissions."
-          }]
+          content: [
+            {
+              type: "text",
+              text: "Failed to add entry to Working Memory. Check file permissions."
+            }
+          ]
         };
       }
       return {
-        content: [{
-          type: "text",
-          text: `Successfully added entry to Working Memory (${content.length} chars)`
-        }]
+        content: [
+          {
+            type: "text",
+            text: `Successfully added entry to Working Memory (${content.length} chars)`
+          }
+        ]
       };
     } catch (error2) {
       return {
-        content: [{
-          type: "text",
-          text: `Error writing to Working Memory: ${error2 instanceof Error ? error2.message : String(error2)}`
-        }]
+        content: [
+          {
+            type: "text",
+            text: `Error writing to Working Memory: ${error2 instanceof Error ? error2.message : String(error2)}`
+          }
+        ]
       };
     }
   }
@@ -22425,24 +22600,30 @@ var notepadWriteManualTool = {
       const success = addManualEntry(root, content);
       if (!success) {
         return {
-          content: [{
-            type: "text",
-            text: "Failed to add entry to MANUAL section. Check file permissions."
-          }]
+          content: [
+            {
+              type: "text",
+              text: "Failed to add entry to MANUAL section. Check file permissions."
+            }
+          ]
         };
       }
       return {
-        content: [{
-          type: "text",
-          text: `Successfully added entry to MANUAL section (${content.length} chars)`
-        }]
+        content: [
+          {
+            type: "text",
+            text: `Successfully added entry to MANUAL section (${content.length} chars)`
+          }
+        ]
       };
     } catch (error2) {
       return {
-        content: [{
-          type: "text",
-          text: `Error writing to MANUAL: ${error2 instanceof Error ? error2.message : String(error2)}`
-        }]
+        content: [
+          {
+            type: "text",
+            text: `Error writing to MANUAL: ${error2 instanceof Error ? error2.message : String(error2)}`
+          }
+        ]
       };
     }
   }
@@ -22460,21 +22641,25 @@ var notepadPruneTool = {
       const root = validateWorkingDirectory(workingDirectory);
       const result = pruneOldEntries(root, daysOld);
       return {
-        content: [{
-          type: "text",
-          text: `## Prune Results
+        content: [
+          {
+            type: "text",
+            text: `## Prune Results
 
 - Pruned: ${result.pruned} entries
 - Remaining: ${result.remaining} entries
 - Threshold: ${daysOld} days`
-        }]
+          }
+        ]
       };
     } catch (error2) {
       return {
-        content: [{
-          type: "text",
-          text: `Error pruning notepad: ${error2 instanceof Error ? error2.message : String(error2)}`
-        }]
+        content: [
+          {
+            type: "text",
+            text: `Error pruning notepad: ${error2 instanceof Error ? error2.message : String(error2)}`
+          }
+        ]
       };
     }
   }
@@ -22492,10 +22677,12 @@ var notepadStatsTool = {
       const stats = getNotepadStats(root);
       if (!stats.exists) {
         return {
-          content: [{
-            type: "text",
-            text: "## Notepad Statistics\n\nNotepad does not exist yet."
-          }]
+          content: [
+            {
+              type: "text",
+              text: "## Notepad Statistics\n\nNotepad does not exist yet."
+            }
+          ]
         };
       }
       const lines = [
@@ -22507,17 +22694,21 @@ var notepadStatsTool = {
         `- **Path:** ${getWorktreeNotepadPath(root)}`
       ];
       return {
-        content: [{
-          type: "text",
-          text: lines.join("\n")
-        }]
+        content: [
+          {
+            type: "text",
+            text: lines.join("\n")
+          }
+        ]
       };
     } catch (error2) {
       return {
-        content: [{
-          type: "text",
-          text: `Error getting notepad stats: ${error2 instanceof Error ? error2.message : String(error2)}`
-        }]
+        content: [
+          {
+            type: "text",
+            text: `Error getting notepad stats: ${error2 instanceof Error ? error2.message : String(error2)}`
+          }
+        ]
       };
     }
   }
@@ -22743,7 +22934,15 @@ var projectMemoryReadTool = {
   name: "project_memory_read",
   description: "Read the project memory. Can read the full memory or a specific section.",
   schema: {
-    section: external_exports.enum(["all", "techStack", "build", "conventions", "structure", "notes", "directives"]).optional().describe("Section to read (default: all)"),
+    section: external_exports.enum([
+      "all",
+      "techStack",
+      "build",
+      "conventions",
+      "structure",
+      "notes",
+      "directives"
+    ]).optional().describe("Section to read (default: all)"),
     workingDirectory: external_exports.string().optional().describe("Working directory (defaults to cwd)")
   },
   handler: async (args) => {
@@ -22753,27 +22952,31 @@ var projectMemoryReadTool = {
       const memory = await loadProjectMemory(root);
       if (!memory) {
         return {
-          content: [{
-            type: "text",
-            text: `Project memory does not exist.
+          content: [
+            {
+              type: "text",
+              text: `Project memory does not exist.
 Expected path: ${getWorktreeProjectMemoryPath(root)}
 
 Run a session to auto-detect project environment, or use project_memory_write to create manually.`
-          }]
+            }
+          ]
         };
       }
       if (section === "all") {
         return {
-          content: [{
-            type: "text",
-            text: `## Project Memory
+          content: [
+            {
+              type: "text",
+              text: `## Project Memory
 
 Path: ${getWorktreeProjectMemoryPath(root)}
 
 \`\`\`json
 ${JSON.stringify(memory, null, 2)}
 \`\`\``
-          }]
+            }
+          ]
         };
       }
       const sectionMap = {
@@ -22787,21 +22990,25 @@ ${JSON.stringify(memory, null, 2)}
       const key = sectionMap[section];
       const data = key === "notes" ? memory.customNotes : key === "directives" ? memory.userDirectives : memory[key];
       return {
-        content: [{
-          type: "text",
-          text: `## Project Memory: ${section}
+        content: [
+          {
+            type: "text",
+            text: `## Project Memory: ${section}
 
 \`\`\`json
 ${JSON.stringify(data, null, 2)}
 \`\`\``
-        }]
+          }
+        ]
       };
     } catch (error2) {
       return {
-        content: [{
-          type: "text",
-          text: `Error reading project memory: ${error2 instanceof Error ? error2.message : String(error2)}`
-        }]
+        content: [
+          {
+            type: "text",
+            text: `Error reading project memory: ${error2 instanceof Error ? error2.message : String(error2)}`
+          }
+        ]
       };
     }
   }
@@ -22811,7 +23018,9 @@ var projectMemoryWriteTool = {
   description: "Write/update project memory. Can replace entirely or merge with existing memory.",
   schema: {
     memory: external_exports.record(external_exports.string(), external_exports.unknown()).describe("The memory object to write"),
-    merge: external_exports.boolean().optional().describe("If true, merge with existing memory (default: false = replace)"),
+    merge: external_exports.boolean().optional().describe(
+      "If true, merge with existing memory (default: false = replace)"
+    ),
     workingDirectory: external_exports.string().optional().describe("Working directory (defaults to cwd)")
   },
   handler: async (args) => {
@@ -22835,18 +23044,22 @@ var projectMemoryWriteTool = {
       if (!finalMemory.projectRoot) finalMemory.projectRoot = root;
       await saveProjectMemory(root, finalMemory);
       return {
-        content: [{
-          type: "text",
-          text: `Successfully ${merge2 ? "merged" : "wrote"} project memory.
+        content: [
+          {
+            type: "text",
+            text: `Successfully ${merge2 ? "merged" : "wrote"} project memory.
 Path: ${getWorktreeProjectMemoryPath(root)}`
-        }]
+          }
+        ]
       };
     } catch (error2) {
       return {
-        content: [{
-          type: "text",
-          text: `Error writing project memory: ${error2 instanceof Error ? error2.message : String(error2)}`
-        }]
+        content: [
+          {
+            type: "text",
+            text: `Error writing project memory: ${error2 instanceof Error ? error2.message : String(error2)}`
+          }
+        ]
       };
     }
   }
@@ -22855,7 +23068,9 @@ var projectMemoryAddNoteTool = {
   name: "project_memory_add_note",
   description: "Add a custom note to project memory. Notes are categorized and persisted across sessions.",
   schema: {
-    category: external_exports.string().max(50).describe('Note category (e.g., "build", "test", "deploy", "env", "architecture")'),
+    category: external_exports.string().max(50).describe(
+      'Note category (e.g., "build", "test", "deploy", "env", "architecture")'
+    ),
     content: external_exports.string().max(1e3).describe("Note content"),
     workingDirectory: external_exports.string().optional().describe("Working directory (defaults to cwd)")
   },
@@ -22866,28 +23081,34 @@ var projectMemoryAddNoteTool = {
       let memory = await loadProjectMemory(root);
       if (!memory) {
         return {
-          content: [{
-            type: "text",
-            text: "Project memory does not exist. Run a session first to auto-detect project environment."
-          }]
+          content: [
+            {
+              type: "text",
+              text: "Project memory does not exist. Run a session first to auto-detect project environment."
+            }
+          ]
         };
       }
       await addCustomNote(root, category, content);
       return {
-        content: [{
-          type: "text",
-          text: `Successfully added note to project memory.
+        content: [
+          {
+            type: "text",
+            text: `Successfully added note to project memory.
 
 - **Category:** ${category}
 - **Content:** ${content}`
-        }]
+          }
+        ]
       };
     } catch (error2) {
       return {
-        content: [{
-          type: "text",
-          text: `Error adding note: ${error2 instanceof Error ? error2.message : String(error2)}`
-        }]
+        content: [
+          {
+            type: "text",
+            text: `Error adding note: ${error2 instanceof Error ? error2.message : String(error2)}`
+          }
+        ]
       };
     }
   }
@@ -22902,16 +23123,23 @@ var projectMemoryAddDirectiveTool = {
     workingDirectory: external_exports.string().optional().describe("Working directory (defaults to cwd)")
   },
   handler: async (args) => {
-    const { directive, context = "", priority = "normal", workingDirectory } = args;
+    const {
+      directive,
+      context = "",
+      priority = "normal",
+      workingDirectory
+    } = args;
     try {
       const root = validateWorkingDirectory(workingDirectory);
       let memory = await loadProjectMemory(root);
       if (!memory) {
         return {
-          content: [{
-            type: "text",
-            text: "Project memory does not exist. Run a session first to auto-detect project environment."
-          }]
+          content: [
+            {
+              type: "text",
+              text: "Project memory does not exist. Run a session first to auto-detect project environment."
+            }
+          ]
         };
       }
       const newDirective = {
@@ -22924,21 +23152,25 @@ var projectMemoryAddDirectiveTool = {
       memory.userDirectives = addDirective(memory.userDirectives, newDirective);
       await saveProjectMemory(root, memory);
       return {
-        content: [{
-          type: "text",
-          text: `Successfully added directive to project memory.
+        content: [
+          {
+            type: "text",
+            text: `Successfully added directive to project memory.
 
 - **Directive:** ${directive}
 - **Priority:** ${priority}
 - **Context:** ${context || "(none)"}`
-        }]
+          }
+        ]
       };
     } catch (error2) {
       return {
-        content: [{
-          type: "text",
-          text: `Error adding directive: ${error2 instanceof Error ? error2.message : String(error2)}`
-        }]
+        content: [
+          {
+            type: "text",
+            text: `Error adding directive: ${error2 instanceof Error ? error2.message : String(error2)}`
+          }
+        ]
       };
     }
   }
@@ -22997,7 +23229,9 @@ function zodTypeToJsonSchema(zodType) {
   if (zodType instanceof external_exports.ZodString) {
     result.type = "string";
   } else if (zodType instanceof external_exports.ZodNumber) {
-    result.type = zodType._def?.checks?.some((c) => c.kind === "int") ? "integer" : "number";
+    result.type = zodType._def?.checks?.some(
+      (c) => c.kind === "int"
+    ) ? "integer" : "number";
   } else if (zodType instanceof external_exports.ZodBoolean) {
     result.type = "boolean";
   } else if (zodType instanceof external_exports.ZodArray) {

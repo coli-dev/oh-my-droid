@@ -1,4 +1,4 @@
-import type { StatuslineStdin } from '../hud/types.js';
+import type { StatuslineStdin } from "../hud/types.js";
 export interface ExtractedTokens {
     inputTokens: number;
     outputTokens: number;

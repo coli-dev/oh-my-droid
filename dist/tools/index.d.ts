@@ -4,10 +4,10 @@
  * This module exports all custom tools and provides helpers
  * for creating MCP servers with the Droid Agent SDK.
  */
-import { z } from 'zod';
-export { lspTools } from './lsp-tools.js';
-export { astTools } from './ast-tools.js';
-export { pythonReplTool } from './python-repl/index.js';
+import { z } from "zod";
+export { lspTools } from "./lsp-tools.js";
+export { astTools } from "./ast-tools.js";
+export { pythonReplTool } from "./python-repl/index.js";
 /**
  * Generic tool definition type
  */
@@ -17,7 +17,7 @@ export interface GenericToolDefinition {
     schema: z.ZodRawShape;
     handler: (args: unknown) => Promise<{
         content: Array<{
-            type: 'text';
+            type: "text";
             text: string;
         }>;
     }>;
@@ -29,7 +29,7 @@ export declare const allCustomTools: GenericToolDefinition[];
 /**
  * Get tools by category
  */
-export declare function getToolsByCategory(category: 'lsp' | 'ast' | 'all'): GenericToolDefinition[];
+export declare function getToolsByCategory(category: "lsp" | "ast" | "all"): GenericToolDefinition[];
 /**
  * Create a Zod schema object from a tool's schema definition
  */
@@ -41,7 +41,7 @@ export interface SdkToolFormat {
     name: string;
     description: string;
     inputSchema: {
-        type: 'object';
+        type: "object";
         properties: Record<string, unknown>;
         required: string[];
     };

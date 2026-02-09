@@ -1,15 +1,20 @@
 // src/team/capabilities.ts
 /** Default capabilities by worker backend */
 const DEFAULT_CAPABILITIES = {
-    'droid-native': ['code-edit', 'testing', 'general'],
-    'mcp-codex': ['code-review', 'security-review', 'architecture', 'refactoring'],
-    'mcp-gemini': ['ui-design', 'documentation', 'research', 'code-edit'],
+    "droid-native": ["code-edit", "testing", "general"],
+    "mcp-codex": [
+        "code-review",
+        "security-review",
+        "architecture",
+        "refactoring",
+    ],
+    "mcp-gemini": ["ui-design", "documentation", "research", "code-edit"],
 };
 /**
  * Get default capabilities for a worker backend.
  */
 export function getDefaultCapabilities(backend) {
-    return [...(DEFAULT_CAPABILITIES[backend] || ['general'])];
+    return [...(DEFAULT_CAPABILITIES[backend] || ["general"])];
 }
 /**
  * Score a worker's fitness for a task based on capabilities.
@@ -30,7 +35,7 @@ export function scoreWorkerFitness(worker, requiredCapabilities) {
         if (workerCaps.has(req)) {
             score += 1.0;
         }
-        else if (workerCaps.has('general')) {
+        else if (workerCaps.has("general")) {
             score += 0.5;
         }
     }
@@ -43,9 +48,12 @@ export function scoreWorkerFitness(worker, requiredCapabilities) {
  */
 export function rankWorkersForTask(workers, requiredCapabilities) {
     const scored = workers
-        .map(w => ({ worker: w, score: scoreWorkerFitness(w, requiredCapabilities) }))
-        .filter(s => s.score > 0)
+        .map((w) => ({
+        worker: w,
+        score: scoreWorkerFitness(w, requiredCapabilities),
+    }))
+        .filter((s) => s.score > 0)
         .sort((a, b) => b.score - a.score);
-    return scored.map(s => s.worker);
+    return scored.map((s) => s.worker);
 }
 //# sourceMappingURL=capabilities.js.map

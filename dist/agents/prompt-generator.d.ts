@@ -4,8 +4,8 @@
  * Generates orchestrator prompts dynamically from agent metadata.
  * Adding a new agent to definitions.ts automatically includes it in the generated prompt.
  */
-import type { AgentConfig } from './types.js';
-import { buildToolSelectionSection } from './prompt-sections/index.js';
+import type { AgentConfig } from "./types.js";
+import { buildToolSelectionSection } from "./prompt-sections/index.js";
 /**
  * Options for controlling what sections are included in generated prompt
  */

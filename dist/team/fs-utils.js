@@ -6,20 +6,23 @@
  * All directory creates default to 0o700 (owner-only access).
  * Atomic writes use PID+timestamp temp files to prevent collisions.
  */
-import { writeFileSync, existsSync, mkdirSync, renameSync, openSync, writeSync, closeSync, realpathSync, constants } from 'fs';
-import { dirname, resolve, relative, basename } from 'path';
+import { writeFileSync, existsSync, mkdirSync, renameSync, openSync, writeSync, closeSync, realpathSync, constants, } from "fs";
+import { dirname, resolve, relative, basename } from "path";
 /** Atomic write: write JSON to temp file with permissions, then rename (prevents corruption on crash) */
 export function atomicWriteJson(filePath, data, mode = 0o600) {
     const dir = dirname(filePath);
     if (!existsSync(dir))
         mkdirSync(dir, { recursive: true, mode: 0o700 });
     const tmpPath = `${filePath}.tmp.${process.pid}.${Date.now()}`;
-    writeFileSync(tmpPath, JSON.stringify(data, null, 2) + '\n', { encoding: 'utf-8', mode });
+    writeFileSync(tmpPath, JSON.stringify(data, null, 2) + "\n", {
+        encoding: "utf-8",
+        mode,
+    });
     renameSync(tmpPath, filePath);
 }
 /** Write file with explicit permission mode */
 export function writeFileWithMode(filePath, data, mode = 0o600) {
-    writeFileSync(filePath, data, { encoding: 'utf-8', mode });
+    writeFileSync(filePath, data, { encoding: "utf-8", mode });
 }
 /** Append to file with explicit permission mode. Creates with mode if file doesn't exist.
  *  Uses O_WRONLY|O_APPEND|O_CREAT to atomically create-or-append in a single syscall,
@@ -27,7 +30,7 @@ export function writeFileWithMode(filePath, data, mode = 0o600) {
 export function appendFileWithMode(filePath, data, mode = 0o600) {
     const fd = openSync(filePath, constants.O_WRONLY | constants.O_APPEND | constants.O_CREAT, mode);
     try {
-        writeSync(fd, data, null, 'utf-8');
+        writeSync(fd, data, null, "utf-8");
     }
     finally {
         closeSync(fd);
@@ -63,7 +66,7 @@ export function validateResolvedPath(resolvedPath, expectedBase) {
     const absResolved = safeRealpath(resolvedPath);
     const absBase = safeRealpath(expectedBase);
     const rel = relative(absBase, absResolved);
-    if (rel.startsWith('..') || resolve(absBase, rel) !== absResolved) {
+    if (rel.startsWith("..") || resolve(absBase, rel) !== absResolved) {
         throw new Error(`Path traversal detected: "${resolvedPath}" escapes base "${expectedBase}"`);
     }
 }

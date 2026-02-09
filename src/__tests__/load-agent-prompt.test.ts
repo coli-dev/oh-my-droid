@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { loadAgentPrompt } from "../droids/utils.js";
+import { loadAgentPrompt } from "../agents/utils.js";
 
 describe("loadAgentPrompt", () => {
   describe("valid agent names", () => {

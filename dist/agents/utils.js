@@ -6,9 +6,9 @@
  *
  * Ported from oh-my-opencode's agent utils.
  */
-import { readFileSync } from 'fs';
-import { join, dirname, resolve, relative, isAbsolute } from 'path';
-import { fileURLToPath } from 'url';
+import { readFileSync } from "fs";
+import { join, dirname, resolve, relative, isAbsolute } from "path";
+import { fileURLToPath } from "url";
 // ============================================================
 // DYNAMIC PROMPT LOADING
 // ============================================================
@@ -19,7 +19,7 @@ function getPackageDir() {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = dirname(__filename);
     // From src/droids/ go up to package root
-    return join(__dirname, '..', '..');
+    return join(__dirname, "..", "..");
 }
 /**
  * Load an agent prompt from /droids/{agentName}.md
@@ -34,25 +34,25 @@ export function loadAgentPrompt(agentName) {
         throw new Error(`Invalid agent name: contains disallowed characters`);
     }
     try {
-        const agentsDir = join(getPackageDir(), 'droids');
+        const agentsDir = join(getPackageDir(), "droids");
         const agentPath = join(agentsDir, `${agentName}.md`);
         // Security: Verify resolved path is within the droids directory
         const resolvedPath = resolve(agentPath);
         const resolvedAgentsDir = resolve(agentsDir);
         const rel = relative(resolvedAgentsDir, resolvedPath);
-        if (rel.startsWith('..') || isAbsolute(rel)) {
+        if (rel.startsWith("..") || isAbsolute(rel)) {
             throw new Error(`Invalid agent name: path traversal detected`);
         }
-        const content = readFileSync(agentPath, 'utf-8');
+        const content = readFileSync(agentPath, "utf-8");
         // Extract content after YAML frontmatter (---\n...\n---\n)
         const match = content.match(/^---[\s\S]*?---\s*([\s\S]*)$/);
         return match ? match[1].trim() : content.trim();
     }
     catch (error) {
         // Don't leak internal paths in error messages
-        const message = error instanceof Error && error.message.includes('Invalid agent name')
+        const message = error instanceof Error && error.message.includes("Invalid agent name")
             ? error.message
-            : 'Agent prompt file not found';
+            : "Agent prompt file not found";
         console.warn(`[loadAgentPrompt] ${message}`);
         return `Agent: ${agentName}\n\nPrompt unavailable.`;
     }
@@ -76,10 +76,10 @@ export function mergeAgentConfig(base, override) {
     const merged = {
         ...base,
         ...(rest.model && { model: rest.model }),
-        ...(rest.enabled !== undefined && { enabled: rest.enabled })
+        ...(rest.enabled !== undefined && { enabled: rest.enabled }),
     };
     if (prompt_append && merged.prompt) {
-        merged.prompt = merged.prompt + '\n\n' + prompt_append;
+        merged.prompt = merged.prompt + "\n\n" + prompt_append;
     }
     return merged;
 }
@@ -88,24 +88,24 @@ export function mergeAgentConfig(base, override) {
  */
 export function buildDelegationTable(availableAgents) {
     if (availableAgents.length === 0) {
-        return '';
+        return "";
     }
     const rows = availableAgents
-        .filter(a => a.metadata.triggers.length > 0)
-        .map(a => {
+        .filter((a) => a.metadata.triggers.length > 0)
+        .map((a) => {
         const triggers = a.metadata.triggers
-            .map(t => `${t.domain}: ${t.trigger}`)
-            .join('; ');
+            .map((t) => `${t.domain}: ${t.trigger}`)
+            .join("; ");
         return `| ${a.metadata.promptAlias || a.name} | ${a.metadata.cost} | ${triggers} |`;
     });
     if (rows.length === 0) {
-        return '';
+        return "";
     }
     return `### Agent Delegation Table
 
 | Agent | Cost | When to Use |
 |-------|------|-------------|
-${rows.join('\n')}`;
+${rows.join("\n")}`;
 }
 /**
  * Build use/avoid section for an agent
@@ -114,13 +114,13 @@ export function buildUseAvoidSection(metadata) {
     const sections = [];
     if (metadata.useWhen && metadata.useWhen.length > 0) {
         sections.push(`**USE when:**
-${metadata.useWhen.map(u => `- ${u}`).join('\n')}`);
+${metadata.useWhen.map((u) => `- ${u}`).join("\n")}`);
     }
     if (metadata.avoidWhen && metadata.avoidWhen.length > 0) {
         sections.push(`**AVOID when:**
-${metadata.avoidWhen.map(a => `- ${a}`).join('\n')}`);
+${metadata.avoidWhen.map((a) => `- ${a}`).join("\n")}`);
     }
-    return sections.join('\n\n');
+    return sections.join("\n\n");
 }
 /**
  * Create environment context for droids
@@ -129,10 +129,10 @@ export function createEnvContext() {
     const now = new Date();
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const locale = Intl.DateTimeFormat().resolvedOptions().locale;
-    const timeStr = now.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
+    const timeStr = now.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
         hour12: true,
     });
     return `
@@ -151,7 +151,7 @@ export function getAvailableAgents(droids) {
         .map(([name, config]) => ({
         name,
         description: config.description,
-        metadata: config.metadata
+        metadata: config.metadata,
     }));
 }
 /**
@@ -165,11 +165,11 @@ export function buildKeyTriggersSection(availableAgents) {
         }
     }
     if (triggers.length === 0) {
-        return '';
+        return "";
     }
     return `### Key Triggers (CHECK BEFORE ACTING)
 
-${triggers.join('\n')}`;
+${triggers.join("\n")}`;
 }
 /**
  * Validate agent configuration
@@ -177,13 +177,13 @@ ${triggers.join('\n')}`;
 export function validateAgentConfig(config) {
     const errors = [];
     if (!config.name) {
-        errors.push('Agent name is required');
+        errors.push("Agent name is required");
     }
     if (!config.description) {
-        errors.push('Agent description is required');
+        errors.push("Agent description is required");
     }
     if (!config.prompt) {
-        errors.push('Agent prompt is required');
+        errors.push("Agent prompt is required");
     }
     // Note: tools is now optional - droids get all tools by default if omitted
     return errors;
@@ -197,16 +197,16 @@ export function parseDisallowedTools(agentName) {
         return undefined;
     }
     try {
-        const agentsDir = join(getPackageDir(), 'droids');
+        const agentsDir = join(getPackageDir(), "droids");
         const agentPath = join(agentsDir, `${agentName}.md`);
         // Security: Verify resolved path is within the droids directory
         const resolvedPath = resolve(agentPath);
         const resolvedAgentsDir = resolve(agentsDir);
         const rel = relative(resolvedAgentsDir, resolvedPath);
-        if (rel.startsWith('..') || isAbsolute(rel)) {
+        if (rel.startsWith("..") || isAbsolute(rel)) {
             return undefined;
         }
-        const content = readFileSync(agentPath, 'utf-8');
+        const content = readFileSync(agentPath, "utf-8");
         // Extract frontmatter
         const match = content.match(/^---[\s\S]*?---/);
         if (!match)
@@ -216,7 +216,10 @@ export function parseDisallowedTools(agentName) {
         if (!disallowedMatch)
             return undefined;
         // Parse comma-separated list
-        return disallowedMatch[1].split(',').map(t => t.trim()).filter(Boolean);
+        return disallowedMatch[1]
+            .split(",")
+            .map((t) => t.trim())
+            .filter(Boolean);
     }
     catch {
         return undefined;
@@ -231,10 +234,10 @@ export function deepMerge(target, source) {
         const sourceValue = source[key];
         const targetValue = target[key];
         if (sourceValue &&
-            typeof sourceValue === 'object' &&
+            typeof sourceValue === "object" &&
             !Array.isArray(sourceValue) &&
             targetValue &&
-            typeof targetValue === 'object' &&
+            typeof targetValue === "object" &&
             !Array.isArray(targetValue)) {
             result[key] = deepMerge(targetValue, sourceValue);
         }

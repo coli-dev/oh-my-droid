@@ -8,31 +8,31 @@
  * Check if a model ID is a GPT model
  */
 export function isGptModel(modelId) {
-    return modelId.toLowerCase().includes('gpt');
+    return modelId.toLowerCase().includes("gpt");
 }
 /**
  * Check if a model ID is a Droid model
  */
 export function isDroidModel(modelId) {
-    return modelId.toLowerCase().includes('droid');
+    return modelId.toLowerCase().includes("droid");
 }
 /**
  * Get default model for a category
  */
 export function getDefaultModelForCategory(category) {
     switch (category) {
-        case 'exploration':
-            return 'haiku'; // Fast, cheap
-        case 'specialist':
-            return 'sonnet'; // Balanced
-        case 'advisor':
-            return 'opus'; // High quality reasoning
-        case 'utility':
-            return 'haiku'; // Fast, cheap
-        case 'orchestration':
-            return 'sonnet'; // Balanced
+        case "exploration":
+            return "haiku"; // Fast, cheap
+        case "specialist":
+            return "sonnet"; // Balanced
+        case "advisor":
+            return "opus"; // High quality reasoning
+        case "utility":
+            return "haiku"; // Fast, cheap
+        case "orchestration":
+            return "sonnet"; // Balanced
         default:
-            return 'sonnet';
+            return "sonnet";
     }
 }
 //# sourceMappingURL=types.js.map

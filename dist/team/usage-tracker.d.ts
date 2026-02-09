@@ -1,7 +1,7 @@
 export interface TaskUsageRecord {
     taskId: string;
     workerName: string;
-    provider: 'codex' | 'gemini';
+    provider: "codex" | "gemini";
     model: string;
     startedAt: string;
     completedAt: string;
@@ -11,7 +11,7 @@ export interface TaskUsageRecord {
 }
 export interface WorkerUsageSummary {
     workerName: string;
-    provider: 'codex' | 'gemini';
+    provider: "codex" | "gemini";
     model: string;
     taskCount: number;
     totalWallClockMs: number;

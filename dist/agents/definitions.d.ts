@@ -7,22 +7,22 @@
  * 3. getAgentDefinitions() for agent registry
  * 4. omdSystemPrompt for the main orchestrator
  */
-import type { AgentConfig, ModelType } from '../shared/types.js';
-import { loadAgentPrompt } from './utils.js';
-export { architectAgent } from './architect.js';
-export { designerAgent } from './designer.js';
-export { writerAgent } from './writer.js';
-export { visionAgent } from './vision.js';
-export { criticAgent } from './critic.js';
-export { analystAgent } from './analyst.js';
-export { executorAgent } from './executor.js';
-export { plannerAgent } from './planner.js';
-export { deepExecutorAgent } from './deep-executor.js';
-export { qaTesterAgent } from './qa-tester.js';
-export { scientistAgent } from './scientist.js';
-export { exploreAgent } from './explore.js';
+import type { AgentConfig, ModelType } from "../shared/types.js";
+import { loadAgentPrompt } from "./utils.js";
+export { architectAgent } from "./architect.js";
+export { designerAgent } from "./designer.js";
+export { writerAgent } from "./writer.js";
+export { visionAgent } from "./vision.js";
+export { criticAgent } from "./critic.js";
+export { analystAgent } from "./analyst.js";
+export { executorAgent } from "./executor.js";
+export { plannerAgent } from "./planner.js";
+export { deepExecutorAgent } from "./deep-executor.js";
+export { qaTesterAgent } from "./qa-tester.js";
+export { scientistAgent } from "./scientist.js";
+export { exploreAgent } from "./explore.js";
 /** @deprecated Use dependency-expert agent instead */
-export { researcherAgent } from './researcher.js';
+export { researcherAgent } from "./researcher.js";
 export { loadAgentPrompt };
 /**
  * Debugger Agent - Root-Cause Analysis & Debugging (Sonnet)

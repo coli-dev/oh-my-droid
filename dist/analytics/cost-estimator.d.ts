@@ -1,4 +1,4 @@
-import { CostBreakdown } from './types.js';
+import { CostBreakdown } from "./types.js";
 export interface CostInput {
     modelName: string;
     inputTokens: number;
@@ -23,7 +23,7 @@ export declare function calculateCostAsync(input: CostInput): Promise<CostBreakd
 export declare function batchCalculateCost(inputs: CostInput[]): Promise<CostBreakdown[]>;
 export declare function normalizeModelName(modelName: string): string;
 export declare function formatCost(cost: number): string;
-export declare function getCostColor(cost: number): 'green' | 'yellow' | 'red';
+export declare function getCostColor(cost: number): "green" | "yellow" | "red";
 export declare function estimateDailyCost(tokensPerHour: number, modelName: string): number;
 export declare function estimateMonthlyCost(tokensPerHour: number, modelName: string): number;
 //# sourceMappingURL=cost-estimator.d.ts.map

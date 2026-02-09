@@ -12,24 +12,30 @@
 export function validateDelegationPrompt(prompt) {
     const warnings = [];
     // Count non-empty lines
-    const lines = prompt.split('\n').filter((l) => l.trim()).length;
+    const lines = prompt.split("\n").filter((l) => l.trim()).length;
     // Check minimum line count
     if (lines < 30) {
         warnings.push(`Delegation prompt is only ${lines} lines. Consider adding more detail (recommended: 30+ lines).`);
     }
     // Check for required sections
-    const requiredSections = ['TASK', 'EXPECTED OUTCOME', 'MUST DO', 'MUST NOT DO'];
+    const requiredSections = [
+        "TASK",
+        "EXPECTED OUTCOME",
+        "MUST DO",
+        "MUST NOT DO",
+    ];
     for (const section of requiredSections) {
-        if (!prompt.includes(`## ${section}`) && !prompt.includes(`### ${section}`)) {
+        if (!prompt.includes(`## ${section}`) &&
+            !prompt.includes(`### ${section}`)) {
             warnings.push(`Missing recommended section: ${section}`);
         }
     }
     // Check for common issues
     if (prompt.length < 200) {
-        warnings.push('Delegation prompt is very short. Consider adding more context and details.');
+        warnings.push("Delegation prompt is very short. Consider adding more context and details.");
     }
-    if (!prompt.includes('Task') && !prompt.includes('task')) {
-        warnings.push('Delegation prompt should clearly describe the task.');
+    if (!prompt.includes("Task") && !prompt.includes("task")) {
+        warnings.push("Delegation prompt should clearly describe the task.");
     }
     return {
         valid: warnings.length === 0,
@@ -44,13 +50,13 @@ export function validateDelegationPrompt(prompt) {
  */
 export function hasAllSections(prompt) {
     const sections = [
-        'TASK',
-        'EXPECTED OUTCOME',
-        'CONTEXT',
-        'MUST DO',
-        'MUST NOT DO',
-        'REQUIRED SKILLS',
-        'REQUIRED TOOLS',
+        "TASK",
+        "EXPECTED OUTCOME",
+        "CONTEXT",
+        "MUST DO",
+        "MUST NOT DO",
+        "REQUIRED SKILLS",
+        "REQUIRED TOOLS",
     ];
     return sections.every((section) => prompt.includes(`## ${section}`) || prompt.includes(`### ${section}`));
 }
@@ -62,13 +68,13 @@ export function hasAllSections(prompt) {
  */
 export function getMissingSections(prompt) {
     const sections = [
-        'TASK',
-        'EXPECTED OUTCOME',
-        'CONTEXT',
-        'MUST DO',
-        'MUST NOT DO',
-        'REQUIRED SKILLS',
-        'REQUIRED TOOLS',
+        "TASK",
+        "EXPECTED OUTCOME",
+        "CONTEXT",
+        "MUST DO",
+        "MUST NOT DO",
+        "REQUIRED SKILLS",
+        "REQUIRED TOOLS",
     ];
     return sections.filter((section) => !prompt.includes(`## ${section}`) && !prompt.includes(`### ${section}`));
 }

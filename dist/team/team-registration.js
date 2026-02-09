@@ -5,24 +5,24 @@
  * Dual-path registration: config.json (if tolerated) or shadow registry (fallback).
  * Auto-detects strategy via cached probe result.
  */
-import { readFileSync, existsSync } from 'fs';
-import { join } from 'path';
-import { homedir } from 'os';
-import { sanitizeName } from './tmux-session.js';
-import { atomicWriteJson, validateResolvedPath } from './fs-utils.js';
+import { readFileSync, existsSync } from "fs";
+import { join } from "path";
+import { homedir } from "os";
+import { sanitizeName } from "./tmux-session.js";
+import { atomicWriteJson, validateResolvedPath } from "./fs-utils.js";
 // --- Config paths ---
 function configPath(teamName) {
-    const result = join(homedir(), '.factory', 'teams', sanitizeName(teamName), 'config.json');
-    validateResolvedPath(result, join(homedir(), '.factory', 'teams'));
+    const result = join(homedir(), ".factory", "teams", sanitizeName(teamName), "config.json");
+    validateResolvedPath(result, join(homedir(), ".factory", "teams"));
     return result;
 }
 function shadowRegistryPath(workingDirectory) {
-    const result = join(workingDirectory, '.omd', 'state', 'team-mcp-workers.json');
-    validateResolvedPath(result, join(workingDirectory, '.omd', 'state'));
+    const result = join(workingDirectory, ".omd", "state", "team-mcp-workers.json");
+    validateResolvedPath(result, join(workingDirectory, ".omd", "state"));
     return result;
 }
 function probeResultPath(workingDirectory) {
-    return join(workingDirectory, '.omd', 'state', 'config-probe-result.json');
+    return join(workingDirectory, ".omd", "state", "config-probe-result.json");
 }
 // --- Probe result cache ---
 /** Read cached probe result. Returns null if not probed yet. */
@@ -31,7 +31,7 @@ export function readProbeResult(workingDirectory) {
     if (!existsSync(filePath))
         return null;
     try {
-        const raw = readFileSync(filePath, 'utf-8');
+        const raw = readFileSync(filePath, "utf-8");
         return JSON.parse(raw);
     }
     catch {
@@ -49,10 +49,10 @@ export function writeProbeResult(workingDirectory, result) {
 export function getRegistrationStrategy(workingDirectory) {
     const probe = readProbeResult(workingDirectory);
     if (!probe)
-        return 'shadow'; // Default to safe path if not probed
-    if (probe.probeResult === 'pass')
-        return 'config';
-    return 'shadow'; // 'fail' and 'partial' both use shadow
+        return "shadow"; // Default to safe path if not probed
+    if (probe.probeResult === "pass")
+        return "config";
+    return "shadow"; // 'fail' and 'partial' both use shadow
 }
 // --- Registration (dual-path) ---
 /**
@@ -73,11 +73,11 @@ export function registerMcpWorker(teamName, workerName, provider, model, tmuxTar
         joinedAt: Date.now(),
         tmuxPaneId: tmuxTarget,
         cwd,
-        backendType: 'tmux',
+        backendType: "tmux",
         subscriptions: [],
     };
     const strategy = getRegistrationStrategy(workingDirectory);
-    if (strategy === 'config') {
+    if (strategy === "config") {
         registerInConfig(teamName, member);
     }
     // Always write to shadow registry (as backup or primary)
@@ -88,9 +88,11 @@ function registerInConfig(teamName, member) {
     if (!existsSync(filePath))
         return; // No config.json to write to
     try {
-        const raw = readFileSync(filePath, 'utf-8');
+        const raw = readFileSync(filePath, "utf-8");
         const config = JSON.parse(raw);
-        const members = Array.isArray(config.members) ? config.members : [];
+        const members = Array.isArray(config.members)
+            ? config.members
+            : [];
         // Remove existing entry for this worker if present
         const filtered = members.filter((m) => m.name !== member.name);
         filtered.push(member);
@@ -106,7 +108,7 @@ function registerInShadow(workingDirectory, teamName, member) {
     let registry;
     if (existsSync(filePath)) {
         try {
-            registry = JSON.parse(readFileSync(filePath, 'utf-8'));
+            registry = JSON.parse(readFileSync(filePath, "utf-8"));
         }
         catch {
             registry = { teamName, workers: [] };
@@ -116,7 +118,7 @@ function registerInShadow(workingDirectory, teamName, member) {
         registry = { teamName, workers: [] };
     }
     // Remove existing entry for this worker
-    registry.workers = (registry.workers || []).filter(w => w.name !== member.name);
+    registry.workers = (registry.workers || []).filter((w) => w.name !== member.name);
     registry.workers.push(member);
     registry.teamName = teamName;
     atomicWriteJson(filePath, registry);
@@ -130,28 +132,34 @@ export function unregisterMcpWorker(teamName, workerName, workingDirectory) {
     const configFile = configPath(teamName);
     if (existsSync(configFile)) {
         try {
-            const raw = readFileSync(configFile, 'utf-8');
+            const raw = readFileSync(configFile, "utf-8");
             const config = JSON.parse(raw);
-            const members = Array.isArray(config.members) ? config.members : [];
-            config.members = members.filter(m => m.name !== workerName);
+            const members = Array.isArray(config.members)
+                ? config.members
+                : [];
+            config.members = members.filter((m) => m.name !== workerName);
             atomicWriteJson(configFile, config);
         }
-        catch { /* ignore */ }
+        catch {
+            /* ignore */
+        }
     }
     // Remove from shadow registry
     const shadowFile = shadowRegistryPath(workingDirectory);
     if (existsSync(shadowFile)) {
         try {
-            const registry = JSON.parse(readFileSync(shadowFile, 'utf-8'));
-            registry.workers = (registry.workers || []).filter(w => w.name !== workerName);
+            const registry = JSON.parse(readFileSync(shadowFile, "utf-8"));
+            registry.workers = (registry.workers || []).filter((w) => w.name !== workerName);
             atomicWriteJson(shadowFile, registry);
         }
-        catch { /* ignore */ }
+        catch {
+            /* ignore */
+        }
     }
 }
 /** Check if a member entry is an MCP worker */
 export function isMcpWorker(member) {
-    return member.backendType === 'tmux';
+    return member.backendType === "tmux";
 }
 /** List all MCP workers for a team (reads from both config.json and shadow registry) */
 export function listMcpWorkers(teamName, workingDirectory) {
@@ -160,27 +168,33 @@ export function listMcpWorkers(teamName, workingDirectory) {
     const configFile = configPath(teamName);
     if (existsSync(configFile)) {
         try {
-            const raw = readFileSync(configFile, 'utf-8');
+            const raw = readFileSync(configFile, "utf-8");
             const config = JSON.parse(raw);
-            const members = Array.isArray(config.members) ? config.members : [];
+            const members = Array.isArray(config.members)
+                ? config.members
+                : [];
             for (const m of members) {
                 if (isMcpWorker(m)) {
                     workers.set(m.name, m);
                 }
             }
         }
-        catch { /* ignore */ }
+        catch {
+            /* ignore */
+        }
     }
     // Read from shadow registry (overrides config.json entries)
     const shadowFile = shadowRegistryPath(workingDirectory);
     if (existsSync(shadowFile)) {
         try {
-            const registry = JSON.parse(readFileSync(shadowFile, 'utf-8'));
-            for (const w of (registry.workers || [])) {
+            const registry = JSON.parse(readFileSync(shadowFile, "utf-8"));
+            for (const w of registry.workers || []) {
                 workers.set(w.name, w);
             }
         }
-        catch { /* ignore */ }
+        catch {
+            /* ignore */
+        }
     }
     return Array.from(workers.values());
 }

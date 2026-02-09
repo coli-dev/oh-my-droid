@@ -6,7 +6,7 @@
  *
  * Ported from oh-my-opencode's architect agent.
  */
-import type { AgentConfig, AgentPromptMetadata } from './types.js';
+import type { AgentConfig, AgentPromptMetadata } from "./types.js";
 export declare const ARCHITECT_PROMPT_METADATA: AgentPromptMetadata;
 export declare const architectAgent: AgentConfig;
 //# sourceMappingURL=architect.d.ts.map

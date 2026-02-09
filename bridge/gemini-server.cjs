@@ -13727,10 +13727,18 @@ function detectGeminiCli(useCache = true) {
     const path = (0, import_child_process.execSync)(command, { encoding: "utf-8", timeout: 5e3 }).trim();
     let version2;
     try {
-      version2 = (0, import_child_process.execSync)("gemini --version", { encoding: "utf-8", timeout: 5e3 }).trim();
+      version2 = (0, import_child_process.execSync)("gemini --version", {
+        encoding: "utf-8",
+        timeout: 5e3
+      }).trim();
     } catch {
     }
-    const result = { available: true, path, version: version2, installHint };
+    const result = {
+      available: true,
+      path,
+      version: version2,
+      installHint
+    };
     geminiCache = result;
     return result;
   } catch {
@@ -13767,7 +13775,7 @@ function getWorktreeRoot(cwd) {
   }
 }
 
-// src/droids/utils.ts
+// src/agents/utils.ts
 var import_fs2 = require("fs");
 var import_path2 = require("path");
 var import_url = require("url");
@@ -13841,7 +13849,9 @@ function resolveSystemPrompt(systemPrompt, agentRole) {
     const role = agentRole.trim();
     const prompt = loadAgentPrompt(role);
     if (prompt.includes("Prompt unavailable")) {
-      console.warn(`[prompt-injection] Agent role "${role}" prompt not found, skipping injection`);
+      console.warn(
+        `[prompt-injection] Agent role "${role}" prompt not found, skipping injection`
+      );
       return void 0;
     }
     return prompt;
@@ -13851,9 +13861,11 @@ function resolveSystemPrompt(systemPrompt, agentRole) {
 function buildPromptWithSystemContext(userPrompt, fileContext, systemPrompt) {
   const parts = [];
   if (systemPrompt) {
-    parts.push(`<system-instructions>
+    parts.push(
+      `<system-instructions>
 ${systemPrompt}
-</system-instructions>`);
+</system-instructions>`
+    );
   }
   if (fileContext) {
     parts.push(fileContext);
@@ -14221,7 +14233,9 @@ ${options.fullPrompt}`;
     (0, import_fs4.writeFileSync)(filePath, content, "utf-8");
     return { filePath, id, slug };
   } catch (err) {
-    console.warn(`[prompt-persistence] Failed to persist prompt: ${err.message}`);
+    console.warn(
+      `[prompt-persistence] Failed to persist prompt: ${err.message}`
+    );
     return void 0;
   }
 }
@@ -14243,7 +14257,9 @@ ${options.response}`;
     (0, import_fs4.writeFileSync)(filePath, content, "utf-8");
     return filePath;
   } catch (err) {
-    console.warn(`[prompt-persistence] Failed to persist response: ${err.message}`);
+    console.warn(
+      `[prompt-persistence] Failed to persist response: ${err.message}`
+    );
     return void 0;
   }
 }
@@ -14263,7 +14279,12 @@ function writeJobStatus(status, workingDirectory) {
   try {
     const promptsDir = getPromptsDir(workingDirectory);
     (0, import_fs4.mkdirSync)(promptsDir, { recursive: true });
-    const statusPath = getStatusFilePath(status.provider, status.slug, status.jobId, workingDirectory);
+    const statusPath = getStatusFilePath(
+      status.provider,
+      status.slug,
+      status.jobId,
+      workingDirectory
+    );
     const tempPath = statusPath + ".tmp";
     (0, import_fs4.writeFileSync)(tempPath, JSON.stringify(status, null, 2), "utf-8");
     renameOverwritingSync(tempPath, statusPath);
@@ -14271,7 +14292,9 @@ function writeJobStatus(status, workingDirectory) {
       upsertJob(status);
     }
   } catch (err) {
-    console.warn(`[prompt-persistence] Failed to write job status: ${err.message}`);
+    console.warn(
+      `[prompt-persistence] Failed to write job status: ${err.message}`
+    );
   }
 }
 function getJobWorkingDir(provider, jobId) {
@@ -14283,7 +14306,12 @@ function readJobStatus(provider, slug, promptId, workingDirectory) {
     const dbResult = getJob(provider, promptId);
     if (dbResult) return dbResult;
   }
-  const statusPath = getStatusFilePath(provider, slug, promptId, workingDirectory);
+  const statusPath = getStatusFilePath(
+    provider,
+    slug,
+    promptId,
+    workingDirectory
+  );
   if (!(0, import_fs4.existsSync)(statusPath)) {
     return void 0;
   }
@@ -14295,7 +14323,12 @@ function readJobStatus(provider, slug, promptId, workingDirectory) {
   }
 }
 function readCompletedResponse(provider, slug, promptId, workingDirectory) {
-  const responsePath = getExpectedResponsePath(provider, slug, promptId, workingDirectory);
+  const responsePath = getExpectedResponsePath(
+    provider,
+    slug,
+    promptId,
+    workingDirectory
+  );
   if (!(0, import_fs4.existsSync)(responsePath)) {
     return void 0;
   }
@@ -14355,30 +14388,58 @@ function isSpawnedPid(pid) {
 var MODEL_NAME_REGEX = /^[a-z0-9][a-z0-9._-]{0,63}$/i;
 function validateModelName(model) {
   if (!MODEL_NAME_REGEX.test(model)) {
-    throw new Error(`Invalid model name: "${model}". Model names must match pattern: alphanumeric start, followed by alphanumeric, dots, hyphens, or underscores (max 64 chars).`);
+    throw new Error(
+      `Invalid model name: "${model}". Model names must match pattern: alphanumeric start, followed by alphanumeric, dots, hyphens, or underscores (max 64 chars).`
+    );
   }
 }
 var GEMINI_DEFAULT_MODEL = process.env.OMD_GEMINI_DEFAULT_MODEL || "gemini-3-pro-preview";
-var GEMINI_TIMEOUT = Math.min(Math.max(5e3, parseInt(process.env.OMD_GEMINI_TIMEOUT || "3600000", 10) || 36e5), 36e5);
+var GEMINI_TIMEOUT = Math.min(
+  Math.max(
+    5e3,
+    parseInt(process.env.OMD_GEMINI_TIMEOUT || "3600000", 10) || 36e5
+  ),
+  36e5
+);
 var GEMINI_MODEL_FALLBACKS = [
   "gemini-3-pro-preview",
   "gemini-3-flash-preview",
   "gemini-2.5-pro",
   "gemini-2.5-flash"
 ];
-var GEMINI_RECOMMENDED_ROLES = ["designer", "writer", "vision"];
+var GEMINI_RECOMMENDED_ROLES = [
+  "designer",
+  "writer",
+  "vision"
+];
 var MAX_CONTEXT_FILES = 20;
 var MAX_FILE_SIZE = 5 * 1024 * 1024;
 function isGeminiRetryableError(stdout, stderr = "") {
   const combined = `${stdout}
 ${stderr}`;
-  if (/model.?not.?found|model is not supported|model.+does not exist|not.+available/i.test(combined)) {
-    const match = combined.match(/.*(?:model.?not.?found|model is not supported|model.+does not exist|not.+available).*/i);
-    return { isError: true, message: match?.[0]?.trim() || "Model not available", type: "model" };
+  if (/model.?not.?found|model is not supported|model.+does not exist|not.+available/i.test(
+    combined
+  )) {
+    const match = combined.match(
+      /.*(?:model.?not.?found|model is not supported|model.+does not exist|not.+available).*/i
+    );
+    return {
+      isError: true,
+      message: match?.[0]?.trim() || "Model not available",
+      type: "model"
+    };
   }
-  if (/429|rate.?limit|too many requests|quota.?exceeded|resource.?exhausted/i.test(combined)) {
-    const match = combined.match(/.*(?:429|rate.?limit|too many requests|quota.?exceeded|resource.?exhausted).*/i);
-    return { isError: true, message: match?.[0]?.trim() || "Rate limit error detected", type: "rate_limit" };
+  if (/429|rate.?limit|too many requests|quota.?exceeded|resource.?exhausted/i.test(
+    combined
+  )) {
+    const match = combined.match(
+      /.*(?:429|rate.?limit|too many requests|quota.?exceeded|resource.?exhausted).*/i
+    );
+    return {
+      isError: true,
+      message: match?.[0]?.trim() || "Rate limit error detected",
+      type: "rate_limit"
+    };
   }
   return { isError: false, message: "", type: "none" };
 }
@@ -14419,16 +14480,28 @@ function executeGemini(prompt, model, cwd) {
         if (code === 0 || stdout.trim()) {
           const retryable = isGeminiRetryableError(stdout, stderr);
           if (retryable.isError) {
-            reject(new Error(`Gemini ${retryable.type === "rate_limit" ? "rate limit" : "model"} error: ${retryable.message}`));
+            reject(
+              new Error(
+                `Gemini ${retryable.type === "rate_limit" ? "rate limit" : "model"} error: ${retryable.message}`
+              )
+            );
           } else {
             resolve5(stdout.trim());
           }
         } else {
           const retryableExit = isGeminiRetryableError(stderr, stdout);
           if (retryableExit.isError) {
-            reject(new Error(`Gemini ${retryableExit.type === "rate_limit" ? "rate limit" : "model"} error: ${retryableExit.message}`));
+            reject(
+              new Error(
+                `Gemini ${retryableExit.type === "rate_limit" ? "rate limit" : "model"} error: ${retryableExit.message}`
+              )
+            );
           } else {
-            reject(new Error(`Gemini exited with code ${code}: ${stderr || "No output"}`));
+            reject(
+              new Error(
+                `Gemini exited with code ${code}: ${stderr || "No output"}`
+              )
+            );
           }
         }
       }
@@ -14457,7 +14530,9 @@ function executeGeminiBackground(fullPrompt, modelInput, jobMeta, workingDirecto
   try {
     const modelExplicit = modelInput !== void 0 && modelInput !== null && modelInput !== "";
     const effectiveModel = modelInput || GEMINI_DEFAULT_MODEL;
-    const modelsToTry = modelExplicit ? [effectiveModel] : GEMINI_MODEL_FALLBACKS.includes(effectiveModel) ? GEMINI_MODEL_FALLBACKS.slice(GEMINI_MODEL_FALLBACKS.indexOf(effectiveModel)) : [effectiveModel, ...GEMINI_MODEL_FALLBACKS];
+    const modelsToTry = modelExplicit ? [effectiveModel] : GEMINI_MODEL_FALLBACKS.includes(effectiveModel) ? GEMINI_MODEL_FALLBACKS.slice(
+      GEMINI_MODEL_FALLBACKS.indexOf(effectiveModel)
+    ) : [effectiveModel, ...GEMINI_MODEL_FALLBACKS];
     const trySpawnWithModel = (tryModel, remainingModels) => {
       validateModelName(tryModel);
       const args = ["-p=.", "--yolo", "--model", tryModel];
@@ -14497,12 +14572,15 @@ function executeGeminiBackground(fullPrompt, modelInput, jobMeta, workingDirecto
             else child.kill("SIGTERM");
           } catch {
           }
-          writeJobStatus({
-            ...initialStatus,
-            status: "timeout",
-            completedAt: (/* @__PURE__ */ new Date()).toISOString(),
-            error: `Gemini timed out after ${GEMINI_TIMEOUT}ms`
-          }, workingDirectory);
+          writeJobStatus(
+            {
+              ...initialStatus,
+              status: "timeout",
+              completedAt: (/* @__PURE__ */ new Date()).toISOString(),
+              error: `Gemini timed out after ${GEMINI_TIMEOUT}ms`
+            },
+            workingDirectory
+          );
         }
       }, GEMINI_TIMEOUT);
       child.stdout?.on("data", (data) => {
@@ -14515,12 +14593,15 @@ function executeGeminiBackground(fullPrompt, modelInput, jobMeta, workingDirecto
         if (settled) return;
         settled = true;
         clearTimeout(timeoutHandle);
-        writeJobStatus({
-          ...initialStatus,
-          status: "failed",
-          completedAt: (/* @__PURE__ */ new Date()).toISOString(),
-          error: `Stdin write error: ${err.message}`
-        }, workingDirectory);
+        writeJobStatus(
+          {
+            ...initialStatus,
+            status: "failed",
+            completedAt: (/* @__PURE__ */ new Date()).toISOString(),
+            error: `Stdin write error: ${err.message}`
+          },
+          workingDirectory
+        );
       });
       child.stdin?.write(fullPrompt);
       child.stdin?.end();
@@ -14530,7 +14611,12 @@ function executeGeminiBackground(fullPrompt, modelInput, jobMeta, workingDirecto
         settled = true;
         clearTimeout(timeoutHandle);
         spawnedPids.delete(pid);
-        const currentStatus = readJobStatus("gemini", jobMeta.slug, jobMeta.jobId, workingDirectory);
+        const currentStatus = readJobStatus(
+          "gemini",
+          jobMeta.slug,
+          jobMeta.jobId,
+          workingDirectory
+        );
         if (currentStatus?.killedByUser) {
           return;
         }
@@ -14539,24 +14625,33 @@ function executeGeminiBackground(fullPrompt, modelInput, jobMeta, workingDirecto
           if (retryableErr.isError && remainingModels.length > 0) {
             const nextModel = remainingModels[0];
             const newRemainingModels = remainingModels.slice(1);
-            const retryResult = trySpawnWithModel(nextModel, newRemainingModels);
+            const retryResult = trySpawnWithModel(
+              nextModel,
+              newRemainingModels
+            );
             if ("error" in retryResult) {
-              writeJobStatus({
-                ...initialStatus,
-                status: "failed",
-                completedAt: (/* @__PURE__ */ new Date()).toISOString(),
-                error: `Fallback spawn failed for model ${nextModel}: ${retryResult.error}`
-              }, workingDirectory);
+              writeJobStatus(
+                {
+                  ...initialStatus,
+                  status: "failed",
+                  completedAt: (/* @__PURE__ */ new Date()).toISOString(),
+                  error: `Fallback spawn failed for model ${nextModel}: ${retryResult.error}`
+                },
+                workingDirectory
+              );
             }
             return;
           }
           if (retryableErr.isError) {
-            writeJobStatus({
-              ...initialStatus,
-              status: "failed",
-              completedAt: (/* @__PURE__ */ new Date()).toISOString(),
-              error: `All models in fallback chain failed. Last error (${retryableErr.type}): ${retryableErr.message}`
-            }, workingDirectory);
+            writeJobStatus(
+              {
+                ...initialStatus,
+                status: "failed",
+                completedAt: (/* @__PURE__ */ new Date()).toISOString(),
+                error: `All models in fallback chain failed. Last error (${retryableErr.type}): ${retryableErr.message}`
+              },
+              workingDirectory
+            );
             return;
           }
           const response = stdout.trim();
@@ -14572,54 +14667,71 @@ function executeGeminiBackground(fullPrompt, modelInput, jobMeta, workingDirecto
             usedFallback,
             fallbackModel: usedFallback ? tryModel : void 0
           });
-          writeJobStatus({
-            ...initialStatus,
-            model: tryModel,
-            status: "completed",
-            completedAt: (/* @__PURE__ */ new Date()).toISOString(),
-            usedFallback: usedFallback || void 0,
-            fallbackModel: usedFallback ? tryModel : void 0
-          }, workingDirectory);
+          writeJobStatus(
+            {
+              ...initialStatus,
+              model: tryModel,
+              status: "completed",
+              completedAt: (/* @__PURE__ */ new Date()).toISOString(),
+              usedFallback: usedFallback || void 0,
+              fallbackModel: usedFallback ? tryModel : void 0
+            },
+            workingDirectory
+          );
         } else {
           const retryableExit = isGeminiRetryableError(stderr, stdout);
           if (retryableExit.isError && remainingModels.length > 0) {
             const nextModel = remainingModels[0];
             const newRemainingModels = remainingModels.slice(1);
-            const retryResult = trySpawnWithModel(nextModel, newRemainingModels);
+            const retryResult = trySpawnWithModel(
+              nextModel,
+              newRemainingModels
+            );
             if ("error" in retryResult) {
-              writeJobStatus({
-                ...initialStatus,
-                status: "failed",
-                completedAt: (/* @__PURE__ */ new Date()).toISOString(),
-                error: `Fallback spawn failed for model ${nextModel}: ${retryResult.error}`
-              }, workingDirectory);
+              writeJobStatus(
+                {
+                  ...initialStatus,
+                  status: "failed",
+                  completedAt: (/* @__PURE__ */ new Date()).toISOString(),
+                  error: `Fallback spawn failed for model ${nextModel}: ${retryResult.error}`
+                },
+                workingDirectory
+              );
             }
             return;
           }
-          writeJobStatus({
-            ...initialStatus,
-            status: "failed",
-            completedAt: (/* @__PURE__ */ new Date()).toISOString(),
-            error: `Gemini exited with code ${code}: ${stderr || "No output"}`
-          }, workingDirectory);
+          writeJobStatus(
+            {
+              ...initialStatus,
+              status: "failed",
+              completedAt: (/* @__PURE__ */ new Date()).toISOString(),
+              error: `Gemini exited with code ${code}: ${stderr || "No output"}`
+            },
+            workingDirectory
+          );
         }
       });
       child.on("error", (err) => {
         if (settled) return;
         settled = true;
         clearTimeout(timeoutHandle);
-        writeJobStatus({
-          ...initialStatus,
-          status: "failed",
-          completedAt: (/* @__PURE__ */ new Date()).toISOString(),
-          error: `Failed to spawn Gemini CLI: ${err.message}`
-        }, workingDirectory);
+        writeJobStatus(
+          {
+            ...initialStatus,
+            status: "failed",
+            completedAt: (/* @__PURE__ */ new Date()).toISOString(),
+            error: `Failed to spawn Gemini CLI: ${err.message}`
+          },
+          workingDirectory
+        );
       });
       return { pid };
     };
     return trySpawnWithModel(modelsToTry[0], modelsToTry.slice(1));
   } catch (err) {
-    return { error: `Failed to start background execution: ${err.message}` };
+    return {
+      error: `Failed to start background execution: ${err.message}`
+    };
   }
 }
 function validateAndReadFile(filePath, baseDir) {
@@ -14660,7 +14772,12 @@ async function handleAskGemini(args) {
     baseDirReal = (0, import_fs5.realpathSync)(baseDir);
   } catch (err) {
     return {
-      content: [{ type: "text", text: `working_directory '${args.working_directory}' does not exist or is not accessible: ${err.message}` }],
+      content: [
+        {
+          type: "text",
+          text: `working_directory '${args.working_directory}' does not exist or is not accessible: ${err.message}`
+        }
+      ],
       isError: true
     };
   }
@@ -14677,7 +14794,12 @@ async function handleAskGemini(args) {
         const relToWorktree = (0, import_path5.relative)(worktreeReal, baseDirReal);
         if (relToWorktree.startsWith("..") || (0, import_path5.isAbsolute)(relToWorktree)) {
           return {
-            content: [{ type: "text", text: `working_directory '${args.working_directory}' is outside the project worktree (${worktreeRoot}). Set OMD_ALLOW_EXTERNAL_WORKDIR=1 to bypass.` }],
+            content: [
+              {
+                type: "text",
+                text: `working_directory '${args.working_directory}' is outside the project worktree (${worktreeRoot}). Set OMD_ALLOW_EXTERNAL_WORKDIR=1 to bypass.`
+              }
+            ],
             isError: true
           };
         }
@@ -14686,31 +14808,45 @@ async function handleAskGemini(args) {
   }
   if (!agent_role || !agent_role.trim()) {
     return {
-      content: [{
-        type: "text",
-        text: `agent_role is required. Recommended roles for Gemini: ${GEMINI_RECOMMENDED_ROLES.join(", ")}`
-      }],
+      content: [
+        {
+          type: "text",
+          text: `agent_role is required. Recommended roles for Gemini: ${GEMINI_RECOMMENDED_ROLES.join(", ")}`
+        }
+      ],
       isError: true
     };
   }
   if (!VALID_AGENT_ROLES.includes(agent_role)) {
     return {
-      content: [{
-        type: "text",
-        text: `Invalid agent_role: "${agent_role}". Must be one of: ${VALID_AGENT_ROLES.join(", ")}. Recommended for Gemini: ${GEMINI_RECOMMENDED_ROLES.join(", ")}`
-      }],
+      content: [
+        {
+          type: "text",
+          text: `Invalid agent_role: "${agent_role}". Must be one of: ${VALID_AGENT_ROLES.join(", ")}. Recommended for Gemini: ${GEMINI_RECOMMENDED_ROLES.join(", ")}`
+        }
+      ],
       isError: true
     };
   }
   if (!args.output_file || !args.output_file.trim()) {
     return {
-      content: [{ type: "text", text: "output_file is required. Specify a path where the response should be written." }],
+      content: [
+        {
+          type: "text",
+          text: "output_file is required. Specify a path where the response should be written."
+        }
+      ],
       isError: true
     };
   }
   if ("prompt" in args) {
     return {
-      content: [{ type: "text", text: "The 'prompt' parameter has been removed. Write the prompt to a file (recommended: .omd/prompts/) and pass 'prompt_file' instead." }],
+      content: [
+        {
+          type: "text",
+          text: "The 'prompt' parameter has been removed. Write the prompt to a file (recommended: .omd/prompts/) and pass 'prompt_file' instead."
+        }
+      ],
       isError: true
     };
   }
@@ -14726,7 +14862,12 @@ async function handleAskGemini(args) {
   const relPath = (0, import_path5.relative)(cwdReal, resolvedPath);
   if (relPath === ".." || relPath.startsWith(".." + import_path5.sep) || (0, import_path5.isAbsolute)(relPath)) {
     return {
-      content: [{ type: "text", text: `prompt_file '${args.prompt_file}' is outside the working directory.` }],
+      content: [
+        {
+          type: "text",
+          text: `prompt_file '${args.prompt_file}' is outside the working directory.`
+        }
+      ],
       isError: true
     };
   }
@@ -14735,14 +14876,24 @@ async function handleAskGemini(args) {
     resolvedReal = (0, import_fs5.realpathSync)(resolvedPath);
   } catch (err) {
     return {
-      content: [{ type: "text", text: `Failed to resolve prompt_file '${args.prompt_file}': ${err.message}` }],
+      content: [
+        {
+          type: "text",
+          text: `Failed to resolve prompt_file '${args.prompt_file}': ${err.message}`
+        }
+      ],
       isError: true
     };
   }
   const relReal = (0, import_path5.relative)(cwdReal, resolvedReal);
   if (relReal === ".." || relReal.startsWith(".." + import_path5.sep) || (0, import_path5.isAbsolute)(relReal)) {
     return {
-      content: [{ type: "text", text: `prompt_file '${args.prompt_file}' resolves to a path outside the working directory.` }],
+      content: [
+        {
+          type: "text",
+          text: `prompt_file '${args.prompt_file}' resolves to a path outside the working directory.`
+        }
+      ],
       isError: true
     };
   }
@@ -14750,13 +14901,23 @@ async function handleAskGemini(args) {
     resolvedPrompt = (0, import_fs5.readFileSync)(resolvedReal, "utf-8");
   } catch (err) {
     return {
-      content: [{ type: "text", text: `Failed to read prompt_file '${args.prompt_file}': ${err.message}` }],
+      content: [
+        {
+          type: "text",
+          text: `Failed to read prompt_file '${args.prompt_file}': ${err.message}`
+        }
+      ],
       isError: true
     };
   }
   if (!resolvedPrompt.trim()) {
     return {
-      content: [{ type: "text", text: `prompt_file '${args.prompt_file}' is empty.` }],
+      content: [
+        {
+          type: "text",
+          text: `prompt_file '${args.prompt_file}' is empty.`
+        }
+      ],
       isError: true
     };
   }
@@ -14766,12 +14927,14 @@ ${resolvedPrompt}`;
   const detection = detectGeminiCli();
   if (!detection.available) {
     return {
-      content: [{
-        type: "text",
-        text: `Gemini CLI is not available: ${detection.error}
+      content: [
+        {
+          type: "text",
+          text: `Gemini CLI is not available: ${detection.error}
 
 ${detection.installHint}`
-      }],
+        }
+      ],
       isError: true
     };
   }
@@ -14780,16 +14943,22 @@ ${detection.installHint}`
   if (files && files.length > 0) {
     if (files.length > MAX_CONTEXT_FILES) {
       return {
-        content: [{
-          type: "text",
-          text: `Too many context files (max ${MAX_CONTEXT_FILES}, got ${files.length})`
-        }],
+        content: [
+          {
+            type: "text",
+            text: `Too many context files (max ${MAX_CONTEXT_FILES}, got ${files.length})`
+          }
+        ],
         isError: true
       };
     }
     fileContext = files.map((f) => validateAndReadFile(f, baseDir)).join("\n\n");
   }
-  const fullPrompt = buildPromptWithSystemContext(userPrompt, fileContext, resolvedSystemPrompt);
+  const fullPrompt = buildPromptWithSystemContext(
+    userPrompt,
+    fileContext,
+    resolvedSystemPrompt
+  );
   const promptResult = persistPrompt({
     provider: "gemini",
     agentRole: agent_role,
@@ -14799,50 +14968,77 @@ ${detection.installHint}`
     fullPrompt,
     workingDirectory: baseDir
   });
-  const expectedResponsePath = promptResult ? getExpectedResponsePath("gemini", promptResult.slug, promptResult.id, baseDir) : void 0;
+  const expectedResponsePath = promptResult ? getExpectedResponsePath(
+    "gemini",
+    promptResult.slug,
+    promptResult.id,
+    baseDir
+  ) : void 0;
   if (args.background) {
     if (!promptResult) {
       return {
-        content: [{ type: "text", text: "Failed to persist prompt for background execution" }],
+        content: [
+          {
+            type: "text",
+            text: "Failed to persist prompt for background execution"
+          }
+        ],
         isError: true
       };
     }
-    const statusFilePath = getStatusFilePath("gemini", promptResult.slug, promptResult.id, baseDir);
+    const statusFilePath = getStatusFilePath(
+      "gemini",
+      promptResult.slug,
+      promptResult.id,
+      baseDir
+    );
     const requestedModelBg = model;
     const fallbackIndexBg = GEMINI_MODEL_FALLBACKS.indexOf(requestedModelBg);
     const modelsToTryBg = fallbackIndexBg >= 0 ? GEMINI_MODEL_FALLBACKS.slice(fallbackIndexBg) : [requestedModelBg, ...GEMINI_MODEL_FALLBACKS];
-    const result = executeGeminiBackground(fullPrompt, args.model, {
-      provider: "gemini",
-      jobId: promptResult.id,
-      slug: promptResult.slug,
-      agentRole: agent_role,
-      model,
-      promptFile: promptResult.filePath,
-      responseFile: expectedResponsePath
-    }, baseDir);
+    const result = executeGeminiBackground(
+      fullPrompt,
+      args.model,
+      {
+        provider: "gemini",
+        jobId: promptResult.id,
+        slug: promptResult.slug,
+        agentRole: agent_role,
+        model,
+        promptFile: promptResult.filePath,
+        responseFile: expectedResponsePath
+      },
+      baseDir
+    );
     if ("error" in result) {
       return {
-        content: [{ type: "text", text: `Failed to spawn background job: ${result.error}` }],
+        content: [
+          {
+            type: "text",
+            text: `Failed to spawn background job: ${result.error}`
+          }
+        ],
         isError: true
       };
     }
     return {
-      content: [{
-        type: "text",
-        text: [
-          `**Mode:** Background (non-blocking)`,
-          `**Job ID:** ${promptResult.id}`,
-          `**Agent Role:** ${agent_role}`,
-          `**Model (attempting):** ${modelsToTryBg[0]}`,
-          `**Fallback chain:** ${modelsToTryBg.join(" -> ")}`,
-          `**PID:** ${result.pid}`,
-          `**Prompt File:** ${promptResult.filePath}`,
-          `**Response File:** ${expectedResponsePath}`,
-          `**Status File:** ${statusFilePath}`,
-          ``,
-          `Job dispatched. Will automatically try fallback models on 429/rate-limit or model errors.`
-        ].join("\n")
-      }]
+      content: [
+        {
+          type: "text",
+          text: [
+            `**Mode:** Background (non-blocking)`,
+            `**Job ID:** ${promptResult.id}`,
+            `**Agent Role:** ${agent_role}`,
+            `**Model (attempting):** ${modelsToTryBg[0]}`,
+            `**Fallback chain:** ${modelsToTryBg.join(" -> ")}`,
+            `**PID:** ${result.pid}`,
+            `**Prompt File:** ${promptResult.filePath}`,
+            `**Response File:** ${expectedResponsePath}`,
+            `**Status File:** ${statusFilePath}`,
+            ``,
+            `Job dispatched. Will automatically try fallback models on 429/rate-limit or model errors.`
+          ].join("\n")
+        }
+      ]
     };
   }
   const paramLines = [
@@ -14883,14 +15079,18 @@ ${detection.installHint}`
         const outputPath = resolvedOutputPath;
         const relOutput = (0, import_path5.relative)(baseDirReal, outputPath);
         if (relOutput === "" || relOutput.startsWith("..") || (0, import_path5.isAbsolute)(relOutput)) {
-          console.warn(`[gemini-core] output_file '${args.output_file}' resolves outside working directory, skipping write.`);
+          console.warn(
+            `[gemini-core] output_file '${args.output_file}' resolves outside working directory, skipping write.`
+          );
         } else {
           try {
             const outputDir = (0, import_path5.dirname)(outputPath);
             if (!(0, import_fs5.existsSync)(outputDir)) {
               const relDir = (0, import_path5.relative)(baseDirReal, outputDir);
               if (relDir.startsWith("..") || (0, import_path5.isAbsolute)(relDir)) {
-                console.warn(`[gemini-core] output_file directory is outside working directory, skipping write.`);
+                console.warn(
+                  `[gemini-core] output_file directory is outside working directory, skipping write.`
+                );
               } else {
                 (0, import_fs5.mkdirSync)(outputDir, { recursive: true });
               }
@@ -14899,56 +15099,70 @@ ${detection.installHint}`
             try {
               outputDirReal = (0, import_fs5.realpathSync)(outputDir);
             } catch {
-              console.warn(`[gemini-core] Failed to resolve output directory, skipping write.`);
+              console.warn(
+                `[gemini-core] Failed to resolve output directory, skipping write.`
+              );
             }
             if (outputDirReal) {
               const relDirReal = (0, import_path5.relative)(baseDirReal, outputDirReal);
               if (relDirReal.startsWith("..") || (0, import_path5.isAbsolute)(relDirReal)) {
-                console.warn(`[gemini-core] output_file directory resolves outside working directory, skipping write.`);
+                console.warn(
+                  `[gemini-core] output_file directory resolves outside working directory, skipping write.`
+                );
               } else {
                 const safePath = (0, import_path5.join)(outputDirReal, (0, import_path5.basename)(outputPath));
                 (0, import_fs5.writeFileSync)(safePath, response, "utf-8");
               }
             }
           } catch (err) {
-            console.warn(`[gemini-core] Failed to write output file: ${err.message}`);
+            console.warn(
+              `[gemini-core] Failed to write output file: ${err.message}`
+            );
           }
         }
       }
       return {
-        content: [{
-          type: "text",
-          text: `${fallbackNote}${paramLines}`
-        }]
+        content: [
+          {
+            type: "text",
+            text: `${fallbackNote}${paramLines}`
+          }
+        ]
       };
     } catch (err) {
       const errMsg = err.message;
       errors.push(`${tryModel}: ${errMsg}`);
-      if (!/model error|model.?not.?found|model is not supported|429|rate.?limit|too many requests|quota.?exceeded|resource.?exhausted/i.test(errMsg)) {
+      if (!/model error|model.?not.?found|model is not supported|429|rate.?limit|too many requests|quota.?exceeded|resource.?exhausted/i.test(
+        errMsg
+      )) {
         return {
-          content: [{
-            type: "text",
-            text: `${paramLines}
+          content: [
+            {
+              type: "text",
+              text: `${paramLines}
 
 ---
 
 Gemini CLI error: ${errMsg}`
-          }],
+            }
+          ],
           isError: true
         };
       }
     }
   }
   return {
-    content: [{
-      type: "text",
-      text: `${paramLines}
+    content: [
+      {
+        type: "text",
+        text: `${paramLines}
 
 ---
 
 Gemini CLI error: all models in fallback chain failed.
 ${errors.join("\n")}`
-    }],
+      }
+    ],
     isError: true
   };
 }
@@ -14966,7 +15180,13 @@ function isSpawnedPid2(pid) {
   return spawnedPids2.has(pid);
 }
 var CODEX_DEFAULT_MODEL = process.env.OMD_CODEX_DEFAULT_MODEL || "gpt-5.3-codex";
-var CODEX_TIMEOUT = Math.min(Math.max(5e3, parseInt(process.env.OMD_CODEX_TIMEOUT || "3600000", 10) || 36e5), 36e5);
+var CODEX_TIMEOUT = Math.min(
+  Math.max(
+    5e3,
+    parseInt(process.env.OMD_CODEX_TIMEOUT || "3600000", 10) || 36e5
+  ),
+  36e5
+);
 var MAX_FILE_SIZE2 = 5 * 1024 * 1024;
 
 // src/mcp/job-management.ts
@@ -14990,7 +15210,9 @@ function findJobStatusFile(provider, jobId, workingDirectory) {
     const files = (0, import_fs7.readdirSync)(promptsDir);
     const escapedProvider = escapeRegex2(provider);
     const escapedJobId = escapeRegex2(jobId);
-    const pattern = new RegExp(`^${escapedProvider}-status-(.+)-${escapedJobId}\\.json$`);
+    const pattern = new RegExp(
+      `^${escapedProvider}-status-(.+)-${escapedJobId}\\.json$`
+    );
     const matches = [];
     for (const f of files) {
       const m = f.match(pattern);
@@ -15014,7 +15236,12 @@ function findJobStatusFile(provider, jobId, workingDirectory) {
         const isActive = status.status === "spawned" || status.status === "running";
         const spawnedAt = new Date(status.spawnedAt).getTime();
         if (!best || isActive && !best.isActive || isActive === best.isActive && spawnedAt > best.spawnedAt) {
-          best = { statusPath: match.statusPath, slug: match.slug, isActive, spawnedAt };
+          best = {
+            statusPath: match.statusPath,
+            slug: match.slug,
+            isActive,
+            spawnedAt
+          };
         }
       } catch {
       }
@@ -15041,27 +15268,36 @@ async function handleWaitForJob(provider, jobId, timeoutMs = 36e5) {
       if (status2) {
         if (status2.status === "completed" || status2.status === "failed" || status2.status === "timeout") {
           if (status2.status === "completed") {
-            const completed = readCompletedResponse(status2.provider, status2.slug, status2.jobId);
+            const completed = readCompletedResponse(
+              status2.provider,
+              status2.slug,
+              status2.jobId
+            );
             const responseSnippet = completed ? completed.response.substring(0, 500) + (completed.response.length > 500 ? "..." : "") : "(response file not found)";
-            return textResult([
-              `**Job ${jobId} completed.**`,
+            return textResult(
+              [
+                `**Job ${jobId} completed.**`,
+                `**Provider:** ${status2.provider}`,
+                `**Model:** ${status2.model}`,
+                `**Agent Role:** ${status2.agentRole}`,
+                `**Response File:** ${status2.responseFile}`,
+                status2.usedFallback ? `**Fallback Model:** ${status2.fallbackModel}` : null,
+                ``,
+                `**Response preview:**`,
+                responseSnippet
+              ].filter(Boolean).join("\n")
+            );
+          }
+          return textResult(
+            [
+              `**Job ${jobId} ${status2.status}.**`,
               `**Provider:** ${status2.provider}`,
               `**Model:** ${status2.model}`,
               `**Agent Role:** ${status2.agentRole}`,
-              `**Response File:** ${status2.responseFile}`,
-              status2.usedFallback ? `**Fallback Model:** ${status2.fallbackModel}` : null,
-              ``,
-              `**Response preview:**`,
-              responseSnippet
-            ].filter(Boolean).join("\n"));
-          }
-          return textResult([
-            `**Job ${jobId} ${status2.status}.**`,
-            `**Provider:** ${status2.provider}`,
-            `**Model:** ${status2.model}`,
-            `**Agent Role:** ${status2.agentRole}`,
-            status2.error ? `**Error:** ${status2.error}` : null
-          ].filter(Boolean).join("\n"), true);
+              status2.error ? `**Error:** ${status2.error}` : null
+            ].filter(Boolean).join("\n"),
+            true
+          );
         }
         await new Promise((resolve5) => setTimeout(resolve5, pollDelay));
         pollDelay = Math.min(pollDelay * 1.5, 2e3);
@@ -15085,27 +15321,36 @@ async function handleWaitForJob(provider, jobId, timeoutMs = 36e5) {
     }
     if (status.status === "completed" || status.status === "failed" || status.status === "timeout") {
       if (status.status === "completed") {
-        const completed = readCompletedResponse(status.provider, status.slug, status.jobId);
+        const completed = readCompletedResponse(
+          status.provider,
+          status.slug,
+          status.jobId
+        );
         const responseSnippet = completed ? completed.response.substring(0, 500) + (completed.response.length > 500 ? "..." : "") : "(response file not found)";
-        return textResult([
-          `**Job ${jobId} completed.**`,
+        return textResult(
+          [
+            `**Job ${jobId} completed.**`,
+            `**Provider:** ${status.provider}`,
+            `**Model:** ${status.model}`,
+            `**Agent Role:** ${status.agentRole}`,
+            `**Response File:** ${status.responseFile}`,
+            status.usedFallback ? `**Fallback Model:** ${status.fallbackModel}` : null,
+            ``,
+            `**Response preview:**`,
+            responseSnippet
+          ].filter(Boolean).join("\n")
+        );
+      }
+      return textResult(
+        [
+          `**Job ${jobId} ${status.status}.**`,
           `**Provider:** ${status.provider}`,
           `**Model:** ${status.model}`,
           `**Agent Role:** ${status.agentRole}`,
-          `**Response File:** ${status.responseFile}`,
-          status.usedFallback ? `**Fallback Model:** ${status.fallbackModel}` : null,
-          ``,
-          `**Response preview:**`,
-          responseSnippet
-        ].filter(Boolean).join("\n"));
-      }
-      return textResult([
-        `**Job ${jobId} ${status.status}.**`,
-        `**Provider:** ${status.provider}`,
-        `**Model:** ${status.model}`,
-        `**Agent Role:** ${status.agentRole}`,
-        status.error ? `**Error:** ${status.error}` : null
-      ].filter(Boolean).join("\n"), true);
+          status.error ? `**Error:** ${status.error}` : null
+        ].filter(Boolean).join("\n"),
+        true
+      );
     }
     await new Promise((resolve5) => setTimeout(resolve5, pollDelay));
     pollDelay = Math.min(pollDelay * 1.5, 2e3);
@@ -15183,14 +15428,23 @@ async function handleKillJob(provider, jobId, signal = "SIGTERM") {
       const dbJob = getJob(provider, jobId);
       if (dbJob) {
         if (dbJob.status !== "spawned" && dbJob.status !== "running") {
-          return textResult(`Job ${jobId} is already in terminal state: ${dbJob.status}. Cannot kill.`, true);
+          return textResult(
+            `Job ${jobId} is already in terminal state: ${dbJob.status}. Cannot kill.`,
+            true
+          );
         }
         if (!dbJob.pid || !Number.isInteger(dbJob.pid) || dbJob.pid <= 0 || dbJob.pid > 4194304) {
-          return textResult(`Job ${jobId} has no valid PID recorded. Cannot send signal.`, true);
+          return textResult(
+            `Job ${jobId} has no valid PID recorded. Cannot send signal.`,
+            true
+          );
         }
         const isOurPid2 = provider === "codex" ? isSpawnedPid2(dbJob.pid) : isSpawnedPid(dbJob.pid);
         if (!isOurPid2) {
-          return textResult(`Job ${jobId} PID ${dbJob.pid} was not spawned by this process. Refusing to send signal for safety.`, true);
+          return textResult(
+            `Job ${jobId} PID ${dbJob.pid} was not spawned by this process. Refusing to send signal for safety.`,
+            true
+          );
         }
         try {
           if (process.platform !== "win32") {
@@ -15204,7 +15458,9 @@ async function handleKillJob(provider, jobId, signal = "SIGTERM") {
             completedAt: (/* @__PURE__ */ new Date()).toISOString(),
             error: `Killed by user (signal: ${signal})`
           });
-          return textResult(`Sent ${signal} to job ${jobId} (PID ${dbJob.pid}). Job marked as failed.`);
+          return textResult(
+            `Sent ${signal} to job ${jobId} (PID ${dbJob.pid}). Job marked as failed.`
+          );
         } catch (err) {
           if (err.code === "ESRCH") {
             updateJobStatus(provider, jobId, {
@@ -15213,9 +15469,14 @@ async function handleKillJob(provider, jobId, signal = "SIGTERM") {
               completedAt: (/* @__PURE__ */ new Date()).toISOString(),
               error: `Killed by user (process already exited, signal: ${signal})`
             });
-            return textResult(`Process ${dbJob.pid} already exited. Job marked as failed.`);
+            return textResult(
+              `Process ${dbJob.pid} already exited. Job marked as failed.`
+            );
           }
-          return textResult(`Failed to kill process ${dbJob.pid}: ${err.message}`, true);
+          return textResult(
+            `Failed to kill process ${dbJob.pid}: ${err.message}`,
+            true
+          );
         }
       }
     }
@@ -15238,7 +15499,10 @@ async function handleKillJob(provider, jobId, signal = "SIGTERM") {
     );
   }
   if (!Number.isInteger(status.pid) || status.pid <= 0 || status.pid > 4194304) {
-    return textResult(`Job ${jobId} has invalid PID: ${status.pid}. Refusing to send signal.`, true);
+    return textResult(
+      `Job ${jobId} has invalid PID: ${status.pid}. Refusing to send signal.`,
+      true
+    );
   }
   const isOurPid = provider === "codex" ? isSpawnedPid2(status.pid) : isSpawnedPid(status.pid);
   if (!isOurPid) {
@@ -15302,7 +15566,10 @@ async function handleKillJob(provider, jobId, signal = "SIGTERM") {
     } else {
       message = `Failed to kill process ${status.pid}: ${err.message}`;
     }
-    return textResult(message, !isESRCH || currentStatus?.status !== "completed");
+    return textResult(
+      message,
+      !isESRCH || currentStatus?.status !== "completed"
+    );
   }
 }
 async function handleListJobs(provider, statusFilter = "active", limit = 50) {
@@ -15321,15 +15588,19 @@ async function handleListJobs(provider, statusFilter = "active", limit = 50) {
         if (job.pid) parts.push(`  PID: ${job.pid}`);
         return parts.join("\n");
       });
-      return textResult(`**${limited2.length} active ${provider} job(s):**
+      return textResult(
+        `**${limited2.length} active ${provider} job(s):**
 
-${lines2.join("\n\n")}`);
+${lines2.join("\n\n")}`
+      );
     }
     const activeJobs = listActiveJobs(provider);
     if (activeJobs.length === 0) {
       return textResult(`No active ${provider} jobs found.`);
     }
-    activeJobs.sort((a, b) => new Date(b.spawnedAt).getTime() - new Date(a.spawnedAt).getTime());
+    activeJobs.sort(
+      (a, b) => new Date(b.spawnedAt).getTime() - new Date(a.spawnedAt).getTime()
+    );
     const limited = activeJobs.slice(0, limit);
     const lines = limited.map((job) => {
       const parts = [
@@ -15339,9 +15610,11 @@ ${lines2.join("\n\n")}`);
       if (job.pid) parts.push(`  PID: ${job.pid}`);
       return parts.join("\n");
     });
-    return textResult(`**${limited.length} active ${provider} job(s):**
+    return textResult(
+      `**${limited.length} active ${provider} job(s):**
 
-${lines.join("\n\n")}`);
+${lines.join("\n\n")}`
+    );
   }
   if (isJobDbInitialized()) {
     let dbJobs = [];
@@ -15369,7 +15642,9 @@ ${lines.join("\n\n")}`);
       }
     }
     if (uniqueJobs.length > 0) {
-      uniqueJobs.sort((a, b) => new Date(b.spawnedAt).getTime() - new Date(a.spawnedAt).getTime());
+      uniqueJobs.sort(
+        (a, b) => new Date(b.spawnedAt).getTime() - new Date(a.spawnedAt).getTime()
+      );
       const limited = uniqueJobs.slice(0, limit);
       const lines = limited.map((job) => {
         const parts = [
@@ -15381,9 +15656,11 @@ ${lines.join("\n\n")}`);
         if (job.pid) parts.push(`  PID: ${job.pid}`);
         return parts.join("\n");
       });
-      return textResult(`**${limited.length} ${provider} job(s) found:**
+      return textResult(
+        `**${limited.length} ${provider} job(s) found:**
 
-${lines.join("\n\n")}`);
+${lines.join("\n\n")}`
+      );
     }
   }
   const promptsDir = getPromptsDir();
@@ -15400,8 +15677,10 @@ ${lines.join("\n\n")}`);
       try {
         const content = (0, import_fs7.readFileSync)((0, import_path7.join)(promptsDir, file), "utf-8");
         const job = JSON.parse(content);
-        if (statusFilter === "completed" && job.status !== "completed") continue;
-        if (statusFilter === "failed" && job.status !== "failed" && job.status !== "timeout") continue;
+        if (statusFilter === "completed" && job.status !== "completed")
+          continue;
+        if (statusFilter === "failed" && job.status !== "failed" && job.status !== "timeout")
+          continue;
         jobs.push(job);
       } catch {
       }
@@ -15410,7 +15689,9 @@ ${lines.join("\n\n")}`);
       const filterDesc = statusFilter !== "all" ? ` with status=${statusFilter}` : "";
       return textResult(`No ${provider} jobs found${filterDesc}.`);
     }
-    jobs.sort((a, b) => new Date(b.spawnedAt).getTime() - new Date(a.spawnedAt).getTime());
+    jobs.sort(
+      (a, b) => new Date(b.spawnedAt).getTime() - new Date(a.spawnedAt).getTime()
+    );
     const limited = jobs.slice(0, limit);
     const lines = limited.map((job) => {
       const parts = [
@@ -15422,9 +15703,11 @@ ${lines.join("\n\n")}`);
       if (job.pid) parts.push(`  PID: ${job.pid}`);
       return parts.join("\n");
     });
-    return textResult(`**${limited.length} ${provider} job(s) found:**
+    return textResult(
+      `**${limited.length} ${provider} job(s) found:**
 
-${lines.join("\n\n")}`);
+${lines.join("\n\n")}`
+    );
   } catch (err) {
     return textResult(`Error listing jobs: ${err.message}`, true);
   }
@@ -15515,12 +15798,31 @@ var askGeminiTool = {
         type: "string",
         description: `Required. Agent perspective for Gemini. Recommended: ${GEMINI_RECOMMENDED_ROLES.join(", ")}. Any valid OMD agent role is accepted.`
       },
-      prompt_file: { type: "string", description: "Path to file containing the prompt" },
-      output_file: { type: "string", description: "Required. Path to write response. Response content is NOT returned inline - read from this file." },
-      files: { type: "array", items: { type: "string" }, description: "File paths to include as context (contents will be prepended to prompt)" },
-      model: { type: "string", description: `Gemini model to use (default: ${GEMINI_DEFAULT_MODEL}). Set OMD_GEMINI_DEFAULT_MODEL env var to change default. Auto-fallback chain: ${GEMINI_MODEL_FALLBACKS.join(" \u2192 ")}.` },
-      background: { type: "boolean", description: "Run in background (non-blocking). Returns immediately with job metadata and file paths. Check response file for completion." },
-      working_directory: { type: "string", description: "Working directory for path resolution and CLI execution. Defaults to process.cwd()." }
+      prompt_file: {
+        type: "string",
+        description: "Path to file containing the prompt"
+      },
+      output_file: {
+        type: "string",
+        description: "Required. Path to write response. Response content is NOT returned inline - read from this file."
+      },
+      files: {
+        type: "array",
+        items: { type: "string" },
+        description: "File paths to include as context (contents will be prepended to prompt)"
+      },
+      model: {
+        type: "string",
+        description: `Gemini model to use (default: ${GEMINI_DEFAULT_MODEL}). Set OMD_GEMINI_DEFAULT_MODEL env var to change default. Auto-fallback chain: ${GEMINI_MODEL_FALLBACKS.join(" \u2192 ")}.`
+      },
+      background: {
+        type: "boolean",
+        description: "Run in background (non-blocking). Returns immediately with job metadata and file paths. Check response file for completion."
+      },
+      working_directory: {
+        type: "string",
+        description: "Working directory for path resolution and CLI execution. Defaults to process.cwd()."
+      }
     },
     required: ["agent_role", "prompt_file", "output_file"]
   }
@@ -15536,8 +15838,24 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
   if (name === "ask_gemini") {
-    const { prompt_file, output_file, agent_role, model, files, background, working_directory } = args ?? {};
-    return handleAskGemini({ prompt_file, output_file, agent_role, model, files, background, working_directory });
+    const {
+      prompt_file,
+      output_file,
+      agent_role,
+      model,
+      files,
+      background,
+      working_directory
+    } = args ?? {};
+    return handleAskGemini({
+      prompt_file,
+      output_file,
+      agent_role,
+      model,
+      files,
+      background,
+      working_directory
+    });
   }
   if (name === "wait_for_job") {
     const { job_id, timeout_ms } = args ?? {};
@@ -15549,13 +15867,24 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   }
   if (name === "kill_job") {
     const { job_id, signal } = args ?? {};
-    return handleKillJob("gemini", job_id, signal || void 0);
+    return handleKillJob(
+      "gemini",
+      job_id,
+      signal || void 0
+    );
   }
   if (name === "list_jobs") {
     const { status_filter, limit } = args ?? {};
-    return handleListJobs("gemini", status_filter || void 0, limit);
+    return handleListJobs(
+      "gemini",
+      status_filter || void 0,
+      limit
+    );
   }
-  return { content: [{ type: "text", text: `Unknown tool: ${name}` }], isError: true };
+  return {
+    content: [{ type: "text", text: `Unknown tool: ${name}` }],
+    isError: true
+  };
 });
 async function main() {
   const transport = new StdioServerTransport();

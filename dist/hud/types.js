@@ -4,10 +4,10 @@
  * Type definitions for the HUD state, configuration, and rendering.
  */
 export const DEFAULT_HUD_CONFIG = {
-    preset: 'focused',
+    preset: "focused",
     elements: {
         cwd: false, // Disabled by default for backward compatibility
-        cwdFormat: 'relative',
+        cwdFormat: "relative",
         gitRepo: false, // Disabled by default for backward compatibility
         gitBranch: false, // Disabled by default for backward compatibility
         model: false, // Disabled by default for backward compatibility
@@ -19,14 +19,14 @@ export const DEFAULT_HUD_CONFIG = {
         activeSkills: true,
         contextBar: true,
         droids: true,
-        agentsFormat: 'multiline', // Multi-line for rich agent visualization
+        agentsFormat: "multiline", // Multi-line for rich agent visualization
         agentsMaxLines: 5, // Show up to 5 agent detail lines
         backgroundTasks: true,
         todos: true,
         lastSkill: true,
         permissionStatus: false, // Disabled: heuristic-based, causes false positives
         thinking: true,
-        thinkingFormat: 'text', // Text format for backward compatibility
+        thinkingFormat: "text", // Text format for backward compatibility
         sessionHealth: true,
         // showSessionDuration, showCostPerHour, showBudgetWarning: undefined = default to true
         useBars: false, // Disabled by default for backwards compatibility
@@ -46,7 +46,7 @@ export const DEFAULT_HUD_CONFIG = {
 export const PRESET_CONFIGS = {
     minimal: {
         cwd: false,
-        cwdFormat: 'folder',
+        cwdFormat: "folder",
         gitRepo: false,
         gitBranch: false,
         model: false,
@@ -59,13 +59,13 @@ export const PRESET_CONFIGS = {
         lastSkill: true,
         contextBar: false,
         droids: true,
-        agentsFormat: 'count',
+        agentsFormat: "count",
         agentsMaxLines: 0,
         backgroundTasks: false,
         todos: true,
         permissionStatus: false,
         thinking: false,
-        thinkingFormat: 'text',
+        thinkingFormat: "text",
         sessionHealth: false,
         useBars: false,
         showCache: false,
@@ -75,7 +75,7 @@ export const PRESET_CONFIGS = {
     },
     analytics: {
         cwd: false,
-        cwdFormat: 'folder',
+        cwdFormat: "folder",
         gitRepo: false,
         gitBranch: false,
         model: false,
@@ -88,13 +88,13 @@ export const PRESET_CONFIGS = {
         lastSkill: false,
         contextBar: false,
         droids: true,
-        agentsFormat: 'codes',
+        agentsFormat: "codes",
         agentsMaxLines: 0,
         backgroundTasks: false,
         todos: true,
         permissionStatus: false,
         thinking: false,
-        thinkingFormat: 'text',
+        thinkingFormat: "text",
         sessionHealth: false,
         useBars: false,
         showCache: true,
@@ -104,7 +104,7 @@ export const PRESET_CONFIGS = {
     },
     focused: {
         cwd: false,
-        cwdFormat: 'relative',
+        cwdFormat: "relative",
         gitRepo: false,
         gitBranch: false,
         model: false,
@@ -117,13 +117,13 @@ export const PRESET_CONFIGS = {
         lastSkill: true,
         contextBar: true,
         droids: true,
-        agentsFormat: 'multiline',
+        agentsFormat: "multiline",
         agentsMaxLines: 3,
         backgroundTasks: true,
         todos: true,
         permissionStatus: false,
         thinking: true,
-        thinkingFormat: 'text',
+        thinkingFormat: "text",
         sessionHealth: true,
         useBars: true,
         showCache: true,
@@ -133,7 +133,7 @@ export const PRESET_CONFIGS = {
     },
     full: {
         cwd: false,
-        cwdFormat: 'relative',
+        cwdFormat: "relative",
         gitRepo: false,
         gitBranch: false,
         model: false,
@@ -146,13 +146,13 @@ export const PRESET_CONFIGS = {
         lastSkill: true,
         contextBar: true,
         droids: true,
-        agentsFormat: 'multiline',
+        agentsFormat: "multiline",
         agentsMaxLines: 10,
         backgroundTasks: true,
         todos: true,
         permissionStatus: false,
         thinking: true,
-        thinkingFormat: 'text',
+        thinkingFormat: "text",
         sessionHealth: true,
         useBars: true,
         showCache: true,
@@ -162,7 +162,7 @@ export const PRESET_CONFIGS = {
     },
     opencode: {
         cwd: false,
-        cwdFormat: 'relative',
+        cwdFormat: "relative",
         gitRepo: false,
         gitBranch: false,
         model: false,
@@ -175,13 +175,13 @@ export const PRESET_CONFIGS = {
         lastSkill: true,
         contextBar: true,
         droids: true,
-        agentsFormat: 'codes',
+        agentsFormat: "codes",
         agentsMaxLines: 0,
         backgroundTasks: false,
         todos: true,
         permissionStatus: false,
         thinking: true,
-        thinkingFormat: 'text',
+        thinkingFormat: "text",
         sessionHealth: true,
         useBars: false,
         showCache: true,
@@ -191,7 +191,7 @@ export const PRESET_CONFIGS = {
     },
     dense: {
         cwd: false,
-        cwdFormat: 'relative',
+        cwdFormat: "relative",
         gitRepo: false,
         gitBranch: false,
         model: false,
@@ -204,13 +204,13 @@ export const PRESET_CONFIGS = {
         lastSkill: true,
         contextBar: true,
         droids: true,
-        agentsFormat: 'multiline',
+        agentsFormat: "multiline",
         agentsMaxLines: 5,
         backgroundTasks: true,
         todos: true,
         permissionStatus: false,
         thinking: true,
-        thinkingFormat: 'text',
+        thinkingFormat: "text",
         sessionHealth: true,
         useBars: true,
         showCache: true,
