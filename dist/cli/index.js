@@ -767,7 +767,7 @@ Examples:
         console.log(chalk.gray("  (Run the install script to create version metadata)"));
     }
     console.log(chalk.gray("\n━".repeat(50)));
-    console.log(chalk.gray("\nTo check for updates, run: oh-my-droid update --check"));
+    console.log(chalk.gray("\nTo check for updates, run: oh-my-droid-sisyphus update --check"));
 });
 /**
  * Install command - Install droids and commands to ~/.factory/
@@ -1043,13 +1043,13 @@ program
     });
     if (result.success) {
         console.log(chalk.green("✓ Oh-My-DroidCode installed successfully!"));
-        console.log(chalk.gray('  Run "oh-my-droid info" to see available droids.'));
+        console.log(chalk.gray('  Run "oh-my-droid-sisyphus info" to see available droids.'));
         console.log(chalk.yellow('  Run "/sisyphus-default" (project) or "/sisyphus-default-global" (global) in Droid.'));
     }
     else {
         // Don't fail the npm install, just warn
         console.warn(chalk.yellow("⚠ Could not complete Sisyphus setup:"), result.message);
-        console.warn(chalk.gray('  Run "oh-my-droid install" manually to complete setup.'));
+        console.warn(chalk.gray('  Run "oh-my-droid-sisyphus install" manually to complete setup.'));
     }
 });
 // Parse arguments

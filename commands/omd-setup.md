@@ -132,14 +132,14 @@ Ask user: "Would you like to install the OMD CLI for standalone analytics? (Reco
 if command -v bun &> /dev/null; then
   echo "Installing OMD CLI via bun..."
   # Clean up npm version if it exists to avoid duplicates
-  if command -v npm &> /dev/null && npm list -g oh-my-droid &>/dev/null; then
+  if command -v npm &> /dev/null && npm list -g oh-my-droid-sisyphus &>/dev/null; then
     echo "Removing existing npm installation to avoid duplicates..."
-    npm uninstall -g oh-my-droid 2>/dev/null
+    npm uninstall -g oh-my-droid-sisyphus 2>/dev/null
   fi
-  bun install -g oh-my-droid
+  bun install -g oh-my-droid-sisyphus
 elif command -v npm &> /dev/null; then
   echo "Installing OMD CLI via npm..."
-  npm install -g oh-my-droid
+  npm install -g oh-my-droid-sisyphus
 else
   echo "ERROR: Neither bun nor npm found. Please install Node.js or Bun first."
   exit 1
@@ -157,7 +157,7 @@ fi
 
 ### If User Chooses NO:
 
-Skip this step. User can install later with `bun install -g oh-my-droid` or `npm install -g oh-my-droid`.
+Skip this step. User can install later with `bun install -g oh-my-droid-sisyphus` or `npm install -g oh-my-droid-sisyphus`.
 
 ## Step 4: Verify Plugin Installation
 

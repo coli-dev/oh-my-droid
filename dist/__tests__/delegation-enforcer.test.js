@@ -95,9 +95,15 @@ describe("delegation-enforcer", () => {
                 { agent: "debugger", expectedModel: "custom:gpt-5.3-codex-3" },
                 { agent: "verifier", expectedModel: "custom:gpt-5.3-codex-3" },
                 { agent: "style-reviewer", expectedModel: "custom:claude-haiku-4.5-4" },
-                { agent: "quality-reviewer", expectedModel: "custom:claude-sonnet-4.5-5" },
+                {
+                    agent: "quality-reviewer",
+                    expectedModel: "custom:claude-sonnet-4.5-5",
+                },
                 { agent: "api-reviewer", expectedModel: "custom:claude-sonnet-4.5-5" },
-                { agent: "performance-reviewer", expectedModel: "custom:claude-sonnet-4.5-5" },
+                {
+                    agent: "performance-reviewer",
+                    expectedModel: "custom:claude-sonnet-4.5-5",
+                },
                 { agent: "dependency-expert", expectedModel: "custom:gpt-5.2-1" },
                 { agent: "test-engineer", expectedModel: "custom:claude-sonnet-4.5-5" },
             ];

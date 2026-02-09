@@ -1,5 +1,5 @@
 {
-  "name": "oh-my-droid",
+  "name": "oh-my-droid-sisyphus",
   "version": "0.0.1",
   "description": "Multi-agent orchestration system for Droid - Inspired by oh-my-opencode",
   "type": "module",
@@ -12,7 +12,7 @@
     }
   },
   "bin": {
-    "oh-my-droid": "dist/cli/index.js",
+    "oh-my-droid-sisyphus": "dist/cli/index.js",
     "omd": "dist/cli/index.js",
     "omd-analytics": "dist/cli/analytics.js",
     "omd-cli": "dist/cli/index.js"

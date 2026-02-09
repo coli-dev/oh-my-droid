@@ -16,7 +16,7 @@ INSTALLED=$(ls ~/.factory/plugins/cache/omd/oh-my-droid/ 2>/dev/null | sort -V |
 echo "Installed: $INSTALLED"
 
 # Get latest from npm
-LATEST=$(npm view oh-my-droid version 2>/dev/null)
+LATEST=$(npm view oh-my-droid-sisyphus version 2>/dev/null)
 echo "Latest: $LATEST"
 ```
 

@@ -4,6 +4,9 @@
 
 ### Changed
 
+- Migrate CLI install/version commands in command prompts from `oh-my-droid` to `oh-my-droid-sisyphus` where they invoke shell CLI directly.
+- Rename npm package from `oh-my-droid` to `oh-my-droid-sisyphus` and update CLI help text references to the new command name.
+- Replace stale `AskUserQuestion` references with `AskUser` across planner/OMD setup skill and command prompts so interactive option pickers render correctly instead of stopping without choices.
 - Migrate user-facing terminology from "agent" to "droid" across commands, skills, droid prompts, templates, plugin metadata, and documentation surfaces.
 - Keep technical internals stable (e.g. package identifiers) while updating wording and installer expectation to "Multi-Droid Orchestration".
 - Migrate droid model routing and default assignments from legacy `haiku/sonnet/opus` tiers to explicit `custom:*` model IDs, including delegation enforcement and routing tier mappings.
