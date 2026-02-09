@@ -29,7 +29,7 @@ describe('bridge-entry security', () => {
   });
 
   it('checks path is under homedir', () => {
-    expect(source).toContain("home + '/'");
+    expect(source).toMatch(/home\s*\+\s*["']\/["']/);
   });
 
   it('verifies git worktree', () => {
@@ -42,8 +42,8 @@ describe('bridge-entry security', () => {
   });
 
   it('validates provider is codex or gemini', () => {
-    expect(source).toContain("config.provider !== 'codex'");
-    expect(source).toContain("config.provider !== 'gemini'");
+    expect(source).toMatch(/config\.provider\s*!==\s*["']codex["']/);
+    expect(source).toMatch(/config\.provider\s*!==\s*["']gemini["']/);
   });
 
   it('has signal handlers for graceful cleanup', () => {
