@@ -48,7 +48,7 @@ Jumping into code without understanding requirements leads to rework, scope cree
 ### Interview Mode (broad/vague requests)
 
 1. **Classify the request**: Broad (vague verbs, no specific files, touches 3+ areas) triggers interview mode
-2. **Ask one focused question** using `AskUserQuestion` for preferences, scope, and constraints
+2. **Ask one focused question** using `AskUser` for preferences, scope, and constraints
 3. **Gather codebase facts first**: Before asking "what patterns does your code use?", spawn an `explore` droid to find out, then ask informed follow-up questions
 4. **Build on answers**: Each question builds on the previous answer
 5. **Consult Analyst** (Opus) for hidden requirements, edge cases, and risks
@@ -89,7 +89,7 @@ Plans are saved to `.omd/plans/`. Drafts go to `.omd/drafts/`.
 
 <Tool_Usage>
 - Before first MCP tool use, call `ToolSearch("mcp")` to discover deferred MCP tools
-- Use `AskUserQuestion` for preference questions (scope, priority, timeline, risk tolerance) -- provides clickable UI
+- Use `AskUser` for preference questions (scope, priority, timeline, risk tolerance) -- provides clickable UI
 - Use plain text for questions needing specific values (port numbers, names, follow-up clarifications)
 - Use `explore` droid (Haiku, 30s timeout) to gather codebase facts before asking the user
 - Use `ask_codex` with `agent_role: "planner"` for planning validation on large-scope plans
@@ -194,7 +194,7 @@ Before asking any interview question, classify it:
 | Type | Examples | Action |
 |------|----------|--------|
 | Codebase Fact | "What patterns exist?", "Where is X?" | Explore first, do not ask user |
-| User Preference | "Priority?", "Timeline?" | Ask user via AskUserQuestion |
+| User Preference | "Priority?", "Timeline?" | Ask user via AskUser |
 | Scope Decision | "Include feature Y?" | Ask user |
 | Requirement | "Performance constraints?" | Ask user |
 

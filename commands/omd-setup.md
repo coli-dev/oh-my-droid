@@ -59,7 +59,7 @@ if [ -f "$STATE_FILE" ]; then
 fi
 ```
 
-If state exists, use AskUserQuestion to prompt:
+If state exists, use AskUser to prompt:
 
 **Question:** "Found a previous setup session. Would you like to resume or start fresh?"
 
@@ -75,7 +75,7 @@ echo "Previous state cleared. Starting fresh setup."
 
 ## Step 1: Ask User Preference
 
-Use the AskUserQuestion tool to prompt the user:
+Use the AskUser tool to prompt the user:
 
 **Question:** "Where should I configure oh-my-droid?"
 
@@ -446,7 +446,7 @@ gh auth status &>/dev/null
 
 ### If gh is available and authenticated:
 
-Use the AskUserQuestion tool to prompt the user:
+Use the AskUser tool to prompt the user:
 
 **Question:** "If you're enjoying oh-my-droid, would you like to support the project by starring it on GitHub?"
 
@@ -465,7 +465,7 @@ gh api -X PUT /user/starred/coli-dev/oh-my-droid 2>/dev/null && echo "Thanks for
 
 ### If gh is NOT available or not authenticated:
 
-Skip the AskUserQuestion and just display:
+Skip the AskUser and just display:
 
 ```bash
 echo ""

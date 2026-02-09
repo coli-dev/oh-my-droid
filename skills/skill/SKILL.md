@@ -439,7 +439,7 @@ echo "Total skills across all directories: $TOTAL"
 
 #### Step 3: Quick Actions Menu
 
-After scanning, use the AskUserQuestion tool to offer these options:
+After scanning, use the AskUser tool to offer these options:
 
 **Question:** "What would you like to do with your local skills?"
 

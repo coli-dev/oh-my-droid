@@ -12,7 +12,7 @@ MCP servers provide additional tools that Droid droids can use. This skill helps
 
 ## Step 1: Show Available MCP Servers
 
-Present the user with available MCP server options using AskUserQuestion:
+Present the user with available MCP server options using AskUser:
 
 **Question:** "Which MCP server would you like to configure?"
 

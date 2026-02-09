@@ -31,7 +31,7 @@ fi
 
 If `ALREADY_CONFIGURED` is true AND the user did NOT pass `--force`, `--local`, or `--global` flags:
 
-Use AskUserQuestion to prompt:
+Use AskUser to prompt:
 
 **Question:** "OMD is already configured. What would you like to do?"
 
@@ -113,7 +113,7 @@ if [ -f "$STATE_FILE" ]; then
 fi
 ```
 
-If state exists, use AskUserQuestion to prompt:
+If state exists, use AskUser to prompt:
 
 **Question:** "Found a previous setup session. Would you like to resume or start fresh?"
 
@@ -175,7 +175,7 @@ Check for flags in the user's invocation:
 
 **Note**: If resuming and lastCompletedStep >= 1, skip to the appropriate step based on configType.
 
-Use the AskUserQuestion tool to prompt the user:
+Use the AskUser tool to prompt the user:
 
 **Question:** "Where should I configure oh-my-droid?"
 
@@ -575,7 +575,7 @@ fi
 
 ## Step 3.7: Set Default Execution Mode
 
-Use the AskUserQuestion tool to prompt the user:
+Use the AskUser tool to prompt the user:
 
 **Question:** "Which parallel execution mode should be your default when you say 'fast' or 'parallel'?"
 
@@ -663,7 +663,7 @@ fi
 
 If **neither** beads nor beads-rust is detected, skip this step (default to built-in).
 
-If beads or beads-rust is detected, use AskUserQuestion:
+If beads or beads-rust is detected, use AskUser:
 
 **Question:** "Which task management tool should I use for tracking work?"
 
@@ -720,7 +720,7 @@ Droid teams are an experimental Droid feature that lets you spawn N coordinated 
 
 Reference: https://code.factory.com/docs/en/droid-teams
 
-Use the AskUserQuestion tool to prompt:
+Use the AskUser tool to prompt:
 
 **Question:** "Would you like to enable droid teams? Teams let you spawn coordinated droids (e.g., `/team 3:executor 'fix all errors'`). This is an experimental Droid feature."
 
@@ -787,7 +787,7 @@ fi
 
 #### Step 5.5.2: Configure Teammate Display Mode
 
-Use the AskUserQuestion tool:
+Use the AskUser tool:
 
 **Question:** "How should teammates be displayed?"
 
@@ -809,7 +809,7 @@ echo "Teammate display mode set to: TEAMMATE_MODE"
 
 #### Step 5.5.3: Configure Team Defaults in omd-config
 
-Use the AskUserQuestion tool with multiple questions:
+Use the AskUser tool with multiple questions:
 
 **Question 1:** "How many droids should teams spawn by default?"
 
@@ -1026,7 +1026,7 @@ gh auth status &>/dev/null
 
 ### If gh is available and authenticated:
 
-Use the AskUserQuestion tool to prompt the user:
+Use the AskUser tool to prompt the user:
 
 **Question:** "If you're enjoying oh-my-droid, would you like to support the project by starring it on GitHub?"
 
